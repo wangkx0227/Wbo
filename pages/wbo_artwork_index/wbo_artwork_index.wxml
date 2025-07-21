@@ -49,7 +49,7 @@
           <view slot="title">
             <view>
               <text class="header-title-main">Name of Client：</text>
-              <text class="header-title-other">TG D51</text>
+              <text class="header-title-other">TG D240</text>
             </view>
             <view>
               <text class="header-title-main">Theme of Program：</text>

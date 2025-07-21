@@ -4,7 +4,9 @@
     "t-dropdown-item": "tdesign-miniprogram/dropdown-item/dropdown-item",
     "t-swiper": "tdesign-miniprogram/swiper/swiper",
     "t-image": "tdesign-miniprogram/image/image",
-    "t-link": "tdesign-miniprogram/link/link"
+    "t-link": "tdesign-miniprogram/link/link",
+    "t-image-viewer": "tdesign-miniprogram/image-viewer/image-viewer"
+
 
   }
 }

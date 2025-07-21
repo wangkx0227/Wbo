@@ -20,7 +20,7 @@
           <text>Code：LSL__AIE MJ_2025_01</text>
         </view>
         <view class="cell-swiper">
-          <t-swiper wx:if="{{swiperImages.length}}" current="{{current}}" autoplay="{{autoplay}}" duration="{{duration}}" interval="{{interval}}" navigation="{{ { type: 'dots' } }}" list="{{swiperImages}}" bind:click="onTap" bind:change="onChange" bind:image-load="onImageLoad">
+          <t-swiper wx:if="{{swiperImages.length}}" current="{{current}}" autoplay="{{autoplay}}" duration="{{duration}}" interval="{{interval}}" navigation="{{ { type: 'dots' } }}" list="{{swiperImages}}" bind:click="onTap" >
           </t-swiper>
           <!-- 无数据时显示占位内容 -->
           <t-image wx:else src="" shape="round" error="slot" width="360" height="192" >
@@ -32,20 +32,32 @@
           <text>OriginalDesignerComments：</text>
           <t-link size="small" content="查看" hover  underline />
         </view>
+        <view class="header-button-other header-button" >
+          <text>ReviewComments：</text>
+          <t-link size="small" content="评论" hover underline />
+        </view>
       </view>
       <view class="cell">
-        <text class="header-title-main">Title：Animals in sleeping bags</text>
+        <text class="header-title-main">Title：热可可杯吊饰</text>
         <view class="header-title-other header-title">
-          <text>Name：黎善玲</text>
-          <text>Code：LSL__AIE MJ_2025_01</text>
+          <text>Name：宁安琪</text>
+          <text>Code：NAQ__AIE MJ_2025_01</text>
         </view>
         <view class="cell-swiper">
-          <t-swiper wx:if="{{swiperImages.length  == 0}}" current="{{current}}" autoplay="{{autoplay}}" duration="{{duration}}" interval="{{interval}}" navigation="{{ { type: 'dots' } }}" list="{{swiperImages}}" bind:click="onTap" bind:change="onChange" bind:image-load="onImageLoad">
+          <t-swiper wx:if="{{swiperImages.length}}" current="{{current}}" autoplay="{{autoplay}}" duration="{{duration}}" interval="{{interval}}" navigation="{{ { type: 'dots' } }}" list="{{swiperImages}}" bind:click="onTap" >
           </t-swiper>
           <!-- 无数据时显示占位内容 -->
           <t-image wx:else src="" shape="round" error="slot" width="360" height="192" >
             <text class="error-text" slot="error">轮播图加载失败</text>
           </t-image>
+        </view>
+        <view class="header-button-other header-button" >
+          <text>OriginalDesignerComments：</text>
+          <t-link size="small" content="查看" hover  underline />
+        </view>
+        <view class="header-button-other header-button" >
+          <text>ReviewComments：</text>
+          <t-link size="small" content="评论" hover underline />
         </view>
       </view>
     </view>

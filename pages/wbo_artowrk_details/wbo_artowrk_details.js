@@ -1,12 +1,12 @@
 import { Toast } from 'tdesign-miniprogram'; // 轻提示
 import Message from 'tdesign-miniprogram/message/index'; // 提示
-const imageCdn = 'https://tdesign.gtimg.com/mobile/demos';
 const swiperImages = [
-  `${imageCdn}/swiper1.png`,
-  `${imageCdn}/swiper2.png`,
-  `${imageCdn}/swiper1.png`,
-  `${imageCdn}/swiper2.png`,
-  `${imageCdn}/swiper1.png`,
+  'https://picsum.photos/800/600?random=1',  // 横版
+  'https://picsum.photos/600/800?random=2',  // 竖版
+  'https://picsum.photos/1000/500?random=3', // 宽幅
+  // 物品类
+  'https://picsum.photos/800/800?random=4',  // 正方形
+  'https://picsum.photos/700/900?random=5',  // 长竖版
 ];
 Page({
   data: {
@@ -107,17 +107,29 @@ Page({
 
   },
 
-  // 轮播图函数
+  // 轮播图函数 - 点击轮播图
   onTap(e) {
     const { index } = e.detail;
-    console.log(index);
-  },
-  onChange(e) {
-    const { current, source } = e.detail;
-
-    console.log(current, source);
-  },
-  onImageLoad(e) {
-    console.log(e.detail.index);
+    const that = this;
+    // const urls = e.currentTarget.dataset.images || [];   // 所有图片对象数组
+    // const index = e.currentTarget.dataset.index;         // 当前图片索引
+    // //把图片对象数组提取成 URL 数组
+    // const urlList = urls.map(img => img.image_url);
+    const swiperImages = this.data.swiperImages; // 假数据
+    const current = swiperImages[index];
+    if (!current || !swiperImages.length) {
+      Toast({
+        context: that,
+        selector: '#t-toast',
+        message: '无法预览图片',
+        theme: 'error',
+        con: 'check-circle',
+      });
+      return;
+    }
+    wx.previewImage({
+      current,
+      urls: swiperImages
+    });
   },
 })
