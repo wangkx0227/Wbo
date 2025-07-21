@@ -1,1 +1,46 @@
-/* pages/wbo_artowrk_details/wbo_artowrk_details.wxss */
+.example-search {
+  background-color: var(--bg-color-demo);
+  padding: 16rpx 32rpx;
+  background-color: #ffffff;
+}
+.page-main{
+  margin-top: 5px;
+  padding: 5px;
+}
+.page-main .wrapper .cell {
+  margin-bottom: 15rpx;
+  background-color: #ffffff;
+  padding: 5px 10px;
+}
+
+/* 最后一个元素不需要间距 */
+.page-main .wrapper .cell:last-child {
+  margin-bottom: 0;
+}
+.cell-swiper{
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.header-title-main {
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+}
+.header-title-other {
+  font-size: 12px;
+  color: #606266  ;
+}
+.header-title {
+  display: flex;
+  justify-content: space-between; /* 一左一右 */
+  align-items: center;
+}
+.header-button{
+  display: flex;
+  align-items: center;
+}
+.header-button-other{
+  font-size: 14px;
+  color: #606266  ;
+}
