@@ -30,11 +30,15 @@
        
         <view class="header-button-other header-button" >
           <text>OriginalDesignerComments：</text>
-          <t-link size="small" content="查看" hover  underline />
+          <t-link size="small" content="查看" hover  underline suffixIcon="chat-bubble"/>
         </view>
         <view class="header-button-other header-button" >
           <text>ReviewComments：</text>
-          <t-link size="small" content="评论" hover underline />
+          <t-link size="small" content="评论" hover underline suffixIcon="chat-message"/>
+        </view>
+        <view class="header-button-other header-button" >
+          <text>操作：</text>
+          <t-link size="small" content="舍弃" hover underline  theme="danger"  suffixIcon="delete-1"/>
         </view>
       </view>
       <view class="cell">
@@ -53,11 +57,15 @@
         </view>
         <view class="header-button-other header-button" >
           <text>OriginalDesignerComments：</text>
-          <t-link size="small" content="查看" hover  underline />
+          <t-link size="small" content="查看" hover  underline suffixIcon="chat-bubble"/>
         </view>
         <view class="header-button-other header-button" >
           <text>ReviewComments：</text>
-          <t-link size="small" content="评论" hover underline />
+          <t-link size="small" content="评论" hover underline suffixIcon="chat-message"/>
+        </view>
+        <view class="header-button-other header-button" >
+          <text>操作：</text>
+          <t-link size="small" content="舍弃" hover underline  theme="danger"  suffixIcon="delete-1"/>
         </view>
       </view>
     </view>

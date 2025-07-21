@@ -20,12 +20,12 @@ Page({
           label: '全部',
         },
         {
-          value: 'not_review',
-          label: '未审查',
+          value: 'NAQ',
+          label: '宁安琪',
         },
         {
-          value: 'review',
-          label: '已审查',
+          value: 'LSL',
+          label: '黎善玲',
         }
       ],
     },
