@@ -1,3 +1,12 @@
+# 采用的组件
+
+```tex
+组件文档地址：
+	https://tdesign.tencent.com/miniprogram/getting-started 
+
+主要使用当前组件的 排版，筛选，搜索，提示等功能。
+```
+
 # pages页面说明
 
 ## 1.wbo_template_index
