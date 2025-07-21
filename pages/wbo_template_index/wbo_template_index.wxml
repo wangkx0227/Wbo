@@ -44,24 +44,24 @@
                 <view slot="title" class="steps-content">
                     <text>初步评审</text>
                     <t-divider layout="vertical" />
-                    <t-link size="small" content="预览上传PPT" hover underline suffixIcon="jump" bindtap="onLookPPTFile" />
+                    <t-link size="small" content="预览上传PPT" hover underline suffixIcon="file-pdf" bindtap="onLookPPTFile" />
                 </view>
                   <view slot="content" class="steps-content">
-                    <t-link size="small" content="上传" theme="primary" hover bindtap="onUploadFile" />
+                    <t-link size="small" content="上传" theme="primary" hover bindtap="onUploadFile" suffixIcon="upload"/>
                     <t-divider layout="vertical" />
-                    <t-link size="small" content="下载" hover  theme="success" bindtap="onDownloadFile"/>
+                    <t-link size="small" content="下载" hover  theme="success" bindtap="onDownloadFile" suffixIcon="file-download"/>
                   </view>
                 </t-step-item>
                 <t-step-item>
                   <view slot="title" class="steps-content">
                     <text>最终评审</text>
                     <t-divider layout="vertical" />
-                    <t-link size="small" content="预览上传PPT" hover underline suffixIcon="jump" disabled/>
+                    <t-link size="small" content="预览上传PPT" hover underline suffixIcon="file-pdf" disabled/>
                 </view>
                   <view slot="content" class="steps-content">
-                    <t-link size="small" content="上传" theme="primary" hover  disabled/>
+                    <t-link size="small" content="上传" theme="primary" hover  disabled suffixIcon="upload"/>
                     <t-divider layout="vertical" />
-                    <t-link size="small" content="下载" hover  theme="success" disabled/>
+                    <t-link size="small" content="下载" hover  theme="success" disabled suffixIcon="file-download"/>
                   </view>
                 </t-step-item>
               </t-steps>
