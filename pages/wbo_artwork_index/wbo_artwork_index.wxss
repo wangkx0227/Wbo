@@ -1,0 +1,31 @@
+.example-search {
+  background-color: var(--bg-color-demo);
+  padding: 16rpx 32rpx;
+  background-color: #ffffff;
+}
+.page-main{
+  margin-top: 8px;
+}
+.page-main .wrapper .t-cell-group {
+  margin-bottom: 20rpx;
+}
+
+/* 最后一个元素不需要间距 */
+.page-main .wrapper .t-cell-group:last-child {
+  margin-bottom: 0;
+}
+
+.header-title-main {
+  font-size: 12px;
+  font-weight: 600;
+  color: #333;
+}
+.header-title-other {
+  font-size: 12px;
+  color: #606266  ;
+}
+.header-title {
+  display: flex;
+  justify-content: space-between; /* 一左一右 */
+  align-items: center;
+}

@@ -1,0 +1,67 @@
+<!--pages/wbo_artwork_index/wbo_artwork_index.wxml-->
+<t-toast id="t-toast" />
+<view class="page-wrapper">
+  <view class="page-head">
+    <t-row>
+      <t-col span="24">
+        <view class="example-search">
+          <t-search placeholder="搜索" shape="round" model:value="{{searchValue}}" bind:change="onSearchChange" />
+        </view>
+      </t-col>
+      <t-col span="24">
+        <t-dropdown-menu>
+          <t-dropdown-item options="{{dropdownTemplate.options}}" placement="right" value="{{dropdownTemplate.value}}" bindchange="onChange" />
+          <t-dropdown-item options="{{dropdownSorter.options}}" placement="right" default-value="{{dropdownSorter.value}}" />
+        </t-dropdown-menu>
+      </t-col>
+    </t-row>
+  </view>
+  <view class="page-main">
+    <view class="wrapper">
+      <t-cell-group theme="card" class="t-cell-group"
+      bindtap="onJumpArtworkDeatails"
+      data-group-id="1" 
+      >
+        <t-cell hover arrow >
+          <t-badge count="{{8}}" slot="note"  shape="square"/>
+          <view slot="title">
+            <view>
+              <text class="header-title-main">Name of Client：</text>
+              <text class="header-title-other">TG D51</text>
+            </view>
+            <view>
+              <text class="header-title-main">Theme of Program：</text>
+              <text class="header-title-other">The Outfitters</text>
+            </view>
+            <view class="header-title">
+              <text class="header-title-other">Year：2015</text>
+              <text class="header-title-other">创建时间：2025-07-21</text>
+            </view>
+          </view>
+        </t-cell>
+      </t-cell-group>
+      <t-cell-group theme="card" class="t-cell-group"
+      bindtap="onJumpArtworkDeatails"
+      data-group-id="2" 
+      >
+        <t-cell hover arrow >
+          <t-badge count="{{5}}" slot="note"  shape="square"/>
+          <view slot="title">
+            <view>
+              <text class="header-title-main">Name of Client：</text>
+              <text class="header-title-other">TG D51</text>
+            </view>
+            <view>
+              <text class="header-title-main">Theme of Program：</text>
+              <text class="header-title-other">The Outfitters</text>
+            </view>
+            <view class="header-title">
+              <text class="header-title-other">Year：2015</text>
+              <text class="header-title-other">创建时间：2025-07-21</text>
+            </view>
+          </view>
+        </t-cell>
+      </t-cell-group>
+    </view>
+  </view>
+</view>
