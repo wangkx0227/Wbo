@@ -1,0 +1,38 @@
+.example-search {
+  background-color: var(--bg-color-demo);
+  padding: 16rpx 32rpx;
+  background-color: #ffffff;
+}
+.page-main{
+  margin-top: 8px;
+  padding:  0 8px;
+}
+
+.page-main .wrapper {
+  margin-bottom: 8px;
+  width: 100%;
+}
+.page-main .wrapper .collapse-header{
+  width: 100%;
+}
+.header-title {
+  display: flex;
+  justify-content: space-between; /* 一左一右 */
+  align-items: center;
+}
+
+.header-title-main {
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+}
+.header-title-other {
+  font-size: 10px;
+  color: #606266  ;
+}
+
+.steps-content {
+  display: flex;
+  align-items: center;
+  gap: 2rpx; /* 控制上传、分隔符、下载之间的间距 */
+}
