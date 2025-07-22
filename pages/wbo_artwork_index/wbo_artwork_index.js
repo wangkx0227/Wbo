@@ -44,8 +44,12 @@ Page({
         },
       ],
     },
+    // 搜索变量
     searchValue: '',
-    // 上拉刷新
+    // 下拉刷新与滚动底部刷新使用变量
+    isDownRefreshing: false, // 下拉刷新状态
+    isLoadingReachMore: false, // 滚动底部加载数据
+    noMoreData: false    // 数据是否全部加载完毕
 
   },
   onChange(e) {
@@ -81,7 +85,6 @@ Page({
       });
     }, 300)
   },
-
   // 用户点击右上角分享
   onShareAppMessage() {
     return {
@@ -90,12 +93,33 @@ Page({
       imageUrl: '/assets/1752927115162.png'     // 自定义分享封面
     };
   },
-  // 上拉刷新 - 用于页面重置
+  // 页面上拉刷新 - 用于页面重置
   onPullDownRefresh() {
     console.log("下拉刷新触发");
+    // 如果正在加载更多，则禁止下拉刷新
+    if (this.data.isLoadingReachMore) return;
+    this.setData({ isDownRefreshing: true });
     // 模拟数据加载
     setTimeout(() => {
       wx.stopPullDownRefresh(); // 必须手动停止
+      this.setData({
+        isDownRefreshing: false, // 修改状态
+      });
     }, 1500);
-  }
+  },
+  // 页面上拉触底事件的处理函数-用于加载更多数据
+  onReachBottom() {
+    // 如果在下拉刷新，禁止滚动加载
+    if (this.data.isDownRefreshing) return;
+    wx.showLoading({ title: '加载更多...' });
+    this.setData({ isLoadingReachMore: true });
+    setTimeout(() => {
+      wx.stopPullDownRefresh(); // 必须手动停止
+      wx.hideLoading();
+      this.setData({
+        isLoadingReachMore: false, // 修改状态
+      });
+    }, 1500);
+
+  },
 })

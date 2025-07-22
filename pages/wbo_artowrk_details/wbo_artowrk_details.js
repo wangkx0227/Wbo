@@ -118,7 +118,7 @@ Page({
             context: that,
             offset: [10, 32],
             duration: 3000,
-            content: '提交成功，3秒后消失',
+            content: '提交成功，提示3秒后消失',
           });
         } else if (res.cancel) {
           // 取消
@@ -144,14 +144,15 @@ Page({
   // 页面上拉触底事件的处理函数-用于加载更多数据
   onReachBottom() {
     // 如果在下拉刷新，禁止滚动加载
-    if (this.data.isDownRefreshing) return;
+    if (this.data.isDownRefreshing || this.data.noMoreData)return;
     this.setData({ isLoadingReachMore: true });
     setTimeout(() => {
       wx.stopPullDownRefresh(); // 必须手动停止
       this.setData({
         isLoadingReachMore: false, // 修改状态
+        noMoreData:true
       });
     }, 1500);
-    
+
   },
 })

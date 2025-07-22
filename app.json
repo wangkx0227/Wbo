@@ -25,6 +25,7 @@
     "t-toast": "tdesign-miniprogram/toast/toast",
     "t-message": "tdesign-miniprogram/message/message",
     "t-overlay": "tdesign-miniprogram/overlay/overlay",
-    "t-image-viewer": "tdesign-miniprogram/image-viewer/image-viewer"
+    "t-image-viewer": "tdesign-miniprogram/image-viewer/image-viewer",
+    "t-loading": "tdesign-miniprogram/loading/loading"
   }
 }

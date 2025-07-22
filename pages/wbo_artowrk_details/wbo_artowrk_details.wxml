@@ -1,8 +1,7 @@
 <t-toast id="t-toast" />
 <t-message id="t-message" />
-
 <view class="page-wrapper">
-  <view class="page-head filter-bar" >
+  <view class="page-head filter-bar">
     <t-row>
       <t-col span="24">
         <t-dropdown-menu>
@@ -107,5 +106,14 @@
         </view>
       </view>
     </view>
+  </view>
+
+  <!-- 当下拉时,进行显示的内容  -->
+  <view class="loading-box loading-flex" wx:if="{{isLoadingReachMore}}">
+    <!-- <text class="loading-text">加载中...</text> -->
+    <t-loading theme="dots" size="60rpx"/>
+  </view>
+  <view class="loading-box" wx:if="{{noMoreData}}">
+    <text class="loading-text">-- 已经到底了 --</text>
   </view>
 </view>
