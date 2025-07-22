@@ -111,11 +111,9 @@ Page({
   onReachBottom() {
     // 如果在下拉刷新，禁止滚动加载
     if (this.data.isDownRefreshing) return;
-    wx.showLoading({ title: '加载更多...' });
     this.setData({ isLoadingReachMore: true });
     setTimeout(() => {
       wx.stopPullDownRefresh(); // 必须手动停止
-      wx.hideLoading();
       this.setData({
         isLoadingReachMore: false, // 修改状态
       });
