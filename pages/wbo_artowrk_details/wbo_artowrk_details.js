@@ -31,25 +31,29 @@ Page({
     },
     // 筛选框变量-2
     dropdownSorter: {
-      value: 'default',
+      value: 'all',
       options: [
         {
-          value: 'default',
-          label: '默认排序',
+          value: 'all',
+          label: '默认状态',
         },
         {
-          value: 'time',
-          label: '时间从高到低',
+          value: 'discard',
+          label: '舍弃',
+        },
+        {
+          value: 'reserve',
+          label: '保留',
         },
       ],
     },
     // 轮播图变量
-    current: 0,
-    autoplay: false,
-    duration: 500,
-    interval: 5000,
-    swiperImages,
-    cur: {},
+    current: 0, // 当前轮播在哪一项（下标）默认第0个索引
+    autoplay: false, // 是否启动自动播放
+    duration: 500, // 滑动动画时长
+    interval: 5000, // 轮播间隔时间，只有开启自动播放才有用
+    swiperImages, // 轮播图 url变量
+    // 
   },
   /**
    * 生命周期函数--监听页面加载
@@ -58,57 +62,27 @@ Page({
     const groupId = options.groupId; // 首页跳转后的存储的id值
   },
 
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady() {
+  // 生命周期函数--监听页面初次渲染完成
+  onReady() {},
+  // 生命周期函数--监听页面显示
+  onShow() {},
+  //生命周期函数--监听页面隐藏
+  onHide() {},
 
-  },
+  // 生命周期函数--监听页面卸载
+  onUnload() {},
 
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow() {
+  // 页面相关事件处理函数--监听用户下拉动作
+  onPullDownRefresh() {},
 
-  },
+  // 页面上拉触底事件的处理函数
+  onReachBottom() {},
 
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide() {
+  // 用户点击右上角分享
+  onShareAppMessage() {},
 
-  },
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload() {
-
-  },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh() {
-
-  },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom() {
-
-  },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage() {
-
-  },
-
-  // 轮播图函数 - 点击轮播图
-  onTap(e) {
+  // 轮播图函数 - 点击轮播图 - 图片预览
+  onSwiperImagesTap(e) {
     const { index } = e.detail;
     const that = this;
     // const urls = e.currentTarget.dataset.images || [];   // 所有图片对象数组
@@ -132,4 +106,9 @@ Page({
       urls: swiperImages
     });
   },
+  // 修改当前图稿状态（舍弃与保留，默认都是保留）
+  onModifyArtworkStatus(e){
+    const {suffixIcon} =  e.currentTarget.dataset;
+    console.log(suffixIcon);
+  }
 })
