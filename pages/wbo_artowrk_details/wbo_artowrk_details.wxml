@@ -47,7 +47,7 @@
       <view class="cell">
         <view class="header-title header-title-main">
           <text class="header-title-main">Title：热可可杯吊饰</text>
-          <text>状态：保留</text>
+          <text style="color: red;">状态：舍弃</text>
         </view>
         <view class="header-title-other header-title">
           <text>Name：宁安琪</text>
@@ -76,12 +76,12 @@
       </view>
       <view class="cell">
         <view class="header-title header-title-main">
-          <text>Title：Animals in sleeping bags</text>
+          <text>Title：National Park emblems</text>
           <text>状态：保留</text>
         </view>
         <view class="header-title-other header-title">
-          <text>Name：黎善玲</text>
-          <text>Code：LSL__AIE MJ_2025_01</text>
+          <text>Name：韩奕君</text>
+          <text>Code：HYJ__AIE MJ_2025_09</text>
         </view>
         <view class="cell-swiper">
           <t-swiper wx:if="{{swiperImages.length}}" current="{{current}}" autoplay="{{autoplay}}" duration="{{duration}}" interval="{{interval}}" navigation="{{ { type: 'dots' } }}" list="{{swiperImages}}" bind:click="onSwiperImagesTap">

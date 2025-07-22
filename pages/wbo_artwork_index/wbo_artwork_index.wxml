@@ -18,12 +18,9 @@
   </view>
   <view class="page-main">
     <view class="wrapper">
-      <t-cell-group theme="card" class="t-cell-group"
-      bindtap="onJumpArtworkDeatails"
-      data-group-id="1" 
-      >
-        <t-cell hover arrow >
-          <t-badge count="{{8}}" slot="note"  shape="square"/>
+      <t-cell-group theme="card" class="t-cell-group" bindtap="onJumpArtworkDeatails" data-group-id="1">
+        <t-cell hover arrow>
+          <t-badge count="{{8}}" slot="note" shape="square" />
           <view slot="title">
             <view>
               <text class="header-title-main">Name of Client：</text>
@@ -40,122 +37,9 @@
           </view>
         </t-cell>
       </t-cell-group>
-      <t-cell-group theme="card" class="t-cell-group"
-      bindtap="onJumpArtworkDeatails"
-      data-group-id="2" 
-      >
-        <t-cell hover arrow >
-          <t-badge count="{{5}}" slot="note"  shape="square"/>
-          <view slot="title">
-            <view>
-              <text class="header-title-main">Name of Client：</text>
-              <text class="header-title-other">TG D240</text>
-            </view>
-            <view>
-              <text class="header-title-main">Theme of Program：</text>
-              <text class="header-title-other">The Outfitters</text>
-            </view>
-            <view class="header-title">
-              <text class="header-title-other">Year：2015</text>
-              <text class="header-title-other">创建时间：2025-07-21</text>
-            </view>
-          </view>
-        </t-cell>
-      </t-cell-group>
-      <t-cell-group theme="card" class="t-cell-group"
-      bindtap="onJumpArtworkDeatails"
-      data-group-id="2" 
-      >
-        <t-cell hover arrow >
-          <t-badge count="{{5}}" slot="note"  shape="square"/>
-          <view slot="title">
-            <view>
-              <text class="header-title-main">Name of Client：</text>
-              <text class="header-title-other">TG D240</text>
-            </view>
-            <view>
-              <text class="header-title-main">Theme of Program：</text>
-              <text class="header-title-other">The Outfitters</text>
-            </view>
-            <view class="header-title">
-              <text class="header-title-other">Year：2015</text>
-              <text class="header-title-other">创建时间：2025-07-21</text>
-            </view>
-          </view>
-        </t-cell>
-      </t-cell-group>
-      <t-cell-group theme="card" class="t-cell-group"
-      bindtap="onJumpArtworkDeatails"
-      data-group-id="2" 
-      >
-        <t-cell hover arrow >
-          <t-badge count="{{5}}" slot="note"  shape="square"/>
-          <view slot="title">
-            <view>
-              <text class="header-title-main">Name of Client：</text>
-              <text class="header-title-other">TG D240</text>
-            </view>
-            <view>
-              <text class="header-title-main">Theme of Program：</text>
-              <text class="header-title-other">The Outfitters</text>
-            </view>
-            <view class="header-title">
-              <text class="header-title-other">Year：2015</text>
-              <text class="header-title-other">创建时间：2025-07-21</text>
-            </view>
-          </view>
-        </t-cell>
-      </t-cell-group>
-      <t-cell-group theme="card" class="t-cell-group"
-      bindtap="onJumpArtworkDeatails"
-      data-group-id="2" 
-      >
-        <t-cell hover arrow >
-          <t-badge count="{{5}}" slot="note"  shape="square"/>
-          <view slot="title">
-            <view>
-              <text class="header-title-main">Name of Client：</text>
-              <text class="header-title-other">TG D240</text>
-            </view>
-            <view>
-              <text class="header-title-main">Theme of Program：</text>
-              <text class="header-title-other">The Outfitters</text>
-            </view>
-            <view class="header-title">
-              <text class="header-title-other">Year：2015</text>
-              <text class="header-title-other">创建时间：2025-07-21</text>
-            </view>
-          </view>
-        </t-cell>
-      </t-cell-group>
-      <t-cell-group theme="card" class="t-cell-group"
-      bindtap="onJumpArtworkDeatails"
-      data-group-id="2" 
-      >
-        <t-cell hover arrow >
-          <t-badge count="{{5}}" slot="note"  shape="square"/>
-          <view slot="title">
-            <view>
-              <text class="header-title-main">Name of Client：</text>
-              <text class="header-title-other">TG D240</text>
-            </view>
-            <view>
-              <text class="header-title-main">Theme of Program：</text>
-              <text class="header-title-other">The Outfitters</text>
-            </view>
-            <view class="header-title">
-              <text class="header-title-other">Year：2015</text>
-              <text class="header-title-other">创建时间：2025-07-21</text>
-            </view>
-          </view>
-        </t-cell>
-      </t-cell-group>
-      <t-cell-group theme="card" class="t-cell-group"
-      bindtap="onJumpArtworkDeatails"
-      data-group-id="2" 
-      >
-        <t-cell hover arrow >
-          <t-badge count="{{5}}" slot="note"  shape="square"/>
+      <t-cell-group theme="card" class="t-cell-group" bindtap="onJumpArtworkDeatails" data-group-id="2">
+        <t-cell hover arrow>
+          <t-badge count="{{5}}" slot="note" shape="square" />
           <view slot="title">
             <view>
               <text class="header-title-main">Name of Client：</text>
@@ -174,10 +58,10 @@
       </t-cell-group>
     </view>
   </view>
-    <!-- 当下拉时,进行显示的内容  -->
-    <view class="loading-box loading-flex" wx:if="{{isLoadingReachMore}}">
+  <!-- 当下拉时,进行显示的内容  -->
+  <view class="loading-box loading-flex" wx:if="{{isLoadingReachMore}}">
     <!-- <text class="loading-text">加载中...</text> -->
-    <t-loading theme="dots" size="60rpx"/>
+    <t-loading theme="dots" size="60rpx" />
   </view>
   <view class="loading-box" wx:if="{{noMoreData}}">
     <text class="loading-text">-- 已经到底了 --</text>
