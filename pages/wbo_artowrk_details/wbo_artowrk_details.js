@@ -53,7 +53,9 @@ Page({
     duration: 500, // 滑动动画时长
     interval: 5000, // 轮播间隔时间，只有开启自动播放才有用
     swiperImages, // 轮播图 url变量
-    // 
+    // 上拉刷新变量
+    downRefreshEnable:false,
+    downRefreshLoadingTexts:['下拉刷新', '松手刷新', '正在刷新', '刷新完成'],
   },
   /**
    * 生命周期函数--监听页面加载
@@ -63,23 +65,23 @@ Page({
   },
 
   // 生命周期函数--监听页面初次渲染完成
-  onReady() {},
+  onReady() { },
   // 生命周期函数--监听页面显示
-  onShow() {},
+  onShow() { },
   //生命周期函数--监听页面隐藏
-  onHide() {},
+  onHide() { },
 
   // 生命周期函数--监听页面卸载
-  onUnload() {},
+  onUnload() { },
 
   // 页面相关事件处理函数--监听用户下拉动作
-  onPullDownRefresh() {},
+  onPullDownRefresh() { },
 
   // 页面上拉触底事件的处理函数
-  onReachBottom() {},
+  onReachBottom() { },
 
   // 用户点击右上角分享
-  onShareAppMessage() {},
+  onShareAppMessage() { },
 
   // 轮播图函数 - 点击轮播图 - 图片预览
   onSwiperImagesTap(e) {
@@ -107,9 +109,35 @@ Page({
     });
   },
   // 修改当前图稿状态（舍弃与保留，默认都是保留）
-  onModifyArtworkStatus(e){
-    const { id } =  e.currentTarget.dataset;
-    
-    
+  onModifyArtworkStatus(e) {
+    const that = this;
+    const { id } = e.currentTarget.dataset;
+    wx.showModal({
+      title: '提示',
+      content: '是否舍弃当前图稿',
+      success(res) {
+        if (res.confirm) {
+          // 发送请求
+          console.log('用户舍弃')
+          Message.success({
+            context: that,
+            offset: [10, 32],
+            duration: 3000,
+            content: '提交成功，3秒后消失',
+          });
+        } else if (res.cancel) {
+          // 取消
+          console.log('用户取消')
+        }
+      }
+    })
+  },
+  // 上拉刷新 - 用于页面重置
+  onPullDownRefresh() {
+    console.log("下拉刷新触发");
+    // 模拟数据加载
+    setTimeout(() => {
+      wx.stopPullDownRefresh(); // 必须手动停止
+    }, 1500);
   }
 })

@@ -45,6 +45,8 @@ Page({
       ],
     },
     searchValue: '',
+    // 上拉刷新
+
   },
   onChange(e) {
     this.setData({
@@ -58,13 +60,13 @@ Page({
   // 跳转到详情页面
   onJumpArtworkDeatails(e) {
     const that = this;
-    const groupId =  e.currentTarget.dataset.groupId;
+    const groupId = e.currentTarget.dataset.groupId;
     wx.showLoading({ title: '正在加载...' });
-    console.log(groupId,"准备跳转");
+    console.log(groupId, "准备跳转");
     setTimeout(() => {
       wx.navigateTo({
         url: `/pages/wbo_artowrk_details/wbo_artowrk_details?groupId=${groupId}`,
-        success(){
+        success() {
           wx.hideLoading();
         },
         fail(err) {
@@ -87,5 +89,13 @@ Page({
       path: 'pages/wbo_artwork_index/wbo_artwork_index',  // 分享后打开的页面路径
       imageUrl: '/assets/1752927115162.png'     // 自定义分享封面
     };
+  },
+  // 上拉刷新 - 用于页面重置
+  onPullDownRefresh() {
+    console.log("下拉刷新触发");
+    // 模拟数据加载
+    setTimeout(() => {
+      wx.stopPullDownRefresh(); // 必须手动停止
+    }, 1500);
   }
 })

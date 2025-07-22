@@ -1,8 +1,4 @@
-.example-search {
-  background-color: var(--bg-color-demo);
-  padding: 16rpx 32rpx;
-  background-color: #ffffff;
-}
+
 .page-main{
   margin-top: 5px;
   padding: 5px;

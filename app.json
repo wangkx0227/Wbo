@@ -8,7 +8,8 @@
   "window": {
     "navigationBarTextStyle": "black",
     "navigationBarTitleText": "Wbo小程序",
-    "navigationBarBackgroundColor": "#ffffff"
+    "navigationBarBackgroundColor": "#ffffff",
+    "enablePullDownRefresh": true
   },
   "style": "v2",
   "componentFramework": "glass-easel",
@@ -22,7 +23,6 @@
     "t-back-top": "tdesign-miniprogram/back-top/back-top",
     "t-toast": "tdesign-miniprogram/toast/toast",
     "t-message": "tdesign-miniprogram/message/message",
-    "t-loading": "tdesign-miniprogram/loading/loading",
     "t-overlay": "tdesign-miniprogram/overlay/overlay",
     "t-image-viewer": "tdesign-miniprogram/image-viewer/image-viewer"
   }
