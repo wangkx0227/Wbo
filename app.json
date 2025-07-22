@@ -9,7 +9,8 @@
     "navigationBarTextStyle": "black",
     "navigationBarTitleText": "Wbo小程序",
     "navigationBarBackgroundColor": "#ffffff",
-    "enablePullDownRefresh": true
+    "enablePullDownRefresh": true,
+    "onReachBottomDistance": 50
   },
   "style": "v2",
   "componentFramework": "glass-easel",

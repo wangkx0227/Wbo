@@ -53,9 +53,10 @@ Page({
     duration: 500, // 滑动动画时长
     interval: 5000, // 轮播间隔时间，只有开启自动播放才有用
     swiperImages, // 轮播图 url变量
-    // 上拉刷新变量
-    downRefreshEnable:false,
-    downRefreshLoadingTexts:['下拉刷新', '松手刷新', '正在刷新', '刷新完成'],
+    // 下拉刷新与滚动底部刷新使用变量
+    isDownRefreshing: false, // 下拉刷新状态
+    isLoadingReachMore: false, // 滚动底部加载数据
+    noMoreData: false    // 数据是否全部加载完毕
   },
   /**
    * 生命周期函数--监听页面加载
@@ -63,7 +64,6 @@ Page({
   onLoad(options) {
     const groupId = options.groupId; // 首页跳转后的存储的id值
   },
-
   // 生命周期函数--监听页面初次渲染完成
   onReady() { },
   // 生命周期函数--监听页面显示
@@ -74,11 +74,6 @@ Page({
   // 生命周期函数--监听页面卸载
   onUnload() { },
 
-  // 页面相关事件处理函数--监听用户下拉动作
-  onPullDownRefresh() { },
-
-  // 页面上拉触底事件的处理函数
-  onReachBottom() { },
 
   // 用户点击右上角分享
   onShareAppMessage() { },
@@ -132,12 +127,31 @@ Page({
       }
     })
   },
-  // 上拉刷新 - 用于页面重置
+  // 页面上拉刷新 - 用于页面重置
   onPullDownRefresh() {
     console.log("下拉刷新触发");
+    // 如果正在加载更多，则禁止下拉刷新
+    if (this.data.isLoadingReachMore) return;
+    this.setData({ isDownRefreshing: true });
     // 模拟数据加载
     setTimeout(() => {
       wx.stopPullDownRefresh(); // 必须手动停止
+      this.setData({
+        isDownRefreshing: false, // 修改状态
+      });
     }, 1500);
-  }
+  },
+  // 页面上拉触底事件的处理函数-用于加载更多数据
+  onReachBottom() {
+    // 如果在下拉刷新，禁止滚动加载
+    if (this.data.isDownRefreshing) return;
+    this.setData({ isLoadingReachMore: true });
+    setTimeout(() => {
+      wx.stopPullDownRefresh(); // 必须手动停止
+      this.setData({
+        isLoadingReachMore: false, // 修改状态
+      });
+    }, 1500);
+    
+  },
 })

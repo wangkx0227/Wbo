@@ -1,7 +1,8 @@
 <t-toast id="t-toast" />
 <t-message id="t-message" />
+
 <view class="page-wrapper">
-  <view class="page-head">
+  <view class="page-head filter-bar" >
     <t-row>
       <t-col span="24">
         <t-dropdown-menu>
