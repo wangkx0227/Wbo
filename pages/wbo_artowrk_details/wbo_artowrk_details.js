@@ -2,10 +2,7 @@ import { Toast } from 'tdesign-miniprogram'; // 轻提示
 import Message from 'tdesign-miniprogram/message/index'; // 提示
 const swiperImages = [
   'https://picsum.photos/800/600?random=1',  // 横版
-  'https://picsum.photos/600/800?random=2',  // 竖版
-  'https://picsum.photos/1000/500?random=3', // 宽幅
   // 物品类
-  'https://picsum.photos/800/800?random=4',  // 正方形
   'https://picsum.photos/700/900?random=5',  // 长竖版
 ];
 Page({
@@ -26,6 +23,10 @@ Page({
         {
           value: 'LSL',
           label: '黎善玲',
+        },
+        {
+          value:'HYJ',
+          label:'韩奕君'
         }
       ],
     },
@@ -150,7 +151,7 @@ Page({
       wx.stopPullDownRefresh(); // 必须手动停止
       this.setData({
         isLoadingReachMore: false, // 修改状态
-        noMoreData:true
+        // noMoreData:true // 如果数据已经读取完毕,就变为true,下拉就没有效果了
       });
     }, 1500);
 

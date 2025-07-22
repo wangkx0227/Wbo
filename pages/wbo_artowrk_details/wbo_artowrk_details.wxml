@@ -25,12 +25,15 @@
         <view class="cell-swiper">
           <t-swiper wx:if="{{swiperImages.length}}" current="{{current}}" autoplay="{{autoplay}}" duration="{{duration}}" interval="{{interval}}" navigation="{{ { type: 'dots' } }}" list="{{swiperImages}}" bind:click="onSwiperImagesTap">
           </t-swiper>
+          <!-- 9宫格遮罩层 -->
+          <view class="grid-overlay" wx:if="{{swiperImages.length}}">
+            <view class="grid-cell" wx:for="{{9}}" wx:key="index"></view>
+          </view>
           <!-- 无数据时显示占位内容 -->
           <t-image wx:else src="" shape="round" error="slot" width="360" height="192">
             <text class="error-text" slot="error">轮播图加载失败</text>
           </t-image>
         </view>
-
         <view class="header-button-other header-button">
           <text>OriginalDesignerComments：</text>
           <t-link size="small" content="查看" hover underline suffixIcon="chat-bubble" />
@@ -56,6 +59,10 @@
         <view class="cell-swiper">
           <t-swiper wx:if="{{swiperImages.length}}" current="{{current}}" autoplay="{{autoplay}}" duration="{{duration}}" interval="{{interval}}" navigation="{{ { type: 'dots' } }}" list="{{swiperImages}}" bind:click="onSwiperImagesTap">
           </t-swiper>
+          <!-- 9宫格遮罩层 -->
+          <view class="grid-overlay" wx:if="{{swiperImages.length}}">
+            <view class="grid-cell" wx:for="{{9}}" wx:key="index"></view>
+          </view>
           <!-- 无数据时显示占位内容 -->
           <t-image wx:else src="" shape="round" error="slot" width="360" height="192">
             <text class="error-text" slot="error">轮播图加载失败</text>
@@ -76,22 +83,25 @@
       </view>
       <view class="cell">
         <view class="header-title header-title-main">
-          <text>Title：National Park emblems</text>
-          <text>状态：保留</text>
+          <text class="header-title-main">Title：热可可杯吊饰</text>
+          <text style="color: red;">状态：舍弃</text>
         </view>
         <view class="header-title-other header-title">
-          <text>Name：韩奕君</text>
-          <text>Code：HYJ__AIE MJ_2025_09</text>
+          <text>Name：宁安琪</text>
+          <text>Code：NAQ__AIE MJ_2025_01</text>
         </view>
         <view class="cell-swiper">
           <t-swiper wx:if="{{swiperImages.length}}" current="{{current}}" autoplay="{{autoplay}}" duration="{{duration}}" interval="{{interval}}" navigation="{{ { type: 'dots' } }}" list="{{swiperImages}}" bind:click="onSwiperImagesTap">
           </t-swiper>
+          <!-- 9宫格遮罩层 -->
+          <view class="grid-overlay" wx:if="{{swiperImages.length}}">
+            <view class="grid-cell" wx:for="{{9}}" wx:key="index"></view>
+          </view>
           <!-- 无数据时显示占位内容 -->
           <t-image wx:else src="" shape="round" error="slot" width="360" height="192">
             <text class="error-text" slot="error">轮播图加载失败</text>
           </t-image>
         </view>
-
         <view class="header-button-other header-button">
           <text>OriginalDesignerComments：</text>
           <t-link size="small" content="查看" hover underline suffixIcon="chat-bubble" />
@@ -102,7 +112,7 @@
         </view>
         <view class="header-button-other header-button">
           <text>操作：</text>
-          <t-link size="small" content="舍弃" hover underline theme="danger" suffixIcon="delete-1" bindtap="onModifyArtworkStatus" data-id="1" />
+          <t-link size="small" content="舍弃" hover underline theme="danger" suffixIcon="delete-1" bindtap="onModifyArtworkStatus" data-id="2" />
         </view>
       </view>
     </view>
@@ -111,7 +121,7 @@
   <!-- 当下拉时,进行显示的内容  -->
   <view class="loading-box loading-flex" wx:if="{{isLoadingReachMore}}">
     <!-- <text class="loading-text">加载中...</text> -->
-    <t-loading theme="dots" size="60rpx"/>
+    <t-loading theme="dots" size="60rpx" />
   </view>
   <view class="loading-box" wx:if="{{noMoreData}}">
     <text class="loading-text">-- 已经到底了 --</text>
