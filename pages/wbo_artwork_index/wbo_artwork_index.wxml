@@ -31,7 +31,7 @@
               <text class="header-title-other">The Outfitters</text>
             </view>
             <view class="header-title">
-              <text class="header-title-other">Year：2015</text>
+              <text class="header-title-other" style="margin-right: 15px;">Year：2015</text>
               <text class="header-title-other">创建时间：2025-07-21</text>
             </view>
           </view>
@@ -47,11 +47,11 @@
             </view>
             <view>
               <text class="header-title-main">Theme of Program：</text>
-              <text class="header-title-other">The Outfitters</text>
+              <text class="header-title-other">Outfitters</text>
             </view>
             <view class="header-title">
-              <text class="header-title-other">Year：2015</text>
-              <text class="header-title-other">创建时间：2025-07-21</text>
+              <text class="header-title-other" style="margin-right: 15px;">Year：2025</text>
+              <text class="header-title-other">创建时间：2025-07-15</text>
             </view>
           </view>
         </t-cell>
