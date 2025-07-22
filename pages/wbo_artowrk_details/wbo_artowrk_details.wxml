@@ -104,11 +104,11 @@
         </view>
         <view class="header-button-other header-button">
           <text>OriginalDesignerComments：</text>
-          <t-link size="small" content="查看" hover underline suffixIcon="chat-bubble" />
+          <t-link size="small" content="查看" hover underline suffixIcon="chat-bubble" variant="outline" bind:tap="handlePopup" />
         </view>
         <view class="header-button-other header-button">
           <text>ReviewComments：</text>
-          <t-link size="small" content="评论" hover underline suffixIcon="chat-message" />
+          <t-link size="small" content="评论" hover underline suffixIcon="chat-message" variant="outline" data-key="showConfirm" bind:tap="showDialog" />
         </view>
         <view class="header-button-other header-button">
           <text>操作：</text>
@@ -127,4 +127,21 @@
   </view>
   <!-- 回到顶部 -->
   <t-back-top theme="half-round" text="顶部" scroll-top="{{scrollTop}}" bind:to-top="onToTop" />
+  <!-- 查看自评弹窗 -->
+  <t-popup visible="{{visible}}" bind:visible-change="onVisibleChange" placement="bottom">
+    <view class="popup-block">
+      <view class="popup-header">
+        <view class="popup-title">OriginalDesignerComments：</view>
+      </view>
+      <text style="padding: 0 5px;">无内容</text>
+    </view>
+  </t-popup>
+  <!-- 评论弹窗 -->
+  <t-dialog visible="{{showConfirm}}" title="评论" confirm-btn="确定" cancel-btn="取消" bind:confirm="closeDialog" bind:cancel="closeDialog">
+    <view slot="content">
+      <view class="textarea-example">
+        <t-textarea t-class="external-class" placeholder="请输入文字" bordered maxlength="200" disableDefaultPadding="{{true}}" indicator style="{{style}}" />
+      </view>
+    </view>
+  </t-dialog>
 </view>

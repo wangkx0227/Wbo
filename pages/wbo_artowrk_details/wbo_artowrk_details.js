@@ -59,7 +59,9 @@ Page({
     isLoadingReachMore: false, // 滚动底部加载数据
     noMoreData: false,    // 数据是否全部加载完毕
     // 回到顶部变量
-    scrollTop: 0
+    scrollTop: 0,
+    // 评论弹出层变量
+    showConfirm: false,
   },
   /**
    * 生命周期函数--监听页面加载
@@ -170,5 +172,31 @@ Page({
     this.setData({
       scrollTop: e.scrollTop
     });
+  },
+  // 弹窗函数 - 需要在进行调整
+  onVisibleChange(e) {
+    this.setData({
+      visible: e.detail.visible,
+    });
+  },
+  handlePopup(e) {
+    const { item } = e.currentTarget.dataset;
+    this.setData(
+      {
+        cur: item,
+      },
+      () => {
+        this.setData({ visible: true });
+      },
+    );
+  },
+  // 弹窗-评论
+  showDialog(e) {
+    const { key } = e.currentTarget.dataset;
+    this.setData({ [key]: true, dialogKey: key });
+  },
+  closeDialog() {
+    const { dialogKey } = this.data;
+    this.setData({ [dialogKey]: false });
   },
 })
