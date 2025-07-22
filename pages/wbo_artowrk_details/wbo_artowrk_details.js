@@ -108,7 +108,8 @@ Page({
   },
   // 修改当前图稿状态（舍弃与保留，默认都是保留）
   onModifyArtworkStatus(e){
-    const {suffixIcon} =  e.currentTarget.dataset;
-    console.log(suffixIcon);
+    const { id } =  e.currentTarget.dataset;
+    
+    
   }
 })
