@@ -25,8 +25,8 @@ Page({
           label: '黎善玲',
         },
         {
-          value:'HYJ',
-          label:'韩奕君'
+          value: 'HYJ',
+          label: '韩奕君'
         }
       ],
     },
@@ -57,7 +57,9 @@ Page({
     // 下拉刷新与滚动底部刷新使用变量
     isDownRefreshing: false, // 下拉刷新状态
     isLoadingReachMore: false, // 滚动底部加载数据
-    noMoreData: false    // 数据是否全部加载完毕
+    noMoreData: false,    // 数据是否全部加载完毕
+    // 回到顶部变量
+    scrollTop: 0
   },
   /**
    * 生命周期函数--监听页面加载
@@ -145,7 +147,7 @@ Page({
   // 页面上拉触底事件的处理函数-用于加载更多数据
   onReachBottom() {
     // 如果在下拉刷新，禁止滚动加载
-    if (this.data.isDownRefreshing || this.data.noMoreData)return;
+    if (this.data.isDownRefreshing || this.data.noMoreData) return;
     this.setData({ isLoadingReachMore: true });
     setTimeout(() => {
       wx.stopPullDownRefresh(); // 必须手动停止
@@ -155,5 +157,18 @@ Page({
       });
     }, 1500);
 
+  },
+  // 回到顶部
+  onToTop(e) {
+    wx.pageScrollTo({
+      scrollTop: 0,
+      duration: 300
+    });
+  },
+  //  实时监听滚动距离，把这个值传给回到顶部的按钮，让它知道是否应该出现
+  onPageScroll(e) {
+    this.setData({
+      scrollTop: e.scrollTop
+    });
   },
 })

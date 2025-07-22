@@ -49,8 +49,9 @@ Page({
     // 下拉刷新与滚动底部刷新使用变量
     isDownRefreshing: false, // 下拉刷新状态
     isLoadingReachMore: false, // 滚动底部加载数据
-    noMoreData: false    // 数据是否全部加载完毕
-
+    noMoreData: false,    // 数据是否全部加载完毕
+    // 回到顶部变量
+    scrollTop: 0
   },
   onChange(e) {
     this.setData({
@@ -118,6 +119,18 @@ Page({
         isLoadingReachMore: false, // 修改状态
       });
     }, 1500);
-
+  },
+  // 回到顶部
+  onToTop(e) {
+    wx.pageScrollTo({
+      scrollTop: 0,
+      duration: 300
+    });
+  },
+  //  实时监听滚动距离，把这个值传给回到顶部的按钮，让它知道是否应该出现
+  onPageScroll(e) {
+    this.setData({
+      scrollTop: e.scrollTop
+    });
   },
 })

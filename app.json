@@ -10,7 +10,8 @@
     "navigationBarTitleText": "Wbo小程序",
     "navigationBarBackgroundColor": "#ffffff",
     "enablePullDownRefresh": true,
-    "onReachBottomDistance": 50
+    "onReachBottomDistance": 50,
+    "component": true
   },
   "style": "v2",
   "componentFramework": "glass-easel",
@@ -27,5 +28,6 @@
     "t-overlay": "tdesign-miniprogram/overlay/overlay",
     "t-image-viewer": "tdesign-miniprogram/image-viewer/image-viewer",
     "t-loading": "tdesign-miniprogram/loading/loading"
+
   }
 }

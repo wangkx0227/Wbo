@@ -66,4 +66,6 @@
   <view class="loading-box" wx:if="{{noMoreData}}">
     <text class="loading-text">-- 已经到底了 --</text>
   </view>
+  <!-- 回到顶部 -->
+  <t-back-top theme="half-round" text="顶部" scroll-top="{{scrollTop}}" bind:to-top="onToTop" />
 </view>
