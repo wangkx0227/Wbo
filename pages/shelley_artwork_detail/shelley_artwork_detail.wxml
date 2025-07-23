@@ -32,12 +32,12 @@
         <view>
           <text class="title-font-main">图稿相关信息：</text>
           <view class="title-arrange-flex-start " style="padding-left: 15px;">
-            <view class="title-font-other header-button">
+            <view class="title-font-other button-center">
               <text>原创设计师自评：</text>
               <t-link size="small" content="查看" hover underline />
             </view>
             <t-divider layout="vertical" />
-            <view class="title-font-other header-button">
+            <view class="title-font-other button-center">
               <text>Kyle评论：</text>
               <t-link size="small" content="查看" hover underline />
             </view>

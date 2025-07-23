@@ -7,7 +7,7 @@
   background-color: #ffffff;
   padding: 5px 10px;
   display: grid;
-  gap: 10px;
+  gap: 8px;
 }
 
 /* 最后一个元素不需要间距 */
@@ -34,14 +34,9 @@
   justify-content: flex-start; /* 子元素从左边开始紧挨着排列 */
   align-items: center;
 }
-
-.header-button{
+.button-center{
   display: flex;
   align-items: center;
-}
-.header-button-other{
-  font-size: 14px;
-  color: #606266  ;
 }
 
 

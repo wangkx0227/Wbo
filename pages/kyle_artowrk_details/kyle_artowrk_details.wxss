@@ -8,6 +8,8 @@
   margin-bottom: 15rpx;
   background-color: #ffffff;
   padding: 5px 10px;
+  display: grid;
+  gap: 8px;
 }
 
 /* 最后一个元素不需要间距 */
@@ -15,30 +17,28 @@
   margin-bottom: 0;
 }
 .cell-swiper{
-  margin-top: 5px;
-  margin-bottom: 10px;
   position: relative; 
 }
 
-.header-title-main {
+.title-font-main {
   font-size: 14px;
   font-weight: 600;
   color: #333;
 }
-.header-title-other {
+.title-font-other {
   font-size: 12px;
   color: #606266  ;
 }
-.header-title {
+.title-arrange-space-between {
   display: flex;
   justify-content: space-between; /* 一左一右 */
   align-items: center;
 }
-.header-button{
+.button-center{
   display: flex;
   align-items: center;
 }
-.header-button-other{
+.button-font-other{
   font-size: 14px;
   color: #606266  ;
 }
