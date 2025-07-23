@@ -60,8 +60,12 @@ Page({
     noMoreData: false,    // 数据是否全部加载完毕
     // 回到顶部变量
     scrollTop: 0,
+    // 设计师自评弹窗控制变量
+    popupVisible: false,
+    popupValue: "",
     // 评论弹出层变量
-    showConfirm: false,
+    dialogVisible: false,
+    dialogValue: "",
   },
   /**
    * 生命周期函数--监听页面加载
@@ -173,30 +177,38 @@ Page({
       scrollTop: e.scrollTop
     });
   },
-  // 弹窗函数 - 需要在进行调整
-  onVisibleChange(e) {
+  // 自评弹窗函数 - 关闭
+  onClosePopup(e) {
     this.setData({
-      visible: e.detail.visible,
+      popupVisible: e.detail.visible,
+      popupValue: "",
     });
   },
-  handlePopup(e) {
-    const { item } = e.currentTarget.dataset;
-    this.setData(
-      {
-        cur: item,
-      },
-      () => {
-        this.setData({ visible: true });
-      },
-    );
+  // 自评弹窗函数 - 唤起
+  onOpenPopup(e) {
+    const { id, designer_comments } = e.currentTarget.dataset; // 点击按钮的存储的数据 id 点击id designer_comments 点击的自评文字
+    this.setData({ popupVisible: true, popupValue: "无内容" }); /// 触发弹窗
   },
-  // 弹窗-评论
-  showDialog(e) {
-    const { key } = e.currentTarget.dataset;
-    this.setData({ [key]: true, dialogKey: key });
+  // 弹窗-评论-打开
+  onOpenDialog(e) {
+    const { id } = e.currentTarget.dataset;
+    this.setData({ dialogVisible: true });
   },
-  closeDialog() {
-    const { dialogKey } = this.data;
-    this.setData({ [dialogKey]: false });
+  // 弹窗-评论-双向绑定
+  onDialogInput(e) {
+    this.setData({
+      dialogValue: e.detail.value
+    });
+  },
+  // 弹窗-评论-关闭（包含提交功能）
+  onCloseDialog(e) {
+    const { dialogValue } = this.data; // 输入的评论的数据
+    const action = e.type; // "confirm" 或 "cancel"
+    if (action === 'confirm') {
+      console.log("提交数据");
+    } else if (action === 'cancel') {
+      console.log("提交取消");
+    }
+    this.setData({ dialogVisible: false, dialogValue: "" });
   },
 })

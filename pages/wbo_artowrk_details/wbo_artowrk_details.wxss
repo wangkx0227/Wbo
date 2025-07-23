@@ -90,11 +90,6 @@
   color: #606266  ;
 }
 /* 评论 */
-.textarea-example {
-  padding: 32rpx 32rpx 48rpx;
-  background-color: var(--bg-color-demo);
-}
-.external-class {
-  padding-top: 24rpx !important;
-  padding-bottom: 24rpx !important;
+.dialog-textarea {
+  margin-top: 15px;
 }
