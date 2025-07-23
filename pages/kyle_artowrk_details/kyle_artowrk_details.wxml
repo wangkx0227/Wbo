@@ -44,7 +44,9 @@
         </view>
         <view class="header-button-other header-button">
           <text>操作：</text>
-          <t-link size="small" content="舍弃" hover underline theme="danger" suffixIcon="delete-1" bindtap="onModifyArtworkStatus" data-id="1" />
+          <t-link size="small" content="舍弃" data-content-status="N" hover underline theme="danger" suffixIcon="delete-1" bindtap="onModifyArtworkStatus" data-id="2" />
+          <t-divider layout="vertical" />
+          <t-link size="small" content="保留" data-content-status="Y" hover underline suffixIcon="task-add-1" bindtap="onModifyArtworkStatus" data-id="2"/>
         </view>
       </view>
       <view class="cell">
@@ -78,7 +80,9 @@
         </view>
         <view class="header-button-other header-button">
           <text>操作：</text>
-          <t-link size="small" content="舍弃" hover underline theme="danger" suffixIcon="delete-1" bindtap="onModifyArtworkStatus" data-id="2" />
+          <t-link size="small" content="舍弃" data-content-status="N" hover underline theme="danger" suffixIcon="delete-1" bindtap="onModifyArtworkStatus" data-id="2" />
+          <t-divider layout="vertical" />
+          <t-link size="small" content="保留" data-content-status="Y" hover underline suffixIcon="task-add-1" bindtap="onModifyArtworkStatus" data-id="2"/>
         </view>
       </view>
       <view class="cell">
@@ -112,7 +116,9 @@
         </view>
         <view class="header-button-other header-button">
           <text>操作：</text>
-          <t-link size="small" content="舍弃" hover underline theme="danger" suffixIcon="delete-1" bindtap="onModifyArtworkStatus" data-id="2" />
+          <t-link size="small" content="舍弃" data-content-status="Y" hover underline theme="danger" suffixIcon="delete-1" bindtap="onModifyArtworkStatus" data-id="2" />
+          <t-divider layout="vertical" />
+          <t-link size="small" content="保留" data-content-status="N" hover underline suffixIcon="task-add-1" bindtap="onModifyArtworkStatus" data-id="2"/>
         </view>
       </view>
     </view>

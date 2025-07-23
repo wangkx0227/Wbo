@@ -115,26 +115,49 @@ Page({
   // 修改当前图稿状态（舍弃与保留，默认都是保留）
   onModifyArtworkStatus(e) {
     const that = this;
-    const { id } = e.currentTarget.dataset;
-    wx.showModal({
-      title: '提示',
-      content: '是否舍弃当前图稿',
-      success(res) {
-        if (res.confirm) {
-          // 发送请求
-          console.log('用户舍弃')
-          Message.success({
-            context: that,
-            offset: [10, 32],
-            duration: 3000,
-            content: '提交成功，提示3秒后消失',
-          });
-        } else if (res.cancel) {
-          // 取消
-          console.log('用户取消')
+    const { id, contentStatus } = e.currentTarget.dataset;
+    if (contentStatus === "Y") {
+      wx.showModal({
+        title: '提示',
+        content: '是否"保留"当前图稿',
+        success(res) {
+          if (res.confirm) {
+            // 发送请求
+            console.log('用户保留')
+            Message.success({
+              context: that,
+              offset: [10, 32],
+              duration: 3000,
+              content: '提交成功，提示3秒后消失',
+            });
+          } else if (res.cancel) {
+            // 取消
+            console.log('用户取消')
+          }
         }
-      }
-    })
+      })
+    } else {
+      wx.showModal({
+        title: '提示',
+        content: '是否"舍弃"当前图稿',
+        success(res) {
+          if (res.confirm) {
+            // 发送请求
+            console.log('用户舍弃')
+            Message.success({
+              context: that,
+              offset: [10, 32],
+              duration: 3000,
+              content: '提交成功，提示3秒后消失',
+            });
+          } else if (res.cancel) {
+            // 取消
+            console.log('用户取消')
+          }
+        }
+      })
+    }
+
   },
   // 页面上拉刷新 - 用于页面重置
   onPullDownRefresh() {
