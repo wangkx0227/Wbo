@@ -68,6 +68,20 @@ Page({
     // 评论弹出层变量
     dialogVisible: false,
     dialogValue: "",
+    // 筛选器
+    cityText: '',
+    city2Text: '',
+    cityValue: [],
+    city2Value: [],
+    cityTitle: '',
+    city2Title: '',
+    citys: [
+      { label: '王五', value: 'A' },
+      { label: '李四', value: 'B' },
+      { label: '张明', value: 'B' },
+      { label: '赵玉', value: 'B' },
+      { label: '张三', value: 'B' },
+    ],
   },
   /**
    * 生命周期函数--监听页面加载
@@ -232,5 +246,37 @@ Page({
       console.log("提交取消");
     }
     this.setData({ dialogVisible: false, dialogValue: "" });
+  },
+  // 筛选器
+  onColumnChange(e) {
+    console.log('picker pick:', e);
+  },
+
+  onPickerChange(e) {
+    const { key } = e.currentTarget.dataset;
+    const { value } = e.detail;
+
+    console.log('picker change:', e.detail);
+    this.setData({
+      [`${key}Visible`]: false,
+      [`${key}Value`]: value,
+      [`${key}Text`]: value.join(' '),
+    });
+  },
+
+  onPickerCancel(e) {
+    const { key } = e.currentTarget.dataset;
+    console.log(e, '取消');
+    console.log('picker1 cancel:');
+    this.setData({
+      [`${key}Visible`]: false,
+    });
+  },
+  onTitlePicker() {
+    this.setData({ cityVisible: true, cityTitle: '请选择FMR' });
+  },
+
+  onWithoutTitlePicker() {
+    this.setData({ city2Visible: true, city2Title: '' });
   },
 })
