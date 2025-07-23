@@ -1,7 +1,6 @@
 import { Toast } from 'tdesign-miniprogram'; // 轻提示
 import Message from 'tdesign-miniprogram/message/index'; // 提示
 const app = getApp(); // 用户信息
-const userRole = app.globalData.userRole;
 
 const swiperImages = [
   'https://picsum.photos/800/600?random=1',  // 横版

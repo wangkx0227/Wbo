@@ -1,2 +1,85 @@
-<!--pages/shelley_artwork_detail/shelley_artwork_detail.wxml-->
-<text>pages/shelley_artwork_detail/shelley_artwork_detail.wxml</text>
+<t-toast id="t-toast" />
+<t-message id="t-message" />
+<view class="page-wrapper">
+  <view class="page-head filter-bar">
+    <t-row>
+      <t-col span="24">
+        <t-dropdown-menu>
+          <t-dropdown-item options="{{dropdownTemplate.options}}" placement="right" value="{{dropdownTemplate.value}}" bindchange="onChange" />
+          <t-dropdown-item options="{{dropdownSorter.options}}" placement="right" default-value="{{dropdownSorter.value}}" />
+        </t-dropdown-menu>
+      </t-col>
+    </t-row>
+  </view>
+  <view class="page-main">
+    <view class="wrapper">
+      <view class="cell">
+        <view class="header-title header-title-main">
+          <text>Title：Animals in sleeping bags</text>
+          <text>状态：未评估</text>
+        </view>
+        <view class="header-title-other header-title">
+          <text>Name：黎善玲</text>
+          <text>Code：LSL__AIE MJ_2025_01</text>
+        </view>
+        <view class="cell-swiper">
+          <t-swiper wx:if="{{swiperImages.length}}" current="{{current}}" autoplay="{{autoplay}}" duration="{{duration}}" interval="{{interval}}" navigation="{{ { type: 'dots' } }}" list="{{swiperImages}}" bind:click="onSwiperImagesTap">
+          </t-swiper>
+          <!-- 无数据时显示占位内容 -->
+          <t-image wx:else src="" shape="round" error="slot" width="360" height="192">
+            <text class="error-text" slot="error">轮播图加载失败</text>
+          </t-image>
+        </view>
+        <view class="header-button-other header-button">
+          <text>原创设计师评论：</text>
+          <t-link size="small" content="查看" hover underline suffixIcon="chat-bubble" />
+        </view>
+        <view class="header-button-other header-button">
+          <text>Kyle图稿评论：</text>
+          <t-link size="small" content="查看" hover underline suffixIcon="chat-bubble" />
+        </view>
+        <view class="header-button-other header-button">
+          <text>评估操作：</text>
+          <t-link size="small" content="可生产" data-content-status="N" hover underline bindtap="onModifyArtworkStatus" data-id="2" />
+          <t-divider layout="vertical" />
+          <t-link size="small" content="需要修改" data-content-status="Y" hover underline bindtap="onModifyArtworkStatus" data-id="2"/>
+          <t-divider layout="vertical" />
+          <t-link size="small" content="不具备可执行性" data-content-status="Y" hover underline bindtap="onModifyArtworkStatus" data-id="2"/>
+        </view>
+        <view class="header-button-other header-button">
+          <text>指派 FMR：</text>
+          
+        </view>
+      </view>
+    </view>
+  </view>
+  <!-- 当下拉时,进行显示的内容  -->
+  <view class="loading-box loading-flex" wx:if="{{isLoadingReachMore}}">
+    <!-- <text class="loading-text">加载中...</text> -->
+    <t-loading theme="dots" size="60rpx" />
+  </view>
+  <view class="loading-box" wx:if="{{noMoreData}}">
+    <text class="loading-text">-- 已经到底了 --</text>
+  </view>
+  <!-- 回到顶部 -->
+  <t-back-top theme="half-round" text="顶部" scroll-top="{{scrollTop}}" bind:to-top="onToTop" />
+  <!-- 查看自评弹窗 -->
+  <t-popup visible="{{popupVisible}}" bind:visible-change="onClosePopup" placement="bottom">
+    <view class="popup-block">
+      <view class="popup-header">
+        <view class="popup-title">原始设计师意见：</view>
+      </view>
+      <view class="popup-comments">
+        <text>{{ popupValue }}</text>
+      </view>
+    </view>
+  </t-popup>
+  <!-- 评论弹窗 -->
+  <t-dialog visible="{{dialogVisible}}" title="评审意见：" confirm-btn="确定" cancel-btn="取消" bind:confirm="onCloseDialog" bind:cancel="onCloseDialog">
+    <view slot="content">
+      <view class="dialog-textarea">
+        <t-textarea value="{{ dialogValue }}"  placeholder="请输入评审意见" bordered maxlength="200" disableDefaultPadding="true" indicator  bind:change="onDialogInput"/>
+      </view>
+    </view>
+  </t-dialog>
+</view>

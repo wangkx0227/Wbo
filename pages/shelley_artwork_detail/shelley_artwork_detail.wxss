@@ -1,1 +1,76 @@
-/* pages/shelley_artwork_detail/shelley_artwork_detail.wxss */
+
+
+.page-main{
+  margin-top: 5px;
+  padding: 5px;
+}
+.page-main .wrapper .cell {
+  margin-bottom: 15rpx;
+  background-color: #ffffff;
+  padding: 5px 10px;
+}
+
+/* 最后一个元素不需要间距 */
+.page-main .wrapper .cell:last-child {
+  margin-bottom: 0;
+}
+.cell-swiper{
+  margin-top: 5px;
+  margin-bottom: 10px;
+}
+
+.header-title-main {
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+}
+.header-title-other {
+  font-size: 12px;
+  color: #606266  ;
+}
+.header-title {
+  display: flex;
+  justify-content: space-between; /* 一左一右 */
+  align-items: center;
+}
+.header-button{
+  display: flex;
+  align-items: center;
+}
+.header-button-other{
+  font-size: 14px;
+  color: #606266  ;
+}
+
+
+/* 弹窗的css */
+.popup-block {
+  width: 100vw;
+  height: 240px;
+  background: var(--td-bg-color-container);
+  border-top-left-radius: 16rpx;
+  border-top-right-radius: 16rpx;
+}
+
+.popup-header {
+  display: flex;
+  align-items: center;
+  height: 116rpx;
+}
+
+.popup-title {
+  flex: 1;
+  text-align: center;
+  font-weight: 600;
+  font-size: 36rpx;
+  color: #333;
+}
+.popup-comments {
+  padding: 0 10px;
+  height: 180px;
+  color: #606266  ;
+}
+/* 评论 */
+.dialog-textarea {
+  margin-top: 15px;
+}
