@@ -1,11 +1,11 @@
 {
   "pages": [
     "pages/wbo_artwork_index/wbo_artwork_index",
-    "pages/kyle_artowrk_details/kyle_artowrk_details",
-    
     "pages/wbo_template_index/wbo_template_index",
-    "pages/wbo_template_details/wbo_template_details"
-    
+    "pages/wbo_template_details/wbo_template_details",
+    "pages/shelley_artwork_detail/shelley_artwork_detail",
+    "pages/kyle_artowrk_details/kyle_artowrk_details",
+    "pages/fmr_artwork_detail/fmr_artwork_detail"
   ],
   "window": {
     "navigationBarTextStyle": "black",
@@ -30,6 +30,5 @@
     "t-overlay": "tdesign-miniprogram/overlay/overlay",
     "t-image-viewer": "tdesign-miniprogram/image-viewer/image-viewer",
     "t-loading": "tdesign-miniprogram/loading/loading"
-
   }
 }
