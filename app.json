@@ -1,5 +1,6 @@
 {
   "pages": [
+    "pages/wbo_login/wbo_login",
     "pages/wbo_artwork_index/wbo_artwork_index",
     "pages/wbo_template_index/wbo_template_index",
     "pages/wbo_template_details/wbo_template_details",

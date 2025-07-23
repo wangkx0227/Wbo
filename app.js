@@ -15,6 +15,8 @@ App({
   //   })
   // },
   globalData: {
-    userInfo: null
+    userInfo: null,   // 当前登录用户信息
+    userRole: 'shelley',     // 用户角色，比如 'kyle' | 'shelley' | 'fmr' | 或者其他
+    token: ''         // 其他全局信息
   }
 })

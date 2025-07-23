@@ -1,6 +1,7 @@
 import { Toast } from 'tdesign-miniprogram'; // 轻提示
 import Message from 'tdesign-miniprogram/message/index'; // 提示
-
+const app = getApp();
+const userRole = app.globalData.userRole;
 Page({
   data: {
     // 筛选框变量-1
@@ -68,24 +69,63 @@ Page({
     const groupId = e.currentTarget.dataset.groupId;
     wx.showLoading({ title: '正在加载...' });
     console.log(groupId, "准备跳转");
-    // 需要3类人进行跳转 Kyle Shelley FMR 
-    setTimeout(() => {
-      wx.navigateTo({
-        url: `/pages/kyle_artowrk_details/kyle_artowrk_details?groupId=${groupId}`,
-        success() {
-          wx.hideLoading();
-        },
-        fail(err) {
-          Toast({
-            context: that,
-            selector: '#t-toast',
-            message: '跳转失败',
-            theme: 'error',
-            con: 'check-circle',
-          });
-        }
-      });
-    }, 300)
+    // 需要3类人进行跳转 Kyle Shelley FMR 进行跳转
+    if (userRole === "kyle") {
+      setTimeout(() => {
+        wx.navigateTo({
+          url: `/pages/kyle_artowrk_details/kyle_artowrk_details?groupId=${groupId}`,
+          success() {
+            wx.hideLoading();
+          },
+          fail(err) {
+            Toast({
+              context: that,
+              selector: '#t-toast',
+              message: '跳转失败',
+              theme: 'error',
+              con: 'check-circle',
+            });
+          }
+        });
+      }, 300)
+    } else if (userRole === "shelley") {
+      setTimeout(() => {
+        wx.navigateTo({
+          url: `/pages/shelley_artwork_detail/shelley_artwork_detail?groupId=${groupId}`,
+          success() {
+            wx.hideLoading();
+          },
+          fail(err) {
+            Toast({
+              context: that,
+              selector: '#t-toast',
+              message: '跳转失败',
+              theme: 'error',
+              con: 'check-circle',
+            });
+          }
+        });
+      }, 300)
+    } else if (userRole === "fmr") {
+      setTimeout(() => {
+        wx.navigateTo({
+          url: `/pages/fmr_artwork_detail/fmr_artwork_detail?groupId=${groupId}`,
+          success() {
+            wx.hideLoading();
+          },
+          fail(err) {
+            Toast({
+              context: that,
+              selector: '#t-toast',
+              message: '跳转失败',
+              theme: 'error',
+              con: 'check-circle',
+            });
+          }
+        });
+      }, 300)
+    }
+
   },
   // 用户点击右上角分享
   onShareAppMessage() {
