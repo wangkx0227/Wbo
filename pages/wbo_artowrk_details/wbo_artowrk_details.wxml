@@ -131,9 +131,11 @@
   <t-popup visible="{{visible}}" bind:visible-change="onVisibleChange" placement="bottom">
     <view class="popup-block">
       <view class="popup-header">
-        <view class="popup-title">OriginalDesignerComments：</view>
+        <view class="popup-title">原始设计师意见：</view>
       </view>
-      <text style="padding: 0 5px;">无内容</text>
+      <view class="popup-comments">
+        <text>无内容</text>
+      </view>
     </view>
   </t-popup>
   <!-- 评论弹窗 -->
