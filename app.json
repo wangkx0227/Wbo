@@ -1,9 +1,11 @@
 {
   "pages": [
     "pages/wbo_artwork_index/wbo_artwork_index",
+    "pages/kyle_artowrk_details/kyle_artowrk_details",
+    
     "pages/wbo_template_index/wbo_template_index",
-    "pages/wbo_template_details/wbo_template_details",
-    "pages/wbo_artowrk_details/wbo_artowrk_details"
+    "pages/wbo_template_details/wbo_template_details"
+    
   ],
   "window": {
     "navigationBarTextStyle": "black",

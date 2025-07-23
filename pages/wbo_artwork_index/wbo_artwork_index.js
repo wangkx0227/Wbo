@@ -68,9 +68,10 @@ Page({
     const groupId = e.currentTarget.dataset.groupId;
     wx.showLoading({ title: '正在加载...' });
     console.log(groupId, "准备跳转");
+    // 需要3类人进行跳转 Kyle Shelley FMR 
     setTimeout(() => {
       wx.navigateTo({
-        url: `/pages/wbo_artowrk_details/wbo_artowrk_details?groupId=${groupId}`,
+        url: `/pages/kyle_artowrk_details/kyle_artowrk_details?groupId=${groupId}`,
         success() {
           wx.hideLoading();
         },
