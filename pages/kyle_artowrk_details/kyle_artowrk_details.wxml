@@ -34,15 +34,15 @@
             <text class="error-text" slot="error">轮播图加载失败</text>
           </t-image>
         </view>
-        <view class="button-center button-font-other">
+        <view class="button-center title-font-other">
           <text>OriginalDesignerComments：</text>
           <t-link size="small" content="查看" hover underline suffixIcon="chat-bubble" />
         </view>
-        <view class="button-center button-font-other">
+        <view class="button-center title-font-other">
           <text>ReviewComments：</text>
           <t-link size="small" content="评论" hover underline suffixIcon="chat-message" />
         </view>
-        <view class="button-center button-font-other">
+        <view class="button-center title-font-other">
           <text>操作：</text>
           <t-link size="small" content="舍弃" data-content-status="N" hover underline theme="danger" suffixIcon="delete-1" bindtap="onModifyArtworkStatus" data-id="2" />
           <t-divider layout="vertical" />
@@ -70,15 +70,15 @@
             <text class="error-text" slot="error">轮播图加载失败</text>
           </t-image>
         </view>
-        <view class="button-center button-font-other">
+        <view class="button-center title-font-other">
           <text>OriginalDesignerComments：</text>
           <t-link size="small" content="查看" hover underline suffixIcon="chat-bubble" />
         </view>
-        <view class="button-center button-font-other">
+        <view class="button-center title-font-other">
           <text>ReviewComments：</text>
           <t-link size="small" content="评论" hover underline suffixIcon="chat-message" />
         </view>
-        <view class="button-center button-font-other">
+        <view class="button-center title-font-other">
           <text>操作：</text>
           <t-link size="small" content="舍弃" data-content-status="N" hover underline theme="danger" suffixIcon="delete-1" bindtap="onModifyArtworkStatus" data-id="2" />
           <t-divider layout="vertical" />
@@ -106,15 +106,15 @@
             <text class="error-text" slot="error">轮播图加载失败</text>
           </t-image>
         </view>
-        <view class="button-center button-font-other">
+        <view class="button-center title-font-other">
           <text>OriginalDesignerComments：</text>
           <t-link size="small" content="查看" hover underline suffixIcon="chat-bubble" variant="outline" bind:tap="onOpenPopup" />
         </view>
-        <view class="button-center button-font-other">
+        <view class="button-center title-font-other">
           <text>ReviewComments：</text>
           <t-link size="small" content="评论" hover underline suffixIcon="chat-message" variant="outline"  bind:tap="onOpenDialog" />
         </view>
-        <view class="button-center button-font-other">
+        <view class="button-center title-font-other">
           <text>操作：</text>
           <t-link size="small" content="舍弃" data-content-status="Y" hover underline theme="danger" suffixIcon="delete-1" bindtap="onModifyArtworkStatus" data-id="2" />
           <t-divider layout="vertical" />
