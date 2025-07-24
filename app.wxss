@@ -20,13 +20,14 @@ page {
   z-index: 999;
 }
 
-/* 底部滚动加载 */
+/* 底部滚动加载 - 样式 */
 .loading-box {
   background-color: #ffff;
   height: 35px;
   width: 100%;
 }
 
+/* 滚到底部加载 - 文字 */
 .loading-text {
   display: block;
   text-align: center;
@@ -35,7 +36,83 @@ page {
   line-height: 35px;
 }
 
+/* 滚到底部加载 - 定位 */
 .loading-flex {
   display: flex;
   justify-content: center;
+}
+
+/* 公共样式 */
+.page-main {
+  margin-top: 5px;
+  padding: 5px;
+}
+
+.page-main .wrapper .cell {
+  margin-bottom: 15rpx;
+  background-color: #ffffff;
+  padding: 5px 10px;
+  display: grid;
+  gap: 8px;
+}
+
+/* 最后一个元素不需要间距 */
+.page-main .wrapper .cell:last-child {
+  margin-bottom: 0;
+}
+
+.title-font-main {
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+}
+
+.title-font-other {
+  font-size: 12px;
+  color: #606266;
+}
+
+.title-arrange-space-between {
+  display: flex;
+  justify-content: space-between; /* 一左一右 */
+  align-items: center;
+}
+
+.button-arrange-center {
+  display: flex;
+  align-items: center; /* 任何元素排在一行 */
+}
+
+/* 弹窗的css */
+.popup-block {
+  width: 100vw;
+  height: 240px;
+  background: var(--td-bg-color-container);
+  border-top-left-radius: 16rpx;
+  border-top-right-radius: 16rpx;
+}
+
+.popup-header {
+  display: flex;
+  align-items: center;
+  height: 116rpx;
+}
+
+.popup-title {
+  flex: 1;
+  text-align: center;
+  font-weight: 600;
+  font-size: 36rpx;
+  color: #333;
+}
+
+.popup-comments {
+  padding: 0 10px;
+  height: 180px;
+  color: #606266;
+}
+
+/* 评论 */
+.dialog-textarea {
+  margin-top: 15px;
 }

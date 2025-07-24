@@ -1,4 +1,6 @@
+<!-- 轻提示 -->
 <t-toast id="t-toast" />
+<!-- 提示 -->
 <t-message id="t-message" />
 <view class="page-wrapper">
   <view class="page-head filter-bar">
@@ -32,13 +34,13 @@
         <view>
           <text class="title-font-main">图稿相关信息：</text>
           <view class="title-arrange-flex-start " style="padding-left: 15px;">
-            <view class="title-font-other button-center">
+            <view class="title-font-other button-arrange-center">
               <text>原创设计师自评：</text>
               <t-link size="small" content="查看" hover underline bind:tap="onOpenPopup" data-commentator="Y" 
               data-comment-content="原创设计师评论" />
             </view>
             <t-divider layout="vertical" />
-            <view class="title-font-other button-center">
+            <view class="title-font-other button-arrange-center">
               <text>Kyle评论：</text>
               <t-link size="small" content="查看" hover underline bind:tap="onOpenPopup" data-commentator="N" 
               data-comment-content="Kyle的评论"/>
