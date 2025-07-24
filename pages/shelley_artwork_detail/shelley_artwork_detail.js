@@ -65,6 +65,7 @@ Page({
     // 设计师自评弹窗控制变量
     popupVisible: false,
     popupValue: "",
+    popupTitle: "",
     // 评论弹出层变量
     dialogVisible: false,
     dialogValue: "",
@@ -213,17 +214,42 @@ Page({
       scrollTop: e.scrollTop
     });
   },
-  // 自评弹窗函数 - 关闭
+  // 评论弹窗函数 - 关闭
   onClosePopup(e) {
+    /*
+      popupVisible: 关闭弹窗
+      popupValue: 清空评论内容
+      popupTitle: 清空评论的标题
+    */
     this.setData({
       popupVisible: e.detail.visible,
-      popupValue: "",
     });
+    // 延迟清空内容，确保动画完成后执行
+    setTimeout(() => {
+      this.setData({
+        popupValue: "",
+        popupTitle: ""
+      });
+    }, 300);
   },
-  // 自评弹窗函数 - 唤起
+  // 评论弹窗函数 - 唤起
   onOpenPopup(e) {
-    const { id, designer_comments } = e.currentTarget.dataset; // 点击按钮的存储的数据 id 点击id designer_comments 点击的自评文字
-    this.setData({ popupVisible: true, popupValue: "无内容" }); /// 触发弹窗
+    /*
+      id: 当条记录的id
+      commentator: 评论人
+      commentContent: 评论内容
+      popupVisible: 唤起弹窗
+      popupTitle: 评论的标题
+      popupValue: 显示的评论内容
+    */
+    const { id, commentator, commentContent } = e.currentTarget.dataset;
+    // commentator 变量控制显示评论标题
+    if (commentator === "Y") {
+      this.setData({ popupTitle: "原创设计师自评：", });
+    } else {
+      this.setData({ popupTitle: "Kyle评论：", });
+    }
+    this.setData({ popupVisible: true, popupValue: commentContent }); // 触发弹窗
   },
   // 弹窗-评论-打开
   onOpenDialog(e) {
@@ -251,7 +277,6 @@ Page({
   onColumnChange(e) {
     console.log('picker pick:', e);
   },
-
   onPickerChange(e) {
     const { key } = e.currentTarget.dataset;
     const { value } = e.detail;
@@ -263,7 +288,6 @@ Page({
       [`${key}Text`]: value.join(' '),
     });
   },
-
   onPickerCancel(e) {
     const { key } = e.currentTarget.dataset;
     console.log(e, '取消');
@@ -275,7 +299,6 @@ Page({
   onTitlePicker() {
     this.setData({ cityVisible: true, cityTitle: '请选择FMR' });
   },
-
   onWithoutTitlePicker() {
     this.setData({ city2Visible: true, city2Title: '' });
   },
