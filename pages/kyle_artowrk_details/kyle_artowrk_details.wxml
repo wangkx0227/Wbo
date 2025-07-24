@@ -44,21 +44,11 @@
           <text>ReviewComments：</text>
           <t-link size="small" content="评论" hover underline suffixIcon="chat-message" />
         </view>
-        <view class="title-font-other">
+        <view class="arrange-center title-font-other">
           <text>操作：</text>
-          <!-- <t-link size="small" content="舍弃" data-content-status="N" hover underline theme="danger" suffixIcon="delete-1" bindtap="onModifyArtworkStatus" data-id="2" />
+          <t-link size="small" content="舍弃" data-content-status="N" hover underline theme="danger"  bindtap="onModifyArtworkStatus" data-id="2" />
           <t-divider layout="vertical" />
-          <t-link size="small" content="保留" data-content-status="Y" hover underline suffixIcon="task-add-1" bindtap="onModifyArtworkStatus" data-id="2"/> -->
-          <t-radio-group t-class="radio-horizontal-box" value="{{radioValue}}" bind:change="onRadioChange" style="justify-content: flex-start;gap: 15px;">
-            <view class="radio-card   {{ radioValue == '0' ? 'radio-active' : ''}}">
-              <t-icon name="check" t-class="radio-icon" />
-              <t-radio value="0" label="舍弃" icon="none" borderless />
-            </view>
-            <view class="radio-card  {{ radioValue == '1' ? 'radio-active' : ''}}">
-              <t-icon name="check" t-class="radio-icon" />
-              <t-radio value="1" label="保留" icon="none" borderless t-class="radio-text" />
-            </view>
-          </t-radio-group>
+          <t-link size="small" content="保留" data-content-status="Y" hover underline bindtap="onModifyArtworkStatus" data-id="2"/>
         </view>
       </view>
       <view class="cell">
@@ -92,9 +82,9 @@
         </view>
         <view class="arrange-center title-font-other">
           <text>操作：</text>
-          <t-link size="small" content="舍弃" data-content-status="N" hover underline theme="danger" suffixIcon="delete-1" bindtap="onModifyArtworkStatus" data-id="2" />
+          <t-link size="small" content="舍弃" data-content-status="N" hover underline theme="danger" bindtap="onModifyArtworkStatus" data-id="2" />
           <t-divider layout="vertical" />
-          <t-link size="small" content="保留" data-content-status="Y" hover underline suffixIcon="task-add-1" bindtap="onModifyArtworkStatus" data-id="2"/>
+          <t-link size="small" content="保留" data-content-status="Y" hover underline bindtap="onModifyArtworkStatus" data-id="2"/>
         </view>
       </view>
       <view class="cell">
@@ -128,9 +118,9 @@
         </view>
         <view class="arrange-center title-font-other">
           <text>操作：</text>
-          <t-link size="small" content="舍弃" data-content-status="N" hover underline theme="danger" suffixIcon="delete-1" bindtap="onModifyArtworkStatus" data-id="2" />
+          <t-link size="small" content="舍弃" data-content-status="N" hover underline theme="danger" bindtap="onModifyArtworkStatus" data-id="2" />
           <t-divider layout="vertical" />
-          <t-link size="small" content="保留" data-content-status="Y" hover underline suffixIcon="task-add-1" bindtap="onModifyArtworkStatus" data-id="2"/>
+          <t-link size="small" content="保留" data-content-status="Y" hover underline bindtap="onModifyArtworkStatus" data-id="2"/>
         </view>
       </view>
     </view>
