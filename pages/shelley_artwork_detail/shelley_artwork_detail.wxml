@@ -19,7 +19,7 @@
         <view class="title-font-main">
           <text>Title：Animals in sleeping bags</text>
         </view>
-        <view class="title-font-other title-arrange-space-between">
+        <view class="title-font-other arrange-space-between">
           <text>Name：黎善玲</text>
           <text>Code：LSL__AIE MJ_2025_01</text>
         </view>
@@ -31,33 +31,38 @@
             <text class="error-text" slot="error">轮播图加载失败</text>
           </t-image>
         </view>
-        <view class="button-arrange-center">
+        <view class="arrange-center">
           <text class="title-font-main">图稿相关信息：</text>
-          <view class="title-font-other button-arrange-center">
+          <view class="title-font-other arrange-center">
             <text>原创设计师自评：</text>
             <t-link size="small" content="查看" hover underline bind:tap="onOpenPopup" data-commentator="Y" data-comment-content="原创设计师评论" />
           </view>
           <t-divider layout="vertical" />
-          <view class="title-font-other button-arrange-center">
+          <view class="title-font-other arrange-center">
             <text>Kyle评论：</text>
             <t-link size="small" content="查看" hover underline bind:tap="onOpenPopup" data-commentator="N" data-comment-content="Kyle的评论" />
           </view>
         </view>
-        <view class="button-arrange-center">
+        <view class="arrange-center">
           <text class="title-font-main">指派 FMR 评估：</text>
-          <view class="title-arrange-flex-start ">
-            <t-link size="small" content="点击选择FMR" data-content-status="N" note="{{cityText}}" hover underline bindtap="onTitlePicker" data-id="2" />
-          </view>
+          <t-link size="small" content="点击选择FMR" data-content-status="N" note="{{cityText}}" hover underline bindtap="onTitlePicker" data-id="2" />
         </view>
-        <view class="button-arrange-center">
+        <view class="arrange-column">
           <text class="title-font-main">评估建议：</text>
-          <view class="title-arrange-flex-start">
-            <t-link size="small" content="可生产" data-content-status="N" hover underline bindtap="onModifyArtworkStatus" data-id="2" />
-            <t-divider layout="vertical" />
-            <t-link size="small" content="小幅修改" data-content-status="Y" hover underline bindtap="onModifyArtworkStatus" data-id="2" />
-            <t-divider layout="vertical" />
-            <t-link size="small" content="不具备可执行性" data-content-status="Y" hover underline bindtap="onModifyArtworkStatus" data-id="2" />
-          </view>
+          <t-radio-group t-class="horizontal-box" value="{{value1}}" bind:change="onChange1">
+            <view class="card card-success-active">
+              <t-icon name="check" t-class="card__icon" />
+              <t-radio value="{{index}}" label="可生产" icon="none" borderless />
+            </view>
+            <view class="card card-default-active">
+              <t-icon name="check" t-class="card__icon" />
+              <t-radio value="{{index}}" label="小幅度修改" icon="none" borderless />
+            </view>
+            <view class="card card-error-active">
+              <t-icon name="check" t-class="card__icon" />
+              <t-radio value="{{index}}" label="不具备可行性" icon="none" borderless />
+            </view>
+          </t-radio-group>
         </view>
       </view>
     </view>

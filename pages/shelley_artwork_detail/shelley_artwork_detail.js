@@ -83,6 +83,9 @@ Page({
       { label: '赵玉', value: 'B' },
       { label: '张三', value: 'B' },
     ],
+    // 单选框变量
+    value1: 0,
+
   },
   /**
    * 生命周期函数--监听页面加载
@@ -301,5 +304,9 @@ Page({
   },
   onWithoutTitlePicker() {
     this.setData({ city2Visible: true, city2Title: '' });
+  },
+  // 单选框
+  onChange1(e) {
+    this.setData({ value1: e.detail.value });
   },
 })

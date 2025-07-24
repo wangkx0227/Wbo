@@ -1,9 +1,85 @@
-.title-arrange-flex-start {
-  display: flex;
-  justify-content: flex-start; /* 子元素从左边开始紧挨着排列 */
-  align-items: center;
-}
+
 
 .mb-16 {
   margin-bottom: 32rpx;
+}
+
+
+.card {
+  position: relative;
+  margin: 32rpx;
+  border-radius: 12rpx;
+  overflow: hidden;
+  box-sizing: border-box;
+  border: 3rpx solid var(--td-bg-color-container, #fff);
+}
+
+.card-success-active {
+  border-color: var(--td-brand-color, #52c41a);
+}
+
+.card-default-active {
+  border-color: var(--td-brand-color, #0052d9);
+}
+
+.card-error-active {
+  border-color: var(--td-brand-color, #f5222d);
+}
+
+.card-success-active::after {
+  content: '';
+  display: block;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 0;
+  border-width: 28px 28px 28px 0;
+  border-style: solid;
+  border-color: var(--td-brand-color, #52c41a) transparent transparent transparent;
+}
+
+.card-default-active::after {
+  content: '';
+  display: block;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 0;
+  border-width: 28px 28px 28px 0;
+  border-style: solid;
+  border-color: var(--td-brand-color, #0052d9) transparent transparent transparent;
+}
+
+.card-error-active::after {
+  content: '';
+  display: block;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 0;
+  border-width: 28px 28px 28px 0;
+  border-style: solid;
+  border-color: var(--td-brand-color, #f5222d) transparent transparent transparent;
+}
+
+.card__icon {
+  color: var(--td-bg-color-container, #f5f5f5);
+  position: absolute;
+  left: 1.5px;
+  top: 1.5px;
+  z-index: 1;
+}
+
+/* 横向布局 */
+.horizontal-box {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  margin: 32rpx;
+}
+
+.horizontal-box .card {
+  flex: 0 0 calc(33.33% - 12rpx);
+  margin: 0 0 24rpx 0;
 }

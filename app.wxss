@@ -72,15 +72,20 @@ page {
   color: #606266;
 }
 
-.title-arrange-space-between {
+.arrange-space-between {
   display: flex;
   justify-content: space-between; /* 一左一右 */
   align-items: center;
 }
 
-.button-arrange-center {
+.arrange-center {
   display: flex;
   align-items: center; /* 任何元素排在一行 */
+}
+
+.arrange-column {
+  display: flex;
+  flex-direction: column; /* 设置为上下布局 */
 }
 
 /* 弹窗的css */
