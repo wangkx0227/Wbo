@@ -101,7 +101,7 @@
   <t-dialog visible="{{dialogVisible}}" title="评估建议：" confirm-btn="确定" cancel-btn="取消" bind:confirm="onCloseDialog" bind:cancel="onCloseDialog">
     <view slot="content">
       <view class="dialog-textarea">
-        <t-textarea value="{{ dialogValue }}" placeholder="请输入评审意见" bordered maxlength="200" disableDefaultPadding="true" indicator bind:change="onDialogInput" />
+        <t-textarea value="{{ dialogValue }}" placeholder="请输入评审意见" bordered maxlength="200" disableDefaultPadding="true" indicator bind:change="onDialogInput"/>
       </view>
     </view>
   </t-dialog>

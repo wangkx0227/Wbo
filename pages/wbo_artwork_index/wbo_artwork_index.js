@@ -1,7 +1,7 @@
 import { Toast } from 'tdesign-miniprogram'; // 轻提示
 import Message from 'tdesign-miniprogram/message/index'; // 提示
 const app = getApp();
-const userRole = app.globalData.userRole;
+
 Page({
   data: {
     // 筛选框变量-1
@@ -69,6 +69,7 @@ Page({
     const groupId = e.currentTarget.dataset.groupId;
     wx.showLoading({ title: '正在加载...' });
     console.log(groupId, "准备跳转");
+    const userRole = app.globalData.userRole;
     // 需要3类人进行跳转 Kyle Shelley FMR 进行跳转
     if (userRole === "kyle") {
       setTimeout(() => {
