@@ -9,10 +9,7 @@
     "t-popup": "tdesign-miniprogram/popup/popup",
     "t-dialog": "tdesign-miniprogram/dialog/dialog",
     "t-textarea": "tdesign-miniprogram/textarea/textarea",
-    "t-divider": "tdesign-miniprogram/divider/divider",
     "t-picker": "tdesign-miniprogram/picker/picker",
     "t-picker-item": "tdesign-miniprogram/picker-item/picker-item"
-    
-
   }
 }

@@ -1,1 +1,4 @@
-/* pages/fmr_artwork_detail/fmr_artwork_detail.wxss */
+.mb-16 {
+  margin-bottom: 32rpx;
+}
+

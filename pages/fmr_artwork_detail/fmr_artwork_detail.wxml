@@ -1,2 +1,99 @@
-<!--pages/fmr_artwork_detail/fmr_artwork_detail.wxml-->
-<text>pages/fmr_artwork_detail/fmr_artwork_detail.wxml</text>
+<!-- 轻提示 -->
+<t-toast id="t-toast" />
+<!-- 提示 -->
+<t-message id="t-message" />
+<view class="page-wrapper">
+  <view class="page-head filter-bar">
+    <t-row>
+      <t-col span="24">
+        <t-dropdown-menu>
+          <t-dropdown-item options="{{dropdownTemplate.options}}" placement="right" value="{{dropdownTemplate.value}}" bindchange="onChange" />
+          <t-dropdown-item options="{{dropdownAssess.options}}" placement="right" default-value="{{dropdownAssess.value}}" />
+        </t-dropdown-menu>
+      </t-col>
+    </t-row>
+  </view>
+  <view class="page-main">
+    <view class="wrapper">
+      <view class="cell">
+        <view class="title-font-main">
+          <text>Title：Animals in sleeping bags</text>
+        </view>
+        <view class="title-font-other arrange-space-between">
+          <text>Name：黎善玲</text>
+          <text>Code：LSL__AIE MJ_2025_01</text>
+        </view>
+        <view class="cell-swiper">
+          <t-swiper wx:if="{{swiperImages.length}}" current="{{current}}" autoplay="{{autoplay}}" duration="{{duration}}" interval="{{interval}}" navigation="{{ { type: 'dots' } }}" list="{{swiperImages}}" bind:click="onSwiperImagesTap">
+          </t-swiper>
+          <!-- 无数据时显示占位内容 -->
+          <t-image wx:else src="" shape="round" error="slot" width="360" height="192">
+            <text class="error-text" slot="error">轮播图加载失败</text>
+          </t-image>
+        </view>
+        <view class="arrange-center">
+          <text class="title-font-main">图稿相关信息：</text>
+          <view class="title-font-other arrange-center">
+            <text>原创设计师自评：</text>
+            <t-link size="small" content="查看" hover underline bind:tap="onOpenPopup" data-commentator="Y" data-comment-content="原创设计师评论" />
+          </view>
+          <t-divider layout="vertical" />
+          <view class="title-font-other arrange-center">
+            <text>Kyle评论：</text>
+            <t-link size="small" content="查看" hover underline bind:tap="onOpenPopup" data-commentator="N" data-comment-content="Kyle的评论" />
+          </view>
+        </view>
+        <view class="arrange-column">
+          <text class="title-font-main">评估建议：</text>
+          <t-radio-group t-class="radio-horizontal-box" value="{{radioValue}}" bind:change="onRadioChange">
+            <view class="radio-card   {{ radioValue == '0' ? 'radio-active' : ''}}">
+              <t-icon name="check" t-class="radio-icon" />
+              <t-radio value="0" label="可生产" icon="none" borderless />
+            </view>
+            <view class="radio-card  {{ radioValue == '1' ? 'radio-active' : ''}}">
+              <t-icon name="check" t-class="radio-icon" />
+              <t-radio value="1" label="小幅度修改" icon="none" borderless t-class="radio-text" />
+            </view>
+            <view class="radio-card  {{ radioValue == '2' ? 'radio-active' : ''}}">
+              <t-icon name="check" t-class=radio-icon" />
+              <t-radio value="2" label="不具备可行性" icon="none" borderless />
+            </view>
+          </t-radio-group>
+        </view>
+      </view>
+    </view>
+  </view>
+  <!-- 当下拉时,进行显示的内容  -->
+  <view class="loading-box loading-flex" wx:if="{{isLoadingReachMore}}">
+    <!-- <text class="loading-text">加载中...</text> -->
+    <t-loading theme="dots" size="60rpx" />
+  </view>
+  <view class="loading-box" wx:if="{{noMoreData}}">
+    <text class="loading-text">-- 已经到底了 --</text>
+  </view>
+  <!-- 回到顶部 -->
+  <t-back-top theme="half-round" text="顶部" scroll-top="{{scrollTop}}" bind:to-top="onToTop" />
+  <!-- 查看自评弹窗 -->
+  <t-popup visible="{{popupVisible}}" bind:visible-change="onClosePopup" placement="bottom">
+    <view class="popup-block">
+      <view class="popup-header">
+        <view class="popup-title">{{ popupTitle }}</view>
+      </view>
+      <view class="popup-comments">
+        <text>{{ popupValue }}</text>
+      </view>
+    </view>
+  </t-popup>
+  <!-- 评论弹窗 -->
+  <t-dialog visible="{{dialogVisible}}" title="评估建议：" confirm-btn="确定" cancel-btn="取消" bind:confirm="onCloseDialog" bind:cancel="onCloseDialog">
+    <view slot="content">
+      <view class="dialog-textarea">
+        <t-textarea value="{{ dialogValue }}" placeholder="请输入评审意见" bordered maxlength="200" disableDefaultPadding="true" indicator bind:change="onDialogInput" />
+      </view>
+    </view>
+  </t-dialog>
+  <!-- FMR下拉框 -->
+  <t-picker visible="{{pickerVisible}}" value="{{cityValue}}" title="请选择FMR" cancelBtn="取消" confirmBtn="确认" bindchange="onPickerChange" bindcancel="onClosePicker" catchtouchmove>
+    <t-picker-item options="{{pickerItemList}}"></t-picker-item>
+  </t-picker>
+</view>
