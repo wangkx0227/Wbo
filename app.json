@@ -30,6 +30,9 @@
     "t-overlay": "tdesign-miniprogram/overlay/overlay",
     "t-loading": "tdesign-miniprogram/loading/loading",
     "t-back-top": "tdesign-miniprogram/back-top/back-top",
-    "t-image-viewer": "tdesign-miniprogram/image-viewer/image-viewer"
+    "t-image-viewer": "tdesign-miniprogram/image-viewer/image-viewer",
+    "t-radio": "tdesign-miniprogram/radio/radio",
+    "t-radio-group": "tdesign-miniprogram/radio-group/radio-group",
+    "t-icon": "tdesign-miniprogram/icon/icon"
   }
 }

@@ -38,7 +38,7 @@ Page({
       options: [
         {
           value: 'all',
-          label: '默认状态',
+          label: '全部状态',
         },
         {
           value: 'discard',
@@ -68,6 +68,8 @@ Page({
     // 评论弹出层变量
     dialogVisible: false,
     dialogValue: "",
+    // 单选框
+    radioValue:null,
   },
   /**
    * 生命周期函数--监听页面加载
@@ -236,4 +238,27 @@ Page({
     }
     this.setData({ dialogVisible: false, dialogValue: "" });
   },
+  // 单选框
+  onRadioChange(e){
+    const that = this;
+    const selectedradioValue = e.detail.value;
+    const radioValue = that.data.radioValue;
+    // 如果选中的点选框的值等于记录的值那么就取消
+    if (selectedradioValue === radioValue) {
+      this.setData({ radioValue: null });
+      Message.warning({
+        context: that,
+        offset: [10, 32],
+        duration: 3000,
+        content: '取消评审',
+      });
+    }
+    this.setData({ radioValue: selectedradioValue });
+    Message.warning({
+      context: that,
+      offset: [10, 32],
+      duration: 3000,
+      content: '评估',
+    });
+  }
 })
