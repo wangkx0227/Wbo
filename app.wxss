@@ -2,30 +2,40 @@
 page {
   background-color: #f5f5f5;
 }
+
+@font-face {
+  font-family: 'tdesign-icon';
+  src: url('/assets/fonts/t.woff') format('woff');
+}
+
 /* 页面整体高度 */
 .page-wrapper {
   height: 100vh;
 }
+
 /* 导航栏固定 */
 .filter-bar {
   position: sticky;
   top: 0;
   z-index: 999;
 }
+
 /* 底部滚动加载 */
-.loading-box{
+.loading-box {
   background-color: #ffff;
   height: 35px;
   width: 100%;
 }
+
 .loading-text {
-  display:block;
+  display: block;
   text-align: center;
   color: #606266;
   font-size: 12px;
   line-height: 35px;
 }
-.loading-flex{
+
+.loading-flex {
   display: flex;
   justify-content: center;
 }
