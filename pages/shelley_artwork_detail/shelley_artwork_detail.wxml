@@ -49,18 +49,18 @@
         </view>
         <view class="arrange-column">
           <text class="title-font-main">评估建议：</text>
-          <t-radio-group t-class="horizontal-box" value="{{value1}}" bind:change="onChange1">
-            <view class="card card-success-active">
-              <t-icon name="check" t-class="card__icon" />
-              <t-radio value="{{index}}" label="可生产" icon="none" borderless />
+          <t-radio-group t-class="radio-horizontal-box" value="{{radioValue}}" bind:change="onRadioChange">
+            <view class="radio-card   {{ radioValue == '0' ? 'radio-active' : ''}}">
+              <t-icon name="check" t-class="radio-icon" />
+              <t-radio value="0" label="可生产" icon="none" borderless />
             </view>
-            <view class="card card-default-active">
-              <t-icon name="check" t-class="card__icon" />
-              <t-radio value="{{index}}" label="小幅度修改" icon="none" borderless />
+            <view class="radio-card  {{ radioValue == '1' ? 'radio-active' : ''}}">
+              <t-icon name="check" t-class="radio-icon" />
+              <t-radio value="1" label="小幅度修改" icon="none" borderless t-class="radio-text" />
             </view>
-            <view class="card card-error-active">
-              <t-icon name="check" t-class="card__icon" />
-              <t-radio value="{{index}}" label="不具备可行性" icon="none" borderless />
+            <view class="radio-card  {{ radioValue == '2' ? 'radio-active' : ''}}">
+              <t-icon name="check" t-class=radio-icon" />
+              <t-radio value="2" label="不具备可行性" icon="none" borderless />
             </view>
           </t-radio-group>
         </view>

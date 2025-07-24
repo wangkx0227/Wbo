@@ -1,44 +1,45 @@
-
-
 .mb-16 {
   margin-bottom: 32rpx;
 }
 
+/* 横向布局 */
+.radio-horizontal-box {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  margin: 0rpx;
 
-.card {
+}
+
+.radio-card {
   position: relative;
-  margin: 32rpx;
-  border-radius: 12rpx;
+  margin: 16rpx;
+  border-radius: 6rpx;
   overflow: hidden;
   box-sizing: border-box;
-  border: 3rpx solid var(--td-bg-color-container, #fff);
+  border: 2rpx solid var(--td-bg-color-container, #f5f5f5);
 }
 
-.card-success-active {
-  border-color: var(--td-brand-color, #52c41a);
+.radio-horizontal-box .radio-card {
+  flex: 0 0 calc(33.33% - 12rpx);
+  margin: 10rpx 0 10rpx 0;
 }
 
-.card-default-active {
+.t-radio {
+  font-size: var(--td-radio-font-size, 26rpx) !important;
+}
+
+.t-radio--block {
+  text-align: center;
+  padding: var(--td-radio-vertical-padding, 18rpx) !important;
+}
+
+.radio-active {
   border-color: var(--td-brand-color, #0052d9);
 }
 
-.card-error-active {
-  border-color: var(--td-brand-color, #f5222d);
-}
-
-.card-success-active::after {
-  content: '';
-  display: block;
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 0;
-  border-width: 28px 28px 28px 0;
-  border-style: solid;
-  border-color: var(--td-brand-color, #52c41a) transparent transparent transparent;
-}
-
-.card-default-active::after {
+.radio-active::after {
   content: '';
   display: block;
   position: absolute;
@@ -50,36 +51,10 @@
   border-color: var(--td-brand-color, #0052d9) transparent transparent transparent;
 }
 
-.card-error-active::after {
-  content: '';
-  display: block;
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 0;
-  border-width: 28px 28px 28px 0;
-  border-style: solid;
-  border-color: var(--td-brand-color, #f5222d) transparent transparent transparent;
-}
-
-.card__icon {
+.radio-icon {
   color: var(--td-bg-color-container, #f5f5f5);
   position: absolute;
-  left: 1.5px;
-  top: 1.5px;
+  left: 1px;
+  top: 1px;
   z-index: 1;
-}
-
-/* 横向布局 */
-.horizontal-box {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  margin: 32rpx;
-}
-
-.horizontal-box .card {
-  flex: 0 0 calc(33.33% - 12rpx);
-  margin: 0 0 24rpx 0;
 }

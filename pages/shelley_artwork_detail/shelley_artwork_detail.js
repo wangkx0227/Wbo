@@ -84,7 +84,7 @@ Page({
       { label: '张三', value: 'B' },
     ],
     // 单选框变量
-    value1: 0,
+    radioValue: 0,
 
   },
   /**
@@ -306,7 +306,7 @@ Page({
     this.setData({ city2Visible: true, city2Title: '' });
   },
   // 单选框
-  onChange1(e) {
-    this.setData({ value1: e.detail.value });
+  onRadioChange(e) {
+    this.setData({ radioValue: e.detail.value });
   },
 })
