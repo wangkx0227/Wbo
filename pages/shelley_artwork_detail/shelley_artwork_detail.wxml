@@ -45,7 +45,8 @@
         </view>
         <view class="arrange-center">
           <text class="title-font-main">指派 FMR 评估：</text>
-          <t-link size="small" content="点击选择FMR" data-content-status="N" note="{{cityText}}" hover underline bindtap="onTitlePicker" data-id="2" />
+          <t-link size="small" content="点击选择FMR" data-content-status="N" note="{{cityText}}" hover underline bindtap="onOpenPicker" data-id="2" />
+
         </view>
         <view class="arrange-column">
           <text class="title-font-main">评估建议：</text>
@@ -89,7 +90,7 @@
     </view>
   </t-popup>
   <!-- 评论弹窗 -->
-  <t-dialog visible="{{dialogVisible}}" title="评审意见：" confirm-btn="确定" cancel-btn="取消" bind:confirm="onCloseDialog" bind:cancel="onCloseDialog">
+  <t-dialog visible="{{dialogVisible}}" title="评估建议：" confirm-btn="确定" cancel-btn="取消" bind:confirm="onCloseDialog" bind:cancel="onCloseDialog">
     <view slot="content">
       <view class="dialog-textarea">
         <t-textarea value="{{ dialogValue }}" placeholder="请输入评审意见" bordered maxlength="200" disableDefaultPadding="true" indicator bind:change="onDialogInput" />
@@ -97,7 +98,7 @@
     </view>
   </t-dialog>
   <!-- FMR下拉框 -->
-  <t-picker visible="{{cityVisible}}" value="{{cityValue}}" data-key="city" title="{{cityTitle}}" cancelBtn="取消" confirmBtn="确认" usingCustomNavbar bindchange="onPickerChange" bindpick="onColumnChange" bindcancel="onPickerCancel">
-    <t-picker-item options="{{citys}}"></t-picker-item>
+  <t-picker visible="{{pickerVisible}}" value="{{cityValue}}" title="请选择FMR" cancelBtn="取消" confirmBtn="确认" bindchange="onPickerChange" bindcancel="onClosePicker" catchtouchmove>
+    <t-picker-item options="{{pickerItemList}}"></t-picker-item>
   </t-picker>
 </view>

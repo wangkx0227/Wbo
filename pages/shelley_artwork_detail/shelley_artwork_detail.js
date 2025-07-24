@@ -70,13 +70,9 @@ Page({
     dialogVisible: false,
     dialogValue: "",
     // 筛选器
-    cityText: '',
-    city2Text: '',
-    cityValue: [],
-    city2Value: [],
-    cityTitle: '',
-    city2Title: '',
-    citys: [
+    pickerVisible: false,
+    pickerValue: null,
+    pickerItemList: [
       { label: '王五', value: 'A' },
       { label: '李四', value: 'B' },
       { label: '张明', value: 'B' },
@@ -84,12 +80,10 @@ Page({
       { label: '张三', value: 'B' },
     ],
     // 单选框变量
-    radioValue: 0,
+    radioValue: "0",
 
   },
-  /**
-   * 生命周期函数--监听页面加载
-   */
+  /* 生命周期函数--监听页面加载 */
   onLoad(options) {
     const groupId = options.groupId; // 首页跳转后的存储的id值
     console.log(groupId);
@@ -129,53 +123,6 @@ Page({
       urls: swiperImages
     });
   },
-  // 修改当前图稿状态（舍弃与保留，默认都是保留）
-  onModifyArtworkStatus(e) {
-    const that = this;
-    const { id, contentStatus } = e.currentTarget.dataset;
-    if (contentStatus === "Y") {
-      wx.showModal({
-        title: '提示',
-        content: '是否"保留"当前图稿',
-        success(res) {
-          if (res.confirm) {
-            // 发送请求
-            console.log('用户保留')
-            Message.success({
-              context: that,
-              offset: [10, 32],
-              duration: 3000,
-              content: '提交成功，提示3秒后消失',
-            });
-          } else if (res.cancel) {
-            // 取消
-            console.log('用户取消')
-          }
-        }
-      })
-    } else {
-      wx.showModal({
-        title: '提示',
-        content: '是否"舍弃"当前图稿',
-        success(res) {
-          if (res.confirm) {
-            // 发送请求
-            console.log('用户舍弃')
-            Message.success({
-              context: that,
-              offset: [10, 32],
-              duration: 3000,
-              content: '提交成功，提示3秒后消失',
-            });
-          } else if (res.cancel) {
-            // 取消
-            console.log('用户取消')
-          }
-        }
-      })
-    }
-
-  },
   // 页面上拉刷新 - 用于页面重置
   onPullDownRefresh() {
     console.log("下拉刷新触发");
@@ -211,13 +158,17 @@ Page({
       duration: 300
     });
   },
-  //  实时监听滚动距离，把这个值传给回到顶部的按钮，让它知道是否应该出现
+  //  回到顶部-实时监听滚动距离
   onPageScroll(e) {
+    /*
+      scrollTop：记录滚动距离
+    */
     this.setData({
       scrollTop: e.scrollTop
     });
   },
-  // 评论弹窗函数 - 关闭
+
+  // 查看评论弹窗 - 关闭
   onClosePopup(e) {
     /*
       popupVisible: 关闭弹窗
@@ -235,7 +186,7 @@ Page({
       });
     }, 300);
   },
-  // 评论弹窗函数 - 唤起
+  // 查看评论弹窗 - 唤起
   onOpenPopup(e) {
     /*
       id: 当条记录的id
@@ -254,59 +205,90 @@ Page({
     }
     this.setData({ popupVisible: true, popupValue: commentContent }); // 触发弹窗
   },
-  // 弹窗-评论-打开
-  onOpenDialog(e) {
-    const { id } = e.currentTarget.dataset;
-    this.setData({ dialogVisible: true });
+  // 筛选器-确定 
+  onPickerChange(e) {
+    /*
+      pickerVisible：筛选器显示变量
+      pickerValue： 选中的值
+    */
+    const { key } = e.currentTarget.dataset;
+    const { value } = e.detail;
+    this.setData({
+      pickerVisible: false,
+      pickerValue: value,
+    });
   },
-  // 弹窗-评论-双向绑定
+  // 关闭 筛选器
+  onClosePicker(e) {
+    /*
+      pickerVisible：筛选器显示变量
+    */
+    this.setData({ pickerVisible: false, });
+  },
+  // 打开 筛选器
+  onOpenPicker() {
+    /*
+      pickerVisible：筛选器显示变量
+      实际情况下需要加入一个默认值
+    */
+    this.setData({ pickerVisible: true });
+  },
+  // 填写评论-双向绑定
   onDialogInput(e) {
     this.setData({
       dialogValue: e.detail.value
     });
   },
-  // 弹窗-评论-关闭（包含提交功能）
+  // 填写弹窗-关闭（包含提交功能）
   onCloseDialog(e) {
-    const { dialogValue } = this.data; // 输入的评论的数据
+    const that = this;
+    const { dialogValue, radioValue } = that.data; // 输入的评论的数据
     const action = e.type; // "confirm" 或 "cancel"
     if (action === 'confirm') {
       console.log("提交数据");
+      this.setData({ radioValue: "1" });
+      Message.success({
+        context: that,
+        offset: [10, 32],
+        duration: 3000,
+        content: '提交评估建议成功',
+      });
     } else if (action === 'cancel') {
       console.log("提交取消");
     }
     this.setData({ dialogVisible: false, dialogValue: "" });
   },
-  // 筛选器
-  onColumnChange(e) {
-    console.log('picker pick:', e);
-  },
-  onPickerChange(e) {
-    const { key } = e.currentTarget.dataset;
-    const { value } = e.detail;
-
-    console.log('picker change:', e.detail);
-    this.setData({
-      [`${key}Visible`]: false,
-      [`${key}Value`]: value,
-      [`${key}Text`]: value.join(' '),
-    });
-  },
-  onPickerCancel(e) {
-    const { key } = e.currentTarget.dataset;
-    console.log(e, '取消');
-    console.log('picker1 cancel:');
-    this.setData({
-      [`${key}Visible`]: false,
-    });
-  },
-  onTitlePicker() {
-    this.setData({ cityVisible: true, cityTitle: '请选择FMR' });
-  },
-  onWithoutTitlePicker() {
-    this.setData({ city2Visible: true, city2Title: '' });
-  },
   // 单选框
   onRadioChange(e) {
-    this.setData({ radioValue: e.detail.value });
+    /*
+      radioValue：记录选中的单选值
+    */
+    const that = this;
+    const selectedradioValue = e.detail.value;
+    const radioValue = that.data.radioValue;
+    // 如果选中的点选框的值等于记录的值那么就取消
+    if (selectedradioValue === radioValue) {
+      this.setData({ radioValue: null });
+      Message.warning({
+        context: that,
+        offset: [10, 32],
+        duration: 3000,
+        content: '取消评估建议',
+      });
+    } else {
+      // 如果选择小幅度修改，需要输入评估建议
+      if (selectedradioValue === "1") {
+        this.setData({ dialogVisible: true });
+      } else {
+        this.setData({ radioValue: selectedradioValue });
+        Message.success({
+          context: that,
+          offset: [10, 32],
+          duration: 3000,
+          content: '提交评估建议成功',
+        });
+      }
+
+    }
   },
 })
