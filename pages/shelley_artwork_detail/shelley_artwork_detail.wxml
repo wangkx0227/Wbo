@@ -8,7 +8,8 @@
       <t-col span="24">
         <t-dropdown-menu>
           <t-dropdown-item options="{{dropdownTemplate.options}}" placement="right" value="{{dropdownTemplate.value}}" bindchange="onChange" />
-          <t-dropdown-item options="{{dropdownSorter.options}}" placement="right" default-value="{{dropdownSorter.value}}" />
+          <t-dropdown-item options="{{dropdownAssign.options}}" placement="right" default-value="{{dropdownAssign.value}}" />
+          <t-dropdown-item options="{{dropdownAssess.options}}" placement="right" default-value="{{dropdownAssess.value}}" />
         </t-dropdown-menu>
       </t-col>
     </t-row>
@@ -43,10 +44,17 @@
             <t-link size="small" content="查看" hover underline bind:tap="onOpenPopup" data-commentator="N" data-comment-content="Kyle的评论" />
           </view>
         </view>
-        <view class="arrange-center">
-          <text class="title-font-main">指派 FMR 评估：</text>
-          <t-link size="small" content="点击选择FMR" data-content-status="N" note="{{cityText}}" hover underline bindtap="onOpenPicker" data-id="2" />
-
+        <view class="arrange-column">
+          <view class="arrange-center">
+            <text class="title-font-main">指派 FMR 评估：</text>
+            <t-link size="small" content="点击选择FMR"  hover underline bindtap="onOpenPicker" data-id="2" />
+          </view>
+          <view class="arrange-center" style="margin: 3px 0 0 8px;">
+            <!-- FMR的评估建议 -->
+            <text class="title-font-other">指派 FMR：{{pickerLabel}}</text>
+            <t-divider layout="vertical" />
+            <text class="title-font-other">FMR 评估结果：暂未选择</text>
+          </view>
         </view>
         <view class="arrange-column">
           <text class="title-font-main">评估建议：</text>

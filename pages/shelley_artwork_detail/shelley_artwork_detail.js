@@ -10,7 +10,7 @@ const swiperImages = [
 Page({
   data: {
     groupId: null, // 首页跳转后的存储的id值
-    // 筛选框变量-1
+    // 筛选框变量-模板
     dropdownTemplate: {
       value: 'all',
       options: [
@@ -32,13 +32,13 @@ Page({
         }
       ],
     },
-    // 筛选框变量-2
-    dropdownSorter: {
+    // 筛选框变量-指派
+    dropdownAssign: {
       value: 'all',
       options: [
         {
           value: 'all',
-          label: '默认状态',
+          label: '全部指派',
         },
         {
           value: 'discard',
@@ -47,6 +47,28 @@ Page({
         {
           value: 'reserve',
           label: '已指派',
+        },
+      ],
+    },
+    // 筛选框变量-评估
+    dropdownAssess: {
+      value: 'all',
+      options: [
+        {
+          value: 'all',
+          label: '全部评估',
+        },
+        {
+          value: 'discard',
+          label: '可生产',
+        },
+        {
+          value: 'reserve',
+          label: '小幅度修改',
+        },
+        {
+          value: 'reserve',
+          label: '不具备可行性',
         },
       ],
     },
@@ -72,6 +94,7 @@ Page({
     // 筛选器
     pickerVisible: false,
     pickerValue: null,
+    pickerLabel: "",
     pickerItemList: [
       { label: '王五', value: 'A' },
       { label: '李四', value: 'B' },
@@ -211,11 +234,11 @@ Page({
       pickerVisible：筛选器显示变量
       pickerValue： 选中的值
     */
-    const { key } = e.currentTarget.dataset;
-    const { value } = e.detail;
+    const { value, label } = e.detail;
     this.setData({
       pickerVisible: false,
       pickerValue: value,
+      pickerLabel: label
     });
   },
   // 关闭 筛选器
