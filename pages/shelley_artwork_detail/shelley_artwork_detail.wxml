@@ -31,29 +31,25 @@
             <text class="error-text" slot="error">轮播图加载失败</text>
           </t-image>
         </view>
-        <view>
+        <view class="button-arrange-center">
           <text class="title-font-main">图稿相关信息：</text>
-          <view class="title-arrange-flex-start ">
-            <view class="title-font-other button-arrange-center">
-              <text>原创设计师自评：</text>
-              <t-link size="small" content="查看" hover underline bind:tap="onOpenPopup" data-commentator="Y" 
-              data-comment-content="原创设计师评论" />
-            </view>
-            <t-divider layout="vertical" />
-            <view class="title-font-other button-arrange-center">
-              <text>Kyle评论：</text>
-              <t-link size="small" content="查看" hover underline bind:tap="onOpenPopup" data-commentator="N" 
-              data-comment-content="Kyle的评论"/>
-            </view>
+          <view class="title-font-other button-arrange-center">
+            <text>原创设计师自评：</text>
+            <t-link size="small" content="查看" hover underline bind:tap="onOpenPopup" data-commentator="Y" data-comment-content="原创设计师评论" />
+          </view>
+          <t-divider layout="vertical" />
+          <view class="title-font-other button-arrange-center">
+            <text>Kyle评论：</text>
+            <t-link size="small" content="查看" hover underline bind:tap="onOpenPopup" data-commentator="N" data-comment-content="Kyle的评论" />
           </view>
         </view>
-        <view>
+        <view class="button-arrange-center">
           <text class="title-font-main">指派 FMR 评估：</text>
           <view class="title-arrange-flex-start ">
             <t-link size="small" content="点击选择FMR" data-content-status="N" note="{{cityText}}" hover underline bindtap="onTitlePicker" data-id="2" />
           </view>
         </view>
-        <view>
+        <view class="button-arrange-center">
           <text class="title-font-main">评估建议：</text>
           <view class="title-arrange-flex-start">
             <t-link size="small" content="可生产" data-content-status="N" hover underline bindtap="onModifyArtworkStatus" data-id="2" />
