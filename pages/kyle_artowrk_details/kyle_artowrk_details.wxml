@@ -1,3 +1,7 @@
+<!-- 骨架屏 -->
+<!-- <import src="kyle_artowrk_details.skeleton.wxml"/>
+<template is="skeleton" wx:if="{{skeletonLoading}}" /> -->
+
 <!-- 轻提示 -->
 <t-toast id="t-toast" />
 <!-- 提示 -->

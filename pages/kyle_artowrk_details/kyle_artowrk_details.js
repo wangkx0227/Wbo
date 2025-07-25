@@ -9,6 +9,7 @@ const swiperImages = [
 ];
 Page({
   data: {
+    skeletonLoading:true, // 骨架屏控制变量
     groupId: null, // 首页跳转后的存储的id值
     // 筛选框变量-1
     dropdownTemplate: {

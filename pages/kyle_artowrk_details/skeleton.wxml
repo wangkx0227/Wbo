@@ -1,0 +1,3 @@
+<template name="skeleton">
+  <t-skeleton theme="paragraph" loading animation="gradient"></t-skeleton>
+</template>
