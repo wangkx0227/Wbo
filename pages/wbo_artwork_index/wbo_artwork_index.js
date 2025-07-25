@@ -1,9 +1,9 @@
 import { Toast } from 'tdesign-miniprogram'; // 轻提示
-import Message from 'tdesign-miniprogram/message/index'; // 提示
 const app = getApp();
 
 Page({
   data: {
+    skeletonLoading: false,// 骨架控制变量
     // 筛选框变量-1
     dropdownTemplate: {
       value: 'all',
@@ -54,6 +54,14 @@ Page({
     // 回到顶部变量
     scrollTop: 0
   },
+  // 加载数据
+  onLoad() {
+    setTimeout(() => {
+      this.setData({
+        skeletonLoading: false,
+      })
+    }, 4000)
+  },
   onChange(e) {
     this.setData({
       'product.value': e.detail.value,
@@ -62,7 +70,6 @@ Page({
   onSearchChange() {
     console.log(this.data.searchValue);
   },
-
   // 跳转到详情页面
   onJumpArtworkDeatails(e) {
     const that = this;
