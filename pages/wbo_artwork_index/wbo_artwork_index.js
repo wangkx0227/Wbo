@@ -3,8 +3,9 @@ const app = getApp();
 
 Page({
   data: {
-    // 悬浮胶囊标签栏
+    // 悬浮胶囊标签栏变量
     tabBarValue: 'primary',
+    tabBarShow: false,
     // 骨架控制变量
     skeletonLoading: false,
     // 筛选框变量-1
@@ -59,6 +60,12 @@ Page({
   },
   // 加载数据
   onLoad() {
+    const userRole = app.globalData.userRole;
+    // 判断显示标签栏
+    if (userRole === "kyle") {
+      this.setData({ tabBarShow: true });
+    }
+    this.setData({ userRole: userRole });
     // setTimeout(() => {
     //   this.setData({
     //     skeletonLoading: false,
@@ -77,9 +84,9 @@ Page({
   onJumpArtworkDeatails(e) {
     const that = this;
     const groupId = e.currentTarget.dataset.groupId;
+    const userRole = that.data.userRole;
     wx.showLoading({ title: '正在加载...' });
     console.log(groupId, "准备跳转");
-    const userRole = app.globalData.userRole;
     // 需要3类人进行跳转 Kyle Shelley FMR 进行跳转
     if (userRole === "kyle") {
       setTimeout(() => {
@@ -163,7 +170,8 @@ Page({
   // 页面上拉触底事件的处理函数-用于加载更多数据
   onReachBottom() {
     // 如果在下拉刷新，禁止滚动加载
-    if (this.data.isDownRefreshing) return;
+    console.log("上拉触底触发");
+    if (this.data.isDownRefreshing || this.data.noMoreData) return;
     this.setData({ isLoadingReachMore: true });
     setTimeout(() => {
       wx.stopPullDownRefresh(); // 必须手动停止

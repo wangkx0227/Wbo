@@ -24,45 +24,30 @@
         <t-cell hover arrow>
           <t-badge count="{{8}}" slot="note" shape="square" />
           <view slot="title">
-            <view>
-              <text class="header-title-main">Name of Client：</text>
-              <text class="header-title-other">TG D51</text>
+            <view class="arrange-space-between">
+              <view>
+                <text class="title-main">Name of Client：</text>
+                <text class="title-other">TG D51</text>
+              </view>
+              <t-tag class="margin-16" variant="light" icon="discount" size="small" 
+              style="position: relative;left: 90rpx;" wx:if="{{tabBarShow}}"> 初步评审 </t-tag>
             </view>
             <view>
-              <text class="header-title-main">Theme of Program：</text>
-              <text class="header-title-other">The Outfitters</text>
+              <text class="title-main">Theme of Program：</text>
+              <text class="title-other">The Outfitters</text>
             </view>
-            <view class="header-title">
-              <text class="header-title-other" style="margin-right: 15px;">Year：2015</text>
-              <text class="header-title-other">创建时间：2025-07-21</text>
+            <view class="arrange-space-between">
+              <text class="title-other" style="margin-right: 15px;">Year：2015</text>
+              <text class="title-other">创建时间：2025-07-21</text>
             </view>
           </view>
         </t-cell>
       </t-cell-group>
-      <t-cell-group theme="card" class="t-cell-group" bindtap="onJumpArtworkDeatails" data-group-id="2">
-        <t-cell hover arrow>
-          <t-badge count="{{5}}" slot="note" shape="square" />
-          <view slot="title">
-            <view>
-              <text class="header-title-main">Name of Client：</text>
-              <text class="header-title-other">TG D240</text>
-            </view>
-            <view>
-              <text class="header-title-main">Theme of Program：</text>
-              <text class="header-title-other">Outfitters</text>
-            </view>
-            <view class="header-title">
-              <text class="header-title-other" style="margin-right: 15px;">Year：2025</text>
-              <text class="header-title-other">创建时间：2025-07-15</text>
-            </view>
-          </view>
-        </t-cell>
-      </t-cell-group>
+
     </view>
   </view>
   <!-- 当下拉时,进行显示的内容  -->
   <view class="loading-box loading-flex" wx:if="{{isLoadingReachMore}}">
-    <!-- <text class="loading-text">加载中...</text> -->
     <t-loading theme="dots" size="60rpx" />
   </view>
   <view class="loading-box" wx:if="{{noMoreData}}">
@@ -70,8 +55,8 @@
   </view>
   <!-- 回到顶部 -->
   <t-back-top theme="half-round" text="顶部" scroll-top="{{scrollTop}}" bind:to-top="onToTop" />
-  <!-- 标签栏 -->
-  <view class="tab-bar-wrapper">
+  <!-- 标签栏-只有Kyle才能看到 -->
+  <view class="tab-bar-wrapper" wx:if="{{tabBarShow}}">
     <t-tab-bar t-class="t-tab-bar" value="{{tabBarValue}}" shape="round" theme="tag" split="false" bindchange="onTabBarChange">
       <t-tab-bar-item value="primary">
         初步评审

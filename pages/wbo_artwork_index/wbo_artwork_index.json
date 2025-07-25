@@ -8,6 +8,7 @@
     "t-cell-group": "tdesign-miniprogram/cell-group/cell-group",
     "t-badge": "tdesign-miniprogram/badge/badge",
     "t-tab-bar": "tdesign-miniprogram/tab-bar/tab-bar",
-    "t-tab-bar-item": "tdesign-miniprogram/tab-bar-item/tab-bar-item"
+    "t-tab-bar-item": "tdesign-miniprogram/tab-bar-item/tab-bar-item",
+    "t-tag": "tdesign-miniprogram/tag/tag"
   }
 }
