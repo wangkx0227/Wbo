@@ -3,7 +3,10 @@ const app = getApp();
 
 Page({
   data: {
-    skeletonLoading: false,// 骨架控制变量
+    // 悬浮胶囊标签栏
+    tabBarValue: 'primary',
+    // 骨架控制变量
+    skeletonLoading: false,
     // 筛选框变量-1
     dropdownTemplate: {
       value: 'all',
@@ -56,11 +59,11 @@ Page({
   },
   // 加载数据
   onLoad() {
-    setTimeout(() => {
-      this.setData({
-        skeletonLoading: false,
-      })
-    }, 4000)
+    // setTimeout(() => {
+    //   this.setData({
+    //     skeletonLoading: false,
+    //   })
+    // }, 4000)
   },
   onChange(e) {
     this.setData({
@@ -143,7 +146,7 @@ Page({
       imageUrl: '/assets/1752927115162.png'     // 自定义分享封面
     };
   },
-  // 页面上拉刷新 - 用于页面重置
+  // 页面下拉刷新 - 用于页面重置
   onPullDownRefresh() {
     console.log("下拉刷新触发");
     // 如果正在加载更多，则禁止下拉刷新
@@ -182,4 +185,10 @@ Page({
       scrollTop: e.scrollTop
     });
   },
+  // 胶囊悬浮框切换函数
+  onTabBarChange(e) {
+    this.setData({
+      tabBarValue: e.detail.value,
+    });
+  }
 })
