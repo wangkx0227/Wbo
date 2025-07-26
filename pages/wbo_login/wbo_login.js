@@ -175,23 +175,23 @@ Page({
       wx.showLoading({ title: '正在加载...' });
       app.globalData.userRole = productValue;
       console.log(productValue);
-
-      wx.navigateTo({
-        url: `/pages/wbo_artwork_index/wbo_artwork_index`,
-        success() {
-          wx.hideLoading();
-        },
-        fail(err) {
-          Toast({
-            context: that,
-            selector: '#t-toast',
-            message: '跳转失败',
-            theme: 'error',
-            con: 'check-circle',
-          });
-        }
-      });
-
+      setTimeout(() => {
+        wx.navigateTo({
+          url: `/pages/wbo_artwork_index/wbo_artwork_index`,
+          success() {
+            wx.hideLoading();
+          },
+          fail(err) {
+            Toast({
+              context: that,
+              selector: '#t-toast',
+              message: '跳转失败',
+              theme: 'error',
+              con: 'check-circle',
+            });
+          }
+        });
+      }, 100)
 
     }
   }

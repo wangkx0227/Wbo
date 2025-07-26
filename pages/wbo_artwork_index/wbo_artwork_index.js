@@ -146,59 +146,59 @@ Page({
     console.log(groupId, "准备跳转");
     // 需要3类人进行跳转 Kyle Shelley FMR 进行跳转
     if (userRole === "kyle") {
-
-      wx.navigateTo({
-        url: `/pages/kyle_artowrk_details/kyle_artowrk_details?groupId=${groupId}`,
-        success() {
-          wx.hideLoading();
-        },
-        fail(err) {
-          Toast({
-            context: that,
-            selector: '#t-toast',
-            message: '跳转失败',
-            theme: 'error',
-            con: 'check-circle',
-          });
-        }
-      });
-
+      setTimeout(() => {
+        wx.navigateTo({
+          url: `/pages/kyle_artowrk_details/kyle_artowrk_details?groupId=${groupId}`,
+          success() {
+            wx.hideLoading();
+          },
+          fail(err) {
+            Toast({
+              context: that,
+              selector: '#t-toast',
+              message: '跳转失败',
+              theme: 'error',
+              con: 'check-circle',
+            });
+          }
+        });
+      }, 100)
     } else if (userRole === "shelley") {
-
-      wx.navigateTo({
-        url: `/pages/shelley_artwork_detail/shelley_artwork_detail?groupId=${groupId}`,
-        success() {
-          wx.hideLoading();
-        },
-        fail(err) {
-          Toast({
-            context: that,
-            selector: '#t-toast',
-            message: '跳转失败',
-            theme: 'error',
-            con: 'check-circle',
-          });
-        }
-      });
-
+      setTimeout(() => {
+        wx.navigateTo({
+          url: `/pages/shelley_artwork_detail/shelley_artwork_detail?groupId=${groupId}`,
+          success() {
+            wx.hideLoading();
+          },
+          fail(err) {
+            Toast({
+              context: that,
+              selector: '#t-toast',
+              message: '跳转失败',
+              theme: 'error',
+              con: 'check-circle',
+            });
+          }
+        });
+      }, 100)
     } else if (userRole === "fmr") {
-
-      wx.navigateTo({
-        url: `/pages/fmr_artwork_detail/fmr_artwork_detail?groupId=${groupId}`,
-        success() {
-          wx.hideLoading();
-        },
-        fail(err) {
-          Toast({
-            context: that,
-            selector: '#t-toast',
-            message: '跳转失败',
-            theme: 'error',
-            con: 'check-circle',
-          });
-        }
-      });
-
+      setTimeout(() => {
+        wx.navigateTo({
+          url: `/pages/fmr_artwork_detail/fmr_artwork_detail?groupId=${groupId}`,
+          success() {
+            wx.hideLoading();
+          },
+          fail(err) {
+            Toast({
+              context: that,
+              selector: '#t-toast',
+              message: '跳转失败',
+              theme: 'error',
+              con: 'check-circle',
+            });
+          }
+        });
+      }, 100)
     }
 
   },
@@ -293,7 +293,7 @@ Page({
     for (let i = 0; i < randomNum; i++) {
       data.push({
         id: i,
-        to_confirmed: i + 5,
+        to_confirmed: i+5,
         client_name: `TG D51-${i}`,
         stage: "初步评审",
         program: `Outfitters_${i}`,
@@ -302,16 +302,16 @@ Page({
       });
     }
     if (tabBarValue === "primary") {
-      data.forEach((item) => {
+      data.forEach((item)=>{
         item["stage"] = "初步评审"
       })
     } else {
-      data.forEach((item) => {
+      data.forEach((item)=>{
         item["stage"] = "最终评审"
       })
     }
     this.setData({
-      dataAllList: data,
+      dataAllList:data,
     })
   }
 })
