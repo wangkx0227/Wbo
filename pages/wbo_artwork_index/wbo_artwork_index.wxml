@@ -1,5 +1,5 @@
 <!-- 骨架 -->
-<import src="wbo_artwork_index.skeleton.wxml" />
+<import src="skeleton.wxml" />
 <template is="skeleton" wx:if="{{skeletonLoading}}" />
 
 <view wx:else="{{skeletonLoading}}" class="page-wrapper">

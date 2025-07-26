@@ -7,7 +7,7 @@ Page({
     tabBarValue: 'primary',
     tabBarShow: false,
     // 骨架控制变量
-    skeletonLoading: false,
+    skeletonLoading: true,
     // 筛选框变量-1
     dropdownTemplate: {
       value: 'all',
@@ -123,11 +123,11 @@ Page({
       this.setData({ tabBarShow: true });
     }
     this.setData({ userRole: userRole });
-    // setTimeout(() => {
-    //   this.setData({
-    //     skeletonLoading: false,
-    //   })
-    // }, 4000)
+    setTimeout(() => {
+      this.setData({
+        skeletonLoading: false,
+      })
+    }, 4000)
   },
   onChange(e) {
     this.setData({

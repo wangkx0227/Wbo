@@ -1,0 +1,53 @@
+<template name="skeleton">
+  <view class="sk-container">
+    <view class="page-wrapper">
+      <view style="background-color: #ffff;">
+        <t-row>
+          <t-col span="24">
+            <view style="height: 57px;">
+              <view style="height: 100%;display: flex;align-items: center;justify-content: center;">
+                <t-skeleton theme="paragraph" loading animation="gradient" rowCol="{{ [{ width: '358px', height: '41px', borderRadius: '30rpx' }]}}" custom-style="background-color: #ffff;"></t-skeleton>
+              </view>
+            </view>
+          </t-col>
+          <t-col span="24">
+            <view style="height: 49px;display: flex;border-bottom: 1px solid #f5f5f5;">
+              <view style="width: 50%;height: 100%;display: flex;align-items: center;justify-content: center;">
+                <t-skeleton theme="paragraph" loading animation="gradient" rowCol="{{ [{ width: '56px', height: '19px' }]}}"></t-skeleton>
+              </view>
+              <view style="width: 50%;height: 100%;display: flex;align-items: center;justify-content: center; ">
+                <t-skeleton theme="paragraph" loading animation="gradient" rowCol="{{ [{ width: '56px', height: '19px' }]}}"></t-skeleton>
+              </view>
+            </view>
+          </t-col>
+        </t-row>
+      </view>
+      <view class="page-main">
+        <view class="wrapper">
+          <view wx:for="{{ [1, 2, 3, 4, 5] }}" wx:for-item="item" wx:key="index">
+            <t-cell-group theme="card" class="t-cell-group">
+              <t-cell hover arrow>
+                <view slot="note">
+                  <t-skeleton theme="text" loading animation="gradient" rowCol="{{ [{ width: '20px', height: '16px'}]}}"></t-skeleton>
+                </view>
+                <view slot="title">
+                  <view style="  display: flex;flex-direction: column;">
+                    <view style="height: 25px;">
+                      <t-skeleton theme="text" loading animation="gradient" rowCol="{{ [{ width: '145px', height: '16px'}]}}"></t-skeleton>
+                    </view>
+                    <view style="height: 25px;">
+                      <t-skeleton theme="text" loading animation="gradient" rowCol="{{ [{ width: '207px', height: '16px'}]}}"></t-skeleton>
+                    </view>
+                    <view style="height: 25px;">
+                      <t-skeleton theme="text" loading animation="gradient" rowCol="{{ [{ width: '207px', height: '16px'}]}}"></t-skeleton>
+                    </view>
+                  </view>
+                </view>
+              </t-cell>
+            </t-cell-group>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+</template>
