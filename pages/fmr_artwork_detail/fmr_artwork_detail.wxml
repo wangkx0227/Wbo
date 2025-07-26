@@ -1,7 +1,4 @@
-<!-- 轻提示 -->
-<t-toast id="t-toast" />
-<!-- 提示 -->
-<t-message id="t-message" />
+<!-- 主体 -->
 <view class="page-wrapper">
   <view class="page-head filter-bar">
     <t-row>
@@ -92,8 +89,8 @@
       </view>
     </view>
   </t-dialog>
-  <!-- FMR下拉框 -->
-  <t-picker visible="{{pickerVisible}}" value="{{cityValue}}" title="请选择FMR" cancelBtn="取消" confirmBtn="确认" bindchange="onPickerChange" bindcancel="onClosePicker" catchtouchmove>
-    <t-picker-item options="{{pickerItemList}}"></t-picker-item>
-  </t-picker>
 </view>
+<!-- 轻提示 -->
+<t-toast id="t-toast" />
+<!-- 提示 -->
+<t-message id="t-message" />
