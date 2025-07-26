@@ -7,9 +7,13 @@
     <t-row>
       <t-col span="24">
         <t-dropdown-menu>
-          <t-dropdown-item options="{{dropdownTemplate.options}}" placement="right" value="{{dropdownTemplate.value}}" bindchange="onChange" />
-          <t-dropdown-item options="{{dropdownAssign.options}}" placement="right" default-value="{{dropdownAssign.value}}" />
-          <t-dropdown-item options="{{dropdownAssess.options}}" placement="right" default-value="{{dropdownAssess.value}}" />
+          <t-dropdown-item options="{{dropdownArtwork.options}}" placement="right" value="{{dropdownArtwork.value}}" bindchange="onArtworkChange" />
+          <t-dropdown-item options="{{dropdownAssign.options}}" placement="right" value="{{dropdownAssign.value}}" 
+          bindchange="onAssignChange"
+          />
+          <t-dropdown-item options="{{dropdownAssess.options}}" placement="right" value="{{dropdownAssess.value}}" 
+          bindchange="onAssessChange"
+          />
         </t-dropdown-menu>
       </t-col>
     </t-row>

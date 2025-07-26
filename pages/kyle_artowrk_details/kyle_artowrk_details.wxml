@@ -7,8 +7,9 @@
     <t-row>
       <t-col span="24">
         <t-dropdown-menu>
-          <t-dropdown-item options="{{dropdownTemplate.options}}" placement="right" value="{{dropdownTemplate.value}}" bindchange="onChange" />
-          <t-dropdown-item options="{{dropdownSorter.options}}" placement="right" default-value="{{dropdownSorter.value}}" />
+          <t-dropdown-item options="{{dropdownDesigner.options}}" placement="right" value="{{dropdownDesigner.value}}" bindchange="onDesignerChange" />
+          <t-dropdown-item options="{{dropdownStatus.options}}" placement="right" value="{{dropdownStatus.value}}" 
+          bindchange="onStatusChange" />
         </t-dropdown-menu>
       </t-col>
     </t-row>

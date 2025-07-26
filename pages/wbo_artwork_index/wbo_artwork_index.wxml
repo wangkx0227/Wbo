@@ -7,13 +7,13 @@
     <t-row>
       <t-col span="24">
         <view class="example-search">
-          <t-search placeholder="搜索" shape="round" model:value="{{searchValue}}" bind:change="onSearchChange" />
+          <t-search placeholder="搜索" shape="round" model:value="{{searchValue}}"  bind:submit="onSearchConfirm" confirm-type="search"/>
         </view>
       </t-col>
       <t-col span="24">
         <t-dropdown-menu>
-          <t-dropdown-item options="{{dropdownTemplate.options}}" placement="right" value="{{dropdownTemplate.value}}" bindchange="onChange" />
-          <t-dropdown-item options="{{dropdownSorter.options}}" placement="right" default-value="{{dropdownSorter.value}}" />
+          <t-dropdown-item options="{{dropdownTemplate.options}}" placement="right" value="{{dropdownTemplate.value}}" bindchange="onTemplateChange" />
+          <t-dropdown-item options="{{dropdownSorter.options}}" placement="right" value="{{dropdownSorter.value}}" bindchange="onSorterChange" />
         </t-dropdown-menu>
       </t-col>
     </t-row>

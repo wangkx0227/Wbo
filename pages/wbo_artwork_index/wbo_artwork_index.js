@@ -123,7 +123,7 @@ Page({
       this.setData({ tabBarShow: true });
     }
     this.setData({ userRole: userRole });
-    wx.showLoading({ title: '正在加载...',});
+    wx.showLoading({ title: '正在加载...', });
     setTimeout(() => {
       wx.hideLoading();
       this.setData({
@@ -132,12 +132,22 @@ Page({
     }, 2000)
   },
 
-  onChange(e) {
+  // 下拉菜单-模板
+  onTemplateChange(e) {
     this.setData({
-      'product.value': e.detail.value,
+      'dropdownTemplate.value': e.detail.value,
     });
   },
-  onSearchChange() {
+  // 下拉菜单-排序
+  onSorterChange(e) {
+    this.setData({
+      'dropdownSorter.value': e.detail.value,
+    });
+  },
+  // 搜索
+  onSearchConfirm() {
+    const keyword = e.detail.value;
+    console.log("用户点击搜索，输入内容为：", keyword);
     console.log(this.data.searchValue);
   },
   // 跳转到详情页面
@@ -149,61 +159,12 @@ Page({
     console.log(groupId, "准备跳转");
     // 需要3类人进行跳转 Kyle Shelley FMR 进行跳转
     if (userRole === "kyle") {
-      setTimeout(() => {
-        wx.navigateTo({
-          url: `/pages/kyle_artowrk_details/kyle_artowrk_details?groupId=${groupId}`,
-          success() {
-            
-          },
-          fail(err) {
-            Toast({
-              context: that,
-              selector: '#t-toast',
-              message: '跳转失败',
-              theme: 'error',
-              con: 'check-circle',
-            });
-          }
-        });
-      }, 100)
+      wx.navigateTo({ url: `/pages/kyle_artowrk_details/kyle_artowrk_details?groupId=${groupId}` });
     } else if (userRole === "shelley") {
-      setTimeout(() => {
-        wx.navigateTo({
-          url: `/pages/shelley_artwork_detail/shelley_artwork_detail?groupId=${groupId}`,
-          success() {
-           
-          },
-          fail(err) {
-            Toast({
-              context: that,
-              selector: '#t-toast',
-              message: '跳转失败',
-              theme: 'error',
-              con: 'check-circle',
-            });
-          }
-        });
-      }, 100)
+      wx.navigateTo({ url: `/pages/shelley_artwork_detail/shelley_artwork_detail?groupId=${groupId}` });
     } else if (userRole === "fmr") {
-      setTimeout(() => {
-        wx.navigateTo({
-          url: `/pages/fmr_artwork_detail/fmr_artwork_detail?groupId=${groupId}`,
-          success() {
-           
-          },
-          fail(err) {
-            Toast({
-              context: that,
-              selector: '#t-toast',
-              message: '跳转失败',
-              theme: 'error',
-              con: 'check-circle',
-            });
-          }
-        });
-      }, 100)
+      wx.navigateTo({ url: `/pages/fmr_artwork_detail/fmr_artwork_detail?groupId=${groupId}`, });
     }
-
   },
   // 用户点击右上角分享
   onShareAppMessage() {

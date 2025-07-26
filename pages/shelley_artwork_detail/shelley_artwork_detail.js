@@ -10,11 +10,11 @@ const swiperImages = [
 Page({
   data: {
     // 骨架屏变量
-    skeletonLoading:true, 
+    skeletonLoading: true,
     // 首页跳转后的存储的id值
-    groupId: null, 
-    // 筛选框变量-模板
-    dropdownTemplate: {
+    groupId: null,
+    // 筛选框变量-图稿
+    dropdownArtwork: {
       value: 'all',
       options: [
         {
@@ -113,7 +113,7 @@ Page({
   onLoad(options) {
     const groupId = options.groupId; // 首页跳转后的存储的id值
     console.log(groupId);
-    wx.showLoading({ title: '正在加载...',});
+    wx.showLoading({ title: '正在加载...', });
     setTimeout(() => {
       wx.hideLoading();
       this.setData({
@@ -131,6 +131,25 @@ Page({
   onUnload() { },
   // 用户点击右上角分享
   onShareAppMessage() { },
+  // 下拉菜单-图稿
+  onArtworkChange(e) {
+    this.setData({
+      'dropdownArtwork.value': e.detail.value,
+    });
+  },
+  // 下拉菜单-指派
+  onAssignChange(e) {
+    this.setData({
+      'dropdownAssign.value': e.detail.value,
+    });
+  },
+  // 下拉菜单-评估
+  onAssessChange(e) {
+    this.setData({
+      'dropdownAssess.value': e.detail.value,
+    });
+  },
+
   // 轮播图函数 - 点击轮播图 - 图片预览
   onSwiperImagesTap(e) {
     const { index } = e.detail;
