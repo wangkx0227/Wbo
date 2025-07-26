@@ -9,6 +9,8 @@ const swiperImages = [
 ];
 Page({
   data: {
+    // 骨架屏变量
+    skeletonLoading: true,
     groupId: null, // 首页跳转后的存储的id值
     // 筛选框变量-模板
     dropdownTemplate: {
@@ -81,6 +83,11 @@ Page({
   onLoad(options) {
     const groupId = options.groupId; // 首页跳转后的存储的id值
     console.log(groupId);
+    setTimeout(() => {
+      this.setData({
+        skeletonLoading: false,
+      })
+    }, 4000)
   },
   // 生命周期函数--监听页面初次渲染完成
   onReady() { },

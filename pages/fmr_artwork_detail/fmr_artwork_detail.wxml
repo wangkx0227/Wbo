@@ -1,5 +1,8 @@
+<!-- 骨架屏 -->
+<import src="skeleton.wxml" />
+<template is="skeleton" wx:if="{{skeletonLoading}}" />
 <!-- 主体 -->
-<view class="page-wrapper">
+<view class="page-wrapper" wx:else="{{skeletonLoading}}">
   <view class="page-head filter-bar">
     <t-row>
       <t-col span="24">
