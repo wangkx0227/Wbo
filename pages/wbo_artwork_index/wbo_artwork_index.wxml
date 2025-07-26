@@ -61,10 +61,10 @@
   <view class="tab-bar-wrapper" wx:if="{{tabBarShow}}">
     <t-tab-bar t-class="t-tab-bar" value="{{tabBarValue}}" shape="round" theme="tag" split="false" bindchange="onTabBarChange">
       <t-tab-bar-item value="primary">
-        初步评审
+        初步评审(1000)
       </t-tab-bar-item>
       <t-tab-bar-item value="ultimate">
-        最终审查
+        最终审查(5)
       </t-tab-bar-item>
     </t-tab-bar>
   </view>

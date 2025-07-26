@@ -172,26 +172,11 @@ Page({
     if (productValue === "all") {
       wx.showToast({ title: '选择后在进行登录', icon: 'error' });
     } else {
-      wx.showLoading({ title: '正在加载...' });
       app.globalData.userRole = productValue;
-      console.log(productValue);
+      wx.showToast({ title: '登录成功', icon: 'success' });
       setTimeout(() => {
-        wx.navigateTo({
-          url: `/pages/wbo_artwork_index/wbo_artwork_index`,
-          success() {
-            
-          },
-          fail(err) {
-            Toast({
-              context: that,
-              selector: '#t-toast',
-              message: '跳转失败',
-              theme: 'error',
-              con: 'check-circle',
-            });
-          }
-        });
-      }, 100)
+        wx.reLaunch({url: `/pages/wbo_artwork_index/wbo_artwork_index`});
+      }, 500)
 
     }
   }

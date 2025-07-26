@@ -129,7 +129,7 @@ Page({
       this.setData({
         skeletonLoading: false,
       })
-    }, 4000)
+    }, 2000)
   },
 
   onChange(e) {
