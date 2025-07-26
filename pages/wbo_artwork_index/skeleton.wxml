@@ -4,9 +4,9 @@
       <view style="background-color: #ffff;">
         <t-row>
           <t-col span="24">
-            <view style="height: 57px;">
+            <view style="height: 100rpx;">
               <view style="height: 100%;display: flex;align-items: center;justify-content: center;">
-                <t-skeleton theme="paragraph" loading animation="gradient" rowCol="{{ [{ width: '358px', height: '41px', borderRadius: '30rpx' }]}}" custom-style="background-color: #ffff;"></t-skeleton>
+                <t-skeleton theme="paragraph" loading animation="gradient" rowCol="{{ [{ width: '690rpx', height: '82rpx', borderRadius: '30rpx' }]}}" custom-style="background-color: #ffff;"></t-skeleton>
               </view>
             </view>
           </t-col>
@@ -28,18 +28,18 @@
             <t-cell-group theme="card" class="t-cell-group">
               <t-cell hover arrow>
                 <view slot="note">
-                  <t-skeleton theme="text" loading animation="gradient" rowCol="{{ [{ width: '20px', height: '16px'}]}}"></t-skeleton>
+                  <t-skeleton theme="text" loading animation="gradient" rowCol="{{ [{ width: '40rpx', height: '32rpx'}]}}"></t-skeleton>
                 </view>
                 <view slot="title">
                   <view style="  display: flex;flex-direction: column;">
-                    <view style="height: 25px;">
-                      <t-skeleton theme="text" loading animation="gradient" rowCol="{{ [{ width: '145px', height: '16px'}]}}"></t-skeleton>
+                    <view style="height: 50rpx;">
+                      <t-skeleton theme="text" loading animation="gradient" rowCol="{{ [{ width: '290rpx', height: '32rpx'}]}}"></t-skeleton>
                     </view>
-                    <view style="height: 25px;">
-                      <t-skeleton theme="text" loading animation="gradient" rowCol="{{ [{ width: '207px', height: '16px'}]}}"></t-skeleton>
+                    <view style="height: 50rpx;">
+                      <t-skeleton theme="text" loading animation="gradient" rowCol="{{ [{ width: '414rpx', height: '32rpx'}]}}"></t-skeleton>
                     </view>
-                    <view style="height: 25px;">
-                      <t-skeleton theme="text" loading animation="gradient" rowCol="{{ [{ width: '207px', height: '16px'}]}}"></t-skeleton>
+                    <view style="height: 50rpx;">
+                      <t-skeleton theme="text" loading animation="gradient" rowCol="{{ [{ width: '414rpx', height: '32rpx'}]}}"></t-skeleton>
                     </view>
                   </view>
                 </view>
