@@ -20,29 +20,31 @@
   </view>
   <view class="page-main">
     <view class="wrapper">
-      <t-cell-group theme="card" class="t-cell-group" bindtap="onJumpArtworkDeatails" data-group-id="1">
-        <t-cell hover arrow>
-          <t-badge count="{{8}}" slot="note" shape="square" />
-          <view slot="title">
-            <view class="arrange-space-between">
-              <view>
-                <text class="title-main">Name of Client：</text>
-                <text class="title-other">TG D51</text>
+      <view wx:for="{{dataAllList}}" wx:key="id">
+        <t-cell-group theme="card" class="t-cell-group" bindtap="onJumpArtworkDeatails" 
+        data-group-id="{{ item.id }}">
+          <t-cell hover arrow>
+            <t-badge count="{{ item.to_confirmed }}" slot="note" shape="square" />
+            <view slot="title">
+              <view class="arrange-space-between">
+                <view>
+                  <text class="title-main">Name of Client：</text>
+                  <text class="title-other">{{ item.client_name }}</text>
+                </view>
+                <t-tag class="margin-16" variant="light" icon="discount" size="small" style="position: relative;left: 90rpx;" wx:if="{{tabBarShow}}"> {{ item.stage }} </t-tag>
               </view>
-              <t-tag class="margin-16" variant="light" icon="discount" size="small" 
-              style="position: relative;left: 90rpx;" wx:if="{{tabBarShow}}"> 初步评审 </t-tag>
+              <view>
+                <text class="title-main">Theme of Program：</text>
+                <text class="title-other">{{ item.program }}</text>
+              </view>
+              <view class="arrange-space-between">
+                <text class="title-other" style="margin-right: 15px;">Year：{{ item.Year }}</text>
+                <text class="title-other">创建时间：{{ item.create_time }}</text>
+              </view>
             </view>
-            <view>
-              <text class="title-main">Theme of Program：</text>
-              <text class="title-other">The Outfitters</text>
-            </view>
-            <view class="arrange-space-between">
-              <text class="title-other" style="margin-right: 15px;">Year：2015</text>
-              <text class="title-other">创建时间：2025-07-21</text>
-            </view>
-          </view>
-        </t-cell>
-      </t-cell-group>
+          </t-cell>
+        </t-cell-group>
+      </view>
 
     </view>
   </view>
@@ -54,7 +56,7 @@
     <text class="loading-text">-- 已经到底了 --</text>
   </view>
   <!-- 回到顶部 -->
-  <t-back-top theme="half-round" text="顶部" scroll-top="{{scrollTop}}" bind:to-top="onToTop" />
+  <t-back-top theme="half-round" text="" scroll-top="{{scrollTop}}" bind:to-top="onToTop" />
   <!-- 标签栏-只有Kyle才能看到 -->
   <view class="tab-bar-wrapper" wx:if="{{tabBarShow}}">
     <t-tab-bar t-class="t-tab-bar" value="{{tabBarValue}}" shape="round" theme="tag" split="false" bindchange="onTabBarChange">

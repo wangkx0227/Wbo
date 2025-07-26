@@ -56,7 +56,64 @@ Page({
     isLoadingReachMore: false, // 滚动底部加载数据
     noMoreData: false,    // 数据是否全部加载完毕
     // 回到顶部变量
-    scrollTop: 0
+    scrollTop: 0,
+    // 假数据
+    dataAllList: [
+      {
+        id: 1,
+        to_confirmed: 15,
+        client_name: "TG D84",
+        stage: "初步评审",
+        program: "The Outfitters",
+        Year: 2025,
+        create_time: "2025-07-21",
+      },
+      {
+        id: 2,
+        to_confirmed: 20,
+        client_name: "TG D240",
+        stage: "初步评审",
+        program: "Outfitters_001",
+        Year: 2025,
+        create_time: "2025-07-25",
+      },
+      {
+        id: 3,
+        to_confirmed: 5,
+        client_name: "TG D51",
+        stage: "初步评审",
+        program: "Outfitters_002",
+        Year: 2025,
+        create_time: "2025-08-25",
+      },
+      {
+        id: 4,
+        to_confirmed: 5,
+        client_name: "HL",
+        stage: "初步评审",
+        program: "Outfitters_003",
+        Year: 2025,
+        create_time: "2025-09-25",
+      },
+      {
+        id: 5,
+        to_confirmed: 9,
+        client_name: "DG",
+        stage: "初步评审",
+        program: "Outfitters_004",
+        Year: 2025,
+        create_time: "2025-10-15",
+      },
+      {
+        id: 6,
+        to_confirmed: 2,
+        client_name: "FM",
+        stage: "初步评审",
+        program: "Outfitters_005",
+        Year: 2025,
+        create_time: "2025-11-15",
+      },
+    ]
   },
   // 加载数据
   onLoad() {
@@ -173,9 +230,41 @@ Page({
     console.log("上拉触底触发");
     if (this.data.isDownRefreshing || this.data.noMoreData) return;
     this.setData({ isLoadingReachMore: true });
+    const oldList = this.data.dataAllList;
+    // 假数据
+    const newList = [
+      {
+        id: 7,
+        to_confirmed: 8,
+        client_name: "新增数据-01",
+        stage: "初步评审",
+        program: "The Outfitters",
+        Year: 2025,
+        create_time: "2025-07-21",
+      },
+      {
+        id: 8,
+        to_confirmed: 18,
+        client_name: "新增数据-02",
+        stage: "初步评审",
+        program: "The Outfitters",
+        Year: 2025,
+        create_time: "2025-07-21",
+      },
+      {
+        id: 9,
+        to_confirmed: 28,
+        client_name: "新增数据-03",
+        stage: "初步评审",
+        program: "The Outfitters",
+        Year: 2025,
+        create_time: "2025-07-21",
+      },
+    ]
     setTimeout(() => {
       wx.stopPullDownRefresh(); // 必须手动停止
       this.setData({
+        dataAllList: oldList.concat(newList),
         isLoadingReachMore: false, // 修改状态
       });
     }, 1500);
@@ -195,8 +284,34 @@ Page({
   },
   // 胶囊悬浮框切换函数
   onTabBarChange(e) {
+    const tabBarValue = e.detail.value;
     this.setData({
-      tabBarValue: e.detail.value,
+      tabBarValue: tabBarValue,
     });
+    let data = []
+    const randomNum = Math.floor(Math.random() * 5) + 1;
+    for (let i = 0; i < randomNum; i++) {
+      data.push({
+        id: i,
+        to_confirmed: i+5,
+        client_name: `TG D51-${i}`,
+        stage: "初步评审",
+        program: `Outfitters_${i}`,
+        Year: 2025,
+        create_time: `2025-08-2${i}`,
+      });
+    }
+    if (tabBarValue === "primary") {
+      data.forEach((item)=>{
+        item["stage"] = "初步评审"
+      })
+    } else {
+      data.forEach((item)=>{
+        item["stage"] = "最终评审"
+      })
+    }
+    this.setData({
+      dataAllList:data,
+    })
   }
 })

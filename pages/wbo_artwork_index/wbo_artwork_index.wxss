@@ -7,7 +7,7 @@
   margin-top: 8px;
 }
 .page-main .wrapper .t-cell-group {
-  margin-bottom: 20rpx;
+  margin-bottom: 20rpx !important;
 }
 
 /* 最后一个元素不需要间距 */
@@ -39,4 +39,9 @@
 }
 .t-tab-bar--fixed {
   margin-bottom: 34px !important;
+}
+
+/* top组件调整位置,防止被标签栏组件遮挡 */
+.t-back-top {
+  margin-bottom: 100px !important;
 }
