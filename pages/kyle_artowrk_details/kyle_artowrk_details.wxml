@@ -1,9 +1,9 @@
 <!-- 骨架屏 -->
-<!-- 轻提示 -->
-<t-toast id="t-toast" />
-<!-- 提示 -->
-<t-message id="t-message" />
-<view class="page-wrapper">
+<!-- 骨架 -->
+<import src="skeleton.wxml" />
+<template is="skeleton" wx:if="{{skeletonLoading}}" />
+
+<view wx:else="{{skeletonLoading}}" class="page-wrapper">
   <view class="page-head filter-bar">
     <t-row>
       <t-col span="24">
@@ -156,3 +156,7 @@
     </view>
   </t-dialog>
 </view>
+<!-- 轻提示 -->
+<t-toast id="t-toast" />
+<!-- 提示 -->
+<t-message id="t-message" />
