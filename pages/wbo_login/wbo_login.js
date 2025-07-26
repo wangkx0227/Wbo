@@ -179,7 +179,7 @@ Page({
         wx.navigateTo({
           url: `/pages/wbo_artwork_index/wbo_artwork_index`,
           success() {
-            wx.hideLoading();
+            
           },
           fail(err) {
             Toast({
