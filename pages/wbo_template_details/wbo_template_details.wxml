@@ -1,4 +1,0 @@
-<!--pages/wbo_template_details/wbo_template_details.wxml-->
-<text>pages/wbo_template_details/wbo_template_details.wxml</text>
-<t-loading indicator="{{false}}" text="加载中..."></t-loading>
-<t-overlay visible="{{visible}}" duration="{{500}}"/>
