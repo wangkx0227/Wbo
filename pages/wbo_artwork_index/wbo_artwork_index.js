@@ -131,7 +131,6 @@ Page({
       })
     }, 2000)
   },
-
   // 下拉菜单-模板
   onTemplateChange(e) {
     this.setData({
