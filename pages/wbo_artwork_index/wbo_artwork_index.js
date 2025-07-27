@@ -248,11 +248,14 @@ Page({
   },
   // 胶囊悬浮框切换函数
   onTabBarChange(e) {
-    const tabBarValue = e.detail.value;
-    this.setData({
-      tabBarValue: tabBarValue,
+    let data = [];
+    const that = this;
+    // 对 胶囊悬浮框 进行复制，开启骨架
+    wx.showLoading({ title: '正在加载...'});
+    that.setData({
+      tabBarValue: e.detail.value,
+      skeletonLoading: true,
     });
-    let data = []
     const randomNum = Math.floor(Math.random() * 5) + 1;
     for (let i = 0; i < randomNum; i++) {
       data.push({
@@ -265,6 +268,7 @@ Page({
         create_time: `2025-08-2${i}`,
       });
     }
+    const tabBarValue = that.data.tabBarValue;
     if (tabBarValue === "primary") {
       data.forEach((item) => {
         item["stage"] = "初步评审"
@@ -274,8 +278,13 @@ Page({
         item["stage"] = "最终评审"
       })
     }
-    this.setData({
-      dataAllList: data,
-    })
+
+    setTimeout(() => {
+      wx.hideLoading();
+      that.setData({
+        skeletonLoading: false,
+        dataAllList: data,
+      })
+    }, 2000)
   }
 })

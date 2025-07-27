@@ -7,7 +7,7 @@
     <t-row>
       <t-col span="24">
         <view class="example-search">
-          <t-search placeholder="搜索" shape="round" model:value="{{searchValue}}"  bind:submit="onSearchConfirm" confirm-type="search"/>
+          <t-search placeholder="搜索" shape="round" model:value="{{searchValue}}" bind:submit="onSearchConfirm" confirm-type="search" />
         </view>
       </t-col>
       <t-col span="24">
@@ -21,8 +21,7 @@
   <view class="page-main">
     <view class="wrapper">
       <view wx:for="{{dataAllList}}" wx:key="id">
-        <t-cell-group theme="card" class="t-cell-group" bindtap="onJumpArtworkDeatails" 
-        data-group-id="{{ item.id }}">
+        <t-cell-group theme="card" class="t-cell-group" bindtap="onJumpArtworkDeatails" data-group-id="{{ item.id }}">
           <t-cell hover arrow>
             <t-badge count="{{ item.to_confirmed }}" slot="note" shape="square" />
             <view slot="title">
@@ -55,19 +54,19 @@
   <view class="loading-box" wx:if="{{noMoreData}}">
     <text class="loading-text">-- 已经到底了 --</text>
   </view>
-  <!-- 回到顶部 -->
-  <t-back-top theme="half-round" text="" scroll-top="{{scrollTop}}" bind:to-top="onToTop" />
-  <!-- 标签栏-只有Kyle才能看到 -->
-  <view class="tab-bar-wrapper" wx:if="{{tabBarShow}}">
-    <t-tab-bar t-class="t-tab-bar" value="{{tabBarValue}}" shape="round" theme="tag" split="false" bindchange="onTabBarChange">
-      <t-tab-bar-item value="primary">
-        初步评审(1000)
-      </t-tab-bar-item>
-      <t-tab-bar-item value="ultimate">
-        最终审查(5)
-      </t-tab-bar-item>
-    </t-tab-bar>
-  </view>
 </view>
 <!-- 轻提示 -->
 <t-toast id="t-toast" />
+<!-- 标签栏-只有Kyle才能看到 -->
+<view class="tab-bar-wrapper" wx:if="{{tabBarShow}}">
+  <t-tab-bar t-class="t-tab-bar" value="{{tabBarValue}}" shape="round" theme="tag" split="false" bindchange="onTabBarChange">
+    <t-tab-bar-item value="primary">
+      <text> 初步评审(1000) </text>
+    </t-tab-bar-item>
+    <t-tab-bar-item value="ultimate">
+      <text> 最终审查(5) </text>
+    </t-tab-bar-item>
+  </t-tab-bar>
+</view>
+<!-- 回到顶部 -->
+<t-back-top theme="half-round" text="" scroll-top="{{scrollTop}}" bind:to-top="onToTop" />
