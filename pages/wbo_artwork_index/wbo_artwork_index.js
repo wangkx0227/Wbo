@@ -158,7 +158,13 @@ Page({
     console.log(groupId, "准备跳转");
     // 需要3类人进行跳转 Kyle Shelley FMR 进行跳转
     if (userRole === "kyle") {
-      wx.navigateTo({ url: `/pages/kyle_artowrk_details/kyle_artowrk_details?groupId=${groupId}` });
+      const tabBarValue = that.data.tabBarValue;
+      if(tabBarValue === "primary"){
+        wx.navigateTo({ url: `/pages/kyle_artowrk_primary_details/kyle_artowrk_primary_details?groupId=${groupId}` });
+      }else{
+
+      }
+      
     } else if (userRole === "shelley") {
       wx.navigateTo({ url: `/pages/shelley_artwork_detail/shelley_artwork_detail?groupId=${groupId}` });
     } else if (userRole === "fmr") {
