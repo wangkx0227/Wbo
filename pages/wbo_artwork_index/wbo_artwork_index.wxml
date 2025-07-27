@@ -1,7 +1,6 @@
 <!-- 骨架 -->
 <import src="skeleton.wxml" />
 <template is="skeleton" wx:if="{{skeletonLoading}}" />
-
 <view wx:else="{{skeletonLoading}}" class="page-wrapper">
   <view class="page-head filter-bar">
     <t-row>

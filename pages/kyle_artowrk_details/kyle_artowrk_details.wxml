@@ -8,8 +8,7 @@
       <t-col span="24">
         <t-dropdown-menu>
           <t-dropdown-item options="{{dropdownDesigner.options}}" placement="right" value="{{dropdownDesigner.value}}" bindchange="onDesignerChange" />
-          <t-dropdown-item options="{{dropdownStatus.options}}" placement="right" value="{{dropdownStatus.value}}" 
-          bindchange="onStatusChange" />
+          <t-dropdown-item options="{{dropdownStatus.options}}" placement="right" value="{{dropdownStatus.value}}" bindchange="onStatusChange" />
         </t-dropdown-menu>
       </t-col>
     </t-row>
@@ -47,9 +46,9 @@
         </view>
         <view class="arrange-center title-font-other">
           <text>操作：</text>
-          <t-link size="small" content="舍弃" data-content-status="N" hover underline theme="danger"  bindtap="onModifyArtworkStatus" data-id="2" />
+          <t-link size="small" content="舍弃" data-content-status="N" hover underline theme="danger" bindtap="onModifyArtworkStatus" data-id="2" />
           <t-divider layout="vertical" />
-          <t-link size="small" content="保留" data-content-status="Y" hover underline bindtap="onModifyArtworkStatus" data-id="2"/>
+          <t-link size="small" content="保留" data-content-status="Y" hover underline bindtap="onModifyArtworkStatus" data-id="2" />
         </view>
       </view>
       <view class="cell">
@@ -85,7 +84,7 @@
           <text>操作：</text>
           <t-link size="small" content="舍弃" data-content-status="N" hover underline theme="danger" bindtap="onModifyArtworkStatus" data-id="2" />
           <t-divider layout="vertical" />
-          <t-link size="small" content="保留" data-content-status="Y" hover underline bindtap="onModifyArtworkStatus" data-id="2"/>
+          <t-link size="small" content="保留" data-content-status="Y" hover underline bindtap="onModifyArtworkStatus" data-id="2" />
         </view>
       </view>
       <view class="cell">
@@ -115,13 +114,13 @@
         </view>
         <view class="arrange-center title-font-other">
           <text>ReviewComments：</text>
-          <t-link size="small" content="评论" hover underline suffixIcon="chat-message" variant="outline"  bind:tap="onOpenDialog" />
+          <t-link size="small" content="评论" hover underline suffixIcon="chat-message" variant="outline" bind:tap="onOpenDialog" />
         </view>
         <view class="arrange-center title-font-other">
           <text>操作：</text>
           <t-link size="small" content="舍弃" data-content-status="N" hover underline theme="danger" bindtap="onModifyArtworkStatus" data-id="2" />
           <t-divider layout="vertical" />
-          <t-link size="small" content="保留" data-content-status="Y" hover underline bindtap="onModifyArtworkStatus" data-id="2"/>
+          <t-link size="small" content="保留" data-content-status="Y" hover underline bindtap="onModifyArtworkStatus" data-id="2" />
         </view>
       </view>
     </view>
@@ -134,29 +133,30 @@
   <view class="loading-box" wx:if="{{noMoreData}}">
     <text class="loading-text">-- 已经到底了 --</text>
   </view>
-  <!-- 回到顶部 -->
-  <t-back-top theme="half-round" text="顶部" scroll-top="{{scrollTop}}" bind:to-top="onToTop" />
-  <!-- 查看自评弹窗 -->
-  <t-popup visible="{{popupVisible}}" bind:visible-change="onClosePopup" placement="bottom">
-    <view class="popup-block">
-      <view class="popup-header">
-        <view class="popup-title">原始设计师意见：</view>
-      </view>
-      <view class="popup-comments">
-        <text>{{ popupValue }}</text>
-      </view>
-    </view>
-  </t-popup>
-  <!-- 评论弹窗 -->
-  <t-dialog visible="{{dialogVisible}}" title="评审意见：" confirm-btn="确定" cancel-btn="取消" bind:confirm="onCloseDialog" bind:cancel="onCloseDialog">
-    <view slot="content">
-      <view class="dialog-textarea">
-        <t-textarea value="{{ dialogValue }}"  placeholder="请输入评审意见" bordered maxlength="200" disableDefaultPadding="true" indicator  bind:change="onDialogInput"/>
-      </view>
-    </view>
-  </t-dialog>
+
 </view>
 <!-- 轻提示 -->
 <t-toast id="t-toast" />
 <!-- 提示 -->
 <t-message id="t-message" />
+<!-- 回到顶部 -->
+<t-back-top theme="half-round" text="顶部" scroll-top="{{scrollTop}}" bind:to-top="onToTop" />
+<!-- 查看自评弹窗 -->
+<t-popup visible="{{popupVisible}}" bind:visible-change="onClosePopup" placement="bottom">
+  <view class="popup-block">
+    <view class="popup-header">
+      <view class="popup-title">原始设计师意见：</view>
+    </view>
+    <view class="popup-comments">
+      <text>{{ popupValue }}</text>
+    </view>
+  </view>
+</t-popup>
+<!-- 评论弹窗 -->
+<t-dialog visible="{{dialogVisible}}" title="评审意见：" confirm-btn="确定" cancel-btn="取消" bind:confirm="onCloseDialog" bind:cancel="onCloseDialog">
+  <view slot="content">
+    <view class="dialog-textarea">
+      <t-textarea value="{{ dialogValue }}" placeholder="请输入评审意见" bordered maxlength="200" disableDefaultPadding="true" indicator bind:change="onDialogInput" />
+    </view>
+  </view>
+</t-dialog>
