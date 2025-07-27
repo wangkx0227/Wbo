@@ -154,7 +154,6 @@ Page({
     const that = this;
     const groupId = e.currentTarget.dataset.groupId;
     const userRole = that.data.userRole;
-    wx.showLoading({ title: '正在加载...' });
     console.log(groupId, "准备跳转");
     // 需要3类人进行跳转 Kyle Shelley FMR 进行跳转
     if (userRole === "kyle") {
@@ -162,7 +161,7 @@ Page({
       if(tabBarValue === "primary"){
         wx.navigateTo({ url: `/pages/kyle_artowrk_primary_details/kyle_artowrk_primary_details?groupId=${groupId}` });
       }else{
-
+        wx.navigateTo({ url: `/pages/kyle_artowrk_ultimate_details/kyle_artowrk_ultimate_details?groupId=${groupId}` });
       }
       
     } else if (userRole === "shelley") {

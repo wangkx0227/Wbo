@@ -4,6 +4,7 @@
     "pages/wbo_artwork_index/wbo_artwork_index",
     "pages/shelley_artwork_detail/shelley_artwork_detail",
     "pages/kyle_artowrk_primary_details/kyle_artowrk_primary_details",
+    "pages/kyle_artowrk_ultimate_details/kyle_artowrk_ultimate_details",
     "pages/fmr_artwork_detail/fmr_artwork_detail"
   ],
   "window": {
