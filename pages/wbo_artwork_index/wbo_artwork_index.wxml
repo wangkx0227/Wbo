@@ -19,7 +19,7 @@
   </view>
   <view class="page-main">
     <view class="wrapper">
-      <view wx:for="{{dataAllList}}" wx:key="id">
+      <view wx:for="{{dataAllList}}" wx:key="index">
         <t-cell-group theme="card" class="t-cell-group" bindtap="onJumpArtworkDeatails" data-group-id="{{ item.id }}">
           <t-cell hover arrow>
             <t-badge count="{{ item.to_confirmed }}" slot="note" shape="square" />
