@@ -175,7 +175,7 @@ Page({
     return {
       title: 'WBO',
       path: 'pages/wbo_artwork_index/wbo_artwork_index',  // 分享后打开的页面路径
-      imageUrl: '/assets/1752927115162.png'     // 自定义分享封面
+      imageUrl: '/assets/images/log.png'     // 自定义分享封面
     };
   },
   // 页面下拉刷新 - 用于页面重置

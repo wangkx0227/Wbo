@@ -49,3 +49,18 @@
 针对文档功能：
   1.STEP 5 - Kyle 最终创意审查
 ```
+## 4.方法
+```tex
+// 存
+wx.setStorageSync('userInfo', { name: 'Tom', age: 18 })
+
+// 取
+const user = wx.getStorageSync('userInfo') || {}
+console.log(user)   // { name: 'Tom', age: 18 }
+
+// 删
+wx.removeStorageSync('userInfo')
+
+// 清空所有
+wx.clearStorageSync()
+```
