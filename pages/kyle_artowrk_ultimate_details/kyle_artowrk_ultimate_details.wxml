@@ -77,7 +77,7 @@
             </view>
             <view class="radio-card  {{ radioValue == '1' ? 'radio-active' : ''}}">
               <t-icon name="check" t-class="radio-icon" />
-              <t-radio value="1" label="轻微修正" icon="none" borderless t-class="radio-text" />
+              <t-radio value="1" label="轻微修改" icon="none" borderless t-class="radio-text" />
             </view>
             <view class="radio-card  {{ radioValue == '2' ? 'radio-active' : ''}}">
               <t-icon name="check" t-class=radio-icon" />

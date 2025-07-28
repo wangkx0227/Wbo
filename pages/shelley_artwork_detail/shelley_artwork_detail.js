@@ -263,6 +263,7 @@ Page({
       pickerVisible：筛选器显示变量
       pickerValue： 选中的值
     */
+ 
     const { value, label } = e.detail;
     this.setData({
       pickerVisible: false,

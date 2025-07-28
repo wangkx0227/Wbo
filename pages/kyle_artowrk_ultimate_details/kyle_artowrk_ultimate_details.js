@@ -46,6 +46,10 @@ Page({
           label: '舍弃',
         },
         {
+          value: 'modify',
+          label: '轻微修改',
+        },
+        {
           value: 'reserve',
           label: '保留',
         },
