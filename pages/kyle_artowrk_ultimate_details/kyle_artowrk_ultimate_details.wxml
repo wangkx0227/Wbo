@@ -48,7 +48,6 @@
             </view>
           </view>
         </view>
-
         <view class="arrange-column ">
           <text class="title-font-main">Shelley 评估（可行性评估）：</text>
           <view class="arrange-center title-font-other">
@@ -58,7 +57,6 @@
             <t-link size="small" content="查看" hover underline />
           </view>
         </view>
-
         <view class="arrange-column">
           <text class="title-font-main">FMR 评估（可行性评估）：</text>
           <view class="arrange-center title-font-other">
@@ -118,10 +116,10 @@
   </view>
 </t-popup>
 <!-- 评论弹窗 -->
-<t-dialog visible="{{dialogVisible}}" title="评审意见：" confirm-btn="确定" cancel-btn="取消" bind:confirm="onCloseDialog" bind:cancel="onCloseDialog">
+<t-dialog visible="{{dialogVisible}}" title="修改建议：" confirm-btn="确定" cancel-btn="取消" bind:confirm="onCloseDialog" bind:cancel="onCloseDialog">
   <view slot="content">
     <view class="dialog-textarea">
-      <t-textarea value="{{ dialogValue }}" placeholder="请输入评审意见" bordered maxlength="200" disableDefaultPadding="true" indicator bind:change="onDialogInput" />
+      <t-textarea value="{{ dialogValue }}" placeholder="请输入修改建议" bordered maxlength="200" disableDefaultPadding="true" indicator bind:change="onDialogInput" />
     </view>
   </view>
 </t-dialog>
