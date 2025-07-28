@@ -69,7 +69,8 @@ Page({
     scrollTop: 0,
     // 设计师自评弹窗控制变量
     popupVisible: false,
-    popupValue: "",
+    popupValue: "", // 评论的内容
+    popupTitle: "", // 评论的标题
     // 评论弹出层变量
     dialogVisible: false,
     dialogValue: "",
@@ -224,19 +225,59 @@ Page({
       scrollTop: e.scrollTop
     });
   },
-  // 自评弹窗函数 - 关闭
+  // 查看评论弹窗函数 - 关闭
   onClosePopup(e) {
     this.setData({
       popupVisible: e.detail.visible,
-      popupValue: "",
     });
+    // 延迟清空内容，确保动画完成后执行
+    setTimeout(() => {
+      this.setData({
+        popupValue: "",
+        popupTitle: ""
+      });
+    }, 300);
   },
-  // 自评弹窗函数 - 唤起
+  // 查看评论弹窗函数 - 唤起
   onOpenPopup(e) {
-    const { id, designer_comments } = e.currentTarget.dataset; // 点击按钮的存储的数据 id 点击id designer_comments 点击的自评文字
+    /*
+      id: 当条记录的id
+      designer_comments: 当前按钮的属性,用来确定点击内容
+      commentator: 评论的内容
+      assessStatus: 状态(只针对 可行性评估 shelley与fmr) 1(可生产) 2(小幅度修改 有评论内容) 3(不具备生产条件)
+    */
+    const that = this;
+    const { id, designer_comments, commentator, assessStatus } = e.currentTarget.dataset; // 点击按钮的存储的数据 id 点击id designer_comments 点击的自评文字
+    if (commentator === "odc") {
+      this.setData({ popupValue: "无内容", popupTitle: "OriginalDesignerComments" });
+    } else if (commentator === "rc") {
+      this.setData({ popupValue: "无内容", popupTitle: "ReviewComments" });
+    } else if (commentator === "sc") {
+      if (assessStatus === "1" || assessStatus === "3") {
+        Toast({
+          context: that,
+          selector: '#t-toast',
+          message: '当前评估没有建议',
+        });
+        return
+      } else {
+        this.setData({ popupValue: "无内容", popupTitle: "Shelley 评估" });
+      }
+    } else if (commentator === "fc") {
+      if (assessStatus === "1" || assessStatus === "3") {
+        Toast({
+          context: that,
+          selector: '#t-toast',
+          message: '当前评估没有建议',
+        });
+        return
+      } else {
+        this.setData({ popupValue: "无内容", popupTitle: "FMR 评估" });
+      }
+    }
     this.setData({ popupVisible: true, popupValue: "无内容" }); /// 触发弹窗
   },
-  // 弹窗-评论-打开
+  // 弹窗-评论输入-打开
   onOpenDialog(e) {
     const { id } = e.currentTarget.dataset;
     this.setData({ dialogVisible: true });
@@ -253,42 +294,42 @@ Page({
     const action = e.type; // "confirm" 或 "cancel"
     if (action === 'confirm') {
       console.log("提交数据");
+      this.setData({ radioValue: "1" }); // 选中单选框
     } else if (action === 'cancel') {
       console.log("提交取消");
     }
     this.setData({ dialogVisible: false, dialogValue: "" });
   },
-    // 单选框
-    onRadioChange(e) {
-      /*
-        radioValue：记录选中的单选值
-      */
-      const that = this;
-      const selectedradioValue = e.detail.value;
-      const radioValue = that.data.radioValue;
-      // 如果选中的点选框的值等于记录的值那么就取消
-      if (selectedradioValue === radioValue) {
-        this.setData({ radioValue: null });
-        Message.warning({
+  // 单选框
+  onRadioChange(e) {
+    /*
+      radioValue：记录选中的单选值
+    */
+    const that = this;
+    const selectedradioValue = e.detail.value;
+    const radioValue = that.data.radioValue;
+    // 如果选中的点选框的值等于记录的值那么就取消
+    if (selectedradioValue === radioValue) {
+      this.setData({ radioValue: null });
+      Message.warning({
+        context: that,
+        offset: [10, 32],
+        duration: 3000,
+        content: '取消评估建议',
+      });
+    } else {
+      // 如果选择小幅度修改，需要输入评估建议
+      if (selectedradioValue === "1") {
+        this.setData({ dialogVisible: true });
+      } else {
+        this.setData({ radioValue: selectedradioValue });
+        Message.success({
           context: that,
           offset: [10, 32],
           duration: 3000,
-          content: '取消评估建议',
+          content: '提交评估建议成功',
         });
-      } else {
-        // 如果选择小幅度修改，需要输入评估建议
-        if (selectedradioValue === "1") {
-          this.setData({ dialogVisible: true });
-        } else {
-          this.setData({ radioValue: selectedradioValue });
-          Message.success({
-            context: that,
-            offset: [10, 32],
-            duration: 3000,
-            content: '提交评估建议成功',
-          });
-        }
-  
       }
-    },
+    }
+  },
 })

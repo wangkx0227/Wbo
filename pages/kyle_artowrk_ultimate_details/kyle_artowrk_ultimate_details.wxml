@@ -40,11 +40,11 @@
           <view class="title-font-other arrange-space-between">
             <view class="arrange-center">
               <text>OriginalDesignerComments：</text>
-              <t-link size="small" content="查看" hover underline />
+              <t-link size="small" content="查看" hover underline bind:tap="onOpenPopup" data-commentator="odc"/>
             </view>
             <view class="arrange-center">
               <text>ReviewComments：</text>
-              <t-link size="small" content="查看" hover underline />
+              <t-link size="small" content="查看" hover underline  bind:tap="onOpenPopup" data-commentator="rc"/>
             </view>
           </view>
         </view>
@@ -54,7 +54,8 @@
             <text>评估建议：可生产</text>
             <t-divider layout="vertical" />
             <!-- 只有选中小幅度修改时,才会显示查看按钮 -->
-            <t-link size="small" content="查看" hover underline />
+            <t-link size="small" content="查看" hover underline  data-commentator="sc" bind:tap="onOpenPopup"
+            data-assess-status="1" />
           </view>
         </view>
         <view class="arrange-column">
@@ -62,10 +63,11 @@
           <view class="arrange-center title-font-other">
             <text>指派FMR：XXX</text>
             <t-divider layout="vertical" />
-            <text>评估建议：可生产</text>
+            <text>评估建议：小幅度修改</text>
             <t-divider layout="vertical" />
             <!-- 只有选中小幅度修改时,才会显示查看按钮 -->
-            <t-link size="small" content="查看" hover underline />
+            <t-link size="small" content="查看" hover underline data-commentator="fc" bind:tap="onOpenPopup"
+            data-assess-status="2" />
           </view>
         </view>
         <view class="arrange-column ">
@@ -108,7 +110,7 @@
 <t-popup visible="{{popupVisible}}" bind:visible-change="onClosePopup" placement="bottom">
   <view class="popup-block">
     <view class="popup-header">
-      <view class="popup-title">原始设计师意见：</view>
+      <view class="popup-title">{{popupTitle}}：</view>
     </view>
     <view class="popup-comments">
       <text>{{ popupValue }}</text>
