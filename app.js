@@ -8,8 +8,8 @@ App({
   onLaunch() {
     // 展示本地存储能力
     console.log("小程序启动");
-    const logs = wx.getStorageSync('logs') || []
-    console.log(logs);
+    // const logs = wx.getStorageSync('logs') || []
+    // console.log(logs);
     // logs.unshift(Date.now())
     // wx.setStorageSync('logs', logs)
 

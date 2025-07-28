@@ -172,21 +172,19 @@ Page({
     if (productValue === "all") {
       wx.showToast({ title: '选择后在进行登录', icon: 'error' });
     } else {
-      app.globalData.userRole = productValue;
       wx.setStorageSync('userRole', productValue); // 异步存储消息
       wx.showToast({ title: '登录成功', icon: 'success' });
       setTimeout(() => {
         wx.reLaunch({ url: `/pages/wbo_artwork_index/wbo_artwork_index` });
       }, 500)
-
     }
   },
-    // 用户点击右上角分享
-    onShareAppMessage() {
-      return {
-        title: 'WBO',
-        path: 'pages/wbo_artwork_index/wbo_artwork_index',  // 分享后打开的页面路径
-        imageUrl: '/assets/images/log.jpg'     // 自定义分享封面
-      };
-    },
+  // 用户点击右上角分享
+  onShareAppMessage() {
+    return {
+      title: 'WBO',
+      path: 'pages/wbo_login/wbo_login',  // 分享后打开的页面路径
+      imageUrl: '/assets/images/log.jpg'     // 自定义分享封面
+    };
+  },
 });

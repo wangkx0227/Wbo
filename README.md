@@ -50,7 +50,7 @@
   1.STEP 5 - Kyle 最终创意审查
 ```
 ## 4.方法
-```tex
+```JavaScript
 // 存
 wx.setStorageSync('userInfo', { name: 'Tom', age: 18 })
 
@@ -63,4 +63,28 @@ wx.removeStorageSync('userInfo')
 
 // 清空所有
 wx.clearStorageSync()
+```
+
+## 4.待处理页面（小程序卡片）小程序消息发送，爬虫脚本
+```JavaScript
+  // 登录页面
+      const redirectUrl = decodeURIComponent(e.redirect || '');
+      if (redirectUrl) {
+        wx.redirectTo({ url: redirectUrl });
+      }
+      console.log(redirectUrl);
+
+  // 待处理页面对登录的验证操作
+    // 测试登录状态验证
+    const currentPages = getCurrentPages();
+    const StorageUserRole = wx.getStorageSync('userRole'); // 异步获取消息
+    if (StorageUserRole) {
+      wx.showToast({ title: '请先登录', icon: 'error' });
+      const currentPages = getCurrentPages();
+      const redirectUrl = 'pages/kyle_artowrk_ultimate_details/kyle_artowrk_ultimate_details'
+      wx.navigateTo({
+        url: `/pages/wbo_login/wbo_login?redirect=${encodeURIComponent(redirectUrl)}`,
+      });
+    }
+    转发通信的脚本将当前待处理页面进行保留，当小程序内变动（谁需要处理），转发通信脚本，将待处理页面的卡片转发给指定的人。
 ```

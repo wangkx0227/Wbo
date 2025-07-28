@@ -117,13 +117,15 @@ Page({
   },
   // 生命周期函数--监听页面加载 
   onLoad() {
-    const userRole = app.globalData.userRole;
+    const userRole = wx.getStorageSync('userRole');
+    console.log(userRole);
+    wx.showLoading({ title: '正在加载...', });
     // 判断显示标签栏
     if (userRole === "kyle") {
       this.setData({ tabBarShow: true });
     }
     this.setData({ userRole: userRole });
-    wx.showLoading({ title: '正在加载...', });
+    
     setTimeout(() => {
       wx.hideLoading();
       this.setData({
@@ -158,12 +160,12 @@ Page({
     // 需要3类人进行跳转 Kyle Shelley FMR 进行跳转
     if (userRole === "kyle") {
       const tabBarValue = that.data.tabBarValue;
-      if(tabBarValue === "primary"){
+      if (tabBarValue === "primary") {
         wx.navigateTo({ url: `/pages/kyle_artowrk_primary_details/kyle_artowrk_primary_details?groupId=${groupId}` });
-      }else{
+      } else {
         wx.navigateTo({ url: `/pages/kyle_artowrk_ultimate_details/kyle_artowrk_ultimate_details?groupId=${groupId}` });
       }
-      
+
     } else if (userRole === "shelley") {
       wx.navigateTo({ url: `/pages/shelley_artwork_detail/shelley_artwork_detail?groupId=${groupId}` });
     } else if (userRole === "fmr") {
@@ -175,7 +177,7 @@ Page({
     return {
       title: 'WBO',
       path: 'pages/wbo_artwork_index/wbo_artwork_index',  // 分享后打开的页面路径
-      imageUrl: '/assets/images/log.png'     // 自定义分享封面
+      imageUrl: '/assets/images/log.jpg'     // 自定义分享封面
     };
   },
   // 页面下拉刷新 - 用于页面重置
@@ -255,7 +257,7 @@ Page({
     let data = [];
     const that = this;
     // 对 胶囊悬浮框 进行复制，开启骨架
-    wx.showLoading({ title: '正在加载...'});
+    wx.showLoading({ title: '正在加载...' });
     that.setData({
       tabBarValue: e.detail.value,
       skeletonLoading: true,
