@@ -1,2 +1,127 @@
-<!--pages/kyle_artowrk_ultimate_details/kyle_artowrk_ultimate_details.wxml-->
-<text>pages/kyle_artowrk_ultimate_details/kyle_artowrk_ultimate_details.wxml</text>
+<!-- 骨架屏 -->
+<import src="skeleton.wxml" />
+<template is="skeleton" wx:if="{{skeletonLoading}}" />
+<!-- 主体 -->
+<view wx:else="{{skeletonLoading}}" class="page-wrapper">
+  <view class="page-head filter-bar">
+    <t-row>
+      <t-col span="24">
+        <t-dropdown-menu>
+          <t-dropdown-item options="{{dropdownDesigner.options}}" placement="right" value="{{dropdownDesigner.value}}" bindchange="onDesignerChange" />
+          <t-dropdown-item options="{{dropdownStatus.options}}" placement="right" value="{{dropdownStatus.value}}" bindchange="onStatusChange" />
+        </t-dropdown-menu>
+      </t-col>
+    </t-row>
+  </view>
+  <view class="page-main">
+    <view class="wrapper">
+      <view class="cell">
+        <view class="arrange-space-between title-font-main">
+          <text>Title：Animals in sleeping bags</text>
+        </view>
+        <view class="title-font-other arrange-space-between">
+          <text>Name：黎善玲</text>
+          <text>Code：LSL__AIE MJ_2025_01</text>
+        </view>
+        <view class="cell-swiper">
+          <t-swiper wx:if="{{swiperImages.length}}" current="{{current}}" autoplay="{{autoplay}}" duration="{{duration}}" interval="{{interval}}" navigation="{{ { type: 'dots' } }}" list="{{swiperImages}}" bind:click="onSwiperImagesTap">
+          </t-swiper>
+          <!-- 9宫格遮罩层 -->
+          <view class="grid-overlay" wx:if="{{swiperImages.length}}">
+            <view class="grid-cell" wx:for="{{9}}" wx:key="index"></view>
+          </view>
+          <!-- 无数据时显示占位内容 -->
+          <t-image wx:else src="" shape="round" error="slot" width="360" height="192">
+            <text class="error-text" slot="error">轮播图加载失败</text>
+          </t-image>
+        </view>
+        <view class="arrange-column ">
+          <text class="title-font-main">图稿相关信息（初步评测）：</text>
+          <view class="title-font-other arrange-space-between">
+            <view class="arrange-center">
+              <text>OriginalDesignerComments：</text>
+              <t-link size="small" content="查看" hover underline />
+            </view>
+            <view class="arrange-center">
+              <text>ReviewComments：</text>
+              <t-link size="small" content="查看" hover underline />
+            </view>
+          </view>
+        </view>
+
+        <view class="arrange-column ">
+          <text class="title-font-main">Shelley 评估（可行性评估）：</text>
+          <view class="arrange-center title-font-other">
+            <text>评估建议：可生产</text>
+            <t-divider layout="vertical" />
+            <!-- 只有选中小幅度修改时,才会显示查看按钮 -->
+            <t-link size="small" content="查看" hover underline />
+          </view>
+        </view>
+
+        <view class="arrange-column">
+          <text class="title-font-main">FMR 评估（可行性评估）：</text>
+          <view class="arrange-center title-font-other">
+            <text>指派FMR：XXX</text>
+            <t-divider layout="vertical" />
+            <text>评估建议：可生产</text>
+            <t-divider layout="vertical" />
+            <!-- 只有选中小幅度修改时,才会显示查看按钮 -->
+            <t-link size="small" content="查看" hover underline />
+          </view>
+        </view>
+        <view class="arrange-column ">
+          <text class="title-font-main">最终评审操作：</text>
+          <t-radio-group t-class="radio-horizontal-box" value="{{radioValue}}" bind:change="onRadioChange">
+            <view class="radio-card   {{ radioValue == '0' ? 'radio-active' : ''}}">
+              <t-icon name="check" t-class="radio-icon" />
+              <t-radio value="0" label="保留" icon="none" borderless />
+            </view>
+            <view class="radio-card  {{ radioValue == '1' ? 'radio-active' : ''}}">
+              <t-icon name="check" t-class="radio-icon" />
+              <t-radio value="1" label="轻微修正" icon="none" borderless t-class="radio-text" />
+            </view>
+            <view class="radio-card  {{ radioValue == '2' ? 'radio-active' : ''}}">
+              <t-icon name="check" t-class=radio-icon" />
+              <t-radio value="2" label="舍弃" icon="none" borderless />
+            </view>
+          </t-radio-group>
+        </view>
+      </view>
+    </view>
+  </view>
+  <!-- 当下拉时,进行显示的内容  -->
+  <view class="loading-box loading-flex" wx:if="{{isLoadingReachMore}}">
+    <!-- <text class="loading-text">加载中...</text> -->
+    <t-loading theme="dots" size="60rpx" />
+  </view>
+  <view class="loading-box" wx:if="{{noMoreData}}">
+    <text class="loading-text">-- 已经到底了 --</text>
+  </view>
+
+</view>
+<!-- 轻提示 -->
+<t-toast id="t-toast" />
+<!-- 提示 -->
+<t-message id="t-message" />
+<!-- 回到顶部 -->
+<t-back-top theme="half-round" text="顶部" scroll-top="{{scrollTop}}" bind:to-top="onToTop" />
+<!-- 查看自评弹窗 -->
+<t-popup visible="{{popupVisible}}" bind:visible-change="onClosePopup" placement="bottom">
+  <view class="popup-block">
+    <view class="popup-header">
+      <view class="popup-title">原始设计师意见：</view>
+    </view>
+    <view class="popup-comments">
+      <text>{{ popupValue }}</text>
+    </view>
+  </view>
+</t-popup>
+<!-- 评论弹窗 -->
+<t-dialog visible="{{dialogVisible}}" title="评审意见：" confirm-btn="确定" cancel-btn="取消" bind:confirm="onCloseDialog" bind:cancel="onCloseDialog">
+  <view slot="content">
+    <view class="dialog-textarea">
+      <t-textarea value="{{ dialogValue }}" placeholder="请输入评审意见" bordered maxlength="200" disableDefaultPadding="true" indicator bind:change="onDialogInput" />
+    </view>
+  </view>
+</t-dialog>
