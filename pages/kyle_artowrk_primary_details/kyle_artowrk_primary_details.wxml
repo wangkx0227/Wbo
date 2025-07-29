@@ -17,78 +17,6 @@
     <view class="wrapper">
       <view class="cell">
         <view class="arrange-space-between title-font-main">
-          <text>Title：Animals in sleeping bags</text>
-          <text>状态：保留</text>
-        </view>
-        <view class="title-font-other arrange-space-between">
-          <text>Name：黎善玲</text>
-          <text>Code：LSL__AIE MJ_2025_01</text>
-        </view>
-        <view class="cell-swiper">
-          <t-swiper wx:if="{{swiperImages.length}}" current="{{current}}" autoplay="{{autoplay}}" duration="{{duration}}" interval="{{interval}}" navigation="{{ { type: 'dots' } }}" list="{{swiperImages}}" bind:click="onSwiperImagesTap">
-          </t-swiper>
-          <!-- 9宫格遮罩层 -->
-          <view class="grid-overlay" wx:if="{{swiperImages.length}}">
-            <view class="grid-cell" wx:for="{{9}}" wx:key="index"></view>
-          </view>
-          <!-- 无数据时显示占位内容 -->
-          <t-image wx:else src="" shape="round" error="slot" width="360" height="192">
-            <text class="error-text" slot="error">轮播图加载失败</text>
-          </t-image>
-        </view>
-        <view class="arrange-center title-font-other">
-          <text>OriginalDesignerComments：</text>
-          <t-link size="small" content="查看" hover underline suffixIcon="chat-bubble" />
-        </view>
-        <view class="arrange-center title-font-other">
-          <text>ReviewComments：</text>
-          <t-link size="small" content="评论" hover underline suffixIcon="chat-message" />
-        </view>
-        <view class="arrange-center title-font-other">
-          <text>操作：</text>
-          <t-link size="small" content="舍弃" data-content-status="N" hover underline theme="danger" bindtap="onModifyArtworkStatus" data-id="2" />
-          <t-divider layout="vertical" />
-          <t-link size="small" content="保留" data-content-status="Y" hover underline bindtap="onModifyArtworkStatus" data-id="2" />
-        </view>
-      </view>
-      <view class="cell">
-        <view class="arrange-space-between title-font-main">
-          <text>Title：热可可杯吊饰</text>
-          <text style="color: red;">状态：舍弃</text>
-        </view>
-        <view class="title-font-other arrange-space-between">
-          <text>Name：宁安琪</text>
-          <text>Code：NAQ__AIE MJ_2025_01</text>
-        </view>
-        <view class="cell-swiper">
-          <t-swiper wx:if="{{swiperImages.length}}" current="{{current}}" autoplay="{{autoplay}}" duration="{{duration}}" interval="{{interval}}" navigation="{{ { type: 'dots' } }}" list="{{swiperImages}}" bind:click="onSwiperImagesTap">
-          </t-swiper>
-          <!-- 9宫格遮罩层 -->
-          <view class="grid-overlay" wx:if="{{swiperImages.length}}">
-            <view class="grid-cell" wx:for="{{9}}" wx:key="index"></view>
-          </view>
-          <!-- 无数据时显示占位内容 -->
-          <t-image wx:else src="" shape="round" error="slot" width="360" height="192">
-            <text class="error-text" slot="error">轮播图加载失败</text>
-          </t-image>
-        </view>
-        <view class="arrange-center title-font-other">
-          <text>OriginalDesignerComments：</text>
-          <t-link size="small" content="查看" hover underline suffixIcon="chat-bubble" />
-        </view>
-        <view class="arrange-center title-font-other">
-          <text>ReviewComments：</text>
-          <t-link size="small" content="评论" hover underline suffixIcon="chat-message" />
-        </view>
-        <view class="arrange-center title-font-other">
-          <text>操作：</text>
-          <t-link size="small" content="舍弃" data-content-status="N" hover underline theme="danger" bindtap="onModifyArtworkStatus" data-id="2" />
-          <t-divider layout="vertical" />
-          <t-link size="small" content="保留" data-content-status="Y" hover underline bindtap="onModifyArtworkStatus" data-id="2" />
-        </view>
-      </view>
-      <view class="cell">
-        <view class="arrange-space-between title-font-main">
           <text>Title：热可可杯吊饰</text>
           <text style="color: red;">状态：舍弃</text>
         </view>
@@ -114,7 +42,7 @@
         </view>
         <view class="arrange-center title-font-other">
           <text>ReviewComments：</text>
-          <t-link size="small" content="评论" hover underline suffixIcon="chat-message" variant="outline" bind:tap="onOpenDialog" />
+          <t-link size="small" content="评审" hover underline suffixIcon="chat-message" variant="outline" bind:tap="onOpenDialog" />
         </view>
         <view class="arrange-center title-font-other">
           <text>操作：</text>
@@ -137,8 +65,6 @@
 </view>
 <!-- 轻提示 -->
 <t-toast id="t-toast" />
-<!-- 提示 -->
-<t-message id="t-message" />
 <!-- 回到顶部 -->
 <t-back-top theme="half-round" text="顶部" scroll-top="{{scrollTop}}" bind:to-top="onToTop" />
 <!-- 查看自评弹窗 -->

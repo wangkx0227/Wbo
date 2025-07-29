@@ -1,6 +1,5 @@
-import { Toast } from 'tdesign-miniprogram'; // 轻提示
-import Message from 'tdesign-miniprogram/message/index'; // 提示
 const app = getApp(); // 用户信息
+const utils = require('../../utils/util')
 
 const swiperImages = [
   'https://picsum.photos/800/600?random=1',  // 横版
@@ -116,66 +115,15 @@ Page({
     const swiperImages = this.data.swiperImages; // 假数据
     const current = swiperImages[index];
     if (!current || !swiperImages.length) {
-      Toast({
-        context: that,
-        selector: '#t-toast',
-        message: '无法预览图片',
-        theme: 'error',
-        con: 'check-circle',
-      });
+      const theme = "error"
+      const message = "无法预览图片"
+      utils.showToast(that, message, theme);
       return;
     }
     wx.previewImage({
       current,
       urls: swiperImages
     });
-  },
-  // 修改当前图稿状态（舍弃与保留，默认都是保留）
-  onModifyArtworkStatus(e) {
-    const that = this;
-    const { id, contentStatus } = e.currentTarget.dataset;
-    if (contentStatus === "Y") {
-      wx.showModal({
-        title: '提示',
-        content: '是否"保留"当前图稿',
-        success(res) {
-          if (res.confirm) {
-            // 发送请求
-            console.log('用户保留')
-            Message.success({
-              context: that,
-              offset: [10, 32],
-              duration: 3000,
-              content: '提交保留成功',
-            });
-          } else if (res.cancel) {
-            // 取消
-            console.log('用户取消')
-          }
-        }
-      })
-    } else {
-      wx.showModal({
-        title: '提示',
-        content: '是否"舍弃"当前图稿',
-        success(res) {
-          if (res.confirm) {
-            // 发送请求
-            console.log('用户舍弃')
-            Message.success({
-              context: that,
-              offset: [10, 32],
-              duration: 3000,
-              content: '提交舍弃成功',
-            });
-          } else if (res.cancel) {
-            // 取消
-            console.log('用户取消')
-          }
-        }
-      })
-    }
-
   },
   // 页面上拉刷新 - 用于页面重置
   onPullDownRefresh() {
@@ -218,14 +166,14 @@ Page({
       scrollTop: e.scrollTop
     });
   },
-  // 自评弹窗函数 - 关闭
+  // 设计师评论弹窗函数 - 关闭
   onClosePopup(e) {
     this.setData({
       popupVisible: e.detail.visible,
       popupValue: "",
     });
   },
-  // 自评弹窗函数 - 唤起
+  // 设计师评论弹窗函数 - 唤起
   onOpenPopup(e) {
     const { id, designer_comments } = e.currentTarget.dataset; // 点击按钮的存储的数据 id 点击id designer_comments 点击的自评文字
     this.setData({ popupVisible: true, popupValue: "无内容" }); /// 触发弹窗
@@ -243,13 +191,58 @@ Page({
   },
   // 弹窗-评论-关闭（包含提交功能）
   onCloseDialog(e) {
+    const that = this;
     const { dialogValue } = this.data; // 输入的评论的数据
     const action = e.type; // "confirm" 或 "cancel"
     if (action === 'confirm') {
-      console.log("提交数据");
+      const message = "评审完成"
+      utils.showToast(that, message);
     } else if (action === 'cancel') {
-      console.log("提交取消");
+      const theme = "warning"
+      const message = "评审取消"
+      utils.showToast(that, message, theme);
     }
     this.setData({ dialogVisible: false, dialogValue: "" });
+  },
+  // 修改当前图稿状态（舍弃与保留，默认都是保留）
+  onModifyArtworkStatus(e) {
+    const that = this;
+    const { id, contentStatus } = e.currentTarget.dataset;
+    if (contentStatus === "Y") {
+      wx.showModal({
+        title: '提示',
+        content: '是否"保留"当前图稿',
+        success(res) {
+          if (res.confirm) {
+            // 发送请求
+            const message = "图稿已标记保留"
+            utils.showToast(that, message);
+          } else if (res.cancel) {
+            // 取消
+            const theme = "warning"
+            const message = "用户已取消操作"
+            utils.showToast(that, message, theme);
+          }
+        }
+      })
+    } else {
+      wx.showModal({
+        title: '提示',
+        content: '是否"舍弃"当前图稿',
+        success(res) {
+          if (res.confirm) {
+            // 发送请求
+            const message = "图稿已标记舍弃"
+            utils.showToast(that, message);
+          } else if (res.cancel) {
+            // 取消
+            const theme = "warning"
+            const message = "用户已取消操作"
+            utils.showToast(that, message, theme);
+          }
+        }
+      })
+    }
+
   },
 })

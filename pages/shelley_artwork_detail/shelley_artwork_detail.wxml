@@ -87,8 +87,6 @@
 </view>
 <!-- 轻提示 -->
 <t-toast id="t-toast" />
-<!-- 提示 -->
-<t-message id="t-message" />
 <!-- 回到顶部 -->
 <t-back-top theme="half-round" text="顶部" scroll-top="{{scrollTop}}" bind:to-top="onToTop" />
 <!-- 查看自评弹窗 -->
@@ -111,6 +109,6 @@
   </view>
 </t-dialog>
 <!-- FMR下拉框 -->
-<t-picker visible="{{pickerVisible}}" value="{{cityValue}}" title="请选择FMR" cancelBtn="取消" confirmBtn="确认" bindchange="onPickerChange" bindcancel="onClosePicker" catchtouchmove>
+<t-picker visible="{{pickerVisible}}" value="{{pickerValue}}" title="请选择FMR" cancelBtn="取消" confirmBtn="确认" bindchange="onPickerChange" bindcancel="onClosePicker" catchtouchmove>
   <t-picker-item options="{{pickerItemList}}"></t-picker-item>
 </t-picker>

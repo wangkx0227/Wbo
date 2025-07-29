@@ -265,9 +265,15 @@ Page({
       if (selectedradioValue === "1") {
         this.setData({ dialogVisible: true });
       } else {
-        this.setData({ radioValue: selectedradioValue });
-        const message = "提交最终评审"
         utils.showToast(that, message);
+        if (radioValue) {
+          const message = "修改最终评审";
+          utils.showToast(that, message);
+        } else {
+          const message = "提交最终评审";
+          utils.showToast(that, message);
+        }
+        this.setData({ radioValue: selectedradioValue });
       }
     }
   },

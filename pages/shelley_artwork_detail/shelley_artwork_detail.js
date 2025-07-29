@@ -1,6 +1,7 @@
 import { Toast } from 'tdesign-miniprogram'; // 轻提示
 import Message from 'tdesign-miniprogram/message/index'; // 提示
 const app = getApp(); // 用户信息
+const utils = require('../../utils/util')
 
 const swiperImages = [
   'https://picsum.photos/800/600?random=1',  // 横版
@@ -87,32 +88,31 @@ Page({
     noMoreData: false,    // 数据是否全部加载完毕
     // 回到顶部变量
     scrollTop: 0,
-    // 设计师自评弹窗控制变量
+    // 查看评论弹窗控制变量
     popupVisible: false,
     popupValue: "",
     popupTitle: "",
-    // 评论弹出层变量
+    // 填写评论弹出层变量
     dialogVisible: false,
     dialogValue: "",
     // 筛选器
     pickerVisible: false,
     pickerValue: null,
-    pickerLabel: "",
+    pickerLabel: "暂未选择",
     pickerItemList: [
       { label: '王五', value: 'A' },
       { label: '李四', value: 'B' },
       { label: '张明', value: 'B' },
       { label: '赵玉', value: 'B' },
       { label: '张三', value: 'B' },
+      { label: '李明博', value: 'B' },
     ],
     // 单选框变量
     radioValue: "0",
-
   },
   /* 生命周期函数--监听页面加载 */
   onLoad(options) {
     const groupId = options.groupId; // 首页跳转后的存储的id值
-    console.log(groupId);
     wx.showLoading({ title: '正在加载...', });
     setTimeout(() => {
       wx.hideLoading();
@@ -263,13 +263,15 @@ Page({
       pickerVisible：筛选器显示变量
       pickerValue： 选中的值
     */
- 
+    const that = this;
     const { value, label } = e.detail;
     this.setData({
       pickerVisible: false,
       pickerValue: value,
       pickerLabel: label
     });
+    const message = `FMR已指派${label}`
+    utils.showToast(that, message);
   },
   // 关闭 筛选器
   onClosePicker(e) {
@@ -311,7 +313,7 @@ Page({
     }
     this.setData({ dialogVisible: false, dialogValue: "" });
   },
-  // 单选框
+  // 评估建议单选框
   onRadioChange(e) {
     /*
       radioValue：记录选中的单选值
@@ -322,24 +324,23 @@ Page({
     // 如果选中的点选框的值等于记录的值那么就取消
     if (selectedradioValue === radioValue) {
       this.setData({ radioValue: null });
-      Message.warning({
-        context: that,
-        offset: [10, 32],
-        duration: 3000,
-        content: '取消评估建议',
-      });
+      const theme = "warning"
+      const message = "取消评估建议";
+      utils.showToast(that, message, theme);
     } else {
       // 如果选择小幅度修改，需要输入评估建议
       if (selectedradioValue === "1") {
         this.setData({ dialogVisible: true });
       } else {
+        if (radioValue) {
+          const message = "修改评估建议";
+          utils.showToast(that, message);
+        } else {
+          const message = "提交评估建议";
+          utils.showToast(that, message);
+        }
         this.setData({ radioValue: selectedradioValue });
-        Message.success({
-          context: that,
-          offset: [10, 32],
-          duration: 3000,
-          content: '提交评估建议成功',
-        });
+
       }
 
     }
