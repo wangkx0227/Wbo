@@ -1,7 +1,5 @@
-import { Toast } from 'tdesign-miniprogram'; // 轻提示
-import Message from 'tdesign-miniprogram/message/index'; // 提示
 const app = getApp(); // 用户信息
-
+const utils = require('../../utils/util')
 const swiperImages = [
   'https://picsum.photos/800/600?random=1',  // 横版
   // 物品类
@@ -77,7 +75,6 @@ Page({
     dialogValue: "",
     // 单选框变量
     radioValue: "0",
-
   },
   /* 生命周期函数--监听页面加载 */
   onLoad(options) {
@@ -124,13 +121,9 @@ Page({
     const swiperImages = this.data.swiperImages; // 假数据
     const current = swiperImages[index];
     if (!current || !swiperImages.length) {
-      Toast({
-        context: that,
-        selector: '#t-toast',
-        message: '无法预览图片',
-        theme: 'error',
-        con: 'check-circle',
-      });
+      const theme = "error"
+      const message = "无法预览图片"
+      utils.showToast(that, message, theme);
       return;
     }
     wx.previewImage({
@@ -233,12 +226,8 @@ Page({
     if (action === 'confirm') {
       console.log("提交数据");
       this.setData({ radioValue: "1" });
-      Message.success({
-        context: that,
-        offset: [10, 32],
-        duration: 3000,
-        content: '提交评估建议成功',
-      });
+      const message = "提交评估建议成功"
+      utils.showToast(that, message);
     } else if (action === 'cancel') {
       console.log("提交取消");
     }
@@ -249,32 +238,32 @@ Page({
     /*
       radioValue：记录选中的单选值
     */
-    const that = this;
-    const selectedradioValue = e.detail.value;
-    const radioValue = that.data.radioValue;
-    // 如果选中的点选框的值等于记录的值那么就取消
-    if (selectedradioValue === radioValue) {
-      this.setData({ radioValue: null });
-      Message.warning({
-        context: that,
-        offset: [10, 32],
-        duration: 3000,
-        content: '取消评估建议',
-      });
-    } else {
-      // 如果选择小幅度修改，需要输入评估建议
-      if (selectedradioValue === "1") {
-        this.setData({ dialogVisible: true });
-      } else {
-        this.setData({ radioValue: selectedradioValue });
-        Message.success({
-          context: that,
-          offset: [10, 32],
-          duration: 3000,
-          content: '提交评估建议成功',
-        });
-      }
-
-    }
+       /*
+      radioValue：记录选中的单选值
+    */
+   const that = this;
+   const selectedradioValue = e.detail.value;
+   const radioValue = that.data.radioValue;
+   // 如果选中的点选框的值等于记录的值那么就取消
+   if (selectedradioValue === radioValue) {
+     this.setData({ radioValue: null });
+     const theme = "warning"
+     const message = "取消评估建议";
+     utils.showToast(that, message, theme);
+   } else {
+     // 如果选择小幅度修改，需要输入评估建议
+     if (selectedradioValue === "1") {
+       this.setData({ dialogVisible: true });
+     } else {
+       if (radioValue) {
+         const message = "修改评估建议";
+         utils.showToast(that, message);
+       } else {
+         const message = "提交评估建议";
+         utils.showToast(that, message);
+       }
+       this.setData({ radioValue: selectedradioValue });
+     }
+   }
   },
 })

@@ -161,13 +161,9 @@ Page({
     const swiperImages = this.data.swiperImages; // 假数据
     const current = swiperImages[index];
     if (!current || !swiperImages.length) {
-      Toast({
-        context: that,
-        selector: '#t-toast',
-        message: '无法预览图片',
-        theme: 'error',
-        con: 'check-circle',
-      });
+      const theme = "error"
+      const message = "无法预览图片"
+      utils.showToast(that, message, theme);
       return;
     }
     wx.previewImage({
@@ -302,12 +298,8 @@ Page({
     if (action === 'confirm') {
       console.log("提交数据");
       this.setData({ radioValue: "1" });
-      Message.success({
-        context: that,
-        offset: [10, 32],
-        duration: 3000,
-        content: '提交评估建议成功',
-      });
+      const message = "提交评估建议成功"
+      utils.showToast(that, message);
     } else if (action === 'cancel') {
       console.log("提交取消");
     }
@@ -340,9 +332,7 @@ Page({
           utils.showToast(that, message);
         }
         this.setData({ radioValue: selectedradioValue });
-
       }
-
     }
   },
 })
