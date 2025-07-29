@@ -1,12 +1,13 @@
 {
-  "entryPagePath": "pages/wbo_login/wbo_login",
+  "entryPagePath": "pages/wbo_pending_processing/wbo_pending_processing",
   "pages": [
     "pages/wbo_login/wbo_login",
     "pages/wbo_artwork_index/wbo_artwork_index",
     "pages/fmr_artwork_detail/fmr_artwork_detail",
     "pages/shelley_artwork_detail/shelley_artwork_detail",
     "pages/kyle_artowrk_primary_details/kyle_artowrk_primary_details",
-    "pages/kyle_artowrk_ultimate_details/kyle_artowrk_ultimate_details"
+    "pages/kyle_artowrk_ultimate_details/kyle_artowrk_ultimate_details",
+    "pages/wbo_pending_processing/wbo_pending_processing"
   ],
   "window": {
     "navigationBarTextStyle": "black",
