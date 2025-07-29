@@ -1,6 +1,5 @@
-import { Toast } from 'tdesign-miniprogram'; // 轻提示
 const app = getApp();
-
+const utils = require('../../utils/util')
 Page({
   data: {
     // 悬浮胶囊标签栏变量
@@ -97,7 +96,26 @@ Page({
   },
   // 生命周期函数--监听页面加载 
   onLoad() {
+    const that = this;
     const userRole = wx.getStorageSync('userRole');
+    if (!userRole) {
+      const theme = 'error'
+      const message = "当前未登录状态"
+      utils.showToast(that, message, theme);
+      const pages = getCurrentPages(); // 获取当前页面栈
+      const currentPage = pages[pages.length - 1]; // 当前页面对象
+      const route = currentPage.route; // 页面路径，例如 "pages/index/index"
+      const options = currentPage.options; // 页面参数对象，例如 { id: '123' }
+      let query = Object.keys(options).map(key => `${key}=${options[key]}`).join('&');
+      let fullPath = route + (query ? '?' + query : ''); // 完整的路径
+      // 跳转到登录界面
+      setTimeout(() => {
+        wx.navigateTo({
+          url: `/pages/wbo_login/wbo_login?redirect=${encodeURIComponent(fullPath)}`,
+        });
+      }, 500)
+      return
+    }
     wx.showLoading({ title: '正在加载...', });
     this.setData({ userRole: userRole });
     setTimeout(() => {

@@ -28,13 +28,18 @@ Page({
         },
       ],
     },
+    redirect: "", // 跳转参数，如果携带，那么需要在登陆后跳转指定路径
 
   },
 
-  onLoad() {
+  onLoad(options) {
     const app = getApp()
     this.setData({ app })
     wx.removeStorageSync('userInfo')
+    // 赋值跳转url
+    this.setData({
+      redirect: options.redirect
+    })
   },
 
   switchToWechat() {
@@ -63,6 +68,7 @@ Page({
 
   onLogin(e) {
     const that = this;
+
     // if(that.data.nickName===""){
     // 	wx.showToast({ title: '请输入昵称', icon: 'error' });
     // 	return
@@ -174,9 +180,22 @@ Page({
     } else {
       wx.setStorageSync('userRole', productValue); // 异步存储消息
       wx.showToast({ title: '登录成功', icon: 'success' });
-      setTimeout(() => {
-        wx.reLaunch({ url: `/pages/wbo_artwork_index/wbo_artwork_index` });
-      }, 500)
+      const redirect = this.data.redirect;
+      if (redirect) {
+        const decodedPath = decodeURIComponent(redirect);  // 解码后的路径
+        setTimeout(() => {
+          wx.navigateTo({
+            url: '/' + decodedPath  // 注意要加斜杠开头
+          });
+          this.setData({
+            redirect: '' // 跳转参数赋值为空，防止登录操作出现问题
+          })
+        }, 500)
+      } else {
+        setTimeout(() => {
+          wx.reLaunch({ url: `/pages/wbo_artwork_index/wbo_artwork_index` });
+        }, 500)
+      }
     }
   },
   // 用户点击右上角分享
