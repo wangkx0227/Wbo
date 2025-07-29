@@ -26,66 +26,52 @@
         <view class="cell-swiper">
           <t-swiper wx:if="{{swiperImages.length}}" current="{{current}}" autoplay="{{autoplay}}" duration="{{duration}}" interval="{{interval}}" navigation="{{ { type: 'dots' } }}" list="{{swiperImages}}" bind:click="onSwiperImagesTap">
           </t-swiper>
-          <!-- 9宫格遮罩层 -->
-          <view class="grid-overlay" wx:if="{{swiperImages.length}}">
-            <view class="grid-cell" wx:for="{{9}}" wx:key="index"></view>
-          </view>
           <!-- 无数据时显示占位内容 -->
           <t-image wx:else src="" shape="round" error="slot" width="360" height="192">
             <text class="error-text" slot="error">轮播图加载失败</text>
           </t-image>
         </view>
         <view class="arrange-column ">
-          <text class="title-font-main">图稿相关信息（初步评测）：</text>
+          <text class="title-font-main">Kyle初步评测：</text>
           <view class="title-font-other arrange-space-between">
             <view class="arrange-center">
               <text>OriginalDesignerComments：</text>
-              <t-link size="small" content="查看" hover underline bind:tap="onOpenPopup" data-commentator="odc"/>
+              <t-link size="small" content="查看" hover underline bind:tap="onOpenPopup" data-commentator="odc" />
             </view>
             <view class="arrange-center">
               <text>ReviewComments：</text>
-              <t-link size="small" content="查看" hover underline  bind:tap="onOpenPopup" data-commentator="rc"/>
+              <t-link size="small" content="查看" hover underline bind:tap="onOpenPopup" data-commentator="rc" />
             </view>
           </view>
         </view>
         <view class="arrange-column ">
-          <text class="title-font-main">Shelley 评估（可行性评估）：</text>
+          <text class="title-font-main">可行性评估[Shelley]：</text>
           <view class="arrange-center title-font-other">
             <text>评估建议：可生产</text>
             <t-divider layout="vertical" />
             <!-- 只有选中小幅度修改时,才会显示查看按钮 -->
-            <t-link size="small" content="查看" hover underline  data-commentator="sc" bind:tap="onOpenPopup"
-            data-assess-status="1" />
+            <t-link size="small" content="查看" hover underline data-commentator="sc" bind:tap="onOpenPopup" data-assess-status="1" />
           </view>
         </view>
         <view class="arrange-column">
-          <text class="title-font-main">FMR 评估（可行性评估）：</text>
+          <text class="title-font-main">可行性评估[FMR]：</text>
           <view class="arrange-center title-font-other">
-            <text>指派FMR：XXX</text>
-            <t-divider layout="vertical" />
             <text>评估建议：小幅度修改</text>
             <t-divider layout="vertical" />
+            <text>指派FMR：XXX</text>
+            <t-divider layout="vertical" />
             <!-- 只有选中小幅度修改时,才会显示查看按钮 -->
-            <t-link size="small" content="查看" hover underline data-commentator="fc" bind:tap="onOpenPopup"
-            data-assess-status="2" />
+            <t-link size="small" content="查看" hover underline data-commentator="fc" bind:tap="onOpenPopup" data-assess-status="2" />
           </view>
         </view>
         <view class="arrange-column ">
-          <text class="title-font-main">最终评审操作：</text>
-          <t-radio-group t-class="radio-horizontal-box" value="{{radioValue}}" bind:change="onRadioChange">
-            <view class="radio-card   {{ radioValue == '0' ? 'radio-active' : ''}}">
-              <t-icon name="check" t-class="radio-icon" />
-              <t-radio value="0" label="保留" icon="none" borderless />
-            </view>
-            <view class="radio-card  {{ radioValue == '1' ? 'radio-active' : ''}}">
-              <t-icon name="check" t-class="radio-icon" />
-              <t-radio value="1" label="轻微修改" icon="none" borderless t-class="radio-text" />
-            </view>
-            <view class="radio-card  {{ radioValue == '2' ? 'radio-active' : ''}}">
-              <t-icon name="check" t-class=radio-icon" />
-              <t-radio value="2" label="舍弃" icon="none" borderless />
-            </view>
-          </t-radio-group>
+          <text class="title-font-main">Kyle最终评审：</text>
+          <view class="arrange-center title-font-other">
+            <text>评审建议：保留</text>
+            <t-divider layout="vertical" />
+            <!-- 只有选中小幅度修改时,才会显示查看按钮 -->
+            <t-link size="small" content="查看" hover underline data-commentator="fj" bind:tap="onOpenPopup" data-assess-status="1" />
+          </view>
         </view>
       </view>
     </view>
