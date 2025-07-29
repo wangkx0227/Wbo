@@ -1,3 +1,4 @@
+import { Toast } from 'tdesign-miniprogram'; // 轻提示
 const formatTime = date => {
   const year = date.getFullYear()
   const month = date.getMonth() + 1
@@ -14,6 +15,17 @@ const formatNumber = n => {
   return n[1] ? n : `0${n}`
 }
 
+function showToast(that,content,theme="success") {
+  Toast({
+    context: that,
+    selector: '#t-toast',
+    message: content,
+    theme: theme,
+    direction: 'row',
+  });
+}
+
 module.exports = {
-  formatTime
+  formatTime,
+  showToast
 }

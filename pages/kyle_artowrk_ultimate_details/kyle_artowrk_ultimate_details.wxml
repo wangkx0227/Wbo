@@ -102,8 +102,6 @@
 </view>
 <!-- 轻提示 -->
 <t-toast id="t-toast" />
-<!-- 提示 -->
-<t-message id="t-message" />
 <!-- 回到顶部 -->
 <t-back-top theme="half-round" text="顶部" scroll-top="{{scrollTop}}" bind:to-top="onToTop" />
 <!-- 查看自评弹窗 -->

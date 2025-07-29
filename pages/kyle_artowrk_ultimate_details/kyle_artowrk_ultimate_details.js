@@ -1,6 +1,5 @@
-import { Toast } from 'tdesign-miniprogram'; // 轻提示
-import Message from 'tdesign-miniprogram/message/index'; // 提示
 const app = getApp(); // 用户信息
+const utils = require('../../utils/util')
 
 const swiperImages = [
   'https://picsum.photos/800/600?random=1',  // 横版
@@ -123,66 +122,15 @@ Page({
     const swiperImages = this.data.swiperImages; // 假数据
     const current = swiperImages[index];
     if (!current || !swiperImages.length) {
-      Toast({
-        context: that,
-        selector: '#t-toast',
-        message: '无法预览图片',
-        theme: 'error',
-        con: 'check-circle',
-      });
+      const theme = "error"
+      const message = "无法预览图片"
+      utils.showToast(that, message, theme);
       return;
     }
     wx.previewImage({
       current,
       urls: swiperImages
     });
-  },
-  // 修改当前图稿状态（舍弃与保留，默认都是保留）
-  onModifyArtworkStatus(e) {
-    const that = this;
-    const { id, contentStatus } = e.currentTarget.dataset;
-    if (contentStatus === "Y") {
-      wx.showModal({
-        title: '提示',
-        content: '是否"保留"当前图稿',
-        success(res) {
-          if (res.confirm) {
-            // 发送请求
-            console.log('用户保留')
-            Message.success({
-              context: that,
-              offset: [10, 32],
-              duration: 3000,
-              content: '提交保留成功',
-            });
-          } else if (res.cancel) {
-            // 取消
-            console.log('用户取消')
-          }
-        }
-      })
-    } else {
-      wx.showModal({
-        title: '提示',
-        content: '是否"舍弃"当前图稿',
-        success(res) {
-          if (res.confirm) {
-            // 发送请求
-            console.log('用户舍弃')
-            Message.success({
-              context: that,
-              offset: [10, 32],
-              duration: 3000,
-              content: '提交舍弃成功',
-            });
-          } else if (res.cancel) {
-            // 取消
-            console.log('用户取消')
-          }
-        }
-      })
-    }
-
   },
   // 页面上拉刷新 - 用于页面重置
   onPullDownRefresh() {
@@ -254,11 +202,9 @@ Page({
       this.setData({ popupValue: "无内容", popupTitle: "ReviewComments" });
     } else if (commentator === "sc") {
       if (assessStatus === "1" || assessStatus === "3") {
-        Toast({
-          context: that,
-          selector: '#t-toast',
-          message: '当前评估没有建议',
-        });
+        const theme = "warning"
+        const message = "当前评估没有建议"
+        utils.showToast(that, message, theme);
         return
       } else {
         this.setData({ popupValue: "无内容", popupTitle: "Shelley 评估" });
@@ -311,24 +257,17 @@ Page({
     // 如果选中的点选框的值等于记录的值那么就取消
     if (selectedradioValue === radioValue) {
       this.setData({ radioValue: null });
-      Message.warning({
-        context: that,
-        offset: [10, 32],
-        duration: 3000,
-        content: '取消评估建议',
-      });
+      const theme = "warning"
+      const message = "取消最终评审"
+      utils.showToast(that, message, theme);
     } else {
       // 如果选择小幅度修改，需要输入评估建议
       if (selectedradioValue === "1") {
         this.setData({ dialogVisible: true });
       } else {
         this.setData({ radioValue: selectedradioValue });
-        Message.success({
-          context: that,
-          offset: [10, 32],
-          duration: 3000,
-          content: '提交评估建议成功',
-        });
+        const message = "提交最终评审"
+        utils.showToast(that, message);
       }
     }
   },
