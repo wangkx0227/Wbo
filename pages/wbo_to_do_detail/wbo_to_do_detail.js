@@ -19,38 +19,35 @@ Page({
           label: '全部',
         },
         {
-          value: 'NAQ',
-          label: '宁安琪',
+          value: 'HL',
+          label: 'HL',
         },
         {
-          value: 'LSL',
-          label: '黎善玲',
+          value: 'D51',
+          label: 'TG-D51',
         },
         {
-          value: 'HYJ',
-          label: '韩奕君'
-        }
+          value: 'D240',
+          label: 'TG-D240',
+        },
+
+        {
+          value: 'D234',
+          label: 'TG-D240',
+        },
       ],
     },
     // 筛选框变量-2
     dropdownStatus: {
-      value: 'all',
+      value: 'default',
       options: [
         {
-          value: 'all',
-          label: '全部状态',
+          value: 'default',
+          label: '默认排序',
         },
         {
-          value: 'discard',
-          label: '舍弃',
-        },
-        {
-          value: 'modify',
-          label: '轻微修改',
-        },
-        {
-          value: 'reserve',
-          label: '保留',
+          value: 'time',
+          label: '时间从高到低',
         },
       ],
     },
@@ -76,13 +73,13 @@ Page({
    */
   onLoad(options) {
     const groupId = options.groupId; // 首页跳转后的存储的id值
-    // wx.showLoading({ title: '正在加载...', });
-    // setTimeout(() => {
-    //   wx.hideLoading();
-    //   this.setData({
-    //     skeletonLoading: false,
-    //   })
-    // }, 2000)
+    wx.showLoading({ title: '正在加载...', });
+    setTimeout(() => {
+      wx.hideLoading();
+      this.setData({
+        skeletonLoading: false,
+      })
+    }, 2000)
   },
   // 生命周期函数--监听页面初次渲染完成
   onReady() { },
