@@ -22,14 +22,14 @@
       <view wx:for="{{dataAllList}}" wx:key="index">
         <t-cell-group theme="card" class="t-cell-group" bindtap="onJumpArtworkDeatails" data-group-id="{{ item.id }}">
           <t-cell hover arrow>
-            <t-badge count="{{ item.to_confirmed }}" slot="note" shape="square" />
+            <t-badge count="{{ item.to_confirmed }}" slot="note" shape="square"></t-badge>
             <view slot="title">
               <view class="arrange-space-between">
                 <view>
                   <text class="title-main">Name of Client：</text>
                   <text class="title-other">{{ item.client_name }}</text>
                 </view>
-                <t-tag class="margin-16" variant="light" icon="discount" size="small" style="position: relative;left: 90rpx;" wx:if="{{tabBarShow}}"> {{ item.stage }} </t-tag>
+                <t-tag class="margin-16" variant="light" icon="discount" size="small" style="position: relative;left: 90rpx;" > {{ item.stage }} </t-tag>
               </view>
               <view>
                 <text class="title-main">Theme of Program：</text>
@@ -56,13 +56,13 @@
 <!-- 轻提示 -->
 <t-toast id="t-toast" />
 <!-- 标签栏-只有Kyle才能看到 -->
-<view class="tab-bar-wrapper" wx:if="{{tabBarShow}}">
+<view class="tab-bar-wrapper">
   <t-tab-bar t-class="t-tab-bar" value="{{tabBarValue}}" shape="round" theme="tag" split="false" bindchange="onTabBarChange">
-    <t-tab-bar-item value="primary">
-      <text> 初步评审</text>
+    <t-tab-bar-item value="pending_processing">
+      <text> 待处理 </text>
     </t-tab-bar-item>
-    <t-tab-bar-item value="ultimate">
-      <text> 最终审查</text>
+    <t-tab-bar-item value="new">
+      <text> 最新 </text>
     </t-tab-bar-item>
   </t-tab-bar>
 </view>
