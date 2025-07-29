@@ -1,2 +1,70 @@
-<!--pages/wbo_pending_processing/wbo_pending_processing.wxml-->
-<text>待处理页面</text>
+<!-- 骨架 -->
+<import src="skeleton.wxml" />
+<template is="skeleton" wx:if="{{skeletonLoading}}" />
+<view wx:else="{{skeletonLoading}}" class="page-wrapper">
+  <view class="page-head filter-bar">
+    <t-row>
+      <t-col span="24">
+        <view class="example-search">
+          <t-search placeholder="搜索" shape="round" model:value="{{searchValue}}" bind:submit="onSearchConfirm" confirm-type="search" />
+        </view>
+      </t-col>
+      <t-col span="24">
+        <t-dropdown-menu>
+          <t-dropdown-item options="{{dropdownTemplate.options}}" placement="right" value="{{dropdownTemplate.value}}" bindchange="onTemplateChange" />
+          <t-dropdown-item options="{{dropdownSorter.options}}" placement="right" value="{{dropdownSorter.value}}" bindchange="onSorterChange" />
+        </t-dropdown-menu>
+      </t-col>
+    </t-row>
+  </view>
+  <view class="page-main">
+    <view class="wrapper">
+      <view wx:for="{{dataAllList}}" wx:key="index">
+        <t-cell-group theme="card" class="t-cell-group" bindtap="onJumpArtworkDeatails" data-group-id="{{ item.id }}">
+          <t-cell hover arrow>
+            <t-badge count="{{ item.to_confirmed }}" slot="note" shape="square" />
+            <view slot="title">
+              <view class="arrange-space-between">
+                <view>
+                  <text class="title-main">Name of Client：</text>
+                  <text class="title-other">{{ item.client_name }}</text>
+                </view>
+                <t-tag class="margin-16" variant="light" icon="discount" size="small" style="position: relative;left: 90rpx;" wx:if="{{tabBarShow}}"> {{ item.stage }} </t-tag>
+              </view>
+              <view>
+                <text class="title-main">Theme of Program：</text>
+                <text class="title-other">{{ item.program }}</text>
+              </view>
+              <view class="arrange-space-between">
+                <text class="title-other" style="margin-right: 15px;">Year：{{ item.Year }}</text>
+                <text class="title-other">创建时间：{{ item.create_time }}</text>
+              </view>
+            </view>
+          </t-cell>
+        </t-cell-group>
+      </view>
+    </view>
+  </view>
+  <!-- 当下拉时,进行显示的内容  -->
+  <view class="loading-box loading-flex" wx:if="{{isLoadingReachMore}}">
+    <t-loading theme="dots" size="60rpx" />
+  </view>
+  <view class="loading-box" wx:if="{{noMoreData}}">
+    <text class="loading-text">-- 已经到底了 --</text>
+  </view>
+</view>
+<!-- 轻提示 -->
+<t-toast id="t-toast" />
+<!-- 标签栏-只有Kyle才能看到 -->
+<view class="tab-bar-wrapper" wx:if="{{tabBarShow}}">
+  <t-tab-bar t-class="t-tab-bar" value="{{tabBarValue}}" shape="round" theme="tag" split="false" bindchange="onTabBarChange">
+    <t-tab-bar-item value="primary">
+      <text> 初步评审</text>
+    </t-tab-bar-item>
+    <t-tab-bar-item value="ultimate">
+      <text> 最终审查</text>
+    </t-tab-bar-item>
+  </t-tab-bar>
+</view>
+<!-- 回到顶部 -->
+<t-back-top theme="half-round" text="" scroll-top="{{scrollTop}}" bind:to-top="onToTop" />
