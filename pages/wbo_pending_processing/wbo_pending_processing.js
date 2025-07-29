@@ -3,7 +3,7 @@ const utils = require('../../utils/util')
 Page({
   data: {
     // 悬浮胶囊标签栏变量
-    tabBarValue: 'pending_processing',
+    tabBarValue: 'todo',
     // 骨架控制变量
     skeletonLoading: true,
     // 筛选框变量-1
@@ -98,32 +98,32 @@ Page({
   onLoad() {
     const that = this;
     const userRole = wx.getStorageSync('userRole');
-    if (!userRole) {
-      const theme = 'error'
-      const message = "当前未登录状态"
-      utils.showToast(that, message, theme);
-      const pages = getCurrentPages(); // 获取当前页面栈
-      const currentPage = pages[pages.length - 1]; // 当前页面对象
-      const route = currentPage.route; // 页面路径，例如 "pages/index/index"
-      const options = currentPage.options; // 页面参数对象，例如 { id: '123' }
-      let query = Object.keys(options).map(key => `${key}=${options[key]}`).join('&');
-      let fullPath = route + (query ? '?' + query : ''); // 完整的路径
-      // 跳转到登录界面
-      setTimeout(() => {
-        wx.navigateTo({
-          url: `/pages/wbo_login/wbo_login?redirect=${encodeURIComponent(fullPath)}`,
-        });
-      }, 500)
-      return
-    }
-    wx.showLoading({ title: '正在加载...', });
+    // if (!userRole) {
+    //   const theme = 'error'
+    //   const message = "当前未登录状态"
+    //   utils.showToast(that, message, theme);
+    //   const pages = getCurrentPages(); // 获取当前页面栈
+    //   const currentPage = pages[pages.length - 1]; // 当前页面对象
+    //   const route = currentPage.route; // 页面路径，例如 "pages/index/index"
+    //   const options = currentPage.options; // 页面参数对象，例如 { id: '123' }
+    //   let query = Object.keys(options).map(key => `${key}=${options[key]}`).join('&');
+    //   let fullPath = route + (query ? '?' + query : ''); // 完整的路径
+    //   // 跳转到登录界面
+    //   setTimeout(() => {
+    //     wx.navigateTo({
+    //       url: `/pages/wbo_login/wbo_login?redirect=${encodeURIComponent(fullPath)}`,
+    //     });
+    //   }, 500)
+    //   return
+    // }
+    // wx.showLoading({ title: '正在加载...', });
     this.setData({ userRole: userRole });
-    setTimeout(() => {
-      wx.hideLoading();
-      this.setData({
-        skeletonLoading: false,
-      })
-    }, 2000)
+    // setTimeout(() => {
+    //   wx.hideLoading();
+    //   this.setData({
+    //     skeletonLoading: false,
+    //   })
+    // }, 2000)
   },
   // 下拉菜单-模板
   onTemplateChange(e) {
@@ -148,14 +148,20 @@ Page({
     const that = this;
     const groupId = e.currentTarget.dataset.groupId;
     const userRole = that.data.userRole;
+    const tabBarValue = that.data.tabBarValue;
     // 需要3类人进行跳转 Kyle Shelley FMR 进行跳转
-    if (userRole === "kyle") {
-      wx.navigateTo({ url: `/pages/kyle_artowrk_ultimate_details/kyle_artowrk_ultimate_details?groupId=${groupId}` });
-    } else if (userRole === "shelley") {
-      wx.navigateTo({ url: `/pages/shelley_artwork_detail/shelley_artwork_detail?groupId=${groupId}` });
-    } else if (userRole === "fmr") {
-      wx.navigateTo({ url: `/pages/fmr_artwork_detail/fmr_artwork_detail?groupId=${groupId}`, });
+    if (tabBarValue === "todo") {
+      if (userRole === "kyle") {
+        wx.navigateTo({ url: `/pages/kyle_artowrk_ultimate_details/kyle_artowrk_ultimate_details?groupId=${groupId}` });
+      } else if (userRole === "shelley") {
+        wx.navigateTo({ url: `/pages/shelley_artwork_detail/shelley_artwork_detail?groupId=${groupId}` });
+      } else if (userRole === "fmr") {
+        wx.navigateTo({ url: `/pages/fmr_artwork_detail/fmr_artwork_detail?groupId=${groupId}`, });
+      }
+    }else{
+      console.log(1110);
     }
+
   },
   // 页面下拉刷新 - 用于页面重置
   onPullDownRefresh() {

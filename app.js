@@ -8,6 +8,8 @@ App({
   onLaunch() {
     // 展示本地存储能力
     console.log("小程序启动");
+    // 每次启动重置登录
+    wx.setStorageSync('userRole', ''); 
     // const logs = wx.getStorageSync('logs') || []
     // console.log(logs);
     // logs.unshift(Date.now())
