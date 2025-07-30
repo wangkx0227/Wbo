@@ -251,4 +251,8 @@ Page({
       this.setData({ radioValue: selectedradioValue });
     }
   },
+  // 新增图稿
+  onAddArtwork(e){
+    console.log(e);
+  }
 })

@@ -42,10 +42,72 @@
           <text class="title-font-main">客户反馈评论（R1）：</text>
           <view class="arrange-center">
             <t-link size="small" content="录入" hover underline bindtap="onOpenDialog" data-id="2" />
-          <t-divider layout="vertical" />
-          <t-link size="small" content="查看"  hover underline bindtap="onOpenPopup" data-id="2" 
-          data-comment-content="无内容"
-          />
+            <t-divider layout="vertical" />
+            <t-link size="small" content="查看" hover underline bindtap="onOpenPopup" data-id="2" data-comment-content="无内容" />
+          </view>
+        </view>
+      </view>
+      <view class="cell">
+        <view class="title-font-main">
+          <text>Title：Animals in sleeping bags</text>
+        </view>
+        <view class="title-font-other arrange-space-between">
+          <text>Name：黎善玲</text>
+          <text>Code：LSL__AIE MJ_2025_01</text>
+        </view>
+        <view class="cell-swiper">
+          <t-swiper wx:if="{{swiperImages.length}}" current="{{current}}" autoplay="{{autoplay}}" duration="{{duration}}" interval="{{interval}}" navigation="{{ { type: 'dots' } }}" list="{{swiperImages}}" bind:click="onSwiperImagesTap">
+          </t-swiper>
+          <!-- 无数据时显示占位内容 -->
+          <t-image wx:else src="" shape="round" error="slot" width="360" height="192">
+            <text class="error-text" slot="error">轮播图加载失败</text>
+          </t-image>
+        </view>
+        <view class="arrange-column">
+          <text class="title-font-main">客户选稿（R1）：</text>
+          <t-radio-group value="{{radioValue}}" bind:change="onRadioChange">
+            <t-radio value="0" label="已选中 – Round 1" borderless />
+            <t-radio value="1" label="已淘汰 – 客户未选中（R1）" borderless />
+          </t-radio-group>
+        </view>
+        <view class="arrange-center">
+          <text class="title-font-main">客户反馈评论（R1）：</text>
+          <view class="arrange-center">
+            <t-link size="small" content="录入" hover underline bindtap="onOpenDialog" data-id="2" />
+            <t-divider layout="vertical" />
+            <t-link size="small" content="查看" hover underline bindtap="onOpenPopup" data-id="2" data-comment-content="无内容" />
+          </view>
+        </view>
+      </view>
+      <view class="cell">
+        <view class="title-font-main">
+          <text>Title：Animals in sleeping bags</text>
+        </view>
+        <view class="title-font-other arrange-space-between">
+          <text>Name：黎善玲</text>
+          <text>Code：LSL__AIE MJ_2025_01</text>
+        </view>
+        <view class="cell-swiper">
+          <t-swiper wx:if="{{swiperImages.length}}" current="{{current}}" autoplay="{{autoplay}}" duration="{{duration}}" interval="{{interval}}" navigation="{{ { type: 'dots' } }}" list="{{swiperImages}}" bind:click="onSwiperImagesTap">
+          </t-swiper>
+          <!-- 无数据时显示占位内容 -->
+          <t-image wx:else src="" shape="round" error="slot" width="360" height="192">
+            <text class="error-text" slot="error">轮播图加载失败</text>
+          </t-image>
+        </view>
+        <view class="arrange-column">
+          <text class="title-font-main">客户选稿（R1）：</text>
+          <t-radio-group value="{{radioValue}}" bind:change="onRadioChange">
+            <t-radio value="0" label="已选中 – Round 1" borderless />
+            <t-radio value="1" label="已淘汰 – 客户未选中（R1）" borderless />
+          </t-radio-group>
+        </view>
+        <view class="arrange-center">
+          <text class="title-font-main">客户反馈评论（R1）：</text>
+          <view class="arrange-center">
+            <t-link size="small" content="录入" hover underline bindtap="onOpenDialog" data-id="2" />
+            <t-divider layout="vertical" />
+            <t-link size="small" content="查看" hover underline bindtap="onOpenPopup" data-id="2" data-comment-content="无内容" />
           </view>
         </view>
       </view>
@@ -65,6 +127,8 @@
 <t-toast id="t-toast" />
 <!-- 回到顶部 -->
 <t-back-top theme="half-round" text="顶部" scroll-top="{{scrollTop}}" bind:to-top="onToTop" />
+<!-- 添加个新的图稿 -->
+<t-fab icon="add" bind:click="onAddArtwork" aria-label="增加" usingCustomNavbar draggable y-bounds="{{[0, 32]}}"></t-fab>
 <!-- 查看评论弹窗 -->
 <t-popup visible="{{popupVisible}}" bind:visible-change="onClosePopup" placement="bottom">
   <view class="popup-block">
