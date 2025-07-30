@@ -1,1 +1,4 @@
-/* pages/guest_selection_artwork_detail/guest_selection_artwork_detail.wxss */
+.mb-16 {
+  margin-bottom: 32rpx;
+}
+
