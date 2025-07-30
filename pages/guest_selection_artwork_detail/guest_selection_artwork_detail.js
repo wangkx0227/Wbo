@@ -67,6 +67,22 @@ Page({
     dialogValue: "",
     // 单选框变量
     radioValue: "0",
+    // 增加图稿
+    popupAddVisible: false,
+    // 指派设计师
+    pickerDesignerVisible: false,
+    pickerDesignerValue: "",
+    pickerDesignerTitile: "指派设计师",
+    pickerDesignerItemList: [
+      { label: '王五', value: 'A' },
+      { label: '李四', value: 'B' },
+      { label: '张明', value: 'B' },
+      { label: '赵玉', value: 'B' },
+      { label: '张三', value: 'B' },
+      { label: '李明博', value: 'B' },
+    ],
+    // 上传图稿变量
+    imageFileList: [],
   },
   /* 生命周期函数--监听页面加载 */
   onLoad(options) {
@@ -197,7 +213,7 @@ Page({
     this.setData({ popupVisible: true, popupValue: commentContent }); // 触发弹窗
   },
   // 打开评论框
-  onOpenDialog(e){
+  onOpenDialog(e) {
     const { id } = e.currentTarget.dataset;
     this.setData({ dialogVisible: true, dialogValue: "" });
   },
@@ -210,7 +226,7 @@ Page({
   // 输入弹窗-关闭（包含提交功能）
   onCloseDialog(e) {
     const that = this;
-    const { id,dialogValue } = that.data; // 输入的评论的数据
+    const { id, dialogValue } = that.data; // 输入的评论的数据
     const action = e.type; // "confirm" 或 "cancel"
     if (action === 'confirm') {
       const message = "提交成功"
@@ -218,7 +234,7 @@ Page({
     } else if (action === 'cancel') {
       const theme = "warning"
       const message = "提交取消"
-      utils.showToast(that, message,theme);
+      utils.showToast(that, message, theme);
     }
     this.setData({ dialogVisible: false, dialogValue: "" });
   },
@@ -252,7 +268,68 @@ Page({
     }
   },
   // 新增图稿
-  onAddArtwork(e){
-    console.log(e);
-  }
+  onOpenAddArtwork(e) {
+    this.setData({ popupAddVisible: true });
+  },
+  // 新增内部关闭按钮
+  onCloseAddDialog(e) {
+    const that = this;
+    this.setData({ popupAddVisible: false });
+  },
+  // 新增内部提交按钮
+  onSubmitAddDialog(e) {
+    const that = this;
+    this.setData({ popupAddVisible: false });
+    console.log(11);
+    const message = "新增图稿成功";
+    utils.showToast(that, message);
+  },
+  // 新增内部的下拉框
+  onDesignerPicker(e) {
+    this.setData({ pickerDesignerVisible: true });
+  },
+  // 新增设计师筛选器-确定 
+  onPickerDesignerChange(e) {
+    /*
+      pickerDesignerVisible：筛选器显示变量
+      pickerDesignerValue： 选中的值
+    */
+    const that = this;
+    const { value, label } = e.detail;
+    this.setData({
+      pickerDesignerVisible: false,
+      pickerDesignerValue: value,
+      pickerDesignerTitile: label
+    });
+    const message = `设计师已指派${label}`
+    utils.showToast(that, message);
+  },
+  // 新增设计师筛选器-关闭 
+  onCloseDesignerPicker(e) {
+    /*
+      pickerDesignerVisible：筛选器显示变量
+    */
+    this.setData({ pickerDesignerVisible: false, });
+  },
+  // 上传图稿函数
+  imageAdd(e) {
+    const { imageFileList } = this.data;
+    const { files } = e.detail;
+    console.log();
+    // 方法1：选择完所有图片之后，统一上传，因此选择完就直接展示
+    this.setData({
+      imageFileList: [...imageFileList, ...files], // 此时设置了 fileList 之后才会展示选择的图片
+    });
+    // 方法2：每次选择图片都上传，展示每次上传图片的进度
+    // files.forEach(file => this.uploadFile(file))
+  },
+  // 图稿删除函数
+  imageRemove(e) {
+    const { index } = e.detail;
+    const { imageFileList } = this.data;
+    imageFileList.splice(index, 1);
+    this.setData({
+      imageFileList,
+    });
+  },
 })
