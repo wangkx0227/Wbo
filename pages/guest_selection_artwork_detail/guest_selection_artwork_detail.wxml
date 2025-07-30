@@ -31,34 +31,20 @@
             <text class="error-text" slot="error">轮播图加载失败</text>
           </t-image>
         </view>
-        <view class="arrange-center">
-          <text class="title-font-main">图稿相关信息：</text>
-          <view class="title-font-other arrange-center">
-            <text>原创设计师自评：</text>
-            <t-link size="small" content="查看" hover underline bind:tap="onOpenPopup" data-commentator="Y" data-comment-content="原创设计师评论" />
-          </view>
-          <t-divider layout="vertical" />
-          <view class="title-font-other arrange-center">
-            <text>Kyle评论：</text>
-            <t-link size="small" content="查看" hover underline bind:tap="onOpenPopup" data-commentator="N" data-comment-content="Kyle的评论" />
-          </view>
-        </view>
         <view class="arrange-column">
-          <text class="title-font-main">评估建议：</text>
-          <t-radio-group t-class="radio-horizontal-box" value="{{radioValue}}" bind:change="onRadioChange">
-            <view class="radio-card   {{ radioValue == '0' ? 'radio-active' : ''}}">
-              <t-icon name="check" t-class="radio-icon" />
-              <t-radio value="0" label="可生产" icon="none" borderless />
-            </view>
-            <view class="radio-card  {{ radioValue == '1' ? 'radio-active' : ''}}">
-              <t-icon name="check" t-class="radio-icon" />
-              <t-radio value="1" label="小幅度修改" icon="none" borderless t-class="radio-text" />
-            </view>
-            <view class="radio-card  {{ radioValue == '2' ? 'radio-active' : ''}}">
-              <t-icon name="check" t-class=radio-icon" />
-              <t-radio value="2" label="不具备可行性" icon="none" borderless />
-            </view>
+          <text class="title-font-main">客户选稿（R1）：</text>
+          <t-radio-group value="{{radioValue}}" bind:change="onRadioChange">
+            <t-radio value="0" label="已选中 – Round 1" borderless />
+            <t-radio value="1" label="已淘汰 – 客户未选中（R1）" borderless />
           </t-radio-group>
+        </view>
+        <view class="arrange-center">
+          <text class="title-font-main">客户反馈评论（R1）：</text>
+          <view class="arrange-center">
+            <t-link size="small" content="录入" data-content-status="N" hover underline bindtap="onModifyArtworkStatus" data-id="2" />
+          <t-divider layout="vertical" />
+          <t-link size="small" content="查看" data-content-status="Y" hover underline bindtap="onModifyArtworkStatus" data-id="2" />
+          </view>
         </view>
       </view>
     </view>

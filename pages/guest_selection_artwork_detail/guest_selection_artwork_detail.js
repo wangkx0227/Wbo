@@ -21,14 +21,6 @@ Page({
         {
           value: 'NAQ',
           label: '宁安琪',
-        },
-        {
-          value: 'LSL',
-          label: '黎善玲',
-        },
-        {
-          value: 'HYJ',
-          label: '韩奕君'
         }
       ],
     },
@@ -38,20 +30,21 @@ Page({
       options: [
         {
           value: 'all',
-          label: '全部评估',
+          label: '全部状态',
         },
         {
-          value: 'discard',
-          label: '可生产',
+          value: 'bot_selected',
+          label: '未选',
         },
         {
-          value: 'reserve',
-          label: '小幅度修改',
+          value: 'selected',
+          label: '已选中',
         },
         {
-          value: 'reserve',
-          label: '不具备可行性',
+          value: 'eliminate',
+          label: '已淘汰',
         },
+
       ],
     },
     // 轮播图变量
@@ -238,32 +231,28 @@ Page({
     /*
       radioValue：记录选中的单选值
     */
-       /*
-      radioValue：记录选中的单选值
-    */
-   const that = this;
-   const selectedradioValue = e.detail.value;
-   const radioValue = that.data.radioValue;
-   // 如果选中的点选框的值等于记录的值那么就取消
-   if (selectedradioValue === radioValue) {
-     this.setData({ radioValue: null });
-     const theme = "warning"
-     const message = "取消评估建议";
-     utils.showToast(that, message, theme);
-   } else {
-     // 如果选择小幅度修改，需要输入评估建议
-     if (selectedradioValue === "1") {
-       this.setData({ dialogVisible: true });
-     } else {
-       if (radioValue) {
-         const message = "修改评估建议";
-         utils.showToast(that, message);
-       } else {
-         const message = "提交评估建议";
-         utils.showToast(that, message);
-       }
-       this.setData({ radioValue: selectedradioValue });
-     }
-   }
+    /*
+   radioValue：记录选中的单选值
+ */
+    const that = this;
+    const selectedradioValue = e.detail.value;
+    const radioValue = that.data.radioValue;
+    // 如果选中的点选框的值等于记录的值那么就取消
+    if (selectedradioValue === radioValue) {
+      this.setData({ radioValue: null });
+      const theme = "warning"
+      const message = "取消客户选稿";
+      utils.showToast(that, message, theme);
+    } else {
+      // 如果选择小幅度修改，需要输入评估建议
+      if (radioValue) {
+        const message = "修改客户选稿";
+        utils.showToast(that, message);
+      } else {
+        const message = "提交客户选稿";
+        utils.showToast(that, message);
+      }
+      this.setData({ radioValue: selectedradioValue });
+    }
   },
 })
