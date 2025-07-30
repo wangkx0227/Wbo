@@ -160,16 +160,17 @@ Page({
     // 需要3类人进行跳转 Kyle Shelley FMR 进行跳转
     if (userRole === "kyle") {
       const tabBarValue = that.data.tabBarValue;
-      if (tabBarValue === "primary") {
+      if (tabBarValue === "primary") { // kyle 初筛和终评
         wx.navigateTo({ url: `/pages/kyle_artowrk_primary_details/kyle_artowrk_primary_details?groupId=${groupId}` });
       } else {
         wx.navigateTo({ url: `/pages/kyle_artowrk_ultimate_details/kyle_artowrk_ultimate_details?groupId=${groupId}` });
       }
-
-    } else if (userRole === "shelley") {
+    } else if (userRole === "shelley") { // 可行性
       wx.navigateTo({ url: `/pages/shelley_artwork_detail/shelley_artwork_detail?groupId=${groupId}` });
-    } else if (userRole === "fmr") {
+    } else if (userRole === "fmr") { // 可行性
       wx.navigateTo({ url: `/pages/fmr_artwork_detail/fmr_artwork_detail?groupId=${groupId}`, });
+    }else if (userRole === "ms"){ // 选稿阶段
+      wx.navigateTo({ url: `/pages/guest_selection_artwork_detail/guest_selection_artwork_detail?groupId=${groupId}`, });
     }
   },
   // 用户点击右上角分享

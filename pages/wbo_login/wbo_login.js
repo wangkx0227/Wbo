@@ -26,6 +26,10 @@ Page({
           value: 'fmr',
           label: 'fmr',
         },
+        {
+          value: 'ms',
+          label: '客户选稿',
+        },
       ],
     },
     redirect: "", // 跳转参数，如果携带，那么需要在登陆后跳转指定路径
@@ -178,6 +182,7 @@ Page({
     if (productValue === "all") {
       wx.showToast({ title: '选择后在进行登录', icon: 'error' });
     } else {
+      console.log(productValue);
       wx.setStorageSync('userRole', productValue); // 异步存储消息
       wx.showToast({ title: '登录成功', icon: 'success' });
       const redirect = this.data.redirect;
