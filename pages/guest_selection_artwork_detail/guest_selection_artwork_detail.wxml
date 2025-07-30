@@ -8,7 +8,7 @@
       <t-col span="24">
         <t-dropdown-menu>
           <t-dropdown-item options="{{dropdownArtwork.options}}" placement="right" value="{{dropdownArtwork.value}}" bindchange="onArtworkChange" />
-          <t-dropdown-item options="{{dropdownAssess.options}}" placement="right" value="{{dropdownAssess.value}}" bindchange="onAssessChange" />
+          <t-dropdown-item options="{{dropdownSelected.options}}" placement="right" value="{{dropdownSelected.value}}" bindchange="onAssessChange" />
         </t-dropdown-menu>
       </t-col>
     </t-row>
@@ -41,9 +41,11 @@
         <view class="arrange-center">
           <text class="title-font-main">客户反馈评论（R1）：</text>
           <view class="arrange-center">
-            <t-link size="small" content="录入" data-content-status="N" hover underline bindtap="onModifyArtworkStatus" data-id="2" />
+            <t-link size="small" content="录入" hover underline bindtap="onOpenDialog" data-id="2" />
           <t-divider layout="vertical" />
-          <t-link size="small" content="查看" data-content-status="Y" hover underline bindtap="onModifyArtworkStatus" data-id="2" />
+          <t-link size="small" content="查看"  hover underline bindtap="onOpenPopup" data-id="2" 
+          data-comment-content="无内容"
+          />
           </view>
         </view>
       </view>
@@ -63,11 +65,11 @@
 <t-toast id="t-toast" />
 <!-- 回到顶部 -->
 <t-back-top theme="half-round" text="顶部" scroll-top="{{scrollTop}}" bind:to-top="onToTop" />
-<!-- 查看自评弹窗 -->
+<!-- 查看评论弹窗 -->
 <t-popup visible="{{popupVisible}}" bind:visible-change="onClosePopup" placement="bottom">
   <view class="popup-block">
     <view class="popup-header">
-      <view class="popup-title">{{ popupTitle }}</view>
+      <view class="popup-title">客户反馈评论：</view>
     </view>
     <view class="popup-comments">
       <text>{{ popupValue }}</text>
@@ -75,10 +77,10 @@
   </view>
 </t-popup>
 <!-- 评论弹窗 -->
-<t-dialog visible="{{dialogVisible}}" title="评估建议：" confirm-btn="确定" cancel-btn="取消" bind:confirm="onCloseDialog" bind:cancel="onCloseDialog">
+<t-dialog visible="{{dialogVisible}}" title="客户反馈评论：" confirm-btn="确定" cancel-btn="取消" bind:confirm="onCloseDialog" bind:cancel="onCloseDialog">
   <view slot="content">
     <view class="dialog-textarea">
-      <t-textarea value="{{ dialogValue }}" placeholder="请输入评审意见" bordered maxlength="200" disableDefaultPadding="true" indicator bind:change="onDialogInput" />
+      <t-textarea value="{{ dialogValue }}" placeholder="请输入客户反馈评论" bordered maxlength="200" disableDefaultPadding="true" indicator bind:change="onDialogInput" />
     </view>
   </view>
 </t-dialog>

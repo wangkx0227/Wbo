@@ -24,8 +24,8 @@ Page({
         }
       ],
     },
-    // 筛选框变量-评估
-    dropdownAssess: {
+    // 筛选框变量-客户选中
+    dropdownSelected: {
       value: 'all',
       options: [
         {
@@ -62,7 +62,6 @@ Page({
     // 设计师自评弹窗控制变量
     popupVisible: false,
     popupValue: "",
-    popupTitle: "",
     // 评论弹出层变量
     dialogVisible: false,
     dialogValue: "",
@@ -182,47 +181,44 @@ Page({
     setTimeout(() => {
       this.setData({
         popupValue: "",
-        popupTitle: ""
       });
     }, 300);
   },
-  // 查看评论弹窗 - 唤起
+  // 查看评论弹窗 - 打开
   onOpenPopup(e) {
     /*
       id: 当条记录的id
-      commentator: 评论人
       commentContent: 评论内容
-      popupVisible: 唤起弹窗
-      popupTitle: 评论的标题
+      popupVisible: 打开弹窗
       popupValue: 显示的评论内容
     */
-    const { id, commentator, commentContent } = e.currentTarget.dataset;
+    const { id, commentContent } = e.currentTarget.dataset;
     // commentator 变量控制显示评论标题
-    if (commentator === "Y") {
-      this.setData({ popupTitle: "原创设计师自评：", });
-    } else {
-      this.setData({ popupTitle: "Kyle评论：", });
-    }
     this.setData({ popupVisible: true, popupValue: commentContent }); // 触发弹窗
   },
-  // 填写评论-双向绑定
+  // 打开评论框
+  onOpenDialog(e){
+    const { id } = e.currentTarget.dataset;
+    this.setData({ dialogVisible: true, dialogValue: "" });
+  },
+  // 输入评论-双向记录
   onDialogInput(e) {
     this.setData({
       dialogValue: e.detail.value
     });
   },
-  // 填写弹窗-关闭（包含提交功能）
+  // 输入弹窗-关闭（包含提交功能）
   onCloseDialog(e) {
     const that = this;
-    const { dialogValue, radioValue } = that.data; // 输入的评论的数据
+    const { id,dialogValue } = that.data; // 输入的评论的数据
     const action = e.type; // "confirm" 或 "cancel"
     if (action === 'confirm') {
-      console.log("提交数据");
-      this.setData({ radioValue: "1" });
-      const message = "提交评估建议成功"
+      const message = "提交成功"
       utils.showToast(that, message);
     } else if (action === 'cancel') {
-      console.log("提交取消");
+      const theme = "warning"
+      const message = "提交取消"
+      utils.showToast(that, message,theme);
     }
     this.setData({ dialogVisible: false, dialogValue: "" });
   },
