@@ -9,47 +9,52 @@
 
 # pages页面说明
 
-## 1.wbo_template_index
-
-```tex
-针对文档的展示功能：
-	2.STEP 2 - 初步创意评审与预选定稿  
-	4.STEP 4 - AIT 后期处理与PPT准备（用于最终创意审查）
-	5.STEP 5 - Kyle 最终创意审查
-```
-
-## 2.wbo_template_details
-
-```tex
-针对文档的功能：
-	3.STEP 3 - 可行性与价格审核（WBO系统内）
-
-让 王晓文 指定图稿批量的 分发给某个FMR，让FMR进行填写图稿的价格选用材质，磨具等等基本信息。
-在内部的图稿进行可行性与价格审核。
-```
-## 3.wbo_artowrk_index
+## 1.wbo_artowrk_index
 ```tex
 针对文档功能：
   1.STEP 1 - 概念创作与打包，列表页面
-  2.STEP 2 - 初步创意评审与预选定稿
 
 ```
-## 4.kyle_artowrk_primary_details
+## 2.kyle_artowrk_primary_details
 ```tex
 针对 kyle 的第一阶段 图稿过滤
 针对文档功能：
-  1.STEP 1 - 概念创作与打包，内部的图稿详情页面
-  2.STEP 2 - 初步创意评审与预选定稿，内部的图稿详情页面
+  1.STEP 2 - 初步创意评审与预选定稿，内部的图稿详情页面
 
 ```
 
-## 4.kyle_artowrk_ultimate_details
+## 3.kyle_artowrk_ultimate_details
 ```tex
 针对 kyle 的第二阶段 图稿过滤（最终的审稿）
 针对文档功能：
   1.STEP 5 - Kyle 最终创意审查
 ```
+## 4.shelley_artwork_detail
+
+```bash
+针对 shelley的可行分析响应界面，可以实现指派fmr与对图稿的可行性分析评估
+针对文档：
+	1.STEP 3 - 可行性与价格审核（WBO系统内）
+```
+
+## 5.fmr_artwork_detail
+
+```bash
+针对 fmr 的可行分析响应界面,由shelley进行指派后fmr才可以进行操作
+针对文档：
+	1.STEP 3 - 可行性与价格审核（WBO系统内）
+```
+
+## 6.wbo_to_do与wbo_to_do_detail
+
+```bash
+作用：
+	wbo_to_do展示待处理页面和最新页面，wbo_to_do_detail展示最新的页面，也就是可以看到整个图稿整体审核流程。
+	具体还是需要待商议。
+```
+
 ## 4.方法
+
 ```JavaScript
 // 存
 wx.setStorageSync('userInfo', { name: 'Tom', age: 18 })
@@ -65,26 +70,3 @@ wx.removeStorageSync('userInfo')
 wx.clearStorageSync()
 ```
 
-## 4.待处理页面（小程序卡片）小程序消息发送，爬虫脚本
-```JavaScript
-  // 登录页面
-      const redirectUrl = decodeURIComponent(e.redirect || '');
-      if (redirectUrl) {
-        wx.redirectTo({ url: redirectUrl });
-      }
-      console.log(redirectUrl);
-
-  // 待处理页面对登录的验证操作
-    // 测试登录状态验证
-    const currentPages = getCurrentPages();
-    const StorageUserRole = wx.getStorageSync('userRole'); // 异步获取消息
-    if (StorageUserRole) {
-      wx.showToast({ title: '请先登录', icon: 'error' });
-      const currentPages = getCurrentPages();
-      const redirectUrl = 'pages/kyle_artowrk_ultimate_details/kyle_artowrk_ultimate_details'
-      wx.navigateTo({
-        url: `/pages/wbo_login/wbo_login?redirect=${encodeURIComponent(redirectUrl)}`,
-      });
-    }
-    转发通信的脚本将当前待处理页面进行保留，当小程序内变动（谁需要处理），转发通信脚本，将待处理页面的卡片转发给指定的人。
-```
