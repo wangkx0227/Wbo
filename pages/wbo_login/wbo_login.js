@@ -28,7 +28,7 @@ Page({
         },
         {
           value: 'ms',
-          label: '客户选稿',
+          label: '客户选稿R1',
         },
       ],
     },
