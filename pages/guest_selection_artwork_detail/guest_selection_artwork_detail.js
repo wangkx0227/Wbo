@@ -71,7 +71,7 @@ Page({
     popupAddVisible: false,
     // 指派设计师
     pickerDesignerVisible: false,
-    pickerDesignerValue: "",
+    pickerDesignerValue: [],
     pickerDesignerTitile: "指派设计师",
     pickerDesignerItemList: [
       { label: '王五', value: 'A' },
@@ -295,6 +295,7 @@ Page({
     */
     const that = this;
     const { value, label } = e.detail;
+    console.log(value, label);
     this.setData({
       pickerDesignerVisible: false,
       pickerDesignerValue: value,
