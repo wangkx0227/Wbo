@@ -20,37 +20,29 @@ Page({
         },
         {
           value: 'NAQ',
-          label: '宁安琪',
+          label: '已上传打样图稿',
         },
         {
-          value: 'LSL',
-          label: '黎善玲',
+          value: 'NAQ',
+          label: '未上传打样图稿',
         },
-        {
-          value: 'HYJ',
-          label: '韩奕君'
-        }
       ],
     },
-    // 筛选框变量-评估
+    // 筛选框变量建议
     dropdownAssess: {
       value: 'all',
       options: [
         {
           value: 'all',
-          label: '全部评估',
+          label: '全部反馈建议',
         },
         {
           value: 'discard',
-          label: '可生产',
+          label: '无反馈建议',
         },
         {
           value: 'reserve',
-          label: '小幅度修改',
-        },
-        {
-          value: 'reserve',
-          label: '不具备可行性',
+          label: '有反馈建议',
         },
       ],
     },
@@ -69,17 +61,13 @@ Page({
     // 设计师自评弹窗控制变量
     popupVisible: false,
     popupValue: "",
-    popupTitle: "",
-    // 评论弹出层变量
-    dialogVisible: false,
-    dialogValue: "",
-    // 单选框变量
-    radioValue: "0",
+    // 折叠版
+    designCollapseValue:[1],
+    factoryCollapseValue:[1]
   },
   /* 生命周期函数--监听页面加载 */
   onLoad(options) {
     const groupId = options.groupId; // 首页跳转后的存储的id值
-    console.log(groupId);
     wx.showLoading({ title: '正在加载...', });
     setTimeout(() => {
       wx.hideLoading();
@@ -189,7 +177,6 @@ Page({
     setTimeout(() => {
       this.setData({
         popupValue: "",
-        popupTitle: ""
       });
     }, 300);
   },
@@ -197,73 +184,23 @@ Page({
   onOpenPopup(e) {
     /*
       id: 当条记录的id
-      commentator: 评论人
       commentContent: 评论内容
       popupVisible: 唤起弹窗
-      popupTitle: 评论的标题
       popupValue: 显示的评论内容
     */
-    const { id, commentator, commentContent } = e.currentTarget.dataset;
-    // commentator 变量控制显示评论标题
-    if (commentator === "Y") {
-      this.setData({ popupTitle: "原创设计师自评：", });
-    } else {
-      this.setData({ popupTitle: "Kyle评论：", });
-    }
+    const { id, commentContent } = e.currentTarget.dataset;
     this.setData({ popupVisible: true, popupValue: commentContent }); // 触发弹窗
   },
-  // 填写评论-双向绑定
-  onDialogInput(e) {
+  // 设计稿展开
+  designCollapseChange(e){
     this.setData({
-      dialogValue: e.detail.value
+      designCollapseValue: e.detail.value,
     });
   },
-  // 填写弹窗-关闭（包含提交功能）
-  onCloseDialog(e) {
-    const that = this;
-    const { dialogValue, radioValue } = that.data; // 输入的评论的数据
-    const action = e.type; // "confirm" 或 "cancel"
-    if (action === 'confirm') {
-      console.log("提交数据");
-      this.setData({ radioValue: "1" });
-      const message = "提交评估建议成功"
-      utils.showToast(that, message);
-    } else if (action === 'cancel') {
-      console.log("提交取消");
-    }
-    this.setData({ dialogVisible: false, dialogValue: "" });
-  },
-  // 单选框
-  onRadioChange(e) {
-    /*
-      radioValue：记录选中的单选值
-    */
-       /*
-      radioValue：记录选中的单选值
-    */
-   const that = this;
-   const selectedradioValue = e.detail.value;
-   const radioValue = that.data.radioValue;
-   // 如果选中的点选框的值等于记录的值那么就取消
-   if (selectedradioValue === radioValue) {
-     this.setData({ radioValue: null });
-     const theme = "warning"
-     const message = "取消评估建议";
-     utils.showToast(that, message, theme);
-   } else {
-     // 如果选择小幅度修改，需要输入评估建议
-     if (selectedradioValue === "1") {
-       this.setData({ dialogVisible: true });
-     } else {
-       if (radioValue) {
-         const message = "修改评估建议";
-         utils.showToast(that, message);
-       } else {
-         const message = "提交评估建议";
-         utils.showToast(that, message);
-       }
-       this.setData({ radioValue: selectedradioValue });
-     }
-   }
+  // 工厂稿展开
+  factoryCollapseChange(e){
+    this.setData({
+      factoryCollapseValue: e.detail.value,
+    });
   },
 })

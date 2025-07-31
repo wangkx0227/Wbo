@@ -54,6 +54,7 @@ page {
   padding: 5px 10px;
   display: grid;
   gap: 8px;
+  border-radius: 5px;
 }
 
 /* 最后一个元素不需要间距 */

@@ -11,9 +11,6 @@
               <view style="width: 50%;height: 100%;display: flex;align-items: center;justify-content: center; ">
                 <t-skeleton theme="paragraph" loading animation="gradient" rowCol="{{ [{ width: '56px', height: '19px' }]}}"></t-skeleton>
               </view>
-              <view style="width: 50%;height: 100%;display: flex;align-items: center;justify-content: center; ">
-                <t-skeleton theme="paragraph" loading animation="gradient" rowCol="{{ [{ width: '56px', height: '19px' }]}}"></t-skeleton>
-              </view>
             </view>
           </t-col>
         </t-row>
