@@ -34,7 +34,7 @@
               <text class="title-font-main">设计稿：</text>
             </view>
             <view class="cell-swiper">
-              <t-swiper wx:if="{{swiperImages.length}}" current="{{current}}" autoplay="{{autoplay}}" duration="{{duration}}" interval="{{interval}}" navigation="{{ { type: 'dots' } }}" list="{{swiperImages}}" bind:click="onSwiperImagesTap">
+              <t-swiper wx:if="{{swiperImages.length !== 0}}" current="{{current}}" autoplay="{{autoplay}}" duration="{{duration}}" interval="{{interval}}" navigation="{{ { type: 'dots' } }}" list="{{swiperImages}}" bind:click="onSwiperImagesTap">
               </t-swiper>
               <!-- 无数据时显示占位内容 -->
               <t-image wx:else src="" shape="round" error="slot" width="360" height="192">
@@ -51,7 +51,7 @@
               catchtap="onOpenUploadFactoryArtwork" prefixIcon="upload" />
             </view>
             <view class="cell-swiper">
-              <t-swiper wx:if="{{swiperImages2.length}}" current="{{current}}" autoplay="{{autoplay}}" duration="{{duration}}" interval="{{interval}}" navigation="{{ { type: 'dots' } }}" list="{{swiperImages}}" bind:click="onSwiperImagesTap">
+              <t-swiper wx:if="{{swiperImages2.length !== 0 }}" current="{{current}}" autoplay="{{autoplay}}" duration="{{duration}}" interval="{{interval}}" navigation="{{ { type: 'dots' } }}" list="{{swiperImages2}}" bind:click="onSwiperImagesTap">
               </t-swiper>
               <!-- 无数据时显示占位内容 -->
               <t-image wx:else src="" shape="round" error="slot" width="640rpx" height="384rpx">

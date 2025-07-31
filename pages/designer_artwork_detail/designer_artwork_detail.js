@@ -68,7 +68,7 @@ Page({
     popupAddVisible: false,
     imageFileList: [],
     // 假数据，工厂稿
-    swiperImages2 = []
+    swiperImages2 :[],
   },
   /* 生命周期函数--监听页面加载 */
   onLoad(options) {
@@ -242,9 +242,13 @@ Page({
   // 提交上传数据
   onSubmitFactoryArtwork(e) {
     const that = this;
-    const Images = ['https://picsum.photos/800/600?random=1']
-    this.setData({ popupAddVisible: false,swiperImages2:Images });
+    this.setData({ popupAddVisible: false, swiperImages2: ['https://picsum.photos/800/600?random=1'] });
     const message = "新增图稿成功";
     utils.showToast(that, message);
+    setTimeout(() => {
+      this.setData({
+        imageFileList: []
+      })
+    }, 500)
   }
 })
