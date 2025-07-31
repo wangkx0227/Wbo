@@ -197,4 +197,9 @@ Page({
       collapseValue: e.detail.value,
     });
   },
+  // 上传工厂打样稿
+  uploadFactoryArtwork(e){
+    e.stopPropagation && e.stopPropagation();  // 阻止事件冒泡
+    console.log(11);
+  }
 })
