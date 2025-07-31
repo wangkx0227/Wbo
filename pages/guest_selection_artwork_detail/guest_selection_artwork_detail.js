@@ -87,7 +87,6 @@ Page({
   /* 生命周期函数--监听页面加载 */
   onLoad(options) {
     const groupId = options.groupId; // 首页跳转后的存储的id值
-    console.log(groupId);
     wx.showLoading({ title: '正在加载...', });
     setTimeout(() => {
       wx.hideLoading();
