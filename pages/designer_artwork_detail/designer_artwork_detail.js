@@ -68,7 +68,7 @@ Page({
     popupAddVisible: false,
     imageFileList: [],
     // 假数据，工厂稿
-    swiperImages2 :[],
+    swiperImages2: [],
   },
   /* 生命周期函数--监听页面加载 */
   onLoad(options) {
