@@ -16,19 +16,19 @@
   <view class="page-main">
     <view class="wrapper">
       <view class="cell">
-        <view class="title-font-main">
+        <view class="title-font-main arrange-space-between">
           <text>Title：Animals in sleeping bags</text>
+          <view class="arrange-center ">
+            <text class="title-font-other">反馈建议：</text>
+            <t-link size="small" content="查看" hover underline bind:tap="onOpenPopup" data-comment-content="无内容" />
+          </view>
         </view>
         <view class="title-font-other arrange-space-between">
           <text>Name：黎善玲</text>
           <text>Code：LSL__AIE MJ_2025_01</text>
         </view>
-        <view class="arrange-center title-font-other ">
-          <text>反馈建议：</text>
-          <t-link size="small" content="查看" hover underline bind:tap="onOpenPopup" data-comment-content="无内容" />
-        </view>
         <!-- 设计稿与工厂打样稿 -->
-        <t-collapse value="{{collapseValue}}" bind:change="collapseChange">
+        <t-collapse value="{{collapseValue}}" bind:change="onCollapseChange">
           <t-collapse-panel value="{{0}}">
             <view slot="header">
               <text class="title-font-main">设计稿：</text>
@@ -48,8 +48,7 @@
             </view>
             <view slot="header-right-content">
               <t-link size="small" content="上传" hover underline 
-              catchtap="uploadFactoryArtwork"  
-              prefixIcon="upload" />
+              catchtap="onOpenUploadFactoryArtwork" prefixIcon="upload" />
             </view>
             <view class="cell-swiper">
               <t-swiper wx:if="{{swiperImages2.length}}" current="{{current}}" autoplay="{{autoplay}}" duration="{{duration}}" interval="{{interval}}" navigation="{{ { type: 'dots' } }}" list="{{swiperImages}}" bind:click="onSwiperImagesTap">
@@ -85,6 +84,25 @@
     </view>
     <view class="popup-comments">
       <text>{{ popupValue }}</text>
+    </view>
+  </view>
+</t-popup>
+<!-- 抽屉 -->
+<t-popup visible="{{popupAddVisible}}" placement="left">
+  <view class="popup-block" style="padding: 10rpx;height: 100%;">
+    <view class="popup-header">
+      <view class="popup-title">工厂打样稿：</view>
+    </view>
+    <view class="popup-comments">
+      <view class="input-example">
+        <t-upload mediaType="{{['image']}}" max="{{5}}" files="{{imageFileList}}" bind:add="onImageAdd" bind:remove="onImageRemove">
+        </t-upload>
+      </view>
+      <view class="button-example">
+        <t-button theme="light" block  t-class="group-btn" bindtap="onCloseUploadFactoryArtwork">关闭</t-button>
+        <t-divider layout="vertical" style="height:64rpx" />
+        <t-button theme="primary" block  t-class="group-btn" bindtap="onSubmitFactoryArtwork">提交</t-button>
+      </view>
     </view>
   </view>
 </t-popup>

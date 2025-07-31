@@ -80,7 +80,7 @@
 <t-dialog visible="{{dialogVisible}}" title="客户反馈评论：" confirm-btn="确定" cancel-btn="取消" bind:confirm="onCloseDialog" bind:cancel="onCloseDialog">
   <view slot="content">
     <view class="dialog-textarea">
-      <t-textarea value="{{ dialogValue }}" placeholder="请输入客户反馈评论" bordered maxlength="200" disableDefaultPadding="true" indicator bind:change="onDialogInput" />
+      <t-textarea value="{{ dialogValue }}" placeholder="请输入" bordered maxlength="200" disableDefaultPadding="true" indicator bind:change="onDialogInput" />
     </view>
   </view>
 </t-dialog>

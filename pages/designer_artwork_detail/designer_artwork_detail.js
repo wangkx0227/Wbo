@@ -5,7 +5,7 @@ const swiperImages = [
   // 物品类
   'https://picsum.photos/700/900?random=5',  // 长竖版
 ];
-const swiperImages2 = [];
+
 Page({
   data: {
     // 骨架屏变量
@@ -63,7 +63,12 @@ Page({
     popupVisible: false,
     popupValue: "",
     // 折叠版
-    collapseValue:[],
+    collapseValue: [],
+    // 上传工厂稿弹窗
+    popupAddVisible: false,
+    imageFileList: [],
+    // 假数据，工厂稿
+    swiperImages2 = []
   },
   /* 生命周期函数--监听页面加载 */
   onLoad(options) {
@@ -192,14 +197,54 @@ Page({
     this.setData({ popupVisible: true, popupValue: commentContent }); // 触发弹窗
   },
   // 折叠板展开展开
-  collapseChange(e){
+  onCollapseChange(e) {
     this.setData({
       collapseValue: e.detail.value,
     });
   },
-  // 上传工厂打样稿
-  uploadFactoryArtwork(e){
+  // 打开-上传工厂打样稿
+  onOpenUploadFactoryArtwork(e) {
     e.stopPropagation && e.stopPropagation();  // 阻止事件冒泡
-    console.log(11);
+    // 打开弹窗，显示upload组件
+    this.setData({ popupAddVisible: true });
+  },
+  // 关闭-上传工厂打样稿
+  onCloseUploadFactoryArtwork() {
+    this.setData({ popupAddVisible: false, });
+    // 等动画结束后，删除imageFileList的图
+    setTimeout(() => {
+      this.setData({
+        imageFileList: []
+      })
+    }, 500)
+  },
+  // 上传图稿函数
+  onImageAdd(e) {
+    const { imageFileList } = this.data;
+    const { files } = e.detail;
+    console.log();
+    // 方法1：选择完所有图片之后，统一上传，因此选择完就直接展示
+    this.setData({
+      imageFileList: [...imageFileList, ...files], // 此时设置了 fileList 之后才会展示选择的图片
+    });
+    // 方法2：每次选择图片都上传，展示每次上传图片的进度
+    // files.forEach(file => this.uploadFile(file))
+  },
+  // 图稿删除函数
+  onImageRemove(e) {
+    const { index } = e.detail;
+    const { imageFileList } = this.data;
+    imageFileList.splice(index, 1);
+    this.setData({
+      imageFileList,
+    });
+  },
+  // 提交上传数据
+  onSubmitFactoryArtwork(e) {
+    const that = this;
+    const Images = ['https://picsum.photos/800/600?random=1']
+    this.setData({ popupAddVisible: false,swiperImages2:Images });
+    const message = "新增图稿成功";
+    utils.showToast(that, message);
   }
 })
