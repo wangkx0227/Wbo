@@ -171,6 +171,8 @@ Page({
       wx.navigateTo({ url: `/pages/fmr_artwork_detail/fmr_artwork_detail?groupId=${groupId}`, });
     }else if (userRole === "ms"){ // 选稿阶段
       wx.navigateTo({ url: `/pages/guest_selection_artwork_detail/guest_selection_artwork_detail?groupId=${groupId}`, });
+    }else if(userRole === "d"){ // 设计师对上传工厂稿R1
+      wx.navigateTo({ url: `/pages/designer_artwork_detail/designer_artwork_detail?groupId=${groupId}`, });
     }
   },
   // 用户点击右上角分享

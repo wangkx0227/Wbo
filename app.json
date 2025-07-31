@@ -9,7 +9,8 @@
     "pages/kyle_artowrk_ultimate_details/kyle_artowrk_ultimate_details",
     "pages/wbo_to_do/wbo_to_do",
     "pages/wbo_to_do_detail/wbo_to_do_detail",
-    "pages/guest_selection_artwork_detail/guest_selection_artwork_detail"
+    "pages/guest_selection_artwork_detail/guest_selection_artwork_detail",
+    "pages/designer_artwork_detail/designer_artwork_detail"
   ],
   "window": {
     "navigationBarTextStyle": "black",
