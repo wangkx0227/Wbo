@@ -67,6 +67,7 @@ Page({
     // 上传工厂稿弹窗
     popupAddVisible: false,
     imageFileList: [],
+    UpdatefactoryArtworkStatus:"未上传",
     // 假数据，工厂稿
     swiperImages2: [],
   },
@@ -242,7 +243,7 @@ Page({
   // 提交上传数据
   onSubmitFactoryArtwork(e) {
     const that = this;
-    this.setData({ popupAddVisible: false, swiperImages2: ['https://xcx.1bizmail.com:8153/static/images/wpb_images/D51_ResinGlitter_Ornament_CS25-SKR-120_HgS7tjR.jpg'] });
+    this.setData({ popupAddVisible: false,UpdatefactoryArtworkStatus:"已上传", swiperImages2: ['https://xcx.1bizmail.com:8153/static/images/wpb_images/D51_ResinGlitter_Ornament_CS25-SKR-120_HgS7tjR.jpg'] });
     const message = "新增图稿成功";
     utils.showToast(that, message);
     setTimeout(() => {
