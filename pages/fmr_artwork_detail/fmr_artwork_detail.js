@@ -1,9 +1,9 @@
 const app = getApp(); // 用户信息
 const utils = require('../../utils/util')
 const swiperImages = [
-  'https://picsum.photos/800/600?random=1',  // 横版
+  'https://xcx.1bizmail.com:8153/static/images/wpb_images/D51_Resin_Ornament_CS25-LYD-095_Ur7N7rc.jpg',  // 横版
   // 物品类
-  'https://picsum.photos/700/900?random=5',  // 长竖版
+  'https://xcx.1bizmail.com:8153/static/images/wpb_images/D51_Resin_Ornament_CS25-HHR-129_JkE4FgU.jpg',  // 长竖版
 ];
 Page({
   data: {
