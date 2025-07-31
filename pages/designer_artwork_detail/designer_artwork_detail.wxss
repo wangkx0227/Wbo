@@ -1,1 +1,4 @@
-/* pages/designer_artwork_detail/designer_artwork_detail.wxss */
+.mb-16 {
+  margin-bottom: 32rpx;
+}
+
