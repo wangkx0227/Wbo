@@ -23,12 +23,12 @@
           <text>Name：黎善玲</text>
           <text>Code：LSL__AIE MJ_2025_01</text>
         </view>
-        <view class="arrange-center">
-          <text class="title-font-main">反馈建议：</text>
+        <view class="arrange-center title-font-other ">
+          <text>反馈建议：</text>
           <t-link size="small" content="查看" hover underline bind:tap="onOpenPopup" data-comment-content="无内容" />
         </view>
-        <!-- 设计稿 -->
-        <t-collapse value="{{designCollapseValue}}" bind:change="designCollapseChange">
+        <!-- 设计稿与工厂打样稿 -->
+        <t-collapse value="{{collapseValue}}" bind:change="collapseChange">
           <t-collapse-panel value="{{0}}">
             <view slot="header">
               <text class="title-font-main">设计稿：</text>
@@ -42,18 +42,15 @@
               </t-image>
             </view>
           </t-collapse-panel>
-        </t-collapse>
-        <!-- 工厂稿 -->
-        <t-collapse value="{{factoryCollapseValue}}" bind:change="factoryCollapseChange">
-          <t-collapse-panel value="{{0}}">
+          <t-collapse-panel value="{{1}}">
             <view slot="header">
               <text class="title-font-main">工厂打样稿：</text>
             </view>
             <view class="cell-swiper">
-              <t-swiper wx:if="{{swiperImages.length}}" current="{{current}}" autoplay="{{autoplay}}" duration="{{duration}}" interval="{{interval}}" navigation="{{ { type: 'dots' } }}" list="{{swiperImages}}" bind:click="onSwiperImagesTap">
+              <t-swiper wx:if="{{swiperImages2.length}}" current="{{current}}" autoplay="{{autoplay}}" duration="{{duration}}" interval="{{interval}}" navigation="{{ { type: 'dots' } }}" list="{{swiperImages}}" bind:click="onSwiperImagesTap">
               </t-swiper>
               <!-- 无数据时显示占位内容 -->
-              <t-image wx:else src="" shape="round" error="slot" width="360" height="192">
+              <t-image wx:else src="" shape="round" error="slot" width="640rpx" height="384rpx">
                 <text class="error-text" slot="error">轮播图加载失败</text>
               </t-image>
             </view>

@@ -5,6 +5,7 @@ const swiperImages = [
   // 物品类
   'https://picsum.photos/700/900?random=5',  // 长竖版
 ];
+const swiperImages2 = [];
 Page({
   data: {
     // 骨架屏变量
@@ -62,8 +63,7 @@ Page({
     popupVisible: false,
     popupValue: "",
     // 折叠版
-    designCollapseValue:[1],
-    factoryCollapseValue:[1]
+    collapseValue:[],
   },
   /* 生命周期函数--监听页面加载 */
   onLoad(options) {
@@ -191,16 +191,10 @@ Page({
     const { id, commentContent } = e.currentTarget.dataset;
     this.setData({ popupVisible: true, popupValue: commentContent }); // 触发弹窗
   },
-  // 设计稿展开
-  designCollapseChange(e){
+  // 折叠板展开展开
+  collapseChange(e){
     this.setData({
-      designCollapseValue: e.detail.value,
-    });
-  },
-  // 工厂稿展开
-  factoryCollapseChange(e){
-    this.setData({
-      factoryCollapseValue: e.detail.value,
+      collapseValue: e.detail.value,
     });
   },
 })
