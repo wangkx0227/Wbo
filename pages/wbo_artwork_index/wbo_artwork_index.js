@@ -118,6 +118,7 @@ Page({
   // 生命周期函数--监听页面加载 
   onLoad() {
     const userRole = wx.getStorageSync('userRole');
+    console.log(userRole);
     wx.showLoading({ title: '正在加载...', });
     // 判断显示标签栏
     if (userRole === "kyle") {

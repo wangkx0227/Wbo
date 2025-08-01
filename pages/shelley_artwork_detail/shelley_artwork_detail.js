@@ -98,7 +98,7 @@ Page({
     // 筛选器
     pickerVisible: false,
     pickerValue: null,
-    pickerLabel: "暂未选择",
+    pickerLabel: "暂未指派FMR",
     pickerItemList: [
       { label: '王五', value: 'A' },
       { label: '李四', value: 'B' },
@@ -238,19 +238,19 @@ Page({
   onOpenPopup(e) {
     /*
       id: 当条记录的id
-      commentator: 评论人
       commentContent: 评论内容
       popupVisible: 唤起弹窗
-      popupTitle: 评论的标题
-      popupValue: 显示的评论内容
+      commentStatus: 评论的状态
     */
-    const { id, commentator, commentContent } = e.currentTarget.dataset;
-    // commentator 变量控制显示评论标题
-    if (commentator === "Y") {
-      this.setData({ popupTitle: "原创设计师自评：", });
-    } else {
-      this.setData({ popupTitle: "Kyle评论：", });
+   const that = this;
+    const { id, commentContent, commentStatus } = e.currentTarget.dataset;
+    if (commentStatus !== "1") {
+      const theme = "warning"
+      const message = "未选择评估选项"
+      utils.showToast(that, message, theme);
+      return
     }
+
     this.setData({ popupVisible: true, popupValue: commentContent }); // 触发弹窗
   },
   // 筛选器-确定 

@@ -197,7 +197,7 @@ Page({
     const that = this;
     const { id, commentator, commentStatus } = e.currentTarget.dataset; // 点击按钮的存储的数据 id 点击id designer_comments 点击的自评文字
     if (commentStatus !== "1") {
-      const theme = "error"
+      const theme = "warning"
       const message = "未选择评估选项"
       utils.showToast(that, message, theme);
       return

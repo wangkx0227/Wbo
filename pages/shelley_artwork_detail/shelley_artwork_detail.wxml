@@ -28,21 +28,32 @@
           <t-swiper wx:if="{{swiperImages.length}}" current="{{current}}" autoplay="{{autoplay}}" duration="{{duration}}" interval="{{interval}}" navigation="{{ { type: 'dots' } }}" list="{{swiperImages}}" bind:click="onSwiperImagesTap">
           </t-swiper>
           <!-- 无数据时显示占位内容 -->
-          <t-image wx:else src="" shape="round" error="slot" width="360" height="192">
+          <t-image wx:else src="" shape="round" error="slot" width="640rpx" height="384rpx">
             <text class="error-text" slot="error">轮播图加载失败</text>
           </t-image>
         </view>
-        <view class="arrange-column">
-          <view class="arrange-center">
-            <text class="title-font-main">指派 FMR 评估：</text>
-            <t-link size="small" content="点击选择FMR" hover underline bindtap="onOpenPicker" data-id="2" />
-          </view>
-          <view class="arrange-center" style="margin: 3px 0 0 8px;">
-            <!-- FMR的评估建议 -->
-            <text class="title-font-other">指派 FMR：{{pickerLabel}}</text>
-            <t-divider layout="vertical" />
-            <text class="title-font-other">FMR 评估结果：暂未选择</text>
-          </view>
+        <view class="fmr">
+          <t-collapse>
+            <t-collapse-panel value="0" expandIcon>
+              <view slot="header" class="arrange-space-between">
+                <text class="title-font-main">FMR 可行性评估：</text>
+                <text class="title-font-other">指派FMR：</text>
+                <t-link size="small" content="{{pickerLabel}}" hover underline bindtap="onOpenPicker" data-id="2" />
+              </view>
+              <view>
+                <t-radio-group default-value="" disabled>
+                  <t-radio value="0" label="可生产 — 无需进一步说明" allow-uncheck style="text-align: start;" />
+                  <t-radio value="1" allow-uncheck>
+                    <view slot="label" class="arrange-space-between">
+                      <text>可生产 — 需小幅修改（需填写评论）</text>
+                      <t-link size="small" content="查看" hover underline  bind:tap="onOpenPopup" data-comment-status="0" />
+                    </view>
+                  </t-radio>
+                  <t-radio value="2" label="不具备可行性（需大幅修改）" allow-uncheck style="text-align: start;" />
+                </t-radio-group>
+              </view>
+            </t-collapse-panel>
+          </t-collapse>
         </view>
         <view class="arrange-column">
           <text class="title-font-main">评估建议：</text>
