@@ -1,17 +1,18 @@
 const app = getApp(); // 用户信息
-const utils = require('../../utils/util')
-const swiperImages = [
-  'https://xcx.1bizmail.com:8153/static/images/wpb_images/D51_Resin_Ornament_CS25-LYD-095_Ur7N7rc.jpg',  // 横版
-  // 物品类
-  'https://xcx.1bizmail.com:8153/static/images/wpb_images/D51_Resin_Ornament_CS25-HHR-129_JkE4FgU.jpg',  // 长竖版
-];
+const utils = require('../../../utils/util')
 
+const swiperImages = [
+  'https://picsum.photos/800/600?random=1',  // 横版
+  // 物品类
+  'https://picsum.photos/700/900?random=5',  // 长竖版
+];
 Page({
   data: {
     // 骨架屏变量
     skeletonLoading: true,
-    groupId: null, // 首页跳转后的存储的id值
-    // 筛选框变量-模板
+    // 首页跳转后的存储的id值
+    groupId: null,
+    // 筛选框变量-图稿
     dropdownArtwork: {
       value: 'all',
       options: [
@@ -21,29 +22,55 @@ Page({
         },
         {
           value: 'NAQ',
-          label: '已上传打样图稿',
+          label: '宁安琪',
         },
         {
-          value: 'NAQ',
-          label: '未上传打样图稿',
+          value: 'LSL',
+          label: '黎善玲',
+        },
+        {
+          value: 'HYJ',
+          label: '韩奕君'
+        }
+      ],
+    },
+    // 筛选框变量-指派
+    dropdownAssign: {
+      value: 'all',
+      options: [
+        {
+          value: 'all',
+          label: '全部指派',
+        },
+        {
+          value: 'discard',
+          label: '未指派',
+        },
+        {
+          value: 'reserve',
+          label: '已指派',
         },
       ],
     },
-    // 筛选框变量建议
+    // 筛选框变量-评估
     dropdownAssess: {
       value: 'all',
       options: [
         {
           value: 'all',
-          label: '全部反馈建议',
+          label: '全部评估',
         },
         {
           value: 'discard',
-          label: '无反馈建议',
+          label: '可生产',
         },
         {
           value: 'reserve',
-          label: '有反馈建议',
+          label: '小幅度修改',
+        },
+        {
+          value: 'reserve',
+          label: '不具备可行性',
         },
       ],
     },
@@ -59,17 +86,27 @@ Page({
     noMoreData: false,    // 数据是否全部加载完毕
     // 回到顶部变量
     scrollTop: 0,
-    // 设计师自评弹窗控制变量
+    // 查看评论弹窗控制变量
     popupVisible: false,
     popupValue: "",
-    // 折叠版
-    collapseValue: [],
-    // 上传工厂稿弹窗
-    popupAddVisible: false,
-    imageFileList: [],
-    UpdatefactoryArtworkStatus:"未上传",
-    // 假数据，工厂稿
-    swiperImages2: [],
+    popupTitle: "",
+    // 填写评论弹出层变量
+    dialogVisible: false,
+    dialogValue: "",
+    // 筛选器
+    pickerVisible: false,
+    pickerValue: null,
+    pickerLabel: "暂未指派FMR",
+    pickerItemList: [
+      { label: '王五', value: 'A' },
+      { label: '李四', value: 'B' },
+      { label: '张明', value: 'B' },
+      { label: '赵玉', value: 'B' },
+      { label: '张三', value: 'B' },
+      { label: '李明博', value: 'B' },
+    ],
+    // 单选框变量
+    radioValue: "0",
   },
   /* 生命周期函数--监听页面加载 */
   onLoad(options) {
@@ -98,12 +135,19 @@ Page({
       'dropdownArtwork.value': e.detail.value,
     });
   },
+  // 下拉菜单-指派
+  onAssignChange(e) {
+    this.setData({
+      'dropdownAssign.value': e.detail.value,
+    });
+  },
   // 下拉菜单-评估
   onAssessChange(e) {
     this.setData({
       'dropdownAssess.value': e.detail.value,
     });
   },
+
   // 轮播图函数 - 点击轮播图 - 图片预览
   onSwiperImagesTap(e) {
     const { index } = e.detail;
@@ -169,6 +213,7 @@ Page({
       scrollTop: e.scrollTop
     });
   },
+
   // 查看评论弹窗 - 关闭
   onClosePopup(e) {
     /*
@@ -183,6 +228,7 @@ Page({
     setTimeout(() => {
       this.setData({
         popupValue: "",
+        popupTitle: ""
       });
     }, 300);
   },
@@ -192,64 +238,98 @@ Page({
       id: 当条记录的id
       commentContent: 评论内容
       popupVisible: 唤起弹窗
-      popupValue: 显示的评论内容
+      commentStatus: 评论的状态
     */
-    const { id, commentContent } = e.currentTarget.dataset;
+   const that = this;
+    const { id, commentContent, commentStatus } = e.currentTarget.dataset;
+    if (commentStatus !== "1") {
+      const theme = "warning"
+      const message = "未选择评估选项"
+      utils.showToast(that, message, theme);
+      return
+    }
     this.setData({ popupVisible: true, popupValue: commentContent }); // 触发弹窗
   },
-  // 折叠板展开展开
-  onCollapseChange(e) {
-    this.setData({
-      collapseValue: e.detail.value,
-    });
-  },
-  // 打开-上传工厂打样稿
-  onOpenUploadFactoryArtwork(e) {
-    e.stopPropagation && e.stopPropagation();  // 阻止事件冒泡
-    // 打开弹窗，显示upload组件
-    this.setData({ popupAddVisible: true });
-  },
-  // 关闭-上传工厂打样稿
-  onCloseUploadFactoryArtwork() {
-    this.setData({ popupAddVisible: false, });
-    // 等动画结束后，删除imageFileList的图
-    setTimeout(() => {
-      this.setData({
-        imageFileList: []
-      })
-    }, 500)
-  },
-  // 上传图稿函数
-  onImageAdd(e) {
-    const { imageFileList } = this.data;
-    const { files } = e.detail;
-    console.log();
-    // 方法1：选择完所有图片之后，统一上传，因此选择完就直接展示
-    this.setData({
-      imageFileList: [...imageFileList, ...files], // 此时设置了 fileList 之后才会展示选择的图片
-    });
-    // 方法2：每次选择图片都上传，展示每次上传图片的进度
-    // files.forEach(file => this.uploadFile(file))
-  },
-  // 图稿删除函数
-  onImageRemove(e) {
-    const { index } = e.detail;
-    const { imageFileList } = this.data;
-    imageFileList.splice(index, 1);
-    this.setData({
-      imageFileList,
-    });
-  },
-  // 提交上传数据
-  onSubmitFactoryArtwork(e) {
+  // 筛选器-确定 
+  onPickerChange(e) {
+    /*
+      pickerVisible：筛选器显示变量
+      pickerValue： 选中的值
+    */
     const that = this;
-    this.setData({ popupAddVisible: false,UpdatefactoryArtworkStatus:"已上传", swiperImages2: ['https://xcx.1bizmail.com:8153/static/images/wpb_images/D51_ResinGlitter_Ornament_CS25-SKR-120_HgS7tjR.jpg'] });
-    const message = "新增图稿成功";
+    const { value, label } = e.detail;
+    this.setData({
+      pickerVisible: false,
+      pickerValue: value,
+      pickerLabel: label
+    });
+    const message = `FMR已指派${label}`
     utils.showToast(that, message);
-    setTimeout(() => {
-      this.setData({
-        imageFileList: []
-      })
-    }, 500)
-  }
+  },
+  // 关闭 筛选器
+  onClosePicker(e) {
+    /*
+      pickerVisible：筛选器显示变量
+    */
+    this.setData({ pickerVisible: false, });
+  },
+  // 打开 筛选器
+  onOpenPicker() {
+    /*
+      pickerVisible：筛选器显示变量
+      实际情况下需要加入一个默认值
+    */
+    this.setData({ pickerVisible: true });
+  },
+  // 填写评论-双向绑定
+  onDialogInput(e) {
+    this.setData({
+      dialogValue: e.detail.value
+    });
+  },
+  // 填写弹窗-关闭（包含提交功能）
+  onCloseDialog(e) {
+    const that = this;
+    const { dialogValue, radioValue } = that.data; // 输入的评论的数据
+    const action = e.type; // "confirm" 或 "cancel"
+    if (action === 'confirm') {
+      console.log("提交数据");
+      this.setData({ radioValue: "1" });
+      const message = "提交评估建议成功"
+      utils.showToast(that, message);
+    } else if (action === 'cancel') {
+      console.log("提交取消");
+    }
+    this.setData({ dialogVisible: false, dialogValue: "" });
+  },
+  // 评估建议单选框
+  onRadioChange(e) {
+    /*
+      radioValue：记录选中的单选值
+    */
+    const that = this;
+    const selectedradioValue = e.detail.value;
+    const radioValue = that.data.radioValue;
+    // 如果选中的点选框的值等于记录的值那么就取消
+    if (selectedradioValue === radioValue) {
+      this.setData({ radioValue: null });
+      const theme = "warning"
+      const message = "取消评估建议";
+      utils.showToast(that, message, theme);
+    } else {
+      // 如果选择小幅度修改，需要输入评估建议
+      if (selectedradioValue === "1") {
+        this.setData({ dialogVisible: true });
+      } else {
+        if (radioValue) {
+          const message = "修改评估建议";
+          utils.showToast(that, message);
+        } else {
+          const message = "提交评估建议";
+          utils.showToast(that, message);
+        }
+        this.setData({ radioValue: selectedradioValue });
+      }
+    }
+  },
 })

@@ -1,5 +1,5 @@
 const app = getApp();
-const utils = require('../../utils/util')
+const utils = require('../../../utils/util')
 Page({
   data: {
     // 悬浮胶囊标签栏变量

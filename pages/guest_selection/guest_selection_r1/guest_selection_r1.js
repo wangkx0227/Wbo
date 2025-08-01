@@ -1,5 +1,5 @@
 const app = getApp(); // 用户信息
-const utils = require('../../utils/util')
+const utils = require('../../../utils/util')
 const swiperImages = [
   'https://picsum.photos/800/600?random=1',  // 横版
   // 物品类

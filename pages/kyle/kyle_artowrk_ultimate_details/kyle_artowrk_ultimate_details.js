@@ -1,5 +1,5 @@
 const app = getApp(); // 用户信息
-const utils = require('../../utils/util')
+const utils = require('../../../utils/util')
 
 const swiperImages = [
   'https://picsum.photos/800/600?random=1',  // 横版
@@ -45,6 +45,10 @@ Page({
           label: '舍弃',
         },
         {
+          value: 'modify',
+          label: '轻微修改',
+        },
+        {
           value: 'reserve',
           label: '保留',
         },
@@ -64,10 +68,13 @@ Page({
     scrollTop: 0,
     // 设计师自评弹窗控制变量
     popupVisible: false,
-    popupValue: "",
+    popupValue: "", // 评论的内容
+    popupTitle: "", // 评论的标题
     // 评论弹出层变量
     dialogVisible: false,
     dialogValue: "",
+    // 评审单选框变量
+    radioValue: "",
   },
   /**
    * 生命周期函数--监听页面加载
@@ -166,19 +173,43 @@ Page({
       scrollTop: e.scrollTop
     });
   },
-  // 设计师评论弹窗函数 - 关闭
+  // 查看评论弹窗函数 - 关闭
   onClosePopup(e) {
     this.setData({
       popupVisible: e.detail.visible,
-      popupValue: "",
     });
+    // 延迟清空内容，确保动画完成后执行
+    setTimeout(() => {
+      this.setData({
+        popupValue: "",
+        popupTitle: ""
+      });
+    }, 300);
   },
-  // 设计师评论弹窗函数 - 唤起
+  // 查看评论弹窗函数 - 唤起
   onOpenPopup(e) {
-    const { id, designer_comments } = e.currentTarget.dataset; // 点击按钮的存储的数据 id 点击id designer_comments 点击的自评文字
+    /*
+      id: 当条记录的id
+      designer_comments: 当前按钮的属性,用来确定点击内容
+      commentator: 评论的内容
+      assessStatus: 状态(只针对 可行性评估 shelley与fmr) 1(可生产) 2(小幅度修改 有评论内容) 3(不具备生产条件)
+    */
+    const that = this;
+    const { id, commentator, commentStatus } = e.currentTarget.dataset; // 点击按钮的存储的数据 id 点击id designer_comments 点击的自评文字
+    if (commentStatus !== "1") {
+      const theme = "warning"
+      const message = "未选择评估选项"
+      utils.showToast(that, message, theme);
+      return
+    }
+    if (commentator === "shelley") {
+      this.setData({ popupValue: "无内容", popupTitle: "Shelley 评估" });
+    } else if (commentator === "fmr") {
+      this.setData({ popupValue: "无内容", popupTitle: "FMR 评估" });
+    }
     this.setData({ popupVisible: true, popupValue: "无内容" }); /// 触发弹窗
   },
-  // 弹窗-评论-打开
+  // 弹窗-评论输入-打开
   onOpenDialog(e) {
     const { id } = e.currentTarget.dataset;
     this.setData({ dialogVisible: true });
@@ -191,58 +222,44 @@ Page({
   },
   // 弹窗-评论-关闭（包含提交功能）
   onCloseDialog(e) {
-    const that = this;
     const { dialogValue } = this.data; // 输入的评论的数据
     const action = e.type; // "confirm" 或 "cancel"
     if (action === 'confirm') {
-      const message = "评审完成"
-      utils.showToast(that, message);
+      console.log("提交数据");
+      this.setData({ radioValue: "1" }); // 选中单选框
     } else if (action === 'cancel') {
-      const theme = "warning"
-      const message = "评审取消"
-      utils.showToast(that, message, theme);
+      console.log("提交取消");
     }
     this.setData({ dialogVisible: false, dialogValue: "" });
   },
-  // 修改当前图稿状态（舍弃与保留，默认都是保留）
-  onModifyArtworkStatus(e) {
+  // 单选框
+  onRadioChange(e) {
+    /*
+      radioValue：记录选中的单选值
+    */
     const that = this;
-    const { id, contentStatus } = e.currentTarget.dataset;
-    if (contentStatus === "Y") {
-      wx.showModal({
-        title: '提示',
-        content: '是否"保留"当前图稿',
-        success(res) {
-          if (res.confirm) {
-            // 发送请求
-            const message = "图稿已标记保留"
-            utils.showToast(that, message);
-          } else if (res.cancel) {
-            // 取消
-            const theme = "warning"
-            const message = "用户已取消操作"
-            utils.showToast(that, message, theme);
-          }
-        }
-      })
+    const selectedradioValue = e.detail.value;
+    const radioValue = that.data.radioValue;
+    // 如果选中的点选框的值等于记录的值那么就取消
+    if (selectedradioValue === radioValue) {
+      this.setData({ radioValue: null });
+      const theme = "warning"
+      const message = "取消最终评审"
+      utils.showToast(that, message, theme);
     } else {
-      wx.showModal({
-        title: '提示',
-        content: '是否"舍弃"当前图稿',
-        success(res) {
-          if (res.confirm) {
-            // 发送请求
-            const message = "图稿已标记舍弃"
-            utils.showToast(that, message);
-          } else if (res.cancel) {
-            // 取消
-            const theme = "warning"
-            const message = "用户已取消操作"
-            utils.showToast(that, message, theme);
-          }
+      // 如果选择小幅度修改，需要输入评估建议
+      if (selectedradioValue === "1") {
+        this.setData({ dialogVisible: true });
+      } else {
+        if (radioValue) {
+          const message = "修改最终评审";
+          utils.showToast(that, message);
+        } else {
+          const message = "提交最终评审";
+          utils.showToast(that, message);
         }
-      })
+        this.setData({ radioValue: selectedradioValue });
+      }
     }
-
   },
 })

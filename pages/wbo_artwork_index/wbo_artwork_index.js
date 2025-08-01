@@ -125,7 +125,7 @@ Page({
       this.setData({ tabBarShow: true });
     }
     this.setData({ userRole: userRole });
-    
+
     setTimeout(() => {
       wx.hideLoading();
       this.setData({
@@ -161,18 +161,30 @@ Page({
     if (userRole === "kyle") {
       const tabBarValue = that.data.tabBarValue;
       if (tabBarValue === "primary") { // kyle 初筛和终评
-        wx.navigateTo({ url: `/pages/kyle_artowrk_primary_details/kyle_artowrk_primary_details?groupId=${groupId}` });
+        wx.navigateTo({
+          url: `/pages/kyle/kyle_artowrk_primary_details/kyle_artowrk_primary_details?groupId=${groupId}`
+        });
       } else {
-        wx.navigateTo({ url: `/pages/kyle_artowrk_ultimate_details/kyle_artowrk_ultimate_details?groupId=${groupId}` });
+        wx.navigateTo({
+          url: `/pages/kyle/kyle_artowrk_ultimate_details/kyle_artowrk_ultimate_details?groupId=${groupId}`
+        });
       }
     } else if (userRole === "shelley") { // 可行性
-      wx.navigateTo({ url: `/pages/shelley_artwork_detail/shelley_artwork_detail?groupId=${groupId}` });
+      wx.navigateTo({
+        url: `/pages/shelley/shelley_artwork_detail/shelley_artwork_detail?groupId=${groupId}`
+      });
     } else if (userRole === "fmr") { // 可行性
-      wx.navigateTo({ url: `/pages/fmr_artwork_detail/fmr_artwork_detail?groupId=${groupId}`, });
-    }else if (userRole === "ms"){ // 选稿阶段
-      wx.navigateTo({ url: `/pages/guest_selection_artwork_detail/guest_selection_artwork_detail?groupId=${groupId}`, });
-    }else if(userRole === "d"){ // 设计师对上传工厂稿R1
-      wx.navigateTo({ url: `/pages/designer_artwork_detail/designer_artwork_detail?groupId=${groupId}`, });
+      wx.navigateTo({
+        url: `/pages/fmr/fmr_artwork_detail/fmr_artwork_detail?groupId=${groupId}`,
+      });
+    } else if (userRole === "ms") { // 选稿阶段
+      wx.navigateTo({
+        url: `/pages/guest_selection/guest_selection_r1/guest_selection_r1?groupId=${groupId}`,
+      });
+    } else if (userRole === "d") { // 设计师对上传工厂稿R1
+      wx.navigateTo({
+        url: `/pages/designer/designer_artwork_detail/designer_artwork_detail?groupId=${groupId}`,
+      });
     }
   },
   // 用户点击右上角分享
