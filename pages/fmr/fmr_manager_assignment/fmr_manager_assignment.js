@@ -24,17 +24,9 @@ Page({
           value: 'NAQ',
           label: '宁安琪',
         },
-        {
-          value: 'LSL',
-          label: '黎善玲',
-        },
-        {
-          value: 'HYJ',
-          label: '韩奕君'
-        }
       ],
     },
-    // 筛选框变量-指派
+    // 筛选框变量-评估
     dropdownAssign: {
       value: 'all',
       options: [
@@ -52,28 +44,6 @@ Page({
         },
       ],
     },
-    // 筛选框变量-评估
-    dropdownAssess: {
-      value: 'all',
-      options: [
-        {
-          value: 'all',
-          label: '全部评估',
-        },
-        {
-          value: 'discard',
-          label: '可生产',
-        },
-        {
-          value: 'reserve',
-          label: '小幅度修改',
-        },
-        {
-          value: 'reserve',
-          label: '不具备可行性',
-        },
-      ],
-    },
     // 轮播图变量
     current: 0, // 当前轮播在哪一项（下标）默认第0个索引
     autoplay: false, // 是否启动自动播放
@@ -86,13 +56,6 @@ Page({
     noMoreData: false,    // 数据是否全部加载完毕
     // 回到顶部变量
     scrollTop: 0,
-    // 查看评论弹窗控制变量
-    popupVisible: false,
-    popupValue: "",
-    popupTitle: "",
-    // 填写评论弹出层变量
-    dialogVisible: false,
-    dialogValue: "",
     // 筛选器
     pickerVisible: false,
     pickerValue: [],
@@ -105,8 +68,6 @@ Page({
       { label: '张三', value: 'B' },
       { label: '李明博', value: 'B' },
     ],
-    // 单选框变量
-    radioValue: "0",
   },
   /* 生命周期函数--监听页面加载 */
   onLoad(options) {
@@ -213,43 +174,6 @@ Page({
       scrollTop: e.scrollTop
     });
   },
-
-  // 查看评论弹窗 - 关闭
-  onClosePopup(e) {
-    /*
-      popupVisible: 关闭弹窗
-      popupValue: 清空评论内容
-      popupTitle: 清空评论的标题
-    */
-    this.setData({
-      popupVisible: e.detail.visible,
-    });
-    // 延迟清空内容，确保动画完成后执行
-    setTimeout(() => {
-      this.setData({
-        popupValue: "",
-        popupTitle: ""
-      });
-    }, 300);
-  },
-  // 查看评论弹窗 - 唤起
-  onOpenPopup(e) {
-    /*
-      id: 当条记录的id
-      commentContent: 评论内容
-      popupVisible: 唤起弹窗
-      commentStatus: 评论的状态
-    */
-   const that = this;
-    const { id, commentContent, commentStatus } = e.currentTarget.dataset;
-    if (commentStatus !== "1") {
-      const theme = "warning"
-      const message = "未选择评估选项"
-      utils.showToast(that, message, theme);
-      return
-    }
-    this.setData({ popupVisible: true, popupValue: commentContent }); // 触发弹窗
-  },
   // 筛选器-确定 
   onPickerChange(e) {
     /*
@@ -281,55 +205,5 @@ Page({
     */
     this.setData({ pickerVisible: true });
   },
-  // 填写评论-双向绑定
-  onDialogInput(e) {
-    this.setData({
-      dialogValue: e.detail.value
-    });
-  },
-  // 填写弹窗-关闭（包含提交功能）
-  onCloseDialog(e) {
-    const that = this;
-    const { dialogValue, radioValue } = that.data; // 输入的评论的数据
-    const action = e.type; // "confirm" 或 "cancel"
-    if (action === 'confirm') {
-      console.log("提交数据");
-      this.setData({ radioValue: "1" });
-      const message = "提交评估建议成功"
-      utils.showToast(that, message);
-    } else if (action === 'cancel') {
-      console.log("提交取消");
-    }
-    this.setData({ dialogVisible: false, dialogValue: "" });
-  },
-  // 评估建议单选框
-  onRadioChange(e) {
-    /*
-      radioValue：记录选中的单选值
-    */
-    const that = this;
-    const selectedradioValue = e.detail.value;
-    const radioValue = that.data.radioValue;
-    // 如果选中的点选框的值等于记录的值那么就取消
-    if (selectedradioValue === radioValue) {
-      this.setData({ radioValue: null });
-      const theme = "warning"
-      const message = "取消评估建议";
-      utils.showToast(that, message, theme);
-    } else {
-      // 如果选择小幅度修改，需要输入评估建议
-      if (selectedradioValue === "1") {
-        this.setData({ dialogVisible: true });
-      } else {
-        if (radioValue) {
-          const message = "修改评估建议";
-          utils.showToast(that, message);
-        } else {
-          const message = "提交评估建议";
-          utils.showToast(that, message);
-        }
-        this.setData({ radioValue: selectedradioValue });
-      }
-    }
-  },
+
 })

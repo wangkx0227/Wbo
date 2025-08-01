@@ -34,6 +34,10 @@ Page({
           value: 'd',
           label: '设计师R1上传工厂打样图稿',
         },
+        {
+          value: 'fma',
+          label: 'FMR主管指派图稿FMR',
+        },
       ],
     },
     redirect: "", // 跳转参数，如果携带，那么需要在登陆后跳转指定路径

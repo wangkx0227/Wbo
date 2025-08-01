@@ -1,0 +1,57 @@
+<!-- 骨架屏 -->
+<import src="skeleton.wxml" />
+<template is="skeleton" wx:if="{{skeletonLoading}}" />
+<!-- 主体 -->
+<view class="page-wrapper" wx:else="{{skeletonLoading}}">
+  <view class="page-head filter-bar">
+    <t-row>
+      <t-col span="24">
+        <t-dropdown-menu>
+          <t-dropdown-item options="{{dropdownArtwork.options}}" placement="right" value="{{dropdownArtwork.value}}" bindchange="onArtworkChange" />
+          <t-dropdown-item options="{{dropdownAssign.options}}" placement="right" value="{{dropdownAssign.value}}" bindchange="onAssessChange" />
+        </t-dropdown-menu>
+      </t-col>
+    </t-row>
+  </view>
+  <view class="page-main">
+    <view class="wrapper">
+      <view class="cell">
+        <view class="title-font-main">
+          <text>Title：Animals in sleeping bags</text>
+        </view>
+        <view class="title-font-other arrange-space-between">
+          <text>Name：黎善玲</text>
+          <text>Code：LSL__AIE MJ_2025_01</text>
+        </view>
+        <view class="cell-swiper">
+          <t-swiper wx:if="{{swiperImages.length}}" current="{{current}}" autoplay="{{autoplay}}" duration="{{duration}}" interval="{{interval}}" navigation="{{ { type: 'dots' } }}" list="{{swiperImages}}" bind:click="onSwiperImagesTap">
+          </t-swiper>
+          <!-- 无数据时显示占位内容 -->
+          <t-image wx:else src="" shape="round" error="slot" width="640rpx" height="384rpx">
+            <text class="error-text" slot="error">轮播图加载失败</text>
+          </t-image>
+        </view>
+        <view class="arrange-center">
+          <text class="title-font-main">指派FMR工厂打样：</text>
+          <t-link size="small" content="{{pickerLabel}}" hover underline catchtap="onOpenPicker" data-id="2" />
+        </view>
+      </view>
+    </view>
+  </view>
+  <!-- 当下拉时,进行显示的内容  -->
+  <view class="loading-box loading-flex" wx:if="{{isLoadingReachMore}}">
+    <!-- <text class="loading-text">加载中...</text> -->
+    <t-loading theme="dots" size="60rpx" />
+  </view>
+  <view class="loading-box" wx:if="{{noMoreData}}">
+    <text class="loading-text">-- 已经到底了 --</text>
+  </view>
+</view>
+<!-- 轻提示 -->
+<t-toast id="t-toast" />
+<!-- 回到顶部 -->
+<t-back-top theme="half-round" text="顶部" scroll-top="{{scrollTop}}" bind:to-top="onToTop" />
+<!-- FMR下拉框 -->
+<t-picker visible="{{pickerVisible}}" value="{{pickerValue}}" title="请选择FMR" cancelBtn="取消" confirmBtn="确认" bindchange="onPickerChange" bindcancel="onClosePicker" catchtouchmove>
+  <t-picker-item options="{{pickerItemList}}"></t-picker-item>
+</t-picker>

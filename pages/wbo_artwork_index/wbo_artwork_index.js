@@ -169,11 +169,11 @@ Page({
           url: `/pages/kyle/kyle_artowrk_ultimate_details/kyle_artowrk_ultimate_details?groupId=${groupId}`
         });
       }
-    } else if (userRole === "shelley") { // 可行性
+    } else if (userRole === "shelley") { // shelley可行性
       wx.navigateTo({
         url: `/pages/shelley/shelley_artwork_detail/shelley_artwork_detail?groupId=${groupId}`
       });
-    } else if (userRole === "fmr") { // 可行性
+    } else if (userRole === "fmr") { // fmr可行性
       wx.navigateTo({
         url: `/pages/fmr/fmr_artwork_detail/fmr_artwork_detail?groupId=${groupId}`,
       });
@@ -184,6 +184,10 @@ Page({
     } else if (userRole === "d") { // 设计师对上传工厂稿R1
       wx.navigateTo({
         url: `/pages/designer/designer_artwork_detail/designer_artwork_detail?groupId=${groupId}`,
+      });
+    } else if (userRole === "fma") { // fmr主管分配fmr图稿
+      wx.navigateTo({
+        url: `/pages/fmr/fmr_manager_assignment/fmr_manager_assignment?groupId=${groupId}`,
       });
     }
   },
