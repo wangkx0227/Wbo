@@ -38,7 +38,7 @@
               <view slot="header" class="arrange-space-between">
                 <text class="title-font-main">FMR 可行性评估：</text>
                 <text class="title-font-other">指派FMR：</text>
-                <t-link size="small" content="{{pickerLabel}}" hover underline bindtap="onOpenPicker" data-id="2" />
+                <t-link size="small" content="{{pickerLabel}}" hover underline catchtap="onOpenPicker" data-id="2" />
               </view>
               <view>
                 <t-radio-group default-value="" disabled>
