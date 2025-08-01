@@ -5,6 +5,8 @@
     "t-image-viewer": "tdesign-miniprogram/image-viewer/image-viewer",
     "t-collapse": "tdesign-miniprogram/collapse/collapse",
     "t-collapse-panel": "tdesign-miniprogram/collapse-panel/collapse-panel",
+    "t-picker": "tdesign-miniprogram/picker/picker",
+    "t-picker-item": "tdesign-miniprogram/picker-item/picker-item",
     "t-upload": "tdesign-miniprogram/upload/upload"
   }
 }

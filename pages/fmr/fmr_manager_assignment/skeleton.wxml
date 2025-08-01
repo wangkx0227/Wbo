@@ -30,8 +30,15 @@
                 <t-skeleton theme="image" loading animation="gradient" rowCol="{{ [{ width: '695rpx', height: '370rpx'}]}}"></t-skeleton>
               </view>
               <view class="arrange-center">
-                <t-skeleton theme="text" loading animation="gradient" rowCol="{{ [{ width: '230rpx', height: '38rpx'}]}}"></t-skeleton>
-                <t-skeleton theme="text" loading animation="gradient" rowCol="{{ [{ width: '145rpx', height: '40rpx',marginLeft:'20rpx'}]}}"></t-skeleton>
+                <view class="arrange-center">
+                  <t-skeleton theme="text" loading animation="gradient" rowCol="{{ [{ width: '180rpx', height: '38rpx'}]}}"></t-skeleton>
+                  <t-skeleton theme="text" loading animation="gradient" rowCol="{{ [{ width: '145rpx', height: '40rpx',marginLeft:'20rpx'}]}}"></t-skeleton>
+                </view>
+                <t-divider layout="vertical" />
+                <view class="arrange-center">
+                  <t-skeleton theme="text" loading animation="gradient" rowCol="{{ [{ width: '120rpx', height: '38rpx'}]}}"></t-skeleton>
+                  <t-skeleton theme="text" loading animation="gradient" rowCol="{{ [{ width: '130rpx', height: '32rpx',marginLeft:'18rpx'}]}}"></t-skeleton>
+                </view>
               </view>
             </view>
           </view>

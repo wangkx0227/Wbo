@@ -31,6 +31,17 @@
             <text class="error-text" slot="error">轮播图加载失败</text>
           </t-image>
         </view>
+        <view class="arrange-center">
+          <view class="arrange-center">
+            <text class="title-font-main">工厂：</text>
+            <t-link size="small" content="{{pickerLabel}}" hover underline catchtap="onOpenPicker" data-id="2" />
+          </view>
+          <t-divider layout="vertical" />
+          <view>
+            <text class="title-font-main">确定时间：</text>
+            <text class="title-font-other ">2025-10-11</text>
+          </view>
+        </view>
         <!-- 设计稿与工厂打样稿 -->
         <t-collapse value="{{collapseValue}}" bind:change="onCollapseChange">
           <t-collapse-panel value="{{0}}">
@@ -96,3 +107,7 @@
     </view>
   </view>
 </t-popup>
+<!-- 下拉框 -->
+<t-picker visible="{{pickerVisible}}" value="{{pickerValue}}" title="请选择工厂" cancelBtn="取消" confirmBtn="确认" bindchange="onPickerChange" bindcancel="onClosePicker" catchtouchmove>
+  <t-picker-item options="{{pickerItemList}}"></t-picker-item>
+</t-picker>

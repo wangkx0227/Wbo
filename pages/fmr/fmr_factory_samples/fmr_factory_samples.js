@@ -21,11 +21,11 @@ Page({
         },
         {
           value: 'NAQ',
-          label: '已上传打样图稿',
+          label: '已上传样品照片',
         },
         {
           value: 'NAQ',
-          label: '未上传打样图稿',
+          label: '未上传样品照片',
         },
       ],
     },
@@ -35,15 +35,15 @@ Page({
       options: [
         {
           value: 'all',
-          label: '全部反馈建议',
+          label: '全部选择',
         },
         {
           value: 'discard',
-          label: '无反馈建议',
+          label: '未选择工厂',
         },
         {
           value: 'reserve',
-          label: '有反馈建议',
+          label: '已选择工厂',
         },
       ],
     },
@@ -67,9 +67,21 @@ Page({
     // 上传工厂稿弹窗
     popupAddVisible: false,
     imageFileList: [],
-    UpdatefactoryArtworkStatus:"未上传",
+    UpdatefactoryArtworkStatus: "未上传",
     // 假数据，工厂稿
     swiperImages2: [],
+    // 筛选器
+    pickerVisible: false,
+    pickerValue: [],
+    pickerLabel: "未选择工厂",
+    pickerItemList: [
+      { label: '深圳工厂', value: 'A' },
+      { label: '佛山工厂', value: 'B' },
+      { label: '惠州工厂', value: 'B' },
+      { label: '浙江工厂', value: 'B' },
+      { label: '越南工厂', value: 'B' },
+      { label: '缅甸工厂', value: 'B' },
+    ],
   },
   /* 生命周期函数--监听页面加载 */
   onLoad(options) {
@@ -92,13 +104,13 @@ Page({
   onUnload() { },
   // 用户点击右上角分享
   onShareAppMessage() { },
-  // 下拉菜单-图稿
+  // 下拉菜单
   onArtworkChange(e) {
     this.setData({
       'dropdownArtwork.value': e.detail.value,
     });
   },
-  // 下拉菜单-评估
+  // 下拉菜单
   onAssessChange(e) {
     this.setData({
       'dropdownAssess.value': e.detail.value,
@@ -243,7 +255,7 @@ Page({
   // 提交上传数据
   onSubmitFactoryArtwork(e) {
     const that = this;
-    this.setData({ popupAddVisible: false,UpdatefactoryArtworkStatus:"已上传", swiperImages2: ['https://xcx.1bizmail.com:8153/static/images/wpb_images/D51_ResinGlitter_Ornament_CS25-SKR-120_HgS7tjR.jpg'] });
+    this.setData({ popupAddVisible: false, UpdatefactoryArtworkStatus: "已上传", swiperImages2: ['https://xcx.1bizmail.com:8153/static/images/wpb_images/D51_ResinGlitter_Ornament_CS25-SKR-120_HgS7tjR.jpg'] });
     const message = "新增图稿成功";
     utils.showToast(that, message);
     setTimeout(() => {
@@ -251,5 +263,36 @@ Page({
         imageFileList: []
       })
     }, 500)
-  }
+  },
+  // 选择工厂确定-筛选器 
+  onPickerChange(e) {
+    /*
+      pickerVisible：筛选器显示变量
+      pickerValue： 选中的值
+    */
+    const that = this;
+    const { value, label } = e.detail;
+    this.setData({
+      pickerVisible: false,
+      pickerValue: value,
+      pickerLabel: label
+    });
+    const message = `已选择${label}`
+    utils.showToast(that, message);
+  },
+  // 选择工厂关闭-筛选器
+  onClosePicker(e) {
+    /*
+      pickerVisible：筛选器显示变量
+    */
+    this.setData({ pickerVisible: false, });
+  },
+  // 选择工厂打开-筛选器
+  onOpenPicker() {
+    /*
+      pickerVisible：筛选器显示变量
+      实际情况下需要加入一个默认值
+    */
+    this.setData({ pickerVisible: true });
+  },
 })

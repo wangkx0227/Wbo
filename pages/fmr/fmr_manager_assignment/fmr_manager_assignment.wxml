@@ -32,8 +32,15 @@
           </t-image>
         </view>
         <view class="arrange-center">
-          <text class="title-font-main">指派FMR工厂打样：</text>
-          <t-link size="small" content="{{pickerLabel}}" hover underline catchtap="onOpenPicker" data-id="2" />
+          <view class="arrange-center">
+            <text class="title-font-main">指派FMR打样：</text>
+            <t-link size="small" content="{{pickerLabel}}" hover underline catchtap="onOpenPicker" data-id="2" />
+          </view>
+          <t-divider layout="vertical" />
+          <view>
+            <text class="title-font-main">指派时间：</text>
+            <text class="title-font-other ">2025-10-11</text>
+          </view>
         </view>
       </view>
     </view>
