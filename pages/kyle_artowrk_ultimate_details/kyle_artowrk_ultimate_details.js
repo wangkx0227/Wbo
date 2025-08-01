@@ -195,31 +195,17 @@ Page({
       assessStatus: 状态(只针对 可行性评估 shelley与fmr) 1(可生产) 2(小幅度修改 有评论内容) 3(不具备生产条件)
     */
     const that = this;
-    const { id, designer_comments, commentator, assessStatus } = e.currentTarget.dataset; // 点击按钮的存储的数据 id 点击id designer_comments 点击的自评文字
-    if (commentator === "odc") {
-      this.setData({ popupValue: "无内容", popupTitle: "OriginalDesignerComments" });
-    } else if (commentator === "rc") {
-      this.setData({ popupValue: "无内容", popupTitle: "ReviewComments" });
-    } else if (commentator === "sc") {
-      if (assessStatus === "1" || assessStatus === "3") {
-        const theme = "warning"
-        const message = "当前评估没有建议"
-        utils.showToast(that, message, theme);
-        return
-      } else {
-        this.setData({ popupValue: "无内容", popupTitle: "Shelley 评估" });
-      }
-    } else if (commentator === "fc") {
-      if (assessStatus === "1" || assessStatus === "3") {
-        Toast({
-          context: that,
-          selector: '#t-toast',
-          message: '当前评估没有建议',
-        });
-        return
-      } else {
-        this.setData({ popupValue: "无内容", popupTitle: "FMR 评估" });
-      }
+    const { id, commentator, commentStatus } = e.currentTarget.dataset; // 点击按钮的存储的数据 id 点击id designer_comments 点击的自评文字
+    if (commentStatus !== "1") {
+      const theme = "error"
+      const message = "未选择评估选项"
+      utils.showToast(that, message, theme);
+      return
+    }
+    if (commentator === "shelley") {
+      this.setData({ popupValue: "无内容", popupTitle: "Shelley 评估" });
+    } else if (commentator === "fmr") {
+      this.setData({ popupValue: "无内容", popupTitle: "FMR 评估" });
     }
     this.setData({ popupVisible: true, popupValue: "无内容" }); /// 触发弹窗
   },

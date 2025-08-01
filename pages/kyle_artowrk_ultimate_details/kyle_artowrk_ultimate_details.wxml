@@ -47,7 +47,7 @@
                   <t-radio value="1" allow-uncheck>
                     <view slot="label" class="arrange-space-between">
                       <text>可生产 — 需小幅修改（需填写评论）</text>
-                      <t-link size="small" content="查看" hover underline data-commentator="sc" bind:tap="onOpenPopup" data-assess-status="1" />
+                      <t-link size="small" content="查看" hover underline data-commentator="shelley" bind:tap="onOpenPopup"  data-comment-status="0"/>
                     </view>
                   </t-radio>
                   <t-radio value="2" label="不具备可行性（需大幅修改）" allow-uncheck style="text-align: start;"/>
@@ -59,8 +59,9 @@
         <view class="fmr">
           <t-collapse>
             <t-collapse-panel value="0" expandIcon>
-              <view slot="header" class="arrange-center">
-                <text class="title-font-main">FMR 可行性评估：XXX</text>
+              <view slot="header" class="arrange-space-between">
+                <text class="title-font-main">FMR 可行性评估：</text>
+                <text class="title-font-other">指派FMR：XXX</text>
               </view>
               <view>
                 <t-radio-group default-value="0" disabled>
@@ -68,7 +69,8 @@
                   <t-radio value="1" allow-uncheck>
                     <view slot="label" class="arrange-space-between" >
                       <text >可生产 — 需小幅修改（需填写评论）</text>
-                      <t-link size="small" content="查看" hover underline data-commentator="sc" bind:tap="onOpenPopup" data-assess-status="1" />
+                      <t-link size="small" content="查看" hover underline data-commentator="fmr" bind:tap="onOpenPopup"  
+                      data-comment-status="0"/>
                     </view>
                   </t-radio>
                   <t-radio value="2" label="不具备可行性（需大幅修改）" allow-uncheck style="text-align: start;"/>

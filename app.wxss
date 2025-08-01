@@ -145,7 +145,7 @@ page {
   flex: 0 0 calc(33.33% - 12rpx);
   margin: 10rpx 0 10rpx 0;
 }
-
+/* 修改 redio*/
 .t-radio {
   font-size: var(--td-radio-font-size, 26rpx) !important;
 }
@@ -155,6 +155,18 @@ page {
   padding: var(--td-radio-vertical-padding, 18rpx) !important;
 }
 
+.t-radio--block{
+  padding: var(--td-radio-vertical-padding, 9px) !important;
+  padding-left: var(--td-radio-vertical-padding,0px) !important;
+}
+.radio--t-radio__border {
+  left:0 !important;
+}
+/* 重写下拉面板的样式 */
+.panel--t-collapse-panel__header {
+  padding-left: var(--td-collapse-horizontal-padding,0px) !important;
+  
+}
 .radio-active {
   border-color: var(--td-brand-color, #0052d9);
 }
