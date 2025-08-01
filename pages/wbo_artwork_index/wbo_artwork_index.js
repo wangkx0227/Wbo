@@ -5,6 +5,7 @@ Page({
   data: {
     // 悬浮胶囊标签栏变量
     tabBarValue: 'primary',
+    userTabs: [],
     tabBarShow: false,
     // 骨架控制变量
     skeletonLoading: true,
@@ -122,10 +123,21 @@ Page({
     wx.showLoading({ title: '正在加载...', });
     // 判断显示标签栏
     if (userRole === "kyle") {
-      this.setData({ tabBarShow: true });
+      this.setData({
+        tabBarShow: true, userTabs: [
+          { value: 'primary', label: '初步评审' },
+          { value: 'ultimate', label: '最终审查' }
+        ]
+      });
+    } else if (userRole === "fmr") {
+      this.setData({
+        tabBarShow: true, userTabs: [
+          { value: 'primary', label: '可行性评估' },
+          { value: 'ultimate', label: '样品上传' }
+        ]
+      });
     }
     this.setData({ userRole: userRole });
-
     setTimeout(() => {
       wx.hideLoading();
       this.setData({
@@ -158,8 +170,8 @@ Page({
     const userRole = that.data.userRole;
     console.log(groupId, "准备跳转");
     // 需要3类人进行跳转 Kyle Shelley FMR 进行跳转
+    const tabBarValue = that.data.tabBarValue;
     if (userRole === "kyle") {
-      const tabBarValue = that.data.tabBarValue;
       if (tabBarValue === "primary") { // kyle 初筛和终评
         wx.navigateTo({
           url: `/pages/kyle/kyle_artowrk_primary_details/kyle_artowrk_primary_details?groupId=${groupId}`
@@ -173,10 +185,16 @@ Page({
       wx.navigateTo({
         url: `/pages/shelley/shelley_artwork_detail/shelley_artwork_detail?groupId=${groupId}`
       });
-    } else if (userRole === "fmr") { // fmr可行性
-      wx.navigateTo({
-        url: `/pages/fmr/fmr_artwork_detail/fmr_artwork_detail?groupId=${groupId}`,
-      });
+    } else if (userRole === "fmr") { // fmr可行性与样品图上传
+      if (tabBarValue === "primary") { // kyle 初筛和终评
+        wx.navigateTo({
+          url: `/pages/fmr/fmr_artwork_detail/fmr_artwork_detail?groupId=${groupId}`,
+        });
+      } else {
+        wx.navigateTo({
+          url: `/pages/fmr/fmr_factory_samples/fmr_factory_samples?groupId=${groupId}`
+        });
+      }
     } else if (userRole === "ms") { // 选稿阶段
       wx.navigateTo({
         url: `/pages/guest_selection/guest_selection_r1/guest_selection_r1?groupId=${groupId}`,
