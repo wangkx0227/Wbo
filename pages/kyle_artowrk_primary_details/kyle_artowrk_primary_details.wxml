@@ -32,7 +32,7 @@
             <view class="grid-cell" wx:for="{{9}}" wx:key="index"></view>
           </view>
           <!-- 无数据时显示占位内容 -->
-          <t-image wx:else src="" shape="round" error="slot" width="360" height="192">
+          <t-image wx:else src="" shape="round" error="slot" width="640rpx" height="384rpx">
             <text class="error-text" slot="error">轮播图加载失败</text>
           </t-image>
         </view>
