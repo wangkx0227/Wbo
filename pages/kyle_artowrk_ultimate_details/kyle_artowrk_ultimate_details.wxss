@@ -19,3 +19,15 @@
   box-sizing: border-box;
 }
 
+/* 重写下拉面板的样式 */
+.panel--t-collapse-panel__header {
+  padding-left: var(--td-collapse-horizontal-padding,0px) !important;
+  right:0 !important;
+}
+.t-radio--block{
+  padding: var(--td-radio-vertical-padding, 9px) !important;
+  padding-left: var(--td-radio-vertical-padding,0px) !important;
+}
+.radio--t-radio__border {
+  right:0 !important;
+}

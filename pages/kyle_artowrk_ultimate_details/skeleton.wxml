@@ -30,47 +30,68 @@
                 <t-skeleton theme="image" loading animation="gradient" rowCol="{{ [{ width: '695rpx', height: '370rpx'}]}}"></t-skeleton>
               </view>
               <view class="arrange-column ">
-                <t-skeleton theme="text" loading animation="gradient" rowCol="{{ [{ width: '340rpx', height: '38rpx'}]}}"></t-skeleton>
+                <text class="title-font-main">图稿相关信息（初步评测）：</text>
                 <view class="title-font-other arrange-space-between">
-                  <view class="arrange-center" style="gap: 5px;">
-                    <t-skeleton theme="text" loading animation="gradient" rowCol="{{ [{ width: '320rpx', height: '32rpx'}]}}"></t-skeleton>
-                    <t-skeleton theme="text" loading animation="gradient" rowCol="{{ [{ width: '48rpx', height: '40rpx'}]}}"></t-skeleton>
+                  <view class="arrange-center">
+                    <text>OriginalDesignerComments：</text>
+                    <t-link size="small" content="查看" hover underline bind:tap="onOpenPopup" data-commentator="odc" />
                   </view>
-                  <view class="arrange-center" style="gap: 5px;">
-                    <t-skeleton theme="text" loading animation="gradient" rowCol="{{ [{ width: '228rpx', height: '32rpx'}]}}"></t-skeleton>
-                    <t-skeleton theme="text" loading animation="gradient" rowCol="{{ [{ width: '48rpx', height: '40rpx'}]}}"></t-skeleton>
+                  <view class="arrange-center">
+                    <text>ReviewComments：</text>
+                    <t-link size="small" content="查看" hover underline bind:tap="onOpenPopup" data-commentator="rc" />
                   </view>
                 </view>
-
               </view>
               <view class="arrange-column ">
-                <t-skeleton theme="text" loading animation="gradient" rowCol="{{ [{ width: '355rpx', height: '38rpx'}]}}"></t-skeleton>
+                <text class="title-font-main">图稿相关信息（初步评测）：</text>
+                <view class="title-font-other arrange-space-between">
+                  <view class="arrange-center">
+                    <text>OriginalDesignerComments：</text>
+                    <t-link size="small" content="查看" hover underline bind:tap="onOpenPopup" data-commentator="odc" />
+                  </view>
+                  <view class="arrange-center">
+                    <text>ReviewComments：</text>
+                    <t-link size="small" content="查看" hover underline bind:tap="onOpenPopup" data-commentator="rc" />
+                  </view>
+                </view>
+              </view>
+
+              <view class="arrange-column ">
+                <text class="title-font-main">Shelley 评估（可行性评估）：</text>
                 <view class="arrange-center title-font-other">
-                  <t-skeleton theme="text" loading animation="gradient" rowCol="{{ [{ width: '190rpx', height: '32rpx'}]}}"></t-skeleton>
+                  <text>评估建议：可生产</text>
                   <t-divider layout="vertical" />
                   <!-- 只有选中小幅度修改时,才会显示查看按钮 -->
-                  <t-skeleton theme="text" loading animation="gradient" rowCol="{{ [{ width: '48rpx', height: '40rpx'}]}}"></t-skeleton>
+                  <t-link size="small" content="查看" hover underline data-commentator="sc" bind:tap="onOpenPopup" data-assess-status="1" />
                 </view>
-
               </view>
               <view class="arrange-column">
-                <t-skeleton theme="text" loading animation="gradient" rowCol="{{ [{ width: '320rpx', height: '38rpx'}]}}"></t-skeleton>
+                <text class="title-font-main">FMR 评估（可行性评估）：</text>
                 <view class="arrange-center title-font-other">
-                  <t-skeleton theme="text" loading animation="gradient" rowCol="{{ [{ width: '170rpx', height: '32rpx'}]}}"></t-skeleton>
+                  <text>指派FMR：XXX</text>
                   <t-divider layout="vertical" />
-                  <t-skeleton theme="text" loading animation="gradient" rowCol="{{ [{ width: '196rpx', height: '32rpx'}]}}"></t-skeleton>
+                  <text>评估建议：小幅度修改</text>
                   <t-divider layout="vertical" />
                   <!-- 只有选中小幅度修改时,才会显示查看按钮 -->
-                  <t-skeleton theme="text" loading animation="gradient" rowCol="{{ [{ width: '48rpx', height: '40rpx'}]}}"></t-skeleton>
+                  <t-link size="small" content="查看" hover underline data-commentator="fc" bind:tap="onOpenPopup" data-assess-status="2" />
                 </view>
               </view>
               <view class="arrange-column ">
-                <t-skeleton theme="text" loading animation="gradient" rowCol="{{ [{ width: '170rpx', height: '38rpx'}]}}"></t-skeleton>
-                <view class="arrange-space-between" style="margin-top: 12rpx;">
-                  <t-skeleton theme="text" loading animation="gradient" rowCol="{{ [{ width: '224rpx', height: '82rpx'}]}}"></t-skeleton>
-                  <t-skeleton theme="text" loading animation="gradient" rowCol="{{ [{ width: '224rpx', height: '82rpx'}]}}"></t-skeleton>
-                  <t-skeleton theme="text" loading animation="gradient" rowCol="{{ [{ width: '224rpx', height: '82rpx'}]}}"></t-skeleton>
-                </view>
+                <text class="title-font-main">最终评审操作：</text>
+                <t-radio-group t-class="radio-horizontal-box" value="{{radioValue}}" bind:change="onRadioChange">
+                  <view class="radio-card   {{ radioValue == '0' ? 'radio-active' : ''}}">
+                    <t-icon name="check" t-class="radio-icon" />
+                    <t-radio value="0" label="保留" icon="none" borderless />
+                  </view>
+                  <view class="radio-card  {{ radioValue == '1' ? 'radio-active' : ''}}">
+                    <t-icon name="check" t-class="radio-icon" />
+                    <t-radio value="1" label="轻微修改" icon="none" borderless t-class="radio-text" />
+                  </view>
+                  <view class="radio-card  {{ radioValue == '2' ? 'radio-active' : ''}}">
+                    <t-icon name="check" t-class=radio-icon" />
+                    <t-radio value="2" label="舍弃" icon="none" borderless />
+                  </view>
+                </t-radio-group>
               </view>
             </view>
           </view>

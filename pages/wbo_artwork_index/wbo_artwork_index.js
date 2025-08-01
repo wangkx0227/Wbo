@@ -259,6 +259,7 @@ Page({
   onTabBarChange(e) {
     let data = [];
     const that = this;
+    console.log("点击胶囊按钮");
     // 对 胶囊悬浮框 进行复制，开启骨架
     wx.showLoading({ title: '正在加载...' });
     that.setData({
