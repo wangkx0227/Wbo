@@ -136,6 +136,13 @@ Page({
           { value: 'ultimate', label: '样品上传' }
         ]
       });
+    } else if (userRole === "d") {
+      this.setData({
+        tabBarShow: true, userTabs: [
+          { value: 'primary', label: '工厂稿上传' },
+          { value: 'ultimate', label: '样品图审查' }
+        ]
+      });
     }
     this.setData({ userRole: userRole });
     setTimeout(() => {
@@ -186,7 +193,7 @@ Page({
         url: `/pages/shelley/shelley_artwork_detail/shelley_artwork_detail?groupId=${groupId}`
       });
     } else if (userRole === "fmr") { // fmr可行性与样品图上传
-      if (tabBarValue === "primary") { // kyle 初筛和终评
+      if (tabBarValue === "primary") { // fmr 可行性评估与样品图上传
         wx.navigateTo({
           url: `/pages/fmr/fmr_artwork_detail/fmr_artwork_detail?groupId=${groupId}`,
         });
@@ -195,14 +202,21 @@ Page({
           url: `/pages/fmr/fmr_factory_samples/fmr_factory_samples?groupId=${groupId}`
         });
       }
-    } else if (userRole === "ms") { // 选稿阶段
+    } else if (userRole === "ms") { // 选稿阶段r1
       wx.navigateTo({
         url: `/pages/guest_selection/guest_selection_r1/guest_selection_r1?groupId=${groupId}`,
       });
-    } else if (userRole === "d") { // 设计师对上传工厂稿R1
-      wx.navigateTo({
-        url: `/pages/designer/designer_artwork_detail/designer_artwork_detail?groupId=${groupId}`,
-      });
+    } else if (userRole === "d") { // 设计师对上传工厂稿
+      if (tabBarValue === "primary") { // 设计师工厂稿上传，样品图审查
+        wx.navigateTo({
+          url: `/pages/designer/designer_artwork_detail/designer_artwork_detail?groupId=${groupId}`,
+        });
+      } else {
+        wx.navigateTo({
+          url: `/pages/designer/designer_review_detail/designer_review_detail?groupId=${groupId}`
+        });
+      }
+      
     } else if (userRole === "fma") { // fmr主管分配fmr图稿
       wx.navigateTo({
         url: `/pages/fmr/fmr_manager_assignment/fmr_manager_assignment?groupId=${groupId}`,

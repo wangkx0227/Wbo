@@ -16,15 +16,15 @@ Page({
         },
         {
           value: 'kyle',
-          label: 'kyle',
+          label: 'kyle（初选与终选）',
         },
         {
           value: 'shelley',
-          label: 'shelley',
+          label: 'shelley（可执行评估）',
         },
         {
           value: 'fmr',
-          label: 'fmr',
+          label: 'fmr（可执行评估和上传样品图）',
         },
         {
           value: 'ms',
@@ -32,11 +32,11 @@ Page({
         },
         {
           value: 'd',
-          label: '设计师R1上传工厂打样图稿',
+          label: '设计师（工厂稿与样品图审查）',
         },
         {
           value: 'fma',
-          label: 'FMR主管指派图稿FMR',
+          label: 'FMR主管（指派图稿FMR）',
         },
       ],
     },

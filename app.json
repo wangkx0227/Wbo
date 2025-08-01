@@ -12,8 +12,8 @@
     "pages/todo/todo_index/todo_index",
     "pages/todo/todo_detail/todo_detail",
     "pages/guest_selection/guest_selection_r1/guest_selection_r1",
-    "pages/designer/designer_artwork_detail/designer_artwork_detail"
-    
+    "pages/designer/designer_artwork_detail/designer_artwork_detail",
+    "pages/designer/designer_review_detail/designer_review_detail"
   ],
   "window": {
     "navigationBarTextStyle": "black",
