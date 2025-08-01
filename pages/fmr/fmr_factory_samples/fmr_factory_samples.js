@@ -68,6 +68,7 @@ Page({
     popupAddVisible: false,
     imageFileList: [],
     UpdatefactorySampleStatus: "未上传",
+    designerReviewStatus:"未标记",
     // 假数据，工厂稿
     swiperImages2: [],
     // 筛选器

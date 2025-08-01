@@ -27,7 +27,7 @@
           <t-swiper wx:if="{{swiperImages.length !== 0}}" current="{{current}}" autoplay="{{autoplay}}" duration="{{duration}}" interval="{{interval}}" navigation="{{ { type: 'dots' } }}" list="{{swiperImages}}" bind:click="onSwiperImagesTap">
           </t-swiper>
           <!-- 无数据时显示占位内容 -->
-          <t-image wx:else src="" shape="round" error="slot" width="360" height="192">
+          <t-image wx:else src="" shape="round" error="slot" width="640rpx" height="384rpx">
             <text class="error-text" slot="error">轮播图加载失败</text>
           </t-image>
         </view>
@@ -42,7 +42,7 @@
             <text class="title-font-other ">2025-10-11</text>
           </view>
         </view>
-        <!-- 设计稿与工厂打样稿 -->
+        <!-- 打样照片与设计师审查 -->
         <t-collapse value="{{collapseValue}}" bind:change="onCollapseChange">
           <t-collapse-panel value="{{0}}">
             <view slot="header">
@@ -62,10 +62,13 @@
           </t-collapse-panel>
           <t-collapse-panel value="{{1}}">
             <view slot="header">
-              <text class="title-font-main">设计师审查：{{UpdatefactoryArtworkStatus}}</text>
+              <text class="title-font-main">设计师审查（点开查看）：{{designerReviewStatus}}</text>
             </view>
-            <view class="title-font-other">
-              1111
+            <view>
+              <text class="title-font-other">标记时间：2025-08-11</text>
+              <view class="title-font-other">
+                暂无修正意见
+              </view>
             </view>
           </t-collapse-panel>
         </t-collapse>
