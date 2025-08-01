@@ -250,7 +250,6 @@ Page({
       utils.showToast(that, message, theme);
       return
     }
-
     this.setData({ popupVisible: true, popupValue: commentContent }); // 触发弹窗
   },
   // 筛选器-确定 

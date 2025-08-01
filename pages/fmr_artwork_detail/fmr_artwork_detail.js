@@ -66,10 +66,6 @@ Page({
     noMoreData: false,    // 数据是否全部加载完毕
     // 回到顶部变量
     scrollTop: 0,
-    // 设计师自评弹窗控制变量
-    popupVisible: false,
-    popupValue: "",
-    popupTitle: "",
     // 评论弹出层变量
     dialogVisible: false,
     dialogValue: "",
@@ -175,43 +171,7 @@ Page({
       scrollTop: e.scrollTop
     });
   },
-  // 查看评论弹窗 - 关闭
-  onClosePopup(e) {
-    /*
-      popupVisible: 关闭弹窗
-      popupValue: 清空评论内容
-      popupTitle: 清空评论的标题
-    */
-    this.setData({
-      popupVisible: e.detail.visible,
-    });
-    // 延迟清空内容，确保动画完成后执行
-    setTimeout(() => {
-      this.setData({
-        popupValue: "",
-        popupTitle: ""
-      });
-    }, 300);
-  },
-  // 查看评论弹窗 - 唤起
-  onOpenPopup(e) {
-    /*
-      id: 当条记录的id
-      commentator: 评论人
-      commentContent: 评论内容
-      popupVisible: 唤起弹窗
-      popupTitle: 评论的标题
-      popupValue: 显示的评论内容
-    */
-    const { id, commentator, commentContent } = e.currentTarget.dataset;
-    // commentator 变量控制显示评论标题
-    if (commentator === "Y") {
-      this.setData({ popupTitle: "原创设计师自评：", });
-    } else {
-      this.setData({ popupTitle: "Kyle评论：", });
-    }
-    this.setData({ popupVisible: true, popupValue: commentContent }); // 触发弹窗
-  },
+
   // 填写评论-双向绑定
   onDialogInput(e) {
     this.setData({
