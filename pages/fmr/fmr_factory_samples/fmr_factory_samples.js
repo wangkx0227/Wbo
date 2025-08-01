@@ -59,7 +59,7 @@ Page({
     noMoreData: false,    // 数据是否全部加载完毕
     // 回到顶部变量
     scrollTop: 0,
-    // 设计师自评弹窗控制变量
+    // 设计师对样品的弹窗控制变量
     popupVisible: false,
     popupValue: "",
     // 折叠版
@@ -67,7 +67,7 @@ Page({
     // 上传工厂稿弹窗
     popupAddVisible: false,
     imageFileList: [],
-    UpdatefactoryArtworkStatus: "未上传",
+    UpdatefactorySampleStatus: "未上传",
     // 假数据，工厂稿
     swiperImages2: [],
     // 筛选器
@@ -181,7 +181,7 @@ Page({
       scrollTop: e.scrollTop
     });
   },
-  // 查看评论弹窗 - 关闭
+  // 查看设计师评论弹窗 - 关闭
   onClosePopup(e) {
     /*
       popupVisible: 关闭弹窗
@@ -198,7 +198,7 @@ Page({
       });
     }, 300);
   },
-  // 查看评论弹窗 - 唤起
+  // 查看设计师评论弹窗 - 唤起
   onOpenPopup(e) {
     /*
       id: 当条记录的id
@@ -216,15 +216,27 @@ Page({
     });
   },
   // 打开-上传工厂打样稿
-  onOpenUploadFactoryArtwork(e) {
+  onOpenUploadFactorySample(e) {
     e.stopPropagation && e.stopPropagation();  // 阻止事件冒泡
     // 打开弹窗，显示upload组件
     this.setData({ popupAddVisible: true });
   },
   // 关闭-上传工厂打样稿
-  onCloseUploadFactoryArtwork() {
+  onCloseUploadFactorySample() {
     this.setData({ popupAddVisible: false, });
     // 等动画结束后，删除imageFileList的图
+    setTimeout(() => {
+      this.setData({
+        imageFileList: []
+      })
+    }, 500)
+  },
+   // 提交上传数据
+   onSubmitFactorySample(e) {
+    const that = this;
+    this.setData({ popupAddVisible: false, UpdatefactorySampleStatus: "已上传", swiperImages2: ['https://xcx.1bizmail.com:8153/static/images/wpb_images/D51_ResinGlitter_Ornament_CS25-SKR-120_HgS7tjR.jpg'] });
+    const message = "已上传样品图";
+    utils.showToast(that, message);
     setTimeout(() => {
       this.setData({
         imageFileList: []
@@ -251,18 +263,6 @@ Page({
     this.setData({
       imageFileList,
     });
-  },
-  // 提交上传数据
-  onSubmitFactoryArtwork(e) {
-    const that = this;
-    this.setData({ popupAddVisible: false, UpdatefactoryArtworkStatus: "已上传", swiperImages2: ['https://xcx.1bizmail.com:8153/static/images/wpb_images/D51_ResinGlitter_Ornament_CS25-SKR-120_HgS7tjR.jpg'] });
-    const message = "新增图稿成功";
-    utils.showToast(that, message);
-    setTimeout(() => {
-      this.setData({
-        imageFileList: []
-      })
-    }, 500)
   },
   // 选择工厂确定-筛选器 
   onPickerChange(e) {
