@@ -28,7 +28,7 @@ Page({
         },
         {
           value: 'ms',
-          label: '客户选稿(r1/最终)',
+          label: '客户选稿(r1/r2)',
         },
         {
           value: 'd',

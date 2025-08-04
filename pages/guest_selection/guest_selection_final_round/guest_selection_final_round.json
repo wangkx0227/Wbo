@@ -1,3 +1,14 @@
 {
-  "usingComponents": {}
+  "usingComponents": {
+    "t-swiper": "tdesign-miniprogram/swiper/swiper",
+    "t-image": "tdesign-miniprogram/image/image",
+    "t-image-viewer": "tdesign-miniprogram/image-viewer/image-viewer",
+    "t-fab": "tdesign-miniprogram/fab/fab",
+    "t-input": "tdesign-miniprogram/input/input",
+    "t-picker": "tdesign-miniprogram/picker/picker",
+    "t-picker-item": "tdesign-miniprogram/picker-item/picker-item",
+    "t-cell": "tdesign-miniprogram/cell/cell",
+    "t-upload": "tdesign-miniprogram/upload/upload"
+
+  }
 }
