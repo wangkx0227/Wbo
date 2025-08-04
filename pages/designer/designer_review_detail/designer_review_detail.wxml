@@ -37,7 +37,7 @@
           <!-- 第二个轮播图/图片 -->
           <view class="cell-swiper">
             <text class="title-font-other">样品照片：</text>
-            <t-swiper wx:if="{{swiperImages.length == 0}}" current="{{current}}" autoplay="{{autoplay}}" duration="{{duration}}" interval="{{interval}}" navigation="{{ { type: 'dots' } }}" list="{{swiperImages}}" bind:click="onSwiperImagesTap">
+            <t-swiper wx:if="{{swiperImages.length !== 0}}" current="{{current}}" autoplay="{{autoplay}}" duration="{{duration}}" interval="{{interval}}" navigation="{{ { type: 'dots' } }}" list="{{swiperImages}}" bind:click="onSwiperImagesTap">
             </t-swiper>
             <t-image wx:else src="" shape="round" error="slot" width="344rpx" height="344rpx">
               <text class="error-text" slot="error">轮播图加载失败</text>
