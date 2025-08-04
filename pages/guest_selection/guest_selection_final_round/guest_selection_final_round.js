@@ -61,8 +61,6 @@ Page({
     scrollTop: 0,
     // 单选框变量
     radioValue: "0",
-    // 折叠版
-    collapseValue: [],
   },
   /* 生命周期函数--监听页面加载 */
   onLoad(options) {
@@ -190,11 +188,5 @@ Page({
       }
       this.setData({ radioValue: selectedradioValue });
     }
-  },
-  // 折叠板展开展开
-  onCollapseChange(e) {
-    this.setData({
-      collapseValue: e.detail.value,
-    });
   },
 })
