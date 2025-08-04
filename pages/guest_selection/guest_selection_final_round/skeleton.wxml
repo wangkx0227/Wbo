@@ -29,22 +29,17 @@
               <view class="cell-swiper">
                 <t-skeleton theme="image" loading animation="gradient" rowCol="{{ [{ width: '695rpx', height: '370rpx'}]}}"></t-skeleton>
               </view>
-              <view class="arrange-column" style="gap: 1px;">
-                <t-skeleton theme="text" loading animation="gradient" rowCol="{{ [{ width: '210rpx', height: '38rpx'}]}}"></t-skeleton>
+              <view class="arrange-column" style="gap: 4rpx;">
+                <t-skeleton theme="text" loading animation="gradient" rowCol="{{ [{ width: '690rpx', height: '105rpx'}]}}"></t-skeleton>
+                <t-skeleton theme="text" loading animation="gradient" rowCol="{{ [{ width: '690rpx', height: '105rpx'}]}}"></t-skeleton>
+              </view>
+              <view class="arrange-column" style="gap: 2rpx;">
+                <t-skeleton theme="text" loading animation="gradient" rowCol="{{ [{ width: '70rpx', height: '38rpx'}]}}"></t-skeleton>
                 <view class="arrange-column" style="gap: 2px;">
                   <t-skeleton theme="text" loading animation="gradient" rowCol="{{ [{ width: '100%', height: '70rpx'}]}}"></t-skeleton>
                   <t-skeleton theme="text" loading animation="gradient" rowCol="{{ [{ width: '100%', height: '70rpx'}]}}"></t-skeleton>
                 </view>
               </view>
-              <view class="arrange-center" style="gap: 5px;">
-                <t-skeleton theme="text" loading animation="gradient" rowCol="{{ [{ width: '260rpx', height: '38rpx'}]}}"></t-skeleton>
-                <view class="arrange-center" >
-                  <t-skeleton theme="text" loading animation="gradient" rowCol="{{ [{ width: '60rpx', height: '40rpx'}]}}"></t-skeleton>
-                  <t-divider layout="vertical" />
-                  <t-skeleton theme="text" loading animation="gradient" rowCol="{{ [{ width: '60rpx', height: '40rpx'}]}}"></t-skeleton>
-                </view>
-              </view>
-              
             </view>
           </view>
         </view>

@@ -62,7 +62,6 @@
             </t-collapse-panel>
           </t-collapse>
         </view>
-
         <!-- 标记 -->
         <view class="arrange-column">
           <text class="title-font-main">选稿：</text>
