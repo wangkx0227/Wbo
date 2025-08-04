@@ -101,7 +101,7 @@
                       <text class="status-font">状态：已上传</text>
                       <t-divider layout="vertical" />
                       <!-- 只有选中小幅度修改时,才会显示查看按钮 -->
-                      <t-link size="small" content="预览" hover underline data-commentator="fc" bind:tap="onOpenPopup" data-assess-status="2" />
+                      <t-link size="small" content="预览" hover underline  />
                     </view>
                   </t-step-item>
                   <!-- fmr上传样品图片 -->
@@ -113,7 +113,7 @@
                       <text class="status-font">状态：已上传</text>
                       <t-divider layout="vertical" />
                       <!-- 只有选中小幅度修改时,才会显示查看按钮 -->
-                      <t-link size="small" content="预览" hover underline data-commentator="fc" bind:tap="onOpenPopup" data-assess-status="2" />
+                      <t-link size="small" content="预览" hover underline />
                     </view>
                   </t-step-item>
                   <!-- 第二轮选稿 -->
