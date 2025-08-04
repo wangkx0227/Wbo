@@ -26,7 +26,8 @@
 .cell-swiper {
   width: 48%; /* 或具体的 320rpx，根据你设计来 */
   box-sizing: border-box;
-  height: 348rpx;
+  height: 48%;
+  display: grid;
 }
 .cell-swiper-row {
   display: flex;

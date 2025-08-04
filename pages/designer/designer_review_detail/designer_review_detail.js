@@ -11,39 +11,39 @@ Page({
     // 骨架屏变量
     skeletonLoading: true,
     groupId: null, // 首页跳转后的存储的id值
-    // 筛选框变量-模板
-    dropdownArtwork: {
+    // 筛选框变量
+    dropdownType: {
       value: 'all',
       options: [
         {
           value: 'all',
-          label: '全部图稿',
+          label: '全部类型',
         },
         {
           value: 'NAQ',
-          label: '已上传打样图稿',
+          label: '已标记',
         },
         {
           value: 'NAQ',
-          label: '未上传打样图稿',
+          label: '未标记',
         },
       ],
     },
     // 筛选框变量建议
-    dropdownAssess: {
+    dropdownMark: {
       value: 'all',
       options: [
         {
           value: 'all',
-          label: '全部反馈建议',
+          label: '全部标记',
         },
         {
           value: 'discard',
-          label: '无反馈建议',
+          label: '样品通过',
         },
         {
           value: 'reserve',
-          label: '有反馈建议',
+          label: '需重打样',
         },
       ],
     },
@@ -59,17 +59,10 @@ Page({
     noMoreData: false,    // 数据是否全部加载完毕
     // 回到顶部变量
     scrollTop: 0,
-    // 设计师自评弹窗控制变量
-    popupVisible: false,
-    popupValue: "",
-    // 折叠版
-    collapseValue: [],
-    // 上传工厂稿弹窗
-    popupAddVisible: false,
-    imageFileList: [],
-    UpdatefactoryArtworkStatus:"未上传",
-    // 假数据，工厂稿
-    swiperImages2: [],
+    // 审查输入多行文本框
+    dialogVisible: false,
+    dialogValue: "",
+
   },
   /* 生命周期函数--监听页面加载 */
   onLoad(options) {
@@ -169,87 +162,60 @@ Page({
       scrollTop: e.scrollTop
     });
   },
-  // 查看评论弹窗 - 关闭
-  onClosePopup(e) {
+  // 单选框
+  onRadioChange(e) {
     /*
-      popupVisible: 关闭弹窗
-      popupValue: 清空评论内容
-      popupTitle: 清空评论的标题
+      radioValue：记录选中的单选值
     */
-    this.setData({
-      popupVisible: e.detail.visible,
-    });
-    // 延迟清空内容，确保动画完成后执行
-    setTimeout(() => {
-      this.setData({
-        popupValue: "",
-      });
-    }, 300);
-  },
-  // 查看评论弹窗 - 唤起
-  onOpenPopup(e) {
     /*
-      id: 当条记录的id
-      commentContent: 评论内容
-      popupVisible: 唤起弹窗
-      popupValue: 显示的评论内容
-    */
-    const { id, commentContent } = e.currentTarget.dataset;
-    this.setData({ popupVisible: true, popupValue: commentContent }); // 触发弹窗
-  },
-  // 折叠板展开展开
-  onCollapseChange(e) {
-    this.setData({
-      collapseValue: e.detail.value,
-    });
-  },
-  // 打开-上传工厂打样稿
-  onOpenUploadFactoryArtwork(e) {
-    e.stopPropagation && e.stopPropagation();  // 阻止事件冒泡
-    // 打开弹窗，显示upload组件
-    this.setData({ popupAddVisible: true });
-  },
-  // 关闭-上传工厂打样稿
-  onCloseUploadFactoryArtwork() {
-    this.setData({ popupAddVisible: false, });
-    // 等动画结束后，删除imageFileList的图
-    setTimeout(() => {
-      this.setData({
-        imageFileList: []
-      })
-    }, 500)
-  },
-  // 上传图稿函数
-  onImageAdd(e) {
-    const { imageFileList } = this.data;
-    const { files } = e.detail;
-    console.log();
-    // 方法1：选择完所有图片之后，统一上传，因此选择完就直接展示
-    this.setData({
-      imageFileList: [...imageFileList, ...files], // 此时设置了 fileList 之后才会展示选择的图片
-    });
-    // 方法2：每次选择图片都上传，展示每次上传图片的进度
-    // files.forEach(file => this.uploadFile(file))
-  },
-  // 图稿删除函数
-  onImageRemove(e) {
-    const { index } = e.detail;
-    const { imageFileList } = this.data;
-    imageFileList.splice(index, 1);
-    this.setData({
-      imageFileList,
-    });
-  },
-  // 提交上传数据
-  onSubmitFactoryArtwork(e) {
+   radioValue：记录选中的单选值
+ */
     const that = this;
-    this.setData({ popupAddVisible: false,UpdatefactoryArtworkStatus:"已上传", swiperImages2: ['https://xcx.1bizmail.com:8153/static/images/wpb_images/D51_ResinGlitter_Ornament_CS25-SKR-120_HgS7tjR.jpg'] });
-    const message = "新增图稿成功";
-    utils.showToast(that, message);
-    setTimeout(() => {
-      this.setData({
-        imageFileList: []
-      })
-    }, 500)
-  }
+    const selectedradioValue = e.detail.value;
+    const radioValue = that.data.radioValue;
+    // 如果选中的点选框的值等于记录的值那么就取消
+    if (selectedradioValue === radioValue) {
+      this.setData({ radioValue: null });
+      const theme = "warning"
+      const message = "取消标记";
+      utils.showToast(that, message, theme);
+    } else {
+      if (selectedradioValue === "0") {
+        this.setData({ dialogVisible: true });
+      } else {
+        if (radioValue) {
+          const message = "修改标记";
+          utils.showToast(that, message);
+        } else {
+          const message = "提交标记";
+          utils.showToast(that, message);
+        }
+        this.setData({ radioValue: selectedradioValue });
+      }
+
+
+    }
+  },
+  // 填写弹窗-关闭（包含提交功能）
+  onCloseDialog(e) {
+    const that = this;
+    const { dialogValue, radioValue } = that.data; // 输入的评论的数据
+    const action = e.type; // "confirm" 或 "cancel"
+    if (action === 'confirm') {
+      this.setData({ radioValue: "0" });
+      const message = "提交成功"
+      utils.showToast(that, message);
+    } else if (action === 'cancel') {
+      const theme = "warning"
+      const message = "提交取消"
+      utils.showToast(that, message,theme);
+    }
+    this.setData({ dialogVisible: false, dialogValue: "" });
+  },
+  // 填写评论-双向绑定
+  onDialogInput(e) {
+    this.setData({
+      dialogValue: e.detail.value
+    });
+  },
 })
