@@ -143,6 +143,13 @@ Page({
           { value: 'ultimate', label: '样品图审查' }
         ]
       });
+    }else if (userRole === "ms"){
+      this.setData({
+        tabBarShow: true, userTabs: [
+          { value: 'primary', label: '第一轮选稿' },
+          { value: 'ultimate', label: '第二轮选稿' }
+        ]
+      });
     }
     this.setData({ userRole: userRole });
     setTimeout(() => {
@@ -203,9 +210,16 @@ Page({
         });
       }
     } else if (userRole === "ms") { // 选稿阶段r1
-      wx.navigateTo({
-        url: `/pages/guest_selection/guest_selection_r1/guest_selection_r1?groupId=${groupId}`,
-      });
+      if (tabBarValue === "primary") { // fmr 可行性评估与样品图上传
+        wx.navigateTo({
+          url: `/pages/guest_selection/guest_selection_first_round/guest_selection_first_round?groupId=${groupId}`,
+        });
+      } else {
+        wx.navigateTo({
+          url: `/pages/guest_selection/guest_selection_final_round/guest_selection_final_round?groupId=${groupId}`
+        });
+      }
+      
     } else if (userRole === "d") { // 设计师对上传工厂稿
       if (tabBarValue === "primary") { // 设计师工厂稿上传，样品图审查
         wx.navigateTo({
