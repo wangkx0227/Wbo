@@ -152,14 +152,14 @@ Page({
     // 需要3类人进行跳转 Kyle Shelley FMR 进行跳转
     if (tabBarValue === "todo") {
       if (userRole === "kyle") {
-        wx.navigateTo({ url: `/pages/kyle_artowrk_ultimate_details/kyle_artowrk_ultimate_details?groupId=${groupId}` });
+        wx.navigateTo({ url: `/pages/kyle/kyle_artowrk_ultimate_details/kyle_artowrk_ultimate_details?groupId=${groupId}` });
       } else if (userRole === "shelley") {
-        wx.navigateTo({ url: `/pages/shelley_artwork_detail/shelley_artwork_detail?groupId=${groupId}` });
+        wx.navigateTo({ url: `/pages/shelley/shelley_artwork_detail/shelley_artwork_detail?groupId=${groupId}` });
       } else if (userRole === "fmr") {
-        wx.navigateTo({ url: `/pages/fmr_artwork_detail/fmr_artwork_detail?groupId=${groupId}`, });
+        wx.navigateTo({ url: `/pages/fmr/fmr_artwork_detail/fmr_artwork_detail?groupId=${groupId}`, });
       }
     }else{
-      wx.navigateTo({ url: `/pages/wbo_to_do_detail/wbo_to_do_detail?groupId=${groupId}`, });
+      wx.navigateTo({ url: `/pages/todo/todo_detail/todo_detail?groupId=${groupId}`, });
     }
 
   },
