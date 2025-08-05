@@ -1,4 +1,3 @@
-import { Toast } from 'tdesign-miniprogram'; // 轻提示
 const app = getApp();
 
 Page({
@@ -236,14 +235,6 @@ Page({
         url: `/pages/fmr/fmr_manager_assignment/fmr_manager_assignment?groupId=${groupId}`,
       });
     }
-  },
-  // 用户点击右上角分享
-  onShareAppMessage() {
-    return {
-      title: 'WBO',
-      path: 'pages/wbo_artwork_index/wbo_artwork_index',  // 分享后打开的页面路径
-      imageUrl: '/assets/images/log.jpg'     // 自定义分享封面
-    };
   },
   // 页面下拉刷新 - 用于页面重置
   onPullDownRefresh() {

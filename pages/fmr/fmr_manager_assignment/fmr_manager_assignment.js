@@ -80,16 +80,6 @@ Page({
       })
     }, 2000)
   },
-  // 生命周期函数--监听页面初次渲染完成
-  onReady() { },
-  // 生命周期函数--监听页面显示
-  onShow() { },
-  //生命周期函数--监听页面隐藏
-  onHide() { },
-  // 生命周期函数--监听页面卸载
-  onUnload() { },
-  // 用户点击右上角分享
-  onShareAppMessage() { },
   // 下拉菜单-图稿
   onArtworkChange(e) {
     this.setData({
