@@ -39,7 +39,7 @@
         <t-collapse value="{{collapseValue}}" bind:change="onCollapseChange">
           <t-collapse-panel value="{{0}}">
             <view slot="header">
-              <text class="title-font-main">工厂打样稿：{{UpdatefactoryArtworkStatus}}</text>
+              <text class="title-font-main">工厂稿：{{UpdatefactoryArtworkStatus}}</text>
             </view>
             <view slot="header-right-content">
               <t-link size="small" content="上传" hover underline catchtap="onOpenUploadFactoryArtwork" prefixIcon="upload" />
