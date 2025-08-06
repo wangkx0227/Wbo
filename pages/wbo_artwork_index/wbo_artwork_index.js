@@ -1,5 +1,5 @@
 const app = getApp();
-
+const utils = require('../../utils/util')
 Page({
   data: {
     // 悬浮胶囊标签栏变量
@@ -7,7 +7,7 @@ Page({
     tabBarValue: 'primary', // 胶囊选中的值
     userTabs: [], // 胶囊框的数据
     tabBarShow: false, // 显示胶囊标签和tab
-    userRole:null, // 角色
+    userRole: null, // 角色
     // 骨架控制变量
     skeletonLoading: true,
     // 筛选框变量-1
@@ -159,7 +159,7 @@ Page({
       });
     }
     this.setData({
-      userRole:userRole
+      userRole: userRole
     })
     setTimeout(() => {
       wx.hideLoading();
@@ -188,7 +188,7 @@ Page({
   },
   // 跳转到详情页面
   onJumpArtworkDeatails(e) {
-    
+
     const that = this;
     const groupId = e.currentTarget.dataset.groupId;
     const userRole = that.data.userRole;
@@ -371,7 +371,34 @@ Page({
     }, 2000)
   },
   // 导出附件
-  exportAttachments(e){
-    console.log(e);
+  exportAttachments(e) {
+    const that = this;
+    const fileUrl = app.globalData.fileUrl;
+    wx.request({
+      url: fileUrl, // 请求地址
+      method: 'POST',
+      data: {
+        name: "123455",
+        fileUrl: 'https://fastly.picsum.photos/id/426/800/600.jpg?hmac=uJFYln6tnniZidby_wunyXXdx3-LfX00agG-avropFg'
+      },
+      header: {
+        'content-type': 'application/json' // 根据后端要求设置
+      },
+      success(res) {
+        if (res.statusCode === 200) {
+          const message = "导出成功"
+          utils.showToast(that, message);
+        } else {
+          const theme = "error"
+          const message = "导出失败"
+          utils.showToast(that, message, theme);
+        }
+      },
+      fail(err) {
+        const theme = "error"
+        const message = "导出失败"
+        utils.showToast(that, message, theme);
+      }
+    });
   },
 })
