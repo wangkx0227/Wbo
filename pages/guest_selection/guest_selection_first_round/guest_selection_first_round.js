@@ -109,24 +109,9 @@ Page({
   },
   // 轮播图函数 - 点击轮播图 - 图片预览
   onSwiperImagesTap(e) {
-    const { index } = e.detail;
+    const el = e;
     const that = this;
-    // const urls = e.currentTarget.dataset.images || [];   // 所有图片对象数组
-    // const index = e.currentTarget.dataset.index;         // 当前图片索引
-    // //把图片对象数组提取成 URL 数组
-    // const urlList = urls.map(img => img.image_url);
-    const swiperImages = this.data.swiperImages; // 假数据
-    const current = swiperImages[index];
-    if (!current || !swiperImages.length) {
-      const theme = "error"
-      const message = "无法预览图片"
-      utils.showToast(that, message, theme);
-      return;
-    }
-    wx.previewImage({
-      current,
-      urls: swiperImages
-    });
+    utils.ImagesPreview(el,that);
   },
   // 页面上拉刷新 - 用于页面重置
   onPullDownRefresh() {

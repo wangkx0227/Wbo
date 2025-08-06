@@ -28,7 +28,7 @@
           <text>Code：LSL__AIE MJ_2025_01</text>
         </view>
         <view class="cell-swiper">
-          <t-swiper wx:if="{{swiperImages.length !== 0}}" current="{{current}}" autoplay="{{autoplay}}" duration="{{duration}}" interval="{{interval}}" navigation="{{ { type: 'dots' } }}" list="{{swiperImages}}" bind:click="onSwiperImagesTap">
+          <t-swiper wx:if="{{swiperImages.length !== 0}}" current="{{current}}" autoplay="{{autoplay}}" duration="{{duration}}" interval="{{interval}}" navigation="{{ { type: 'dots' } }}" list="{{swiperImages}}" bind:click="onSwiperImagesTap" data-images="{{swiperImages}}">
           </t-swiper>
           <!-- 无数据时显示占位内容 -->
           <t-image wx:else src="" shape="round" error="slot" width="640rpx" height="384rpx">
@@ -45,7 +45,7 @@
               <t-link size="small" content="上传" hover underline catchtap="onOpenUploadFactoryArtwork" prefixIcon="upload" />
             </view>
             <view class="cell-swiper">
-              <t-swiper wx:if="{{swiperImages2.length !== 0 }}" current="{{current}}" autoplay="{{autoplay}}" duration="{{duration}}" interval="{{interval}}" navigation="{{ { type: 'dots' } }}" list="{{swiperImages2}}" bind:click="onSwiperImagesTap">
+              <t-swiper wx:if="{{swiperImages2.length !== 0 }}" current="{{current}}" autoplay="{{autoplay}}" duration="{{duration}}" interval="{{interval}}" navigation="{{ { type: 'dots' } }}" list="{{swiperImages2}}" bind:click="onSwiperImagesTap" data-images="{{swiperImages2}}">
               </t-swiper>
               <!-- 无数据时显示占位内容 -->
               <t-image wx:else src="" shape="round" error="slot" width="640rpx" height="384rpx">

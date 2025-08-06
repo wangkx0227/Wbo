@@ -24,27 +24,37 @@ function showToast(that,content,theme="success") {
     direction: 'row',
   });
 }
-onSwiperImagesTap(e) {
-  const { index } = e.detail;
-  const that = this;
-  // const urls = e.currentTarget.dataset.images || [];   // 所有图片对象数组
-  // const index = e.currentTarget.dataset.index;         // 当前图片索引
-  // //把图片对象数组提取成 URL 数组
-  // const urlList = urls.map(img => img.image_url);
-  const swiperImages = this.data.swiperImages; // 假数据
-  const current = swiperImages[index];
-  if (!current || !swiperImages.length) {
+// 图片预览
+function ImagesPreview(el,that) {
+  /*
+    el：点击的对象
+    that：当前this对象
+    需要在轮播图或者图片预览的标签设置 data-images 变量存储图片的路径
+  */
+ console.log(1,"点击轮播图");
+  const { index } = el.detail; // 点击的图片索引
+  const images = el.currentTarget.dataset.images || [];   // 所有图片列表
+  // 如果不是列表就需要调整未列表
+  let imagesList = [];
+  if( !Array.isArray(images)){
+    imagesList = images.map(img => img.image_url);
+  }else {
+    imagesList = images;
+  }
+  const current = imagesList[index];
+  if (!current || !imagesList.length) {
     const theme = "error"
     const message = "无法预览图片"
-    utils.showToast(that, message, theme);
+    showToast(that, message, theme);
     return;
   }
   wx.previewImage({
     current,
-    urls: swiperImages
+    urls: imagesList
   });
 }
 module.exports = {
   formatTime,
-  showToast
+  showToast,
+  ImagesPreview
 }
