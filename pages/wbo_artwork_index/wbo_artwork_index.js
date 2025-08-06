@@ -378,15 +378,15 @@ Page({
       url: fileUrl, // 请求地址
       method: 'POST',
       data: {
-        name: "123455",
-        fileUrl: 'https://fastly.picsum.photos/id/426/800/600.jpg?hmac=uJFYln6tnniZidby_wunyXXdx3-LfX00agG-avropFg'
+        name: "11",
+        url: 'https://xcx.1bizmail.com:8153/static/images/wpb_images/D51_Resin_Ornament_CS25-HHR-129_JkE4FgU.jpg'
       },
       header: {
         'content-type': 'application/json' // 根据后端要求设置
       },
       success(res) {
         if (res.statusCode === 200) {
-          const message = "导出成功"
+          const message = "导出成功,请稍等"
           utils.showToast(that, message);
         } else {
           const theme = "error"
