@@ -7,6 +7,7 @@ Page({
     tabBarValue: 'primary', // 胶囊选中的值
     userTabs: [], // 胶囊框的数据
     tabBarShow: false, // 显示胶囊标签和tab
+    userRole:null, // 角色
     // 骨架控制变量
     skeletonLoading: true,
     // 筛选框变量-1
@@ -157,6 +158,9 @@ Page({
         tabBarTabLabel: current.label
       });
     }
+    this.setData({
+      userRole:userRole
+    })
     setTimeout(() => {
       wx.hideLoading();
       this.setData({
@@ -184,9 +188,11 @@ Page({
   },
   // 跳转到详情页面
   onJumpArtworkDeatails(e) {
+    
     const that = this;
     const groupId = e.currentTarget.dataset.groupId;
     const userRole = that.data.userRole;
+    console.log(1);
     console.log(groupId, "准备跳转");
     // 需要3类人进行跳转 Kyle Shelley FMR 进行跳转
     const tabBarValue = that.data.tabBarValue;
@@ -363,5 +369,9 @@ Page({
         dataAllList: data,
       })
     }, 2000)
-  }
+  },
+  // 导出附件
+  exportAttachments(e){
+    console.log(e);
+  },
 })

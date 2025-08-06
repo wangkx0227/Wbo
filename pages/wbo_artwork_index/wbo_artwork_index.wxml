@@ -29,15 +29,20 @@
                   <text class="title-main">Name of Client：</text>
                   <text class="title-other">{{ item.client_name }}</text>
                 </view>
-                <t-tag class="margin-16" variant="light" icon="discount" size="small" style="position: relative;left: 90rpx;" wx:if="{{tabBarShow}}"> {{ tabBarTabLabel }} </t-tag>
+                <t-tag variant="light" icon="discount" size="small" wx:if="{{tabBarShow}}"
+                  style="position: relative;left: 90rpx;"> {{ tabBarTabLabel }} </t-tag>
               </view>
               <view>
                 <text class="title-main">Theme of Program：</text>
                 <text class="title-other">{{ item.program }}</text>
               </view>
-              <view class="arrange-space-between">
-                <text class="title-other" style="margin-right: 15px;">Year：{{ item.Year }}</text>
-                <text class="title-other">创建时间：{{ item.create_time }}</text>
+              <view class="arrange-space-between title-other">
+                <text>Year：{{ item.Year }}</text>
+                <text>创建时间：{{ item.create_time }}</text>
+              </view>
+              <!-- 只有kyle导出ppt或者第二轮标记导出附件 -->
+              <view style="position:absolute;right: 50rpx;bottom: 38rpx;" wx:if="{{userRole === 'kyle' || userRole === 'ms'}}">
+                <t-link size="small" content="导出附件" underline hover catch:tap="exportAttachments" />
               </view>
             </view>
           </t-cell>

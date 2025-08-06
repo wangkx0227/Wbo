@@ -11,6 +11,7 @@ page {
 /* 页面整体高度 */
 .page-wrapper {
   height: 100vh;
+  position: relative;
 }
 
 /* 导航栏固定 */
