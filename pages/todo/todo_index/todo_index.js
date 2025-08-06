@@ -89,8 +89,8 @@ Page({
   // 用户点击右上角分享
   onShareAppMessage() {
     return {
-      title: 'WBO',
-      path: 'pages/wbo_pending_processing/wbo_pending_processing',  // 分享后打开的页面路径
+      title: 'WBO待处理',
+      path: 'pages/todo/todo_index/todo_index',  // 分享后打开的页面路径
       imageUrl: '/assets/images/log.jpg'     // 自定义分享封面
     };
   },

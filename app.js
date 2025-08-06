@@ -6,6 +6,7 @@ App({
     url: 'https://xcx.1bizmail.com:8153/api/', // 后端接口路径
   },
   onLaunch(options) {
+    wx.removeStorageSync('userRole') // 每次重置，清除登录信息
     // 小程序初始化（只执行一次）
     if (!wx.getStorageSync('firstLaunchTime')) {
       wx.setStorageSync('firstLaunchTime', Date.now())
