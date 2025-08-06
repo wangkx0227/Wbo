@@ -1,5 +1,5 @@
 {
-  "entryPagePath": "pages/todo/todo_index/todo_index",
+  "entryPagePath": "pages/wbo_login/wbo_login",
   "pages": [
     "pages/wbo_login/wbo_login",
     "pages/wbo_artwork_index/wbo_artwork_index",

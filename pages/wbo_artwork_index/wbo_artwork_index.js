@@ -3,9 +3,10 @@ const app = getApp();
 Page({
   data: {
     // 悬浮胶囊标签栏变量
-    tabBarValue: 'primary',
-    userTabs: [],
-    tabBarShow: false,
+    tabBarTabLabel: "", // 胶囊的label
+    tabBarValue: 'primary', // 胶囊选中的值
+    userTabs: [], // 胶囊框的数据
+    tabBarShow: false, // 显示胶囊标签和tab
     // 骨架控制变量
     skeletonLoading: true,
     // 筛选框变量-1
@@ -118,7 +119,6 @@ Page({
   // 生命周期函数--监听页面加载 
   onLoad() {
     const userRole = wx.getStorageSync('userRole');
-    console.log(userRole);
     wx.showLoading({ title: '正在加载...', });
     // 判断显示标签栏
     if (userRole === "kyle") {
@@ -142,7 +142,7 @@ Page({
           { value: 'ultimate', label: '样品图审查' }
         ]
       });
-    }else if (userRole === "ms"){
+    } else if (userRole === "ms") {
       this.setData({
         tabBarShow: true, userTabs: [
           { value: 'primary', label: '第一轮选稿' },
@@ -150,7 +150,13 @@ Page({
         ]
       });
     }
-    this.setData({ userRole: userRole });
+    // 设置tag显示
+    const current = this.data.userTabs.find(item => item.value === this.data.tabBarValue);
+    if (current) {
+      this.setData({
+        tabBarTabLabel: current.label
+      });
+    }
     setTimeout(() => {
       wx.hideLoading();
       this.setData({
@@ -218,7 +224,7 @@ Page({
           url: `/pages/guest_selection/guest_selection_final_round/guest_selection_final_round?groupId=${groupId}`
         });
       }
-      
+
     } else if (userRole === "d") { // 设计师对上传工厂稿
       if (tabBarValue === "primary") { // 设计师工厂稿上传，样品图审查
         wx.navigateTo({
@@ -229,7 +235,7 @@ Page({
           url: `/pages/designer/designer_review_detail/designer_review_detail?groupId=${groupId}`
         });
       }
-      
+
     } else if (userRole === "fma") { // fmr主管分配fmr图稿
       wx.navigateTo({
         url: `/pages/fmr/fmr_manager_assignment/fmr_manager_assignment?groupId=${groupId}`,
@@ -315,10 +321,19 @@ Page({
     console.log("点击胶囊按钮");
     // 对 胶囊悬浮框 进行复制，开启骨架
     wx.showLoading({ title: '正在加载...' });
+    // 设置值
     that.setData({
       tabBarValue: e.detail.value,
       skeletonLoading: true,
     });
+    // 动态显示tab
+    const current = this.data.userTabs.find(item => item.value === this.data.tabBarValue);
+    if (current) {
+      this.setData({
+        tabBarTabLabel: current.label
+      });
+    }
+    // 加载假数据
     const randomNum = Math.floor(Math.random() * 5) + 1;
     for (let i = 0; i < randomNum; i++) {
       data.push({
@@ -341,7 +356,6 @@ Page({
         item["stage"] = "最终评审"
       })
     }
-
     setTimeout(() => {
       wx.hideLoading();
       that.setData({

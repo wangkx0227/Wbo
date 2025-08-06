@@ -29,7 +29,7 @@
                   <text class="title-main">Name of Client：</text>
                   <text class="title-other">{{ item.client_name }}</text>
                 </view>
-                <t-tag class="margin-16" variant="light" icon="discount" size="small" style="position: relative;left: 90rpx;" wx:if="{{tabBarShow === 'kyle'}}"> {{ item.stage }} </t-tag>
+                <t-tag class="margin-16" variant="light" icon="discount" size="small" style="position: relative;left: 90rpx;" wx:if="{{tabBarShow}}"> {{ tabBarTabLabel }} </t-tag>
               </view>
               <view>
                 <text class="title-main">Theme of Program：</text>
