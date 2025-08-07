@@ -121,6 +121,7 @@ Page({
   },
   // 获取数据
   getData() {
+    wx.showLoading({ title: '正在加载...', });
     const that = this;
     const fileUrl = app.globalData.url;
     wx.request({
@@ -209,11 +210,42 @@ Page({
       userRole: userRole
     })
   },
-  // 生命周期函数--监听页面加载 
+  // 生命周期函数
   onLoad() {
-    wx.showLoading({ title: '正在加载...', });
     this.loadUserRole();
+    utils.LoadDataList({
+      page: this,
+      data: { type: "getProjectList", username: "admin" },
+      mode: 'init'
+    }).then(list => { // list 就是data数据
+        let arrangeData = [];
+        list.forEach(item => {
+          arrangeData.push({
+            id: item.id,
+            name: item.name,
+            director: item.director,
+            start_date: item.start_date,
+            line_plan_list: item.line_plan_list,
+            to_confirmed: 80, // 假数据
+          })
+        })
+        this.setData({
+          Data: arrangeData
+        })
+    });
+  },
+  // 页面下拉刷新 - 用于页面重置
+  onPullDownRefresh() {
+    if (this.data.isLoadingReachMore) return;
+    this.setData({ isDownRefreshing: true });
     this.getData();
+    // 模拟数据加载
+    setTimeout(() => {
+      wx.stopPullDownRefresh(); // 必须手动停止
+      this.setData({
+        isDownRefreshing: false, // 修改状态
+      });
+    }, 1500);
   },
   // 下拉菜单-模板
   onTemplateChange(e) {
@@ -295,20 +327,7 @@ Page({
       });
     }
   },
-  // 页面下拉刷新 - 用于页面重置
-  onPullDownRefresh() {
-    console.log("下拉刷新触发");
-    // 如果正在加载更多，则禁止下拉刷新
-    if (this.data.isLoadingReachMore) return;
-    this.setData({ isDownRefreshing: true });
-    // 模拟数据加载
-    setTimeout(() => {
-      wx.stopPullDownRefresh(); // 必须手动停止
-      this.setData({
-        isDownRefreshing: false, // 修改状态
-      });
-    }, 1500);
-  },
+
   // 页面上拉触底事件的处理函数-用于加载更多数据
   onReachBottom() {
     // 如果在下拉刷新，禁止滚动加载
