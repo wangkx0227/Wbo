@@ -59,6 +59,8 @@ Page({
     noMoreData: false,    // 数据是否全部加载完毕
     // 回到顶部变量
     scrollTop: 0,
+    // 数据
+    Data: [],
     // 假数据
     dataAllList: [
       {
@@ -117,10 +119,55 @@ Page({
       },
     ]
   },
-  // 生命周期函数--监听页面加载 
-  onLoad() {
+  // 获取数据
+  getData() {
+    const that = this;
+    const fileUrl = app.globalData.url;
+    wx.request({
+      url: fileUrl, // 请求地址
+      method: 'POST',
+      data: {
+        type: "getProjectList",
+        username: "admin"
+      },
+      header: {
+        'content-type': 'application/json' // 根据后端要求设置
+      },
+      success(res) {
+        if (res.statusCode === 200) {
+          const data = res.data.data;// 数据
+          if (data) {
+            let arrangeData = [];
+            data.forEach(item => {
+              arrangeData.push({
+                id: item.id,
+                name: item.name,
+                director: item.director,
+                start_date: item.start_date,
+                line_plan_list: item.line_plan_list,
+                to_confirmed: 80, // 假数据
+              })
+            })
+            that.setData({
+              Data: arrangeData
+            })
+          }
+        } else {
+          utils.showToast(that, "数据请求失败", "error");
+        }
+      },
+      fail(err) {
+        utils.showToast(that, "数据请求失败", "error");
+      },
+      complete: () => {
+        that.setData({ skeletonLoading: false }); // 即使失败也结束骨架
+        wx.hideLoading();
+      }
+    });
+  },
+  // 加载用户角色
+  loadUserRole() {
     const userRole = wx.getStorageSync('userRole');
-    wx.showLoading({ title: '正在加载...', });
     // 判断显示标签栏
     if (userRole === "kyle") {
       this.setData({
@@ -161,12 +208,12 @@ Page({
     this.setData({
       userRole: userRole
     })
-    setTimeout(() => {
-      wx.hideLoading();
-      this.setData({
-        skeletonLoading: false,
-      })
-    }, 2000)
+  },
+  // 生命周期函数--监听页面加载 
+  onLoad() {
+    wx.showLoading({ title: '正在加载...', });
+    this.loadUserRole();
+    this.getData();
   },
   // 下拉菜单-模板
   onTemplateChange(e) {
@@ -372,33 +419,33 @@ Page({
   },
   // 导出附件
   exportAttachments(e) {
-    const that = this;
-    const fileUrl = app.globalData.fileUrl;
-    wx.request({
-      url: fileUrl, // 请求地址
-      method: 'POST',
-      data: {
-        name: "11",
-        url: 'https://xcx.1bizmail.com:8153/static/images/wpb_images/D51_Resin_Ornament_CS25-HHR-129_JkE4FgU.jpg'
-      },
-      header: {
-        'content-type': 'application/json' // 根据后端要求设置
-      },
-      success(res) {
-        if (res.statusCode === 200) {
-          const message = "导出成功,请稍等"
-          utils.showToast(that, message);
-        } else {
-          const theme = "error"
-          const message = "导出失败"
-          utils.showToast(that, message, theme);
-        }
-      },
-      fail(err) {
-        const theme = "error"
-        const message = "导出失败"
-        utils.showToast(that, message, theme);
-      }
-    });
+    // const that = this;
+    // const fileUrl = app.globalData.fileUrl;
+    // wx.request({
+    //   url: fileUrl, // 请求地址
+    //   method: 'POST',
+    //   data: {
+    //     name: "11",
+    //     url: 'https://xcx.1bizmail.com:8153/static/images/wpb_images/D51_Resin_Ornament_CS25-HHR-129_JkE4FgU.jpg'
+    //   },
+    //   header: {
+    //     'content-type': 'application/json' // 根据后端要求设置
+    //   },
+    //   success(res) {
+    //     if (res.statusCode === 200) {
+    //       const message = "导出成功,请稍等"
+    //       utils.showToast(that, message);
+    //     } else {
+    //       const theme = "error"
+    //       const message = "导出失败"
+    //       utils.showToast(that, message, theme);
+    //     }
+    //   },
+    //   fail(err) {
+    //     const theme = "error"
+    //     const message = "导出失败"
+    //     utils.showToast(that, message, theme);
+    //   }
+    // });
   },
 })

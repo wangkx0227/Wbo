@@ -19,26 +19,24 @@
   </view>
   <view class="page-main">
     <view class="wrapper">
-      <view wx:for="{{dataAllList}}" wx:key="index">
+      <view wx:for="{{Data}}" wx:key="index">
         <t-cell-group theme="card" class="t-cell-group" bindtap="onJumpArtworkDeatails" data-group-id="{{ item.id }}">
           <t-cell hover arrow>
             <t-badge count="{{ item.to_confirmed }}" slot="note" shape="square" />
             <view slot="title">
               <view class="arrange-space-between">
                 <view>
-                  <text class="title-main">Name of Client：</text>
-                  <text class="title-other">{{ item.client_name }}</text>
+                  <text class="title-main">开发案名称：</text>
+                  <text class="title-other">{{ item.name }}</text>
                 </view>
-                <t-tag variant="light" icon="discount" size="small" wx:if="{{tabBarShow}}"
-                  style="position: relative;left: 90rpx;"> {{ tabBarTabLabel }} </t-tag>
+                <t-tag variant="light" icon="discount" size="small" wx:if="{{tabBarShow}}" style="position: absolute;right: 75rpx;"> {{ tabBarTabLabel }} </t-tag>
               </view>
               <view>
-                <text class="title-main">Theme of Program：</text>
-                <text class="title-other">{{ item.program }}</text>
+                <text class="title-main">主导人：</text>
+                <text class="title-other">{{ item.director }}</text>
               </view>
               <view class="arrange-space-between title-other">
-                <text>Year：{{ item.Year }}</text>
-                <text>创建时间：{{ item.create_time }}</text>
+                <text>创建时间：{{ item.start_date }}</text>
               </view>
               <!-- 只有kyle导出ppt或者第二轮标记导出附件 -->
               <view style="position:absolute;right: 50rpx;bottom: 38rpx;" wx:if="{{userRole === 'kyle' || userRole === 'ms'}}">
