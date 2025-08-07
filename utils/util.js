@@ -64,7 +64,6 @@ function LoadDataList({
   showLoading = true, // 是否显示了加载框
   showSkeleton = true, // 是否显示骨架
 }) {
-  console.log(11);
   const isInit = mode === 'init';
   const isRefresh = mode === 'refresh';
   const isMore = mode === 'more';
@@ -78,7 +77,7 @@ function LoadDataList({
   }
   // 加载更多
   if (isMore) {
-    
+    page.setData({ isLoadingReachMore: true });
   }
   const url = app.globalData.url; // 请求后端接口
   return new Promise((resolve, reject) => {
@@ -120,7 +119,10 @@ function LoadDataList({
         }
         // 加载更多，进行关闭
         if (isMore) {
-    
+          wx.stopPullDownRefresh(); // 必须手动停止
+          page.setData({
+            isLoadingReachMore: false, // 修改状态
+          });
         }
       }
     });

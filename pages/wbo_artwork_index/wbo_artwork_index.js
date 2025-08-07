@@ -61,110 +61,6 @@ Page({
     scrollTop: 0,
     // 数据
     Data: [],
-    // 假数据
-    dataAllList: [
-      {
-        id: 1,
-        to_confirmed: 15,
-        client_name: "TG D84",
-        stage: "初步评审",
-        program: "The Outfitters",
-        Year: 2025,
-        create_time: "2025-07-21",
-      },
-      {
-        id: 2,
-        to_confirmed: 20,
-        client_name: "TG D240",
-        stage: "初步评审",
-        program: "Outfitters_001",
-        Year: 2025,
-        create_time: "2025-07-25",
-      },
-      {
-        id: 3,
-        to_confirmed: 5,
-        client_name: "TG D51",
-        stage: "初步评审",
-        program: "Outfitters_002",
-        Year: 2025,
-        create_time: "2025-08-25",
-      },
-      {
-        id: 4,
-        to_confirmed: 5,
-        client_name: "HL",
-        stage: "初步评审",
-        program: "Outfitters_003",
-        Year: 2025,
-        create_time: "2025-09-25",
-      },
-      {
-        id: 5,
-        to_confirmed: 9,
-        client_name: "DG",
-        stage: "初步评审",
-        program: "Outfitters_004",
-        Year: 2025,
-        create_time: "2025-10-15",
-      },
-      {
-        id: 6,
-        to_confirmed: 2,
-        client_name: "FM",
-        stage: "初步评审",
-        program: "Outfitters_005",
-        Year: 2025,
-        create_time: "2025-11-15",
-      },
-    ]
-  },
-  // 获取数据
-  getData() {
-    wx.showLoading({ title: '正在加载...', });
-    const that = this;
-    const fileUrl = app.globalData.url;
-    wx.request({
-      url: fileUrl, // 请求地址
-      method: 'POST',
-      data: {
-        type: "getProjectList",
-        username: "admin"
-      },
-      header: {
-        'content-type': 'application/json' // 根据后端要求设置
-      },
-      success(res) {
-        if (res.statusCode === 200) {
-          const data = res.data.data;// 数据
-          if (data) {
-            let arrangeData = [];
-            data.forEach(item => {
-              arrangeData.push({
-                id: item.id,
-                name: item.name,
-                director: item.director,
-                start_date: item.start_date,
-                line_plan_list: item.line_plan_list,
-                to_confirmed: 80, // 假数据
-              })
-            })
-            that.setData({
-              Data: arrangeData
-            })
-          }
-        } else {
-          utils.showToast(that, "数据请求失败", "error");
-        }
-      },
-      fail(err) {
-        utils.showToast(that, "数据请求失败", "error");
-      },
-      complete: () => {
-        that.setData({ skeletonLoading: false }); // 即使失败也结束骨架
-        wx.hideLoading();
-      }
-    });
   },
   // 加载用户角色
   loadUserRole() {
@@ -218,34 +114,106 @@ Page({
       data: { type: "getProjectList", username: "admin" },
       mode: 'init'
     }).then(list => { // list 就是data数据
-        let arrangeData = [];
-        list.forEach(item => {
-          arrangeData.push({
-            id: item.id,
-            name: item.name,
-            director: item.director,
-            start_date: item.start_date,
-            line_plan_list: item.line_plan_list,
-            to_confirmed: 80, // 假数据
-          })
+      let arrangeData = [];
+      list.forEach(item => {
+        arrangeData.push({
+          id: item.id,
+          name: item.name,
+          director: item.director,
+          start_date: item.start_date,
+          line_plan_list: item.line_plan_list,
+          to_confirmed: 80, // 假数据
         })
-        this.setData({
-          Data: arrangeData
-        })
+      })
+      arrangeData.push({
+        id: 10,
+        name: '测试',
+        director: '测试',
+        start_date: '测试',
+        line_plan_list: '测试',
+        to_confirmed: 80, // 假数据
+      })
+      arrangeData.push({
+        id: 10,
+        name: '测试2',
+        director: '测试2',
+        start_date: '测试2',
+        line_plan_list: '测试2',
+        to_confirmed: 80, // 假数据
+      })
+      this.setData({
+        Data: arrangeData
+      })
     });
   },
   // 页面下拉刷新 - 用于页面重置
   onPullDownRefresh() {
     if (this.data.isLoadingReachMore) return;
-    this.setData({ isDownRefreshing: true });
-    this.getData();
-    // 模拟数据加载
-    setTimeout(() => {
-      wx.stopPullDownRefresh(); // 必须手动停止
+    utils.LoadDataList({
+      page: this,
+      data: {
+        type: 'getProjectList',
+        username: 'admin',
+      },
+      mode: 'refresh',
+      // 如果有分页加入分页，或者搜索条件等等
+    }).then(list => { // list 就是data数据
+      let arrangeData = [];
+      // list.forEach(item => {
+      //   arrangeData.push({
+      //     id: item.id,
+      //     name: item.name,
+      //     director: item.director,
+      //     start_date: item.start_date,
+      //     line_plan_list: item.line_plan_list,
+      //     to_confirmed: 80, // 假数据
+      //   })
+      // })
+      const item = list[0]
+      if (item) {
+        arrangeData.push({
+          id: item.id,
+          name: item.name,
+          director: item.director,
+          start_date: item.start_date,
+          line_plan_list: item.line_plan_list,
+          to_confirmed: 80,
+        });
+      }
       this.setData({
-        isDownRefreshing: false, // 修改状态
-      });
-    }, 1500);
+        Data: arrangeData
+      })
+    });
+  },
+  // 页面上拉触底事件的处理函数-用于加载更多数据
+  onReachBottom() {
+    // noMoreData:true, 下拉时，如果数据没有了，将这个值进行设置
+    // 如果在下拉刷新，禁止滚动加载
+    if (this.data.isDownRefreshing || this.data.noMoreData) return;
+    utils.LoadDataList({
+      page: this,
+      data: {
+        type: 'getProjectList',
+        username: 'admin',
+      },
+      mode: 'more',
+      // 如果有分页加入分页，或者搜索条件等等
+    }).then(list => { // list 就是data数据
+      let arrangeData = [];
+      list.forEach(item => {
+        arrangeData.push({
+          id: item.id,
+          name: item.name,
+          director: item.director,
+          start_date: item.start_date,
+          line_plan_list: item.line_plan_list,
+          to_confirmed: 80, // 假数据
+        })
+      })
+      this.setData({
+        Data: this.data.Data.concat(arrangeData),
+      })
+    });
   },
   // 下拉菜单-模板
   onTemplateChange(e) {
@@ -328,51 +296,6 @@ Page({
     }
   },
 
-  // 页面上拉触底事件的处理函数-用于加载更多数据
-  onReachBottom() {
-    // 如果在下拉刷新，禁止滚动加载
-    console.log("上拉触底触发");
-    if (this.data.isDownRefreshing || this.data.noMoreData) return;
-    this.setData({ isLoadingReachMore: true });
-    const oldList = this.data.dataAllList;
-    // 假数据
-    const newList = [
-      {
-        id: 7,
-        to_confirmed: 8,
-        client_name: "新增数据-01",
-        stage: "初步评审",
-        program: "The Outfitters",
-        Year: 2025,
-        create_time: "2025-07-21",
-      },
-      {
-        id: 8,
-        to_confirmed: 18,
-        client_name: "新增数据-02",
-        stage: "初步评审",
-        program: "The Outfitters",
-        Year: 2025,
-        create_time: "2025-07-21",
-      },
-      {
-        id: 9,
-        to_confirmed: 28,
-        client_name: "新增数据-03",
-        stage: "初步评审",
-        program: "The Outfitters",
-        Year: 2025,
-        create_time: "2025-07-21",
-      },
-    ]
-    setTimeout(() => {
-      wx.stopPullDownRefresh(); // 必须手动停止
-      this.setData({
-        dataAllList: oldList.concat(newList),
-        isLoadingReachMore: false, // 修改状态
-      });
-    }, 1500);
-  },
   // 回到顶部
   onToTop(e) {
     wx.pageScrollTo({

@@ -10,7 +10,7 @@ page {
 
 /* 页面整体高度 */
 .page-wrapper {
-  height: 100vh;
+  min-height: 100vh;
   position: relative;
 }
 
@@ -41,6 +41,19 @@ page {
 .loading-flex {
   display: flex;
   justify-content: center;
+}
+
+/* 固定到底部*/
+.bottom-loading {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 20rpx 0;
+  background-color: #fff;
+  text-align: center;
+  z-index: 999; /* 确保在上层 */
+  box-shadow: 0 -2rpx 10rpx rgba(0, 0, 0, 0.05);
 }
 
 /* 公共样式 */
@@ -77,18 +90,21 @@ page {
 
 .arrange-space-between {
   display: flex;
-  justify-content: space-between; /* 一左一右 */
+  justify-content: space-between;
+  /* 一左一右 */
   align-items: center;
 }
 
 .arrange-center {
   display: flex;
-  align-items: center; /* 任何元素排在一行 */
+  align-items: center;
+  /* 任何元素排在一行 */
 }
 
 .arrange-column {
   display: flex;
-  flex-direction: column; /* 设置为上下布局 */
+  flex-direction: column;
+  /* 设置为上下布局 */
 }
 
 /* 弹窗的css */
@@ -124,6 +140,7 @@ page {
 .dialog-textarea {
   margin-top: 15px;
 }
+
 /* 横向布局 */
 .radio-horizontal-box {
   display: flex;
@@ -146,6 +163,7 @@ page {
   flex: 0 0 calc(33.33% - 12rpx);
   margin: 10rpx 0 10rpx 0;
 }
+
 /* 修改 redio*/
 .t-radio {
   font-size: var(--td-radio-font-size, 26rpx) !important;
@@ -156,18 +174,21 @@ page {
   padding: var(--td-radio-vertical-padding, 18rpx) !important;
 }
 
-.t-radio--block{
+.t-radio--block {
   padding: var(--td-radio-vertical-padding, 9px) !important;
-  padding-left: var(--td-radio-vertical-padding,0px) !important;
+  padding-left: var(--td-radio-vertical-padding, 0px) !important;
 }
+
 .radio--t-radio__border {
-  left:0 !important;
+  left: 0 !important;
 }
+
 /* 重写下拉面板的样式 */
 .panel--t-collapse-panel__header {
-  padding-left: var(--td-collapse-horizontal-padding,0px) !important;
-  
+  padding-left: var(--td-collapse-horizontal-padding, 0px) !important;
+
 }
+
 .radio-active {
   border-color: var(--td-brand-color, #0052d9);
 }
