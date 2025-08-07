@@ -3,7 +3,8 @@ App({
     token: null,       // token
     userRole: null,     // 用户角色，比如 'kyle'
     userInfo: null,   // 当前登录用户信息
-    url: 'https://xcx.1bizmail.com:8153/api/', // 后端接口路径
+    // url: 'https://xcx.1bizmail.com:8153/api/', // 后端接口路径
+    url: 'http://10.8.0.69:8000/wbo/api/', // 后端接口路径
     fileUrl:'http://10.8.10.110:5000/send_wechat_file', // 下载附件发送的地址
   },
   onLaunch(options) {
