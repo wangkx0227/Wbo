@@ -29,13 +29,14 @@
                   <text class="title-main">开发案名称：</text>
                   <text class="title-other">{{ item.name }}</text>
                 </view>
-                <t-tag variant="light" icon="discount" size="small" wx:if="{{tabBarShow}}" style="position: absolute;right: 75rpx;"> {{ tabBarTabLabel }} </t-tag>
+                <t-tag variant="light"  size="small" wx:if="{{tabBarShow}}" style="position: absolute;right: 130rpx;"> 阶段：{{ tabBarTabLabel }} </t-tag>
               </view>
               <view>
                 <text class="title-main">主导人：</text>
                 <text class="title-other">{{ item.director }}</text>
               </view>
-              <view class="arrange-space-between title-other">
+              <view class="arrange-space-between title-other" style="gap: 20rpx;">
+                <text>Year：2025</text>
                 <text>创建时间：{{ item.start_date }}</text>
               </view>
               <!-- 只有kyle导出ppt或者第二轮标记导出附件 -->
