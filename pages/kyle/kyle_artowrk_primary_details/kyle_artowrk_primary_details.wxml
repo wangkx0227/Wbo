@@ -21,7 +21,7 @@
         </view>
         <view class="arrange-space-between title-font-other">
           <text>Material：{{ item.texture }}</text>
-          <text style="color: red;">状态：舍弃</text>
+          <text style="color: {{ item.confirmed == 3 ? 'red' : 'black' }};;">状态：{{ item.confirmed_text }}</text>
         </view>
         <view class="title-font-other arrange-space-between">
           <text>Name：{{ item.name }}</text>
@@ -40,12 +40,8 @@
           </t-image>
         </view>
         <view class="arrange-center title-font-other">
-          <text>OriginalDesignerComments：</text>
-          <t-link size="small" content="查看" hover underline suffixIcon="chat-bubble" variant="outline" bind:tap="onOpenPopup" />
-        </view>
-        <view class="arrange-center title-font-other">
           <text>ReviewComments：</text>
-          <t-link size="small" content="评审" hover underline suffixIcon="chat-message" variant="outline" bind:tap="onOpenDialog" data-id="{{ item.id }}" />
+          <t-link size="small" content="评审" hover underline suffixIcon="chat-message" variant="outline" bind:tap="onOpenDialog" data-id="{{ item.id }}" data-comment="{{ item.comment }}"/>
         </view>
         <view class="arrange-center title-font-other">
           <text>操作：</text>
@@ -72,17 +68,6 @@
 <t-toast id="t-toast" />
 <!-- 回到顶部 -->
 <t-back-top theme="half-round" text="顶部" scroll-top="{{scrollTop}}" bind:to-top="onToTop" />
-<!-- 查看自评弹窗 -->
-<t-popup visible="{{popupVisible}}" bind:visible-change="onClosePopup" placement="bottom">
-  <view class="popup-block">
-    <view class="popup-header">
-      <view class="popup-title">原始设计师意见：</view>
-    </view>
-    <view class="popup-comments">
-      <text>{{ popupValue }}</text>
-    </view>
-  </view>
-</t-popup>
 <!-- 评论弹窗 -->
 <t-dialog visible="{{dialogVisible}}" title="评审意见：" confirm-btn="确定" cancel-btn="取消" bind:confirm="onCloseDialog" bind:cancel="onCloseDialog">
   <view slot="content">

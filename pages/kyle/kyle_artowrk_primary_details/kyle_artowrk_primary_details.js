@@ -67,12 +67,10 @@ Page({
     noMoreData: false,    // 数据是否全部加载完毕
     // 回到顶部变量
     scrollTop: 0,
-    // 设计师自评弹窗控制变量
-    popupVisible: false,
-    popupValue: "",
     // 评论弹出层变量
     dialogVisible: false,
     dialogValue: "",
+    dialogId: null, // 当前点击的id
   },
   // 数据结构处理
   dataStructure(dataList) {
@@ -88,6 +86,16 @@ Page({
         name: task_list[index].AIE_designer1,
       }
       for (const timeline in task_list[index].timeline_list) {
+        data_dict["comment"] = task_list[index].timeline_list[timeline].comment; // kyle评审信息
+        const confirmed = task_list[index].timeline_list[timeline].confirmed; // 标记舍弃(3)还是保留(1)
+        data_dict["confirmed"] = confirmed;
+        if (confirmed === 0) {
+          data_dict["confirmed_text"] = "未标记";
+        } else if (confirmed === 1) {
+          data_dict["confirmed_text"] = "保留";
+        } else if (confirmed === 3) {
+          data_dict["confirmed_text"] = "舍弃";
+        }
         const image_list = task_list[index].timeline_list[timeline].image_list;
         if (image_list.length === 0) {
           data_dict["picture_list"] = [];
@@ -212,22 +220,14 @@ Page({
       'dropdownStatus.value': e.detail.value,
     });
   },
-  // 设计师评论弹窗函数 - 关闭
-  onClosePopup(e) {
-    this.setData({
-      popupVisible: e.detail.visible,
-      popupValue: "",
-    });
-  },
-  // 设计师评论弹窗函数 - 唤起
-  onOpenPopup(e) {
-    const { id, designer_comments } = e.currentTarget.dataset; // 点击按钮的存储的数据 id 点击id designer_comments 点击的自评文字
-    this.setData({ popupVisible: true, popupValue: "无内容" }); /// 触发弹窗
-  },
   // 弹窗-评论-打开
   onOpenDialog(e) {
-    const { id } = e.currentTarget.dataset;
-    this.setData({ dialogVisible: true });
+    const { id,comment } = e.currentTarget.dataset;
+    // 展示评审信息
+    if(comment){
+      this.setData({ dialogValue: comment});
+    }
+    this.setData({ dialogVisible: true, dialogId: id });
   },
   // 弹窗-评论-双向绑定
   onDialogInput(e) {
@@ -238,7 +238,7 @@ Page({
   // 弹窗-评论-关闭（包含提交功能）
   onCloseDialog(e) {
     const that = this;
-    const { dialogValue } = this.data; // 输入的评论的数据
+    const { dialogValue, dialogId } = this.data; // 输入的评论的数据
     const action = e.type; // "confirm" 或 "cancel"
     if (action === 'confirm') {
       const message = "评审完成"
@@ -248,7 +248,7 @@ Page({
       const message = "评审取消"
       utils.showToast(that, message, theme);
     }
-    this.setData({ dialogVisible: false, dialogValue: "" });
+    this.setData({ dialogVisible: false, dialogValue: "", dialogId: null });
   },
   // 修改当前图稿状态（舍弃与保留，默认都是保留）
   onModifyArtworkStatus(e) {
