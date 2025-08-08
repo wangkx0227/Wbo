@@ -29,7 +29,7 @@
                   <text class="title-main">开发案名称：</text>
                   <text class="title-other">{{ item.name }}</text>
                 </view>
-                <t-tag variant="light"  size="small" wx:if="{{tabBarShow}}" style="position: absolute;right: 130rpx;"> 阶段：{{ tabBarTabLabel }} </t-tag>
+                <t-tag variant="light" size="small" wx:if="{{tabBarShow}}" style="position: absolute;right: 130rpx;"> 阶段：{{ tabBarTabLabel }} </t-tag>
               </view>
               <view>
                 <text class="title-main">主导人：</text>
@@ -50,7 +50,7 @@
     </view>
   </view>
   <!-- 当下拉时,进行显示的内容  -->
-  <view class="bottom-loading" wx:if="{{noMoreData || isLoadingReachMore}}"> 
+  <view class="bottom-loading" wx:if="{{noMoreData || isLoadingReachMore}}">
     <view class="loading-box loading-flex" wx:if="{{isLoadingReachMore}}">
       <t-loading theme="dots" size="60rpx" />
     </view>

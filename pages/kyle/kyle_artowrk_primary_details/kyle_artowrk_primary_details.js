@@ -103,7 +103,6 @@ Page({
   readIdStructure(that) {
     const { allIdList, pageSize, currentIndex } = that.data;
     const nextIds = allIdList.slice(currentIndex, currentIndex + pageSize); // 取读取id的范围
-
     return nextIds; // 返回需要读取的id列表
   },
   // 请求后端接口数据处理
@@ -111,8 +110,12 @@ Page({
     const that = this;
     // 读取id
     const nextIds = that.readIdStructure(that);
+    // 判断，如果nextIds的长度小于预设pageSize的长度，就totalRequests重置，避免加载动作卡死
+    let totalRequests = that.data.pageSize;
+    if(nextIds.length !== that.data.pageSize){
+      totalRequests = nextIds.length;
+    }
     // 实例化请求类
-    const totalRequests = that.data.pageSize;
     const loader = new utils.MultiRequestLoader(that, totalRequests);
     // 读取数据
     let successIds = []; // 用于记录成功的 id 
@@ -129,7 +132,7 @@ Page({
       });
     })
     Promise.all(promises).then(results => {
-      console.log(results);
+      console.log(results,"11100110");
       const arrangedData = results.flatMap(list => that.dataStructure(list));
       // refresh刷新时重置，其他的数据追加
       if (mode === 'refresh') {
@@ -159,18 +162,17 @@ Page({
   },
   // 页面上拉刷新 - 用于页面重置
   onPullDownRefresh() {
-    console.log("上拉刷新");
     if (this.data.isLoadingReachMore) return; // 如果正在加载更多，则禁止下拉刷新
     // 重置 currentIndex 让它从头开始访问
     this.setData({
       currentIndex: 0,
-      noMoreData: true
+      noMoreData: false,
+      isLoadingReachMore:false
     })
     this.multiIdRequest('refresh');
   },
   // 页面上拉触底事件的处理函数-用于加载更多数据
   onReachBottom() {
-    console.log("下拉加载");
     // 如果在下拉刷新，禁止滚动加载
     if (this.data.isDownRefreshing || this.data.noMoreData) return;
     this.multiIdRequest('more');
