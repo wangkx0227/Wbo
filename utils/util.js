@@ -53,7 +53,7 @@ function ImagesPreview(el, that) {
     urls: imagesList
   });
 }
-// 单次请求
+// 单次请求获取数据
 function LoadDataList({
   page,                // 页面 this
   method = 'POST',      // 请求方法
@@ -127,7 +127,7 @@ function LoadDataList({
     });
   });
 }
-// 多次请求-避免加载状态重复，导致页面闪烁
+// 多次请求获取数据-避免加载状态重复，导致页面闪烁
 class MultiRequestLoader {
   constructor(page, totalRequests) {
     this.page = page;
@@ -200,11 +200,45 @@ class MultiRequestLoader {
     });
   }
 }
+// 提交请求-不牵扯加载动态
+function UpdateData({
+  page,                // 页面 this
+  method = 'POST',      // 请求方法
+  data,                 // 请求数据
+  message,
+}) {
+  const url = app.globalData.url; // 请求后端接口
+  return new Promise((resolve, reject) => {
+    wx.request({
+      url,
+      method,
+      data,
+      header: {
+        'content-type': 'application/json'
+      },
+      success: (res) => {
+        if (res.statusCode === 200 && res.data) { // 请求成功
+          showToast(page, message);
+        } else { // 请求失败
+          showToast(page, "数据请求失败", "error");
+          reject(res);
+        }
+      },
+      fail: (err) => { // 错误
+        showToast(page, "数据请求失败", "error");
+        reject(err);
+      },
+      complete: () => {
 
+      }
+    });
+  });
+}
 module.exports = {
   formatTime,
   showToast,
   ImagesPreview,
   LoadDataList,
-  MultiRequestLoader
+  MultiRequestLoader,
+  UpdateData
 }

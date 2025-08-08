@@ -102,6 +102,7 @@ Page({
         } else {
           data_dict["picture_list"] = [image_url + image_list[0].imageURL];
         }
+        data_dict["timeline_id"] = task_list[index].timeline_list[timeline].id;
       }
       arrangeData.push(data_dict);
     }
@@ -222,12 +223,12 @@ Page({
   },
   // 弹窗-评论-打开
   onOpenDialog(e) {
-    const { id,comment } = e.currentTarget.dataset;
+    const { timelineid, comment } = e.currentTarget.dataset;
     // 展示评审信息
-    if(comment){
-      this.setData({ dialogValue: comment});
+    if (comment) {
+      this.setData({ dialogValue: comment });
     }
-    this.setData({ dialogVisible: true, dialogId: id });
+    this.setData({ dialogVisible: true, dialogId: timelineid });
   },
   // 弹窗-评论-双向绑定
   onDialogInput(e) {
@@ -241,28 +242,69 @@ Page({
     const { dialogValue, dialogId } = this.data; // 输入的评论的数据
     const action = e.type; // "confirm" 或 "cancel"
     if (action === 'confirm') {
-      const message = "评审完成"
-      utils.showToast(that, message);
+      utils.UpdateData({
+        page: that,
+        data: {
+          "type": "update_timeline",
+          "timeLine_id": dialogId,
+          "username": "admin",
+          "name": "管理员",
+          "comment": dialogValue
+        },
+        message: "评审记录完成"
+      })
+      // 数据更新
+      const updatedData = that.data.Data.map(item => {
+        if (item.timeline_id === dialogId) {
+          item["comment"] = dialogValue;
+        }
+        return item;
+      })
+      this.setData({
+        Data: updatedData
+      });
     } else if (action === 'cancel') {
       const theme = "warning"
-      const message = "评审取消"
+      const message = "评审记录取消"
       utils.showToast(that, message, theme);
     }
-    this.setData({ dialogVisible: false, dialogValue: "", dialogId: null });
+    this.setData({ dialogVisible: false, dialogId: null });
+    setTimeout(() => {
+      this.setData({ dialogValue: "", })
+    }, 500)
   },
-  // 修改当前图稿状态（舍弃与保留，默认都是保留）
+  // 修改当前图稿状态（舍弃与保留，默认都是保留）- 小问题，需要修改
   onModifyArtworkStatus(e) {
     const that = this;
-    const { id, contentStatus } = e.currentTarget.dataset;
+    const { timelineid, contentStatus } = e.currentTarget.dataset;
     if (contentStatus === "Y") {
       wx.showModal({
         title: '提示',
         content: '是否"保留"当前图稿',
         success(res) {
           if (res.confirm) {
-            // 发送请求
-            const message = "图稿已标记保留"
-            utils.showToast(that, message);
+            utils.UpdateData({
+              page: that,
+              data: {
+                "type": "update_timeline",
+                "timeLine_id": timelineid,
+                "username": "admin",
+                "name": "管理员",
+                "confirmed": 1
+              },
+
+              message: "图稿已标记保留"
+            })
+            const updatedData = that.data.Data.map(item => {
+              if (item.timeline_id === timelineid) {
+                item["confirmed"] = 1;
+                item["confirmed_text"] = "保留";
+              }
+              return item;
+            })
+            this.setData({
+              Data: updatedData
+            });
           } else if (res.cancel) {
             // 取消
             const theme = "warning"
@@ -277,9 +319,27 @@ Page({
         content: '是否"舍弃"当前图稿',
         success(res) {
           if (res.confirm) {
-            // 发送请求
-            const message = "图稿已标记舍弃"
-            utils.showToast(that, message);
+            utils.UpdateData({
+              page: that,
+              data: {
+                "type": "update_timeline",
+                "timeLine_id": timelineid,
+                "username": "admin",
+                "name": "管理员",
+                "confirmed": 3
+              },
+              message: "图稿已标记舍弃"
+            })
+            const updatedData = that.data.Data.map(item => {
+              if (item.timeline_id === timelineid) {
+                item["confirmed"] = 3;
+                item["confirmed_text"] = "舍弃";
+              }
+              return item;
+            })
+            this.setData({
+              Data: updatedData
+            });
           } else if (res.cancel) {
             // 取消
             const theme = "warning"
