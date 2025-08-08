@@ -92,23 +92,61 @@ Page({
         if (image_list.length === 0) {
           data_dict["picture_list"] = [];
         } else {
-          data_dict["picture_list"] = [ image_url + image_list[0].imageURL];
+          data_dict["picture_list"] = [image_url + image_list[0].imageURL];
         }
       }
       arrangeData.push(data_dict);
     }
     return arrangeData; // 返回整理的结构体
   },
-  // 读取ID处理
+  // 读取访问ID处理
   readIdStructure(that) {
     const { allIdList, pageSize, currentIndex } = that.data;
     const nextIds = allIdList.slice(currentIndex, currentIndex + pageSize); // 取读取id的范围
-    // 记录已经读取的id和读取id的位置，应该在数据请求完成后
-    that.setData({
-      loadedIdList: that.data.loadedIdList.concat(nextIds),
-      currentIndex: that.data.currentIndex + nextIds.length
-    })
+
     return nextIds; // 返回需要读取的id列表
+  },
+  // 请求后端接口数据处理
+  multiIdRequest(mode) {
+    const that = this;
+    // 读取id
+    const nextIds = that.readIdStructure(that);
+    // 实例化请求类
+    const totalRequests = that.data.pageSize;
+    const loader = new utils.MultiRequestLoader(that, totalRequests);
+    // 读取数据
+    let successIds = []; // 用于记录成功的 id 
+    const promises = nextIds.map(id => {
+      return loader.request({
+        data: { type: "getTaskByLinePlan", username: "admin", "lp_id": id, },
+        mode: mode,
+      }).then(res => {
+        successIds.push(id); // 用于记录成功的 id
+        return res;
+      }).catch(err => {
+        console.warn(`ID ${id} 请求失败`, err);
+        return null; // 保证 Promise.all 能跑完
+      });
+    })
+    Promise.all(promises).then(results => {
+      console.log(results);
+      const arrangedData = results.flatMap(list => that.dataStructure(list));
+      // refresh刷新时重置，其他的数据追加
+      if (mode === 'refresh') {
+        that.setData({
+          Data: arrangedData,
+        })
+      } else {
+        that.setData({
+          Data: that.data.Data.concat(arrangedData),
+        })
+      }
+      that.setData({
+        // 只记录访问成功的id
+        loadedIdList: that.data.loadedIdList.concat(successIds),
+        currentIndex: that.data.currentIndex + successIds.length
+      });
+    })
   },
   // 页面初次加载数据
   onLoad(options) {
@@ -117,27 +155,30 @@ Page({
     that.setData({
       allIdList: groupIdList, // 记录全部的id数据
     })
-    // 读取id
-    const nextIds = that.readIdStructure(that);
-    // 实例化请求类
-    const totalRequests = that.data.pageSize;
-    const loader = new utils.MultiRequestLoader(that, totalRequests);
-    // 读取数据
-    const promises = nextIds.map(id => {
-      return loader.request({
-        data: { type: "getTaskByLinePlan", username: "admin", "lp_id": id, },
-        mode: 'init',
-      })
+    this.multiIdRequest('init');
+  },
+  // 页面上拉刷新 - 用于页面重置
+  onPullDownRefresh() {
+    console.log("上拉刷新");
+    if (this.data.isLoadingReachMore) return; // 如果正在加载更多，则禁止下拉刷新
+    // 重置 currentIndex 让它从头开始访问
+    this.setData({
+      currentIndex: 0,
+      noMoreData: true
     })
-    Promise.all(promises).then(results => {
-      const arrangedData = results.flatMap(list => this.dataStructure(list));
-      console.log(arrangedData);
-      that.setData({
-        Data: this.data.Data.concat(arrangedData)
-      });
-    }).catch(err => {
-      console.error('有一个请求失败了：', err);
-    });
+    this.multiIdRequest('refresh');
+  },
+  // 页面上拉触底事件的处理函数-用于加载更多数据
+  onReachBottom() {
+    console.log("下拉加载");
+    // 如果在下拉刷新，禁止滚动加载
+    if (this.data.isDownRefreshing || this.data.noMoreData) return;
+    this.multiIdRequest('more');
+    if (this.data.currentIndex === this.data.allIdList.length) {
+      this.setData({
+        noMoreData: true
+      })
+    }
   },
   // 下拉菜单-设计师
   onDesignerChange(e) {
@@ -151,39 +192,11 @@ Page({
       'dropdownStatus.value': e.detail.value,
     });
   },
-  // 轮播图函数 - 点击轮播图 - 图片预览
+  // 点击轮播图 - 图片预览
   onSwiperImagesTap(e) {
     const el = e;
     const that = this;
     utils.ImagesPreview(el, that);
-  },
-  // 页面上拉刷新 - 用于页面重置
-  onPullDownRefresh() {
-    console.log("下拉刷新触发");
-    // 如果正在加载更多，则禁止下拉刷新
-    if (this.data.isLoadingReachMore) return;
-    this.setData({ isDownRefreshing: true });
-    // 模拟数据加载
-    setTimeout(() => {
-      wx.stopPullDownRefresh(); // 必须手动停止
-      this.setData({
-        isDownRefreshing: false, // 修改状态
-      });
-    }, 1500);
-  },
-  // 页面上拉触底事件的处理函数-用于加载更多数据
-  onReachBottom() {
-    // 如果在下拉刷新，禁止滚动加载
-    if (this.data.isDownRefreshing || this.data.noMoreData) return;
-    this.setData({ isLoadingReachMore: true });
-    setTimeout(() => {
-      wx.stopPullDownRefresh(); // 必须手动停止
-      this.setData({
-        isLoadingReachMore: false, // 修改状态
-        // noMoreData:true // 如果数据已经读取完毕,就变为true,下拉就没有效果了
-      });
-    }, 1500);
-
   },
   // 回到顶部
   onToTop(e) {
