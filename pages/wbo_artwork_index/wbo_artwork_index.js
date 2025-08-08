@@ -62,6 +62,26 @@ Page({
     // 数据
     Data: [],
   },
+  // 数据结构处理
+  dataStructure(dataList) {
+    let arrangeData = [];
+    dataList.forEach(item => {
+      // 对内部的line_plan_list变量进行循环
+      let lp_list = [];
+      item.line_plan_list.forEach((line_plan) => {
+        lp_list.push(line_plan.id)
+      })
+      arrangeData.push({
+        id: item.id,
+        name: item.name,
+        director: item.director,
+        start_date: item.start_date,
+        line_plan_list: lp_list,
+        to_confirmed: 80, // 假数据
+      })
+    })
+    return arrangeData
+  },
   // 加载用户角色
   loadUserRole() {
     const userRole = wx.getStorageSync('userRole');
@@ -114,33 +134,7 @@ Page({
       data: { type: "getProjectList", username: "admin" },
       mode: 'init'
     }).then(list => { // list 就是data数据
-      let arrangeData = [];
-      list.forEach(item => {
-        arrangeData.push({
-          id: item.id,
-          name: item.name,
-          director: item.director,
-          start_date: item.start_date,
-          line_plan_list: item.line_plan_list,
-          to_confirmed: 80, // 假数据
-        })
-      })
-      arrangeData.push({
-        id: 10,
-        name: '测试',
-        director: '测试',
-        start_date: '测试',
-        line_plan_list: '测试',
-        to_confirmed: 80, // 假数据
-      })
-      arrangeData.push({
-        id: 10,
-        name: '测试2',
-        director: '测试2',
-        start_date: '测试2',
-        line_plan_list: '测试2',
-        to_confirmed: 80, // 假数据
-      })
+      const arrangeData = this.dataStructure(list);
       this.setData({
         Data: arrangeData
       })
@@ -158,28 +152,7 @@ Page({
       mode: 'refresh',
       // 如果有分页加入分页，或者搜索条件等等
     }).then(list => { // list 就是data数据
-      let arrangeData = [];
-      // list.forEach(item => {
-      //   arrangeData.push({
-      //     id: item.id,
-      //     name: item.name,
-      //     director: item.director,
-      //     start_date: item.start_date,
-      //     line_plan_list: item.line_plan_list,
-      //     to_confirmed: 80, // 假数据
-      //   })
-      // })
-      const item = list[0]
-      if (item) {
-        arrangeData.push({
-          id: item.id,
-          name: item.name,
-          director: item.director,
-          start_date: item.start_date,
-          line_plan_list: item.line_plan_list,
-          to_confirmed: 80,
-        });
-      }
+      const arrangeData = this.dataStructure(list);
       this.setData({
         Data: arrangeData
       })
@@ -199,17 +172,7 @@ Page({
       mode: 'more',
       // 如果有分页加入分页，或者搜索条件等等
     }).then(list => { // list 就是data数据
-      let arrangeData = [];
-      list.forEach(item => {
-        arrangeData.push({
-          id: item.id,
-          name: item.name,
-          director: item.director,
-          start_date: item.start_date,
-          line_plan_list: item.line_plan_list,
-          to_confirmed: 80, // 假数据
-        })
-      })
+      const arrangeData = this.dataStructure(list);
       this.setData({
         Data: this.data.Data.concat(arrangeData),
       })
@@ -235,22 +198,19 @@ Page({
   },
   // 跳转到详情页面
   onJumpArtworkDeatails(e) {
-
     const that = this;
-    const groupId = e.currentTarget.dataset.groupId;
     const userRole = that.data.userRole;
-    console.log(1);
-    console.log(groupId, "准备跳转");
+    const groupIdList = e.currentTarget.dataset.groupIdList;
     // 需要3类人进行跳转 Kyle Shelley FMR 进行跳转
     const tabBarValue = that.data.tabBarValue;
     if (userRole === "kyle") {
       if (tabBarValue === "primary") { // kyle 初筛和终评
         wx.navigateTo({
-          url: `/pages/kyle/kyle_artowrk_primary_details/kyle_artowrk_primary_details?groupId=${groupId}`
+          url: `/pages/kyle/kyle_artowrk_primary_details/kyle_artowrk_primary_details?groupIdList=${groupIdList}`
         });
       } else {
         wx.navigateTo({
-          url: `/pages/kyle/kyle_artowrk_ultimate_details/kyle_artowrk_ultimate_details?groupId=${groupId}`
+          url: `/pages/kyle/kyle_artowrk_ultimate_details/kyle_artowrk_ultimate_details?groupIdList=${groupIdList}`
         });
       }
     } else if (userRole === "shelley") { // shelley可行性
@@ -295,7 +255,6 @@ Page({
       });
     }
   },
-
   // 回到顶部
   onToTop(e) {
     wx.pageScrollTo({
