@@ -8,8 +8,13 @@ const swiperImages = [
 ];
 Page({
   data: {
+    Data: [], // 页面渲染数据存储列表
+    pageSize: 1, // 每次加载几个ID
+    currentIndex: 0, // 当前加载到第几个ID
+    allIdList: [], // 首页跳转后的存储的ID值列表
+    loadedIdList: [], // 已经读取渲染到页面的ID
     skeletonLoading: true, // 骨架屏控制变量
-    groupIdList: null, // 首页跳转后的存储的id值列表
+
     // 筛选框变量-1
     dropdownDesigner: {
       value: 'all',
@@ -69,19 +74,37 @@ Page({
     dialogVisible: false,
     dialogValue: "",
   },
-  /**
-   * 生命周期函数--监听页面加载
-   */
+  // 数据结构处理
+  dataStructure(dataList) {
+    let arrangeData = [];
+    console.log(dataList);
+    return arrangeData
+  },
+  // 页面初次加载数据
   onLoad(options) {
-    const groupIdList = options.groupIdList; // 首页跳转后的存储的id值
-    console.log(groupIdList);
-    wx.showLoading({ title: '正在加载...', });
-    setTimeout(() => {
-      wx.hideLoading();
+    const groupIdList = JSON.parse(options.groupIdList || '[]'); // 首页跳转后的存储的id值
+    this.setData({
+      allIdList: groupIdList, // 记录全部的id数据
+    })
+    const { allIdList, pageSize, currentIndex } = this.data;
+    const nextIds = allIdList.slice(currentIndex, currentIndex + pageSize); // 取读取id的范围
+    // 读取数据
+    console.log(nextIds);
+    utils.LoadDataList({
+      page: this,
+      data: { type: "getTaskByLinePlan", username: "admin", "lp_id": "10468", },
+      mode: 'init'
+    }).then(list => { // list 就是data数据
+      const arrangeData = this.dataStructure(list);
       this.setData({
-        skeletonLoading: false,
+        Data: this.data.Data.concat(arrangeData)
       })
-    }, 2000)
+    });
+    // 记录已经读取的id和读取id的位置
+    this.setData({
+      loadedIdList: this.data.loadedIdList.concat(nextIds),
+      currentIndex: this.data.currentIndex + nextIds.length
+    })
   },
   // 下拉菜单-设计师
   onDesignerChange(e) {
@@ -99,7 +122,7 @@ Page({
   onSwiperImagesTap(e) {
     const el = e;
     const that = this;
-    utils.ImagesPreview(el,that);
+    utils.ImagesPreview(el, that);
   },
   // 页面上拉刷新 - 用于页面重置
   onPullDownRefresh() {

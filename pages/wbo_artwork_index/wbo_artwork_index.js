@@ -206,11 +206,11 @@ Page({
     if (userRole === "kyle") {
       if (tabBarValue === "primary") { // kyle 初筛和终评
         wx.navigateTo({
-          url: `/pages/kyle/kyle_artowrk_primary_details/kyle_artowrk_primary_details?groupIdList=${groupIdList}`
+          url: `/pages/kyle/kyle_artowrk_primary_details/kyle_artowrk_primary_details?groupIdList=${JSON.stringify(groupIdList)}`
         });
       } else {
         wx.navigateTo({
-          url: `/pages/kyle/kyle_artowrk_ultimate_details/kyle_artowrk_ultimate_details?groupIdList=${groupIdList}`
+          url: `/pages/kyle/kyle_artowrk_ultimate_details/kyle_artowrk_ultimate_details?groupIdList=${JSON.stringify(groupIdList)}`
         });
       }
     } else if (userRole === "shelley") { // shelley可行性
