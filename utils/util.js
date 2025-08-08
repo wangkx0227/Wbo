@@ -53,8 +53,7 @@ function ImagesPreview(el, that) {
     urls: imagesList
   });
 }
-
-// 请求
+// 单次请求
 function LoadDataList({
   page,                // 页面 this
   method = 'POST',      // 请求方法
@@ -128,9 +127,83 @@ function LoadDataList({
     });
   });
 }
+// 多次请求-避免加载状态重复，导致页面闪烁
+class MultiRequestLoader {
+  constructor(page, totalRequests) {
+    this.page = page;
+    this.loadingCount = 0; // 计数
+    this.totalRequests = totalRequests; // 总请求数
+    this.url = app.globalData.url; // 请求后端接口
+  }
+  request({ method = 'POST', data, mode = 'init', toastOnError = true }) {
+    const isInit = mode === 'init';
+    const isRefresh = mode === 'refresh';
+    const isMore = mode === 'more';
+    const url = this.url;
+    if (isInit) {
+      // 多次请求只第一次显示loading和骨架
+      if (this.loadingCount === 0) {
+        wx.showLoading({ title: '加载中...' });
+      }
+      this.loadingCount++;
+    }
+    if (isRefresh) {
+      this.page.setData({ isDownRefreshing: true });
+      this.loadingCount++;
+    }
+    if (isMore) {
+      this.page.setData({ isLoadingReachMore: true });
+      this.loadingCount++;
+    }
+    return new Promise((resolve, reject) => {
+      wx.request({
+        url,
+        method,
+        data,
+        header: { 'content-type': 'application/json' },
+        success: (res) => {
+          if (res.statusCode === 200 && res.data) {
+            resolve(res.data.data || []);
+          } else {
+            if (toastOnError) showToast(this.page, "数据请求失败", "error");
+            reject(res);
+          }
+        },
+        fail: (err) => {
+          if (toastOnError) showToast(this.page, "数据请求失败", "error");
+          reject(err);
+        },
+        complete: () => {
+          // 关闭加载状态
+          if (isInit) {
+            if (this.loadingCount === this.totalRequests) {
+              wx.hideLoading();
+              this.page.setData({ skeletonLoading: false });
+            }
+          }
+          if (isRefresh) {
+            if (this.loadingCount === this.totalRequests) {
+              wx.stopPullDownRefresh();
+              this.page.setData({ isDownRefreshing: false });
+            }
+
+          }
+          if (isMore) {
+            if (this.loadingCount === this.totalRequests) {
+              wx.stopPullDownRefresh();
+              this.page.setData({ isLoadingReachMore: false });
+            }
+          }
+        }
+      });
+    });
+  }
+}
+
 module.exports = {
   formatTime,
   showToast,
   ImagesPreview,
-  LoadDataList
+  LoadDataList,
+  MultiRequestLoader
 }

@@ -9,7 +9,7 @@ const swiperImages = [
 Page({
   data: {
     Data: [], // 页面渲染数据存储列表
-    pageSize: 1, // 每次加载几个ID
+    pageSize: 2, // 每次加载几个ID
     currentIndex: 0, // 当前加载到第几个ID
     allIdList: [], // 首页跳转后的存储的ID值列表
     loadedIdList: [], // 已经读取渲染到页面的ID
@@ -77,33 +77,70 @@ Page({
   // 数据结构处理
   dataStructure(dataList) {
     let arrangeData = [];
-    console.log(dataList);
-    return arrangeData
+    const image_url = dataList.WBO_URL
+    const task_list = dataList.task_list
+    for (const index in task_list) {
+      let data_dict = {
+        id: task_list[index].id,
+        code: task_list[index].code,
+        title: task_list[index].title,
+        texture: task_list[index].texture,
+        name: task_list[index].AIE_designer1,
+      }
+      for (const timeline in task_list[index].timeline_list) {
+        const image_list = task_list[index].timeline_list[timeline].image_list;
+        if (image_list.length === 0) {
+          data_dict["iamge_list"] = [];
+        } else {
+          data_dict["iamge_list"] = [ image_url + image_list[0].imageURL];
+        }
+      }
+      arrangeData.push(data_dict);
+    }
+    return arrangeData; // 返回整理的结构体
+  },
+  // 读取ID处理
+  readIdStructure(that) {
+    const { allIdList, pageSize, currentIndex } = that.data;
+    const nextIds = allIdList.slice(currentIndex, currentIndex + pageSize); // 取读取id的范围
+    // 记录已经读取的id和读取id的位置，应该在数据请求完成后
+    that.setData({
+      loadedIdList: that.data.loadedIdList.concat(nextIds),
+      currentIndex: that.data.currentIndex + nextIds.length
+    })
+    return nextIds; // 返回需要读取的id列表
   },
   // 页面初次加载数据
   onLoad(options) {
+    const that = this;
     const groupIdList = JSON.parse(options.groupIdList || '[]'); // 首页跳转后的存储的id值
-    this.setData({
+    that.setData({
       allIdList: groupIdList, // 记录全部的id数据
     })
-    const { allIdList, pageSize, currentIndex } = this.data;
-    const nextIds = allIdList.slice(currentIndex, currentIndex + pageSize); // 取读取id的范围
+    // 读取id
+    const nextIds = that.readIdStructure(that);
+    // 实例化请求类
+    const totalRequests = that.data.pageSize;
+    const loader = new utils.MultiRequestLoader(that, totalRequests);
     // 读取数据
-    console.log(nextIds);
-    utils.LoadDataList({
-      page: this,
-      data: { type: "getTaskByLinePlan", username: "admin", "lp_id": "10468", },
-      mode: 'init'
-    }).then(list => { // list 就是data数据
-      const arrangeData = this.dataStructure(list);
-      this.setData({
-        Data: this.data.Data.concat(arrangeData)
+    const newData = []; // 累计数据体
+    const promises = nextIds.map(id => {
+      return loader.request({
+        data: { type: "getTaskByLinePlan", username: "admin", "lp_id": id, },
+        mode: 'init',
       })
+    })
+    Promise.all(promises).then(results => {
+      const arrangedData = results.flatMap(list => this.dataStructure(list));
+      that.setData({
+        Data: this.data.Data.concat(arrangedData)
+      });
+    }).catch(err => {
+      console.error('有一个请求失败了：', err);
     });
-    // 记录已经读取的id和读取id的位置
-    this.setData({
-      loadedIdList: this.data.loadedIdList.concat(nextIds),
-      currentIndex: this.data.currentIndex + nextIds.length
+    // 进行赋值
+    that.setData({
+      Data: newData
     })
   },
   // 下拉菜单-设计师
