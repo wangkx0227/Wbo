@@ -21,7 +21,10 @@
             <view class="cell" style="margin-bottom: 15rpx;">
               <view class="arrange-space-between">
                 <t-skeleton theme="text" loading animation="gradient" rowCol="{{ [{ width: '410rpx', height: '38rpx'}]}}"></t-skeleton>
-                <t-skeleton theme="text" loading animation="gradient" rowCol="{{ [{ width: '80px', height: '38rpx'}]}}"></t-skeleton>
+              </view>
+              <view class="arrange-space-between title-font-other">
+                <t-skeleton theme="text" loading animation="gradient" rowCol="{{ [{ width: '180rpx', height: '32rpx'}]}}"></t-skeleton>
+                <t-skeleton theme="text" loading animation="gradient" rowCol="{{ [{ width: '80px', height: '32rpx'}]}}"></t-skeleton>
               </view>
               <view class="arrange-space-between">
                 <t-skeleton theme="text" loading animation="gradient" rowCol="{{ [{ width: '135rpx', height: '32rpx'}]}}"></t-skeleton>

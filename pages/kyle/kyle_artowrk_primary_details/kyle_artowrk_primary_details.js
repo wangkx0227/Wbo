@@ -90,9 +90,9 @@ Page({
       for (const timeline in task_list[index].timeline_list) {
         const image_list = task_list[index].timeline_list[timeline].image_list;
         if (image_list.length === 0) {
-          data_dict["iamge_list"] = [];
+          data_dict["picture_list"] = [];
         } else {
-          data_dict["iamge_list"] = [ image_url + image_list[0].imageURL];
+          data_dict["picture_list"] = [ image_url + image_list[0].imageURL];
         }
       }
       arrangeData.push(data_dict);
@@ -123,7 +123,6 @@ Page({
     const totalRequests = that.data.pageSize;
     const loader = new utils.MultiRequestLoader(that, totalRequests);
     // 读取数据
-    const newData = []; // 累计数据体
     const promises = nextIds.map(id => {
       return loader.request({
         data: { type: "getTaskByLinePlan", username: "admin", "lp_id": id, },
@@ -132,16 +131,13 @@ Page({
     })
     Promise.all(promises).then(results => {
       const arrangedData = results.flatMap(list => this.dataStructure(list));
+      console.log(arrangedData);
       that.setData({
         Data: this.data.Data.concat(arrangedData)
       });
     }).catch(err => {
       console.error('有一个请求失败了：', err);
     });
-    // 进行赋值
-    that.setData({
-      Data: newData
-    })
   },
   // 下拉菜单-设计师
   onDesignerChange(e) {

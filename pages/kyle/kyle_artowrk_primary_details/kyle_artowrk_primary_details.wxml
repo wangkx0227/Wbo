@@ -15,40 +15,45 @@
   </view>
   <view class="page-main">
     <view class="wrapper">
-      <view class="cell">
-        <view class="arrange-space-between title-font-main">
-          <text>Title：热可可杯吊饰</text>
-          <text style="color: red;">状态：舍弃</text>
-        </view>
-        <view class="title-font-other arrange-space-between">
-          <text>Name：宁安琪</text>
-          <text>Code：NAQ__AIE MJ_2025_01</text>
-        </view>
-        <view class="cell-swiper">
-          <t-swiper wx:if="{{swiperImages.length}}" current="{{current}}" autoplay="{{autoplay}}" duration="{{duration}}" interval="{{interval}}" navigation="{{ { type: 'dots' } }}" list="{{swiperImages}}" bind:click="onSwiperImagesTap" data-images="{{swiperImages}}">
-          </t-swiper>
-          <!-- 9宫格遮罩层 -->
-          <view class="grid-overlay" wx:if="{{swiperImages.length}}">
-            <view class="grid-cell" wx:for="{{9}}" wx:key="index"></view>
+      <view wx:for="{{Data}}" wx:key="index">
+        <view class="cell">
+          <view class="arrange-space-between title-font-main">
+            <text>Title：{{ item.title }}</text>
           </view>
-          <!-- 无数据时显示占位内容 -->
-          <t-image wx:else src="" shape="round" error="slot" width="640rpx" height="384rpx">
-            <text class="error-text" slot="error">轮播图加载失败</text>
-          </t-image>
-        </view>
-        <view class="arrange-center title-font-other">
-          <text>OriginalDesignerComments：</text>
-          <t-link size="small" content="查看" hover underline suffixIcon="chat-bubble" variant="outline" bind:tap="onOpenPopup" />
-        </view>
-        <view class="arrange-center title-font-other">
-          <text>ReviewComments：</text>
-          <t-link size="small" content="评审" hover underline suffixIcon="chat-message" variant="outline" bind:tap="onOpenDialog" />
-        </view>
-        <view class="arrange-center title-font-other">
-          <text>操作：</text>
-          <t-link size="small" content="舍弃" data-content-status="N" hover underline theme="danger" bindtap="onModifyArtworkStatus" data-id="2" />
-          <t-divider layout="vertical" />
-          <t-link size="small" content="保留" data-content-status="Y" hover underline bindtap="onModifyArtworkStatus" data-id="2" />
+          <view class="arrange-space-between title-font-other">
+            <text>Material：{{ item.texture }}</text>
+            <text style="color: red;">状态：舍弃</text>
+          </view>
+          <view class="title-font-other arrange-space-between">
+            <text>Name：{{ item.name }}</text>
+            <text>Code：{{ item.code }}</text>
+          </view>
+          <view class="cell-swiper">
+            <t-swiper wx:if="{{item.picture_list.length}}" current="{{current}}" autoplay="{{autoplay}}" duration="{{duration}}" interval="{{interval}}" navigation="{{ { type: 'dots' } }}" list="{{item.picture_list}}" bind:click="onSwiperImagesTap" data-images="{{item.picture_list}}">
+            </t-swiper>
+            <!-- 9宫格遮罩层 -->
+            <view class="grid-overlay" wx:if="{{item.picture_list.length}}">
+              <view class="grid-cell" wx:for="{{9}}" wx:key="index"></view>
+            </view>
+            <!-- 无数据时显示占位内容 -->
+            <t-image wx:else src="" shape="round" error="slot" width="690rpx" height="384rpx">
+              <text class="error-text" slot="error">轮播图加载失败</text>
+            </t-image>
+          </view>
+          <view class="arrange-center title-font-other">
+            <text>OriginalDesignerComments：</text>
+            <t-link size="small" content="查看" hover underline suffixIcon="chat-bubble" variant="outline" bind:tap="onOpenPopup" />
+          </view>
+          <view class="arrange-center title-font-other">
+            <text>ReviewComments：</text>
+            <t-link size="small" content="评审" hover underline suffixIcon="chat-message" variant="outline" bind:tap="onOpenDialog" data-id="{{ item.id }}"/>
+          </view>
+          <view class="arrange-center title-font-other">
+            <text>操作：</text>
+            <t-link size="small" content="舍弃" data-content-status="N" hover underline theme="danger" bindtap="onModifyArtworkStatus" data-id="{{ item.id }}" />
+            <t-divider layout="vertical" />
+            <t-link size="small" content="保留" data-content-status="Y" hover underline bindtap="onModifyArtworkStatus" data-id="{{ item.id }}" />
+          </view>
         </view>
       </view>
     </view>
