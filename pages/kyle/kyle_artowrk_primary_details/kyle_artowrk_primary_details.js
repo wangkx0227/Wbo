@@ -112,7 +112,7 @@ Page({
     const nextIds = that.readIdStructure(that);
     // 判断，如果nextIds的长度小于预设pageSize的长度，就totalRequests重置，避免加载动作卡死
     let totalRequests = that.data.pageSize;
-    if(nextIds.length !== that.data.pageSize){
+    if (nextIds.length !== that.data.pageSize) {
       totalRequests = nextIds.length;
     }
     // 实例化请求类
@@ -132,7 +132,6 @@ Page({
       });
     })
     Promise.all(promises).then(results => {
-      console.log(results,"11100110");
       const arrangedData = results.flatMap(list => that.dataStructure(list));
       // refresh刷新时重置，其他的数据追加
       if (mode === 'refresh') {
@@ -167,7 +166,7 @@ Page({
     this.setData({
       currentIndex: 0,
       noMoreData: false,
-      isLoadingReachMore:false
+      isLoadingReachMore: false
     })
     this.multiIdRequest('refresh');
   },
@@ -181,18 +180,6 @@ Page({
         noMoreData: true
       })
     }
-  },
-  // 下拉菜单-设计师
-  onDesignerChange(e) {
-    this.setData({
-      'dropdownDesigner.value': e.detail.value,
-    });
-  },
-  // 下拉菜单-状态
-  onStatusChange(e) {
-    this.setData({
-      'dropdownStatus.value': e.detail.value,
-    });
   },
   // 点击轮播图 - 图片预览
   onSwiperImagesTap(e) {
@@ -211,6 +198,18 @@ Page({
   onPageScroll(e) {
     this.setData({
       scrollTop: e.scrollTop
+    });
+  },
+  // 下拉菜单-设计师
+  onDesignerChange(e) {
+    this.setData({
+      'dropdownDesigner.value': e.detail.value,
+    });
+  },
+  // 下拉菜单-状态
+  onStatusChange(e) {
+    this.setData({
+      'dropdownStatus.value': e.detail.value,
     });
   },
   // 设计师评论弹窗函数 - 关闭
