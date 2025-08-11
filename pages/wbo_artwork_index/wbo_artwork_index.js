@@ -215,7 +215,7 @@ Page({
       }
     } else if (userRole === "shelley") { // shelley可行性
       wx.navigateTo({
-        url: `/pages/shelley/shelley_artwork_detail/shelley_artwork_detail?groupId=${groupId}`
+        url: `/pages/shelley/shelley_artwork_detail/shelley_artwork_detail?groupIdList=${JSON.stringify(groupIdList)}`
       });
     } else if (userRole === "fmr") { // fmr可行性与样品图上传
       if (tabBarValue === "primary") { // fmr 可行性评估与样品图上传

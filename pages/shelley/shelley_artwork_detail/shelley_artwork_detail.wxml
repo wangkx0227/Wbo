@@ -16,19 +16,19 @@
   </view>
   <view class="page-main">
     <view class="wrapper">
-      <view class="cell">
+      <view class="cell" wx:for="{{Data}}" wx:key="index">
         <view class="title-font-main">
-          <text>Title：Animals in sleeping bags</text>
+          <text>Title：{{ item.title }}</text>
         </view>
         <view class="title-font-other arrange-space-between">
-          <text>Name：黎善玲</text>
-          <text>Code：LSL__AIE MJ_2025_01</text>
+          <text>Name：{{ item.name }}</text>
+          <text>Code：{{ item.code }}</text>
         </view>
         <view class="cell-swiper">
-          <t-swiper wx:if="{{swiperImages.length}}" current="{{current}}" autoplay="{{autoplay}}" duration="{{duration}}" interval="{{interval}}" navigation="{{ { type: 'dots' } }}" list="{{swiperImages}}" bind:click="onSwiperImagesTap" data-images="{{swiperImages}}">
+          <t-swiper wx:if="{{item.picture_list.length}}" current="{{current}}" autoplay="{{autoplay}}" duration="{{duration}}" interval="{{interval}}" navigation="{{ { type: 'dots' } }}" list="{{item.picture_list}}" bind:click="onSwiperImagesTap" data-images="{{item.picture_list}}">
           </t-swiper>
           <!-- 无数据时显示占位内容 -->
-          <t-image wx:else src="" shape="round" error="slot" width="640rpx" height="384rpx">
+          <t-image wx:else src="" shape="round" error="slot" width="690rpx" height="384rpx">
             <text class="error-text" slot="error">轮播图加载失败</text>
           </t-image>
         </view>

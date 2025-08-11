@@ -8,10 +8,12 @@ const swiperImages = [
 ];
 Page({
   data: {
-    // 骨架屏变量
-    skeletonLoading: true,
-    // 首页跳转后的存储的id值
-    groupId: null,
+    Data: [], // 页面渲染数据存储列表
+    pageSize: 2, // 每次加载几个ID
+    currentIndex: 0, // 当前加载到第几个ID
+    allIdList: [], // 首页跳转后的存储的ID值列表
+    loadedIdList: [], // 已经读取渲染到页面的ID
+    skeletonLoading: true, // 骨架屏控制变量
     // 筛选框变量-图稿
     dropdownArtwork: {
       value: 'all',
@@ -108,17 +110,116 @@ Page({
     // 单选框变量
     radioValue: "0",
   },
+  // 数据结构处理
+  dataStructure(dataList) {
+    let arrangeData = [];
+    const image_url = dataList.WBO_URL
+    const task_list = dataList.task_list
+    for (const index in task_list) {
+      let data_dict = {
+        id: task_list[index].id,
+        code: task_list[index].code,
+        title: task_list[index].title,
+        texture: task_list[index].texture,
+        name: task_list[index].AIE_designer1,
+      }
+      for (const timeline in task_list[index].timeline_list) {
+        data_dict["confirmed"] = task_list[index].timeline_list[timeline].confirmed; // 标记舍弃(3)还是保留(1)
+        const image_list = task_list[index].timeline_list[timeline].image_list;
+        if (image_list.length === 0) {
+          data_dict["picture_list"] = [];
+        } else {
+          data_dict["picture_list"] = [image_url + image_list[0].imageURL];
+        }
+        data_dict["timeline_id"] = task_list[index].timeline_list[timeline].id;
+      }
+      // kyle标记保留的显示，如果不是保留的就过滤
+      if(data_dict["confirmed"] === 3){
+        continue
+      }
+      arrangeData.push(data_dict);
+    }
+    console.log(arrangeData);
+    return arrangeData; // 返回整理的结构体
+  },
+  // 请求后端接口数据处理
+  multiIdRequest(mode) {
+    const that = this;
+    // 读取id
+    const nextIds = utils.readIdStructure(that);
+    // 判断，如果nextIds的长度小于预设pageSize的长度，就totalRequests重置，避免加载动作卡死
+    let totalRequests = that.data.pageSize;
+    if (nextIds.length !== that.data.pageSize) {
+      totalRequests = nextIds.length;
+    }
+    // 实例化请求类
+    const loader = new utils.MultiRequestLoader(that, totalRequests);
+    // 读取数据
+    let successIds = []; // 用于记录成功的 id 
+    const promises = nextIds.map(id => {
+      return loader.request({
+        data: { type: "getTaskByLinePlan", username: "admin", "lp_id": id, },
+        mode: mode,
+      }).then(res => {
+        successIds.push(id); // 用于记录成功的 id
+        return res;
+      }).catch(err => {
+        console.warn(`ID ${id} 请求失败`, err);
+        return null; // 保证 Promise.all 能跑完
+      });
+    })
+    Promise.all(promises).then(results => {
+      const arrangedData = results.flatMap(list => that.dataStructure(list));
+      // refresh刷新时重置，其他的数据追加
+      if (mode === 'refresh') {
+        that.setData({
+          Data: arrangedData,
+        })
+      } else {
+        that.setData({
+          Data: that.data.Data.concat(arrangedData),
+        })
+      }
+      that.setData({
+        // 只记录访问成功的id
+        loadedIdList: that.data.loadedIdList.concat(successIds),
+        currentIndex: that.data.currentIndex + successIds.length
+      });
+    })
+  },
   /* 生命周期函数--监听页面加载 */
   onLoad(options) {
-    const groupId = options.groupId; // 首页跳转后的存储的id值
-    wx.showLoading({ title: '正在加载...', });
-    setTimeout(() => {
-      wx.hideLoading();
-      this.setData({
-        skeletonLoading: false,
-      })
-    }, 2000)
+    const that = this;
+    const groupIdList = JSON.parse(options.groupIdList || '[]'); // 首页跳转后的存储的id值
+    that.setData({
+      allIdList: groupIdList, // 记录全部的id数据
+    })
+    this.multiIdRequest('init');
   },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
   // 下拉菜单-图稿
   onArtworkChange(e) {
     this.setData({
@@ -142,7 +243,7 @@ Page({
   onSwiperImagesTap(e) {
     const el = e;
     const that = this;
-    utils.ImagesPreview(el,that);
+    utils.ImagesPreview(el, that);
   },
   // 页面上拉刷新 - 用于页面重置
   onPullDownRefresh() {
@@ -215,7 +316,7 @@ Page({
       popupVisible: 唤起弹窗
       commentStatus: 评论的状态
     */
-   const that = this;
+    const that = this;
     const { id, commentContent, commentStatus } = e.currentTarget.dataset;
     if (commentStatus !== "1") {
       const theme = "warning"

@@ -233,11 +233,26 @@ function UpdateData({
     });
   });
 }
+
+// 读取访问ID处理-分页处理
+function readIdStructure(that) {
+  const { allIdList, pageSize, currentIndex } = that.data;
+  if (allIdList.length === 0) {
+    utils.showToast(this.page, "无数据", "warning");
+    that.setData({
+      skeletonLoading: false
+    })
+    return [];
+  }
+  const nextIds = allIdList.slice(currentIndex, currentIndex + pageSize); // 取读取id的范围
+  return nextIds; // 返回需要读取的id列表
+}
 module.exports = {
   formatTime,
   showToast,
   ImagesPreview,
   LoadDataList,
   MultiRequestLoader,
-  UpdateData
+  UpdateData,
+  readIdStructure
 }

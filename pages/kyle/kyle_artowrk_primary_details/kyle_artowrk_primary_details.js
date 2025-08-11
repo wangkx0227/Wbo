@@ -7,7 +7,7 @@ Page({
     allIdList: [], // 首页跳转后的存储的ID值列表
     loadedIdList: [], // 已经读取渲染到页面的ID
     skeletonLoading: true, // 骨架屏控制变量
-
+    
     // 筛选框变量-1
     dropdownDesigner: {
       value: 'all',
@@ -100,24 +100,11 @@ Page({
     }
     return arrangeData; // 返回整理的结构体
   },
-  // 读取访问ID处理
-  readIdStructure(that) {
-    const { allIdList, pageSize, currentIndex } = that.data;
-    if (allIdList.length === 0) {
-      utils.showToast(this.page, "无数据", "warning");
-      that.setData({
-        skeletonLoading: false
-      })
-      return [];
-    }
-    const nextIds = allIdList.slice(currentIndex, currentIndex + pageSize); // 取读取id的范围
-    return nextIds; // 返回需要读取的id列表
-  },
   // 请求后端接口数据处理
   multiIdRequest(mode) {
     const that = this;
     // 读取id
-    const nextIds = that.readIdStructure(that);
+    const nextIds = utils.readIdStructure(that);
     // 判断，如果nextIds的长度小于预设pageSize的长度，就totalRequests重置，避免加载动作卡死
     let totalRequests = that.data.pageSize;
     if (nextIds.length !== that.data.pageSize) {
