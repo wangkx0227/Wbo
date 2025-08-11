@@ -1,4 +1,7 @@
 const utils = require('../../../utils/util')
+// 评论筛选工具
+const tool = new utils.CommentTool();
+let commentStr = tool.init();
 Page({
   data: {
     Data: [], // 页面渲染数据存储列表
@@ -7,7 +10,7 @@ Page({
     allIdList: [], // 首页跳转后的存储的ID值列表
     loadedIdList: [], // 已经读取渲染到页面的ID
     skeletonLoading: true, // 骨架屏控制变量
-    
+
     // 筛选框变量-1
     dropdownDesigner: {
       value: 'all',
@@ -78,7 +81,9 @@ Page({
         name: task_list[index].AIE_designer1,
       }
       for (const timeline in task_list[index].timeline_list) {
-        data_dict["comment"] = task_list[index].timeline_list[timeline].comment; // kyle评审信息
+        const comment = task_list[index].timeline_list[timeline].comment; // 全部的评论
+        const kyle_conmment = tool.get(comment, "Kyle"); // 只获取kyle的评论
+        data_dict["comment"] = kyle_conmment; // kyle评审信息
         const confirmed = task_list[index].timeline_list[timeline].confirmed; // 标记舍弃(3)还是保留(1)
         data_dict["confirmed"] = confirmed;
         if (confirmed === 0) {
@@ -226,8 +231,17 @@ Page({
   onCloseDialog(e) {
     const that = this;
     const { dialogValue, dialogId } = this.data; // 输入的评论的数据
+    
     const action = e.type; // "confirm" 或 "cancel"
     if (action === 'confirm') {
+      if (!dialogValue) {
+        const theme = "warning"
+        const message = "无评审无法提交"
+        utils.showToast(that, message, theme);
+        return;
+      } else {
+        commentStr = tool.set(commentStr, "Kyle", dialogValue);
+      }
       utils.UpdateData({
         page: that,
         data: {
@@ -235,7 +249,7 @@ Page({
           "timeLine_id": dialogId,
           "username": "admin",
           "name": "管理员",
-          "comment": dialogValue
+          "comment": commentStr
         },
         message: "评审记录完成"
       })

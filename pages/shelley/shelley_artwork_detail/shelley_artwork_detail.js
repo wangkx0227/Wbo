@@ -1,6 +1,7 @@
-const app = getApp(); // 用户信息
 const utils = require('../../../utils/util')
-
+// 评论筛选工具
+const tool = new utils.CommentTool();
+let commentStr = tool.init();
 const swiperImages = [
   'https://picsum.photos/800/600?random=1',  // 横版
   // 物品类
@@ -130,6 +131,9 @@ Page({
         } else {
           data_dict["picture_list"] = [image_url + image_list[0].imageURL];
         }
+        const comment = task_list[index].timeline_list[timeline].comment; // 全部的评论
+        const shelley_conmment = tool.get(comment, "Shelley"); // 只获取Shelley的评论
+        data_dict["comment"] = shelley_conmment; // kyle评审信息
         // kyle标记 3 舍弃 1 保留
         data_dict["confirmed"] = task_list[index].timeline_list[timeline].confirmed;
         // shelley 1可生产 2修改 3不具备可行性
@@ -199,9 +203,117 @@ Page({
     })
     this.multiIdRequest('init');
   },
-
-
-
+  // 评估建议单选框
+  onRadioChange(e) {
+    /*
+      radioValue：记录选中的单选值
+    */
+    const that = this;
+    // 点击的选中的
+    const selectedValue = e.detail.value;
+    // 原来点击的
+    const confirmed2 = e.currentTarget.dataset.confirmed2;
+    const timelineid = e.currentTarget.dataset.timelineid;
+    let data = {
+      "type": "update_timeline",
+      "timeLine_id": timelineid,
+      "username": "admin",
+      "name": "管理员",
+      "confirmed2": selectedValue
+    }
+    // 如果选中的点选框的值等于记录的值那么就取消
+    if (selectedValue.toString() === confirmed2.toString()) {
+      data["confirmed2"] = 0;
+      utils.UpdateData({ page: that, data: data, message: "取消评估建议", theme: "warning" });
+    } else {
+      // 如果选择小幅度修改，需要输入评估建议
+      if (selectedValue === "2") {
+        this.setData({ dialogVisible: true, timelineid: timelineid });
+      } else {
+        if (confirmed2 !== 0) {
+          utils.UpdateData({ page: that, data: data, message: "修改评估建议" });
+        } else {
+          utils.UpdateData({ page: that, data: data, message: "提交评估建议" });
+        }
+      }
+    }
+    const updatedData = that.data.Data.map(item => {
+      if (item.timeline_id === timelineid) {
+        item["confirmed2"] = data["confirmed2"];
+      }
+      return item;
+    })
+    that.setData({
+      Data: updatedData
+    });
+  },
+  // 填写评论-双向绑定
+  onDialogInput(e) {
+    this.setData({
+      dialogValue: e.detail.value
+    });
+  },
+  // 填写弹窗-关闭（包含评论提交功能）
+  onCloseDialog(e) {
+    const that = this;
+    const { dialogValue, timelineid } = that.data; // 输入的评论的数据
+    const action = e.type;
+    if (action === 'confirm') {
+      if (!dialogValue) {
+        const theme = "warning"
+        const message = "无评审无法提交"
+        utils.showToast(that, message, theme);
+        return;
+      }
+      const data = {
+        "type": "update_timeline",
+        "timeLine_id": timelineid,
+        "username": "admin",
+        "name": "管理员",
+        "confirmed2": 2,
+        "comment": tool.set(commentStr, "Shelley", dialogValue),
+      }
+      utils.UpdateData({ page: that, data: data, message: "提交评估建议" });
+    } else if (action === 'cancel') {
+      utils.showToast(that, "取消评估建议", "warning");
+    }
+    this.setData({ dialogVisible: false, dialogValue: "", timelineid: null });
+  },
+  // 查看评论弹窗 - 关闭
+  onClosePopup(e) {
+    /*
+      popupVisible: 关闭弹窗
+      popupValue: 清空评论内容
+      popupTitle: 清空评论的标题
+    */
+    this.setData({
+      popupVisible: e.detail.visible,
+    });
+    // 延迟清空内容，确保动画完成后执行
+    setTimeout(() => {
+      this.setData({
+        popupValue: ""
+      });
+    }, 300);
+  },
+  // 查看评论弹窗 - 开启
+  onOpenPopup(e) {
+    /*
+      id: 当条记录的id
+      commentContent: 评论内容
+      popupVisible: 唤起弹窗
+      commentStatus: 评论的状态
+    */
+    const that = this;
+    const { comment, commentStatus } = e.currentTarget.dataset;
+    if (commentStatus.toString() !== "2") {
+      const theme = "warning"
+      const message = "当前评估没有评论"
+      utils.showToast(that, message, theme);
+      return
+    }
+    that.setData({ popupVisible: true, popupValue: comment }); // 触发弹窗
+  },
 
 
 
@@ -293,42 +405,7 @@ Page({
     });
   },
 
-  // 查看评论弹窗 - 关闭
-  onClosePopup(e) {
-    /*
-      popupVisible: 关闭弹窗
-      popupValue: 清空评论内容
-      popupTitle: 清空评论的标题
-    */
-    this.setData({
-      popupVisible: e.detail.visible,
-    });
-    // 延迟清空内容，确保动画完成后执行
-    setTimeout(() => {
-      this.setData({
-        popupValue: "",
-        popupTitle: ""
-      });
-    }, 300);
-  },
-  // 查看评论弹窗 - 唤起
-  onOpenPopup(e) {
-    /*
-      id: 当条记录的id
-      commentContent: 评论内容
-      popupVisible: 唤起弹窗
-      commentStatus: 评论的状态
-    */
-    const that = this;
-    const { id, commentContent, commentStatus } = e.currentTarget.dataset;
-    if (commentStatus !== "1") {
-      const theme = "warning"
-      const message = "未选择评估选项"
-      utils.showToast(that, message, theme);
-      return
-    }
-    this.setData({ popupVisible: true, popupValue: commentContent }); // 触发弹窗
-  },
+
   // 筛选器-确定 
   onPickerChange(e) {
     /*
@@ -360,70 +437,5 @@ Page({
     */
     this.setData({ pickerVisible: true });
   },
-  // 填写评论-双向绑定
-  onDialogInput(e) {
-    this.setData({
-      dialogValue: e.detail.value
-    });
-  },
-  // 填写弹窗-关闭（包含提交功能）
-  onCloseDialog(e) {
-    const that = this;
-    const { dialogValue, radioValue } = that.data; // 输入的评论的数据
-    const action = e.type; // "confirm" 或 "cancel"
-    if (action === 'confirm') {
-      console.log("提交数据");
-      this.setData({ radioValue: "1" });
-      const message = "提交评估建议成功"
-      utils.showToast(that, message);
-    } else if (action === 'cancel') {
-      console.log("提交取消");
-    }
-    this.setData({ dialogVisible: false, dialogValue: "" });
-  },
-  
-  // 评估建议单选框
-  onRadioChange(e) {
-    /*
-      radioValue：记录选中的单选值
-    */
-    const that = this;
-    // 点击的选中的
-    const selectedValue = e.detail.value;
-    // 原来点击的
-    const confirmed2 = e.currentTarget.dataset.confirmed2;
-    const timelineid = e.currentTarget.dataset.timelineid;
-    let data = {
-      "type": "update_timeline",
-      "timeLine_id": timelineid,
-      "username": "admin",
-      "name": "管理员",
-      "confirmed2": selectedValue
-    }
-    // 如果选中的点选框的值等于记录的值那么就取消
-    if (selectedValue.toString() === confirmed2.toString()) {
-      data["confirmed2"] = 0;
-      utils.UpdateData({ page: that, data: data, message: "取消评估建议", theme: "warning" });
-    } else {
-      // 如果选择小幅度修改，需要输入评估建议
-      if (selectedValue === "2") {
-        this.setData({ dialogVisible: true });
-      } else {
-        if (confirmed2 !== 0) {
-          utils.UpdateData({ page: that, data: data, message: "修改评估建议", theme: "warning" });
-        } else {
-          utils.UpdateData({ page: that, data: data, message: "提交评估建议", theme: "warning" });
-        }
-      }
-    }
-    const updatedData = that.data.Data.map(item => {
-      if (item.timeline_id === timelineid) {
-        item["confirmed2"] = data["confirmed2"];
-      }
-      return item;
-    })
-    that.setData({
-      Data: updatedData
-    });
-  },
+
 })

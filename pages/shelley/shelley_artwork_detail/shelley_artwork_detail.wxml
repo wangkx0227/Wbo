@@ -24,6 +24,9 @@
           <text>Name：{{ item.name }}</text>
           <text>Code：{{ item.code }}</text>
         </view>
+        <view class="title-font-other">
+          <text style="border-bottom: 1px solid currentColor;">材质：{{ item.texture }}</text>
+        </view>
         <view class="cell-swiper">
           <t-swiper wx:if="{{item.picture_list.length}}" current="{{current}}" autoplay="{{autoplay}}" duration="{{duration}}" interval="{{interval}}" navigation="{{ { type: 'dots' } }}" list="{{item.picture_list}}" bind:click="onSwiperImagesTap" data-images="{{item.picture_list}}">
           </t-swiper>
@@ -41,22 +44,26 @@
                 <t-link size="small" content="{{pickerLabel}}" hover underline catchtap="onOpenPicker" data-id="2" />
               </view>
               <view>
-                <t-radio-group default-value="" disabled>
-                  <t-radio value="0" label="可生产 — 无需进一步说明" allow-uncheck style="text-align: start;" />
-                  <t-radio value="1" allow-uncheck>
+                <t-radio-group default-value="" >
+                  <t-radio disabled value="0" label="可生产 — 无需进一步说明" allow-uncheck style="text-align: start;" />
+                  <t-radio disabled value="1" allow-uncheck>
                     <view slot="label" class="arrange-space-between">
                       <text>可生产 — 需小幅修改（需填写评论）</text>
                       <t-link size="small" content="查看" hover underline  bind:tap="onOpenPopup" data-comment-status="0" />
                     </view>
                   </t-radio>
-                  <t-radio value="2" label="不具备可行性（需大幅修改）" allow-uncheck style="text-align: start;" />
+                  <t-radio disabled value="2" label="不具备可行性（需大幅修改）" allow-uncheck style="text-align: start;" />
                 </t-radio-group>
               </view>
             </t-collapse-panel>
           </t-collapse>
         </view>
         <view class="arrange-column">
+        <view class="arrange-center" style="margin-bottom: 15rpx;">
           <text class="title-font-main">评估建议：</text>
+          <t-link size="small" content="查看评论" hover underline catchtap="onOpenPopup" 
+          data-comment="{{ item.comment }}" data-comment-status="{{item.confirmed2}}"/>
+        </view>
           <t-radio-group t-class="radio-horizontal-box" value="{{item.confirmed2}}" bind:change="onRadioChange"
           data-confirmed2="{{item.confirmed2}}" data-timelineid="{{ item.timeline_id }}"
           >
@@ -94,7 +101,7 @@
 <t-popup visible="{{popupVisible}}" bind:visible-change="onClosePopup" placement="bottom">
   <view class="popup-block">
     <view class="popup-header">
-      <view class="popup-title">{{ popupTitle }}</view>
+      <view class="popup-title">当前评论：</view>
     </view>
     <view class="popup-comments">
       <text>{{ popupValue }}</text>
