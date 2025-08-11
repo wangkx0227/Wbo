@@ -152,7 +152,6 @@ class MultiRequestLoader {
       this.loadingCount++;
     }
     if (isMore) {
-      console.log(1);
       this.page.setData({ isLoadingReachMore: true });
       this.loadingCount++;
     }

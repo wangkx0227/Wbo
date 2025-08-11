@@ -119,6 +119,13 @@ Page({
     const that = this;
     // 读取id
     const nextIds = that.readIdStructure(that);
+    if (nextIds.length === 0) {
+      utils.showToast(this.page, "无数据", "warning");
+      that.setData({
+        skeletonLoading: false
+      })
+      return
+    }
     // 判断，如果nextIds的长度小于预设pageSize的长度，就totalRequests重置，避免加载动作卡死
     let totalRequests = that.data.pageSize;
     if (nextIds.length !== that.data.pageSize) {
@@ -134,6 +141,7 @@ Page({
         mode: mode,
       }).then(res => {
         successIds.push(id); // 用于记录成功的 id
+        utils.showToast(this.page, "无数据", "warning");
         return res;
       }).catch(err => {
         console.warn(`ID ${id} 请求失败`, err);
