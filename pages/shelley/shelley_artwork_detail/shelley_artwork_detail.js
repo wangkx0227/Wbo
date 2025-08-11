@@ -1,12 +1,6 @@
 const utils = require('../../../utils/util')
 // 评论筛选工具
 const tool = new utils.CommentTool();
-let commentStr = tool.init();
-const swiperImages = [
-  'https://picsum.photos/800/600?random=1',  // 横版
-  // 物品类
-  'https://picsum.photos/700/900?random=5',  // 长竖版
-];
 Page({
   data: {
     Data: [], // 页面渲染数据存储列表
@@ -82,7 +76,6 @@ Page({
     autoplay: false, // 是否启动自动播放
     duration: 500, // 滑动动画时长
     interval: 5000, // 轮播间隔时间，只有开启自动播放才有用
-    swiperImages, // 轮播图 url变量
     // 下拉刷新与滚动底部刷新使用变量
     isDownRefreshing: false, // 下拉刷新状态
     isLoadingReachMore: false, // 滚动底部加载数据
@@ -92,7 +85,6 @@ Page({
     // 查看评论弹窗控制变量
     popupVisible: false,
     popupValue: "",
-    popupTitle: "",
     // 填写评论弹出层变量
     dialogVisible: false,
     dialogValue: "",
@@ -107,9 +99,7 @@ Page({
       { label: '赵玉', value: 'B' },
       { label: '张三', value: 'B' },
       { label: '李明博', value: 'B' },
-    ],
-    // 单选框变量
-    radioValue: "0",
+    ]
   },
   // 数据结构处理
   dataStructure(dataList) {
@@ -131,9 +121,12 @@ Page({
         } else {
           data_dict["picture_list"] = [image_url + image_list[0].imageURL];
         }
-        const comment = task_list[index].timeline_list[timeline].comment; // 全部的评论
-        const shelley_conmment = tool.get(comment, "Shelley"); // 只获取Shelley的评论
-        data_dict["comment"] = shelley_conmment; // kyle评审信息
+        const conmment = task_list[index].timeline_list[timeline].comment; // 全部的评论
+        const shelley_conmment = tool.get(conmment, "Shelley"); // 只获取Shelley的评论
+        const fmr_conmment = tool.get(conmment, "FMR"); // 只获取FMR的评论
+        data_dict["conmment"] = conmment; // 全部评论，需要在shelley评论时携带
+        data_dict["shelley_conmment"] = shelley_conmment; 
+        data_dict["fmr_conmment"] = fmr_conmment; 
         // kyle标记 3 舍弃 1 保留
         data_dict["confirmed"] = task_list[index].timeline_list[timeline].confirmed;
         // shelley 1可生产 2修改 3不具备可行性
@@ -211,24 +204,27 @@ Page({
     const that = this;
     // 点击的选中的
     const selectedValue = e.detail.value;
-    // 原来点击的
+    // 修改前的数据
     const confirmed2 = e.currentTarget.dataset.confirmed2;
     const timelineid = e.currentTarget.dataset.timelineid;
+    const conmment = e.currentTarget.dataset.conmment;
     let data = {
       "type": "update_timeline",
       "timeLine_id": timelineid,
       "username": "admin",
       "name": "管理员",
-      "confirmed2": selectedValue
+      "confirmed2": selectedValue,
+      comment: tool.set(conmment, "Shelley", "")
     }
+    const isConfirmedEqual = selectedValue.toString() === confirmed2.toString();
     // 如果选中的点选框的值等于记录的值那么就取消
-    if (selectedValue.toString() === confirmed2.toString()) {
+    if (isConfirmedEqual) {
       data["confirmed2"] = 0;
       utils.UpdateData({ page: that, data: data, message: "取消评估建议", theme: "warning" });
     } else {
       // 如果选择小幅度修改，需要输入评估建议
       if (selectedValue === "2") {
-        this.setData({ dialogVisible: true, timelineid: timelineid });
+        this.setData({ dialogVisible: true, timelineid: timelineid, conmment: conmment });
       } else {
         if (confirmed2 !== 0) {
           utils.UpdateData({ page: that, data: data, message: "修改评估建议" });
@@ -237,16 +233,21 @@ Page({
         }
       }
     }
-    const updatedData = that.data.Data.map(item => {
-      if (item.timeline_id === timelineid) {
-        item["confirmed2"] = data["confirmed2"];
-      }
-      return item;
-    })
-    that.setData({
-      Data: updatedData
-    });
+    if (selectedValue !== "2" || isConfirmedEqual) {
+      const updatedData = that.data.Data.map(item => {
+        if (item.timeline_id === timelineid) {
+          item["confirmed2"] = data["confirmed2"];
+          item["conmment"] = tool.set(conmment, "Shelley", "");
+        }
+        return item;
+      })
+      that.setData({
+        Data: updatedData
+      });
+    }
+
   },
+
   // 填写评论-双向绑定
   onDialogInput(e) {
     this.setData({
@@ -256,7 +257,7 @@ Page({
   // 填写弹窗-关闭（包含评论提交功能）
   onCloseDialog(e) {
     const that = this;
-    const { dialogValue, timelineid } = that.data; // 输入的评论的数据
+    const { dialogValue, timelineid, conmment } = that.data; // 输入的评论的数据
     const action = e.type;
     if (action === 'confirm') {
       if (!dialogValue) {
@@ -271,9 +272,19 @@ Page({
         "username": "admin",
         "name": "管理员",
         "confirmed2": 2,
-        "comment": tool.set(commentStr, "Shelley", dialogValue),
+        "comment": tool.set(conmment, "Shelley", dialogValue), // 携带其他人原来的评论
       }
       utils.UpdateData({ page: that, data: data, message: "提交评估建议" });
+      const updatedData = that.data.Data.map(item => {
+        if (item.timeline_id === timelineid) {
+          item["confirmed2"] = 2;
+          item["shelley_conmment"] = dialogValue;
+        }
+        return item;
+      })
+      that.setData({
+        Data: updatedData
+      });
     } else if (action === 'cancel') {
       utils.showToast(that, "取消评估建议", "warning");
     }
@@ -296,7 +307,7 @@ Page({
       });
     }, 300);
   },
-  // 查看评论弹窗 - 开启
+  // 查看评论弹窗 - 查看
   onOpenPopup(e) {
     /*
       id: 当条记录的id
@@ -305,17 +316,47 @@ Page({
       commentStatus: 评论的状态
     */
     const that = this;
-    const { comment, commentStatus } = e.currentTarget.dataset;
-    if (commentStatus.toString() !== "2") {
+    const { shelleyConmment, conmmentStatus, fmrConmment, clickObject } = e.currentTarget.dataset;
+    if (conmmentStatus.toString() !== "2") {
       const theme = "warning"
       const message = "当前评估没有评论"
       utils.showToast(that, message, theme);
       return
     }
-    that.setData({ popupVisible: true, popupValue: comment }); // 触发弹窗
+    if (clickObject === "fmr") {
+      this.setData({
+        popupValue: fmrConmment
+      })
+    } else {
+      console.log(shelleyConmment);
+      this.setData({
+        popupValue: shelleyConmment
+      })
+    }
+    that.setData({ popupVisible: true }); // 触发弹窗
   },
-
-
+  // 轮播图函数 - 点击轮播图 - 图片预览
+  onSwiperImagesTap(e) {
+    const el = e;
+    const that = this;
+    utils.ImagesPreview(el, that);
+  },
+  // 回到顶部
+  onToTop(e) {
+    wx.pageScrollTo({
+      scrollTop: 0,
+      duration: 300
+    });
+  },
+  //  回到顶部-实时监听滚动距离
+  onPageScroll(e) {
+    /*
+      scrollTop：记录滚动距离
+    */
+    this.setData({
+      scrollTop: e.scrollTop
+    });
+  },
 
 
 
@@ -354,12 +395,7 @@ Page({
     });
   },
 
-  // 轮播图函数 - 点击轮播图 - 图片预览
-  onSwiperImagesTap(e) {
-    const el = e;
-    const that = this;
-    utils.ImagesPreview(el, that);
-  },
+
   // 页面上拉刷新 - 用于页面重置
   onPullDownRefresh() {
     console.log("下拉刷新触发");
@@ -388,24 +424,6 @@ Page({
     }, 1500);
 
   },
-  // 回到顶部
-  onToTop(e) {
-    wx.pageScrollTo({
-      scrollTop: 0,
-      duration: 300
-    });
-  },
-  //  回到顶部-实时监听滚动距离
-  onPageScroll(e) {
-    /*
-      scrollTop：记录滚动距离
-    */
-    this.setData({
-      scrollTop: e.scrollTop
-    });
-  },
-
-
   // 筛选器-确定 
   onPickerChange(e) {
     /*

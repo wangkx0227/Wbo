@@ -49,7 +49,7 @@
                   <t-radio disabled value="1" allow-uncheck>
                     <view slot="label" class="arrange-space-between">
                       <text>可生产 — 需小幅修改（需填写评论）</text>
-                      <t-link size="small" content="查看" hover underline  bind:tap="onOpenPopup" data-comment-status="0" />
+                      <t-link size="small" content="查看" hover underline  bind:tap="onOpenPopup" data-click-object="fmr"  data-conmment-status="{{item.confirmed2}}" data-fmr-conmment="{{ item.fmr_conmment }}"/>
                     </view>
                   </t-radio>
                   <t-radio disabled value="2" label="不具备可行性（需大幅修改）" allow-uncheck style="text-align: start;" />
@@ -62,10 +62,11 @@
         <view class="arrange-center" style="margin-bottom: 15rpx;">
           <text class="title-font-main">评估建议：</text>
           <t-link size="small" content="查看评论" hover underline catchtap="onOpenPopup" 
-          data-comment="{{ item.comment }}" data-comment-status="{{item.confirmed2}}"/>
+          data-shelley-conmment="{{ item.shelley_conmment }}" data-click-object="shelley"
+          data-conmment-status="{{item.confirmed2}}"/>
         </view>
           <t-radio-group t-class="radio-horizontal-box" value="{{item.confirmed2}}" bind:change="onRadioChange"
-          data-confirmed2="{{item.confirmed2}}" data-timelineid="{{ item.timeline_id }}"
+          data-confirmed2="{{item.confirmed2}}" data-timelineid="{{ item.timeline_id }}" data-conmment="{{ item.conmment }}"
           >
             <view class="radio-card   {{ item.confirmed2 == 1 ? 'radio-active' : ''}}">
               <t-icon name="check" t-class="radio-icon" />
