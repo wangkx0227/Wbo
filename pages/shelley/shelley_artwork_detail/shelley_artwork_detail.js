@@ -131,11 +131,11 @@ Page({
           data_dict["picture_list"] = [image_url + image_list[0].imageURL];
         }
         // kyle标记 3 舍弃 1 保留
-        data_dict["confirmed"] = task_list[index].timeline_list[timeline].confirmed; 
+        data_dict["confirmed"] = task_list[index].timeline_list[timeline].confirmed;
         // shelley 1可生产 2修改 3不具备可行性
-        data_dict["confirmed2"] = task_list[index].timeline_list[timeline].confirmed2; 
+        data_dict["confirmed2"] = task_list[index].timeline_list[timeline].confirmed2;
         // 第一条时间线的id 1-5步都是按照第一条时间线操作
-        data_dict["timeline_id"] = task_list[index].timeline_list[timeline].id; 
+        data_dict["timeline_id"] = task_list[index].timeline_list[timeline].id;
       }
       // kyle 标记如果时3舍弃，就直接过滤掉
       if (data_dict["confirmed"] === 3) {
@@ -381,6 +381,7 @@ Page({
     }
     this.setData({ dialogVisible: false, dialogValue: "" });
   },
+  
   // 评估建议单选框
   onRadioChange(e) {
     /*
@@ -390,25 +391,39 @@ Page({
     // 点击的选中的
     const selectedValue = e.detail.value;
     // 原来点击的
-    const confirmed = e.currentTarget.dataset.confirmed;
+    const confirmed2 = e.currentTarget.dataset.confirmed2;
+    const timelineid = e.currentTarget.dataset.timelineid;
+    let data = {
+      "type": "update_timeline",
+      "timeLine_id": timelineid,
+      "username": "admin",
+      "name": "管理员",
+      "confirmed2": selectedValue
+    }
     // 如果选中的点选框的值等于记录的值那么就取消
-    if (selectedValue.toString() === confirmed.toString()) {
-      const theme = "warning"
-      const message = "取消评估建议";
-      utils.showToast(that, message, theme);
+    if (selectedValue.toString() === confirmed2.toString()) {
+      data["confirmed2"] = 0;
+      utils.UpdateData({ page: that, data: data, message: "取消评估建议", theme: "warning" });
     } else {
       // 如果选择小幅度修改，需要输入评估建议
       if (selectedValue === "2") {
         this.setData({ dialogVisible: true });
       } else {
-        if (confirmed !== 0) {
-          const message = "修改评估建议";
-          utils.showToast(that, message);
+        if (confirmed2 !== 0) {
+          utils.UpdateData({ page: that, data: data, message: "修改评估建议", theme: "warning" });
         } else {
-          const message = "提交评估建议";
-          utils.showToast(that, message);
+          utils.UpdateData({ page: that, data: data, message: "提交评估建议", theme: "warning" });
         }
       }
     }
+    const updatedData = that.data.Data.map(item => {
+      if (item.timeline_id === timelineid) {
+        item["confirmed2"] = data["confirmed2"];
+      }
+      return item;
+    })
+    that.setData({
+      Data: updatedData
+    });
   },
 })

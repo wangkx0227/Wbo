@@ -205,6 +205,7 @@ function UpdateData({
   method = 'POST',      // 请求方法
   data,                 // 请求数据
   message,
+  theme
 }) {
   const url = app.globalData.url; // 请求后端接口
   return new Promise((resolve, reject) => {
@@ -217,7 +218,11 @@ function UpdateData({
       },
       success: (res) => {
         if (res.statusCode === 200 && res.data) { // 请求成功
-          showToast(page, message);
+          if (!theme) {
+            showToast(page, message);
+          } else {
+            showToast(page, message, theme);
+          }
         } else { // 请求失败
           showToast(page, "数据请求失败", "error");
           reject(res);

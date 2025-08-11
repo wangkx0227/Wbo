@@ -58,7 +58,7 @@
         <view class="arrange-column">
           <text class="title-font-main">评估建议：</text>
           <t-radio-group t-class="radio-horizontal-box" value="{{item.confirmed2}}" bind:change="onRadioChange"
-          data-confirmed="{{item.confirmed2}}"
+          data-confirmed2="{{item.confirmed2}}" data-timelineid="{{ item.timeline_id }}"
           >
             <view class="radio-card   {{ item.confirmed2 == 1 ? 'radio-active' : ''}}">
               <t-icon name="check" t-class="radio-icon" />
