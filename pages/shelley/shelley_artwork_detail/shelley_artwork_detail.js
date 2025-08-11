@@ -124,22 +124,25 @@ Page({
         name: task_list[index].AIE_designer1,
       }
       for (const timeline in task_list[index].timeline_list) {
-        data_dict["confirmed"] = task_list[index].timeline_list[timeline].confirmed; // 标记舍弃(3)还是保留(1)
         const image_list = task_list[index].timeline_list[timeline].image_list;
         if (image_list.length === 0) {
           data_dict["picture_list"] = [];
         } else {
           data_dict["picture_list"] = [image_url + image_list[0].imageURL];
         }
-        data_dict["timeline_id"] = task_list[index].timeline_list[timeline].id;
+        // kyle标记 3 舍弃 1 保留
+        data_dict["confirmed"] = task_list[index].timeline_list[timeline].confirmed; 
+        // shelley 1可生产 2修改 3不具备可行性
+        data_dict["confirmed2"] = task_list[index].timeline_list[timeline].confirmed2; 
+        // 第一条时间线的id 1-5步都是按照第一条时间线操作
+        data_dict["timeline_id"] = task_list[index].timeline_list[timeline].id; 
       }
-      // kyle标记保留的显示，如果不是保留的就过滤
-      if(data_dict["confirmed"] === 3){
+      // kyle 标记如果时3舍弃，就直接过滤掉
+      if (data_dict["confirmed"] === 3) {
         continue
       }
       arrangeData.push(data_dict);
     }
-    console.log(arrangeData);
     return arrangeData; // 返回整理的结构体
   },
   // 请求后端接口数据处理
@@ -219,7 +222,7 @@ Page({
 
 
 
-  
+
   // 下拉菜单-图稿
   onArtworkChange(e) {
     this.setData({
@@ -384,27 +387,27 @@ Page({
       radioValue：记录选中的单选值
     */
     const that = this;
-    const selectedradioValue = e.detail.value;
-    const radioValue = that.data.radioValue;
+    // 点击的选中的
+    const selectedValue = e.detail.value;
+    // 原来点击的
+    const confirmed = e.currentTarget.dataset.confirmed;
     // 如果选中的点选框的值等于记录的值那么就取消
-    if (selectedradioValue === radioValue) {
-      this.setData({ radioValue: null });
+    if (selectedValue.toString() === confirmed.toString()) {
       const theme = "warning"
       const message = "取消评估建议";
       utils.showToast(that, message, theme);
     } else {
       // 如果选择小幅度修改，需要输入评估建议
-      if (selectedradioValue === "1") {
+      if (selectedValue === "2") {
         this.setData({ dialogVisible: true });
       } else {
-        if (radioValue) {
+        if (confirmed !== 0) {
           const message = "修改评估建议";
           utils.showToast(that, message);
         } else {
           const message = "提交评估建议";
           utils.showToast(that, message);
         }
-        this.setData({ radioValue: selectedradioValue });
       }
     }
   },
