@@ -1,11 +1,4 @@
-const app = getApp(); // 用户信息
 const utils = require('../../../utils/util')
-
-const swiperImages = [
-  'https://picsum.photos/800/600?random=1',  // 横版
-  // 物品类
-  'https://picsum.photos/700/900?random=5',  // 长竖版
-];
 Page({
   data: {
     Data: [], // 页面渲染数据存储列表
@@ -60,7 +53,6 @@ Page({
     autoplay: false, // 是否启动自动播放
     duration: 500, // 滑动动画时长
     interval: 5000, // 轮播间隔时间，只有开启自动播放才有用
-    swiperImages, // 轮播图 url变量
     // 下拉刷新与滚动底部刷新使用变量
     isDownRefreshing: false, // 下拉刷新状态
     isLoadingReachMore: false, // 滚动底部加载数据
