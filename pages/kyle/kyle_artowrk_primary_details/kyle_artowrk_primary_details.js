@@ -302,7 +302,7 @@ Page({
               }
               return item;
             })
-            this.setData({
+            that.setData({
               Data: updatedData
             });
           } else if (res.cancel) {
@@ -337,7 +337,7 @@ Page({
               }
               return item;
             })
-            this.setData({
+            that.setData({
               Data: updatedData
             });
           } else if (res.cancel) {
