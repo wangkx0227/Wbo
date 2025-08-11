@@ -116,7 +116,7 @@ Page({
       that.setData({
         skeletonLoading: false
       })
-      return
+      return [];
     }
     const nextIds = allIdList.slice(currentIndex, currentIndex + pageSize); // 取读取id的范围
     return nextIds; // 返回需要读取的id列表
