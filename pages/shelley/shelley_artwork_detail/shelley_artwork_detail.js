@@ -114,26 +114,51 @@ Page({
         texture: task_list[index].texture,
         name: task_list[index].AIE_designer1,
       }
-      for (const timeline in task_list[index].timeline_list) {
-        const image_list = task_list[index].timeline_list[timeline].image_list;
+      const timeline_list = task_list[index].timeline_list;
+      for (let i = 0; i < timeline_list.length; i++) {
+        if (i > 0) {
+          continue;  // 跳过第2个及以后
+        }
+        const image_list = task_list[index].timeline_list[i].image_list;
         if (image_list.length === 0) {
           data_dict["picture_list"] = [];
         } else {
           data_dict["picture_list"] = [image_url + image_list[0].imageURL];
         }
-        const conmment = task_list[index].timeline_list[timeline].comment; // 全部的评论
+        const conmment = task_list[index].timeline_list[i].comment; // 全部的评论
         const shelley_conmment = tool.get(conmment, "Shelley"); // 只获取Shelley的评论
         const fmr_conmment = tool.get(conmment, "FMR"); // 只获取FMR的评论
         data_dict["conmment"] = conmment; // 全部评论，需要在shelley评论时携带
-        data_dict["shelley_conmment"] = shelley_conmment; 
-        data_dict["fmr_conmment"] = fmr_conmment; 
+        data_dict["shelley_conmment"] = shelley_conmment;
+        data_dict["fmr_conmment"] = fmr_conmment;
         // kyle标记 3 舍弃 1 保留
-        data_dict["confirmed"] = task_list[index].timeline_list[timeline].confirmed;
+        data_dict["confirmed"] = task_list[index].timeline_list[i].confirmed;
         // shelley 1可生产 2修改 3不具备可行性
-        data_dict["confirmed2"] = task_list[index].timeline_list[timeline].confirmed2;
+        data_dict["confirmed2"] = task_list[index].timeline_list[i].confirmed2;
         // 第一条时间线的id 1-5步都是按照第一条时间线操作
-        data_dict["timeline_id"] = task_list[index].timeline_list[timeline].id;
+        data_dict["timeline_id"] = task_list[index].timeline_list[i].id;
       }
+
+      // for (const timeline in task_list[index].timeline_list) {
+      //   const image_list = task_list[index].timeline_list[timeline].image_list;
+      //   if (image_list.length === 0) {
+      //     data_dict["picture_list"] = [];
+      //   } else {
+      //     data_dict["picture_list"] = [image_url + image_list[0].imageURL];
+      //   }
+      //   const conmment = task_list[index].timeline_list[timeline].comment; // 全部的评论
+      //   const shelley_conmment = tool.get(conmment, "Shelley"); // 只获取Shelley的评论
+      //   const fmr_conmment = tool.get(conmment, "FMR"); // 只获取FMR的评论
+      //   data_dict["conmment"] = conmment; // 全部评论，需要在shelley评论时携带
+      //   data_dict["shelley_conmment"] = shelley_conmment;
+      //   data_dict["fmr_conmment"] = fmr_conmment;
+      //   // kyle标记 3 舍弃 1 保留
+      //   data_dict["confirmed"] = task_list[index].timeline_list[timeline].confirmed;
+      //   // shelley 1可生产 2修改 3不具备可行性
+      //   data_dict["confirmed2"] = task_list[index].timeline_list[timeline].confirmed2;
+      //   // 第一条时间线的id 1-5步都是按照第一条时间线操作
+      //   data_dict["timeline_id"] = task_list[index].timeline_list[timeline].id;
+      // }
       // kyle 标记如果时3舍弃，就直接过滤掉
       if (data_dict["confirmed"] === 3) {
         continue
