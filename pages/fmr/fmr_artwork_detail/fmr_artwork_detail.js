@@ -1,15 +1,19 @@
-const app = getApp(); // 用户信息
 const utils = require('../../../utils/util')
-const swiperImages = [
-  'https://xcx.1bizmail.com:8153/static/images/wpb_images/D51_Resin_Ornament_CS25-LYD-095_Ur7N7rc.jpg',  // 横版
-  // 物品类
-  'https://xcx.1bizmail.com:8153/static/images/wpb_images/D51_Resin_Ornament_CS25-HHR-129_JkE4FgU.jpg',  // 长竖版
-];
+const tool = new utils.CommentTool();
+let commentStr = tool.init();
+
 Page({
   data: {
-    // 骨架屏变量
-    skeletonLoading: true,
-    groupId: null, // 首页跳转后的存储的id值
+    Data: [], // 页面渲染数据存储列表
+    pageSize: 1, // 每次加载几个ID
+    currentIndex: 0, // 当前加载到第几个ID
+    allIdList: [], // 首页跳转后的存储的ID值列表
+    loadedIdList: [], // 已经读取渲染到页面的ID
+    skeletonLoading: true, // 骨架屏控制变量
+    // 下拉刷新与滚动底部刷新使用变量
+    isDownRefreshing: false, // 下拉刷新状态
+    isLoadingReachMore: false, // 滚动底部加载数据
+    noMoreData: false,    // 数据是否全部加载完毕
     // 筛选框变量-模板
     dropdownArtwork: {
       value: 'all',
@@ -54,35 +58,294 @@ Page({
         },
       ],
     },
-    // 轮播图变量
-    current: 0, // 当前轮播在哪一项（下标）默认第0个索引
-    autoplay: false, // 是否启动自动播放
-    duration: 500, // 滑动动画时长
-    interval: 5000, // 轮播间隔时间，只有开启自动播放才有用
-    swiperImages, // 轮播图 url变量
-    // 下拉刷新与滚动底部刷新使用变量
-    isDownRefreshing: false, // 下拉刷新状态
-    isLoadingReachMore: false, // 滚动底部加载数据
-    noMoreData: false,    // 数据是否全部加载完毕
     // 回到顶部变量
     scrollTop: 0,
     // 评论弹出层变量
     dialogVisible: false,
     dialogValue: "",
-    // 单选框变量
-    radioValue: "0",
+    // 查看评论
+    popupVisible: false,
+    popupValue: "",
+  },
+  // 数据结构处理
+  dataStructure(dataList) {
+    let arrangeData = [];
+    const image_url = dataList.WBO_URL
+    const task_list = dataList.task_list
+    for (const index in task_list) {
+      let data_dict = {
+        id: task_list[index].id,
+        code: task_list[index].code,
+        title: task_list[index].title,
+        texture: task_list[index].texture,
+        name: task_list[index].AIE_designer1,
+        fmr: task_list[index].fmr || "暂未指派FMR", // 当前指派的fmr
+        fmr2: task_list[index].fmr2  // 当前fmr的状态
+      }
+      // 需要增加一个判断当前用户
+      const timeline_list = task_list[index].timeline_list;
+      for (let i = timeline_list.length - 1; i >= 0; i--) {
+        if (i < timeline_list.length - 1) {
+          continue; // 跳过倒序的第2个及以后
+        }
+        const image_list = task_list[index].timeline_list[i].image_list;
+        if (image_list.length === 0) {
+          data_dict["picture_list"] = [];
+        } else {
+          let picture_list = []
+          for (let img_num = 0; img_num < image_list.length; img_num++) {
+            picture_list.push(image_url + image_list[img_num].imageURL)
+          }
+          data_dict["picture_list"] = picture_list;
+        }
+        const conmment = task_list[index].timeline_list[i].comment; // 全部的评论
+        const fmr_conmment = tool.get(conmment, "FMR"); // 只获取FMR的评论
+        data_dict["conmment"] = conmment; // 全部评论，需要在shelley评论时携带
+        data_dict["fmr_conmment"] = fmr_conmment;
+        // kyle标记 3 舍弃 1 保留
+        data_dict["confirmed"] = task_list[index].timeline_list[i].confirmed;
+        // 第一条时间线的id 1-5步都是按照第一条时间线操作
+        data_dict["timeline_id"] = task_list[index].timeline_list[i].id;
+      }
+      // kyle 标记如果时3舍弃，就直接过滤掉
+      if (data_dict["confirmed"] === 3) {
+        continue
+      }
+      arrangeData.push(data_dict);
+    }
+    return arrangeData; // 返回整理的结构体
+  },
+  // 请求后端接口数据处理
+  multiIdRequest(mode) {
+    const that = this;
+    // 读取id
+    const nextIds = utils.readIdStructure(that);
+    // 判断，如果nextIds的长度小于预设pageSize的长度，就totalRequests重置，避免加载动作卡死
+    let totalRequests = that.data.pageSize;
+    if (nextIds.length !== that.data.pageSize) {
+      totalRequests = nextIds.length;
+    }
+    // 实例化请求类
+    const loader = new utils.MultiRequestLoader(that, totalRequests);
+    // 读取数据
+    let successIds = []; // 用于记录成功的 id 
+    const promises = nextIds.map(id => {
+      return loader.request({
+        data: { type: "getTaskByLinePlan", username: "admin", "lp_id": id, },
+        mode: mode,
+      }).then(res => {
+        successIds.push(id); // 用于记录成功的 id
+        return res;
+      }).catch(err => {
+        console.warn(`ID ${id} 请求失败`, err);
+        return null; // 保证 Promise.all 能跑完
+      });
+    })
+    Promise.all(promises).then(results => {
+      const arrangedData = results.flatMap(list => that.dataStructure(list));
+      // refresh刷新时重置，其他的数据追加
+      if (mode === 'refresh') {
+        that.setData({
+          Data: arrangedData,
+        })
+      } else {
+        that.setData({
+          Data: that.data.Data.concat(arrangedData),
+        })
+      }
+      that.setData({
+        // 只记录访问成功的id
+        loadedIdList: that.data.loadedIdList.concat(successIds),
+        currentIndex: that.data.currentIndex + successIds.length
+      });
+    })
   },
   /* 生命周期函数--监听页面加载 */
   onLoad(options) {
-    const groupId = options.groupId; // 首页跳转后的存储的id值
-    console.log(groupId);
-    wx.showLoading({ title: '正在加载...', });
-    setTimeout(() => {
-      wx.hideLoading();
-      this.setData({
-        skeletonLoading: false,
+    const that = this;
+    const groupIdList = JSON.parse(options.groupIdList || '[]'); // 首页跳转后的存储的id值
+    that.setData({
+      allIdList: groupIdList, // 记录全部的id数据
+    })
+    this.multiIdRequest('init');
+  },
+  // 轮播图函数 - 点击轮播图 - 图片预览
+  onSwiperImagesTap(e) {
+    const el = e;
+    const that = this;
+    utils.ImagesPreview(el, that);
+  },
+  // 回到顶部
+  onToTop(e) {
+    wx.pageScrollTo({
+      scrollTop: 0,
+      duration: 300
+    });
+  },
+  //  回到顶部-实时监听滚动距离
+  onPageScroll(e) {
+    /*
+      scrollTop：记录滚动距离
+    */
+    this.setData({
+      scrollTop: e.scrollTop
+    });
+  },
+  // 评估建议单选框
+  onRadioChange(e) {
+    /*
+      radioValue：记录选中的单选值
+    */
+    const that = this;
+    // 点击的选中的
+    const selectedValue = e.detail.value;
+    // 修改前的数据
+    const fmr2 = e.currentTarget.dataset.fmr2;
+    const task_id = e.currentTarget.dataset.taskId;
+    const timelineid = e.currentTarget.dataset.timelineid;
+    const conmment = e.currentTarget.dataset.conmment;
+    // 提交fmr的状态
+    let task_data = {
+      "type": "update_task",
+      "task_id": task_id,
+      "username": "admin",
+      "fmr2": selectedValue,
+    }
+    // 提交评论修改记录
+    let timeline_data = {
+      "type": "update_timeline",
+      "timeLine_id": timelineid,
+      "username": "admin",
+      "name": "管理员",
+    }
+    const fmr_conmment = tool.get(conmment, "FMR");
+    if (fmr_conmment) {
+      timeline_data["comment"] = tool.set(conmment, "FMR", "");
+    }
+    const isConfirmedEqual = selectedValue.toString() === fmr2.toString();
+    // 如果选中的点选框的值等于记录的值那么就取消
+    if (isConfirmedEqual) {
+      task_data["fmr2"] = 0;
+      utils.UpdateData({ page: that, data: timeline_data, toastShow: false });
+      utils.UpdateData({ page: that, data: task_data, message: "取消评估建议", theme: "warning" });
+    } else {
+      if (selectedValue === "3") {
+        that.setData({ dialogVisible: true, timelineid: timelineid, conmment: conmment, task_id: task_id });
+      } else {
+        utils.UpdateData({ page: that, data: timeline_data, toastShow: false });
+        if (fmr2 !== 0) {
+          utils.UpdateData({ page: that, data: task_data, message: "修改评估建议" });
+        } else {
+          console.log(isConfirmedEqual, "11");
+          utils.UpdateData({ page: that, data: task_data, message: "提交评估建议" });
+        }
+      }
+    }
+    if (selectedValue !== "3" || isConfirmedEqual) {
+      const updatedData = that.data.Data.map(item => {
+        if (item.id === task_id) {
+          item["fmr2"] = task_data["fmr2"];
+          item["conmment"] = tool.set(conmment, "FMR", "");
+        }
+        return item;
       })
-    }, 2000)
+      that.setData({
+        Data: updatedData
+      });
+    }
+  },
+  // 填写评论-双向绑定
+  onDialogInput(e) {
+    this.setData({
+      dialogValue: e.detail.value
+    });
+  },
+  // 填写弹窗-关闭（包含提交功能）
+  onCloseDialog(e) {
+    const that = this;
+    const { dialogValue, timelineid, conmment, task_id } = that.data; // 输入的评论的数据
+    const action = e.type; // "confirm" 或 "cancel"
+    if (action === 'confirm') {
+      if (!dialogValue) {
+        const theme = "warning"
+        const message = "无评审无法提交"
+        utils.showToast(that, message, theme);
+        return;
+      }
+      // 确定格式
+      const kyle_conmment = tool.get(conmment, 'Kyle');
+      commentStr = tool.set(commentStr, 'Kyle', kyle_conmment);
+      const shelley_conmment = tool.get(conmment, 'Kyle');
+      commentStr = tool.set(commentStr, 'Kyle', shelley_conmment);
+      // 包含shelley的评论
+      const fmr_conmment = tool.set(commentStr, "FMR", dialogValue);
+      // 提交fmr的状态
+      let task_data = {
+        "type": "update_task",
+        "task_id": task_id,
+        "username": "admin",
+        "fmr2": 3,
+      }
+      // 提交评论修改记录
+      let timeline_data = {
+        "type": "update_timeline",
+        "timeLine_id": timelineid,
+        "username": "admin",
+        "name": "管理员",
+        "comment": fmr_conmment, // 携带其他人原来的评论
+      }
+      utils.UpdateData({ page: that, data: timeline_data, toastShow: false });
+      utils.UpdateData({ page: that, data: task_data, message: "提交评估建议" });
+      const updatedData = that.data.Data.map(item => {
+        if (item.id === task_id) {
+          item["fmr2"] = 3;
+        }
+        if (item.timeline_id === timelineid) {
+          item["fmr_conmment"] = dialogValue;
+          item["conmment"] = fmr_conmment;
+        }
+        return item;
+      })
+      that.setData({
+        Data: updatedData
+      });
+    } else if (action === 'cancel') {
+      utils.showToast(that, "取消评估建议", "warning");
+    }
+    this.setData({ dialogVisible: false, dialogValue: "", timelineid: null, task_id: null });
+  },
+  // 查看评论弹窗 - 关闭
+  onClosePopup(e) {
+    /*
+      popupVisible: 关闭弹窗
+      popupValue: 清空评论内容
+    */
+    this.setData({
+      popupVisible: e.detail.visible,
+    });
+    // 延迟清空内容，确保动画完成后执行
+    setTimeout(() => {
+      this.setData({
+        popupValue: ""
+      });
+    }, 300);
+  },
+  // 查看评论弹窗 - 查看
+  onOpenPopup(e) {
+    /*
+      fmrConmment: 评论内容
+      popupVisible: 唤起弹窗
+      commentStatus: 评论的状态
+    */
+    const that = this;
+    const { conmmentStatus, fmrConmment, } = e.currentTarget.dataset;
+    if (conmmentStatus.toString() !== "3") {
+      const theme = "warning"
+      const message = "当前评估没有评论"
+      utils.showToast(that, message, theme);
+      return
+    }
+    that.setData({ popupVisible: true, popupValue: fmrConmment }); // 触发弹窗
   },
   // 下拉菜单-图稿
   onArtworkChange(e) {
@@ -96,12 +359,7 @@ Page({
       'dropdownAssess.value': e.detail.value,
     });
   },
-  // 轮播图函数 - 点击轮播图 - 图片预览
-  onSwiperImagesTap(e) {
-    const el = e;
-    const that = this;
-    utils.ImagesPreview(el,that);
-  },
+
   // 页面上拉刷新 - 用于页面重置
   onPullDownRefresh() {
     console.log("下拉刷新触发");
@@ -130,75 +388,9 @@ Page({
     }, 1500);
 
   },
-  // 回到顶部
-  onToTop(e) {
-    wx.pageScrollTo({
-      scrollTop: 0,
-      duration: 300
-    });
-  },
-  //  回到顶部-实时监听滚动距离
-  onPageScroll(e) {
-    /*
-      scrollTop：记录滚动距离
-    */
-    this.setData({
-      scrollTop: e.scrollTop
-    });
-  },
 
-  // 填写评论-双向绑定
-  onDialogInput(e) {
-    this.setData({
-      dialogValue: e.detail.value
-    });
-  },
-  // 填写弹窗-关闭（包含提交功能）
-  onCloseDialog(e) {
-    const that = this;
-    const { dialogValue, radioValue } = that.data; // 输入的评论的数据
-    const action = e.type; // "confirm" 或 "cancel"
-    if (action === 'confirm') {
-      console.log("提交数据");
-      this.setData({ radioValue: "1" });
-      const message = "提交评估建议成功"
-      utils.showToast(that, message);
-    } else if (action === 'cancel') {
-      console.log("提交取消");
-    }
-    this.setData({ dialogVisible: false, dialogValue: "" });
-  },
-  // 单选框
-  onRadioChange(e) {
-    /*
-      radioValue：记录选中的单选值
-    */
-       /*
-      radioValue：记录选中的单选值
-    */
-   const that = this;
-   const selectedradioValue = e.detail.value;
-   const radioValue = that.data.radioValue;
-   // 如果选中的点选框的值等于记录的值那么就取消
-   if (selectedradioValue === radioValue) {
-     this.setData({ radioValue: null });
-     const theme = "warning"
-     const message = "取消评估建议";
-     utils.showToast(that, message, theme);
-   } else {
-     // 如果选择小幅度修改，需要输入评估建议
-     if (selectedradioValue === "1") {
-       this.setData({ dialogVisible: true });
-     } else {
-       if (radioValue) {
-         const message = "修改评估建议";
-         utils.showToast(that, message);
-       } else {
-         const message = "提交评估建议";
-         utils.showToast(that, message);
-       }
-       this.setData({ radioValue: selectedradioValue });
-     }
-   }
-  },
+
+
+
+
 })

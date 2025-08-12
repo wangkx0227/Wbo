@@ -272,7 +272,6 @@ Page({
         Data: updatedData
       });
     }
-
   },
   // 填写评论-双向绑定
   onDialogInput(e) {
@@ -287,7 +286,7 @@ Page({
     // 确定格式
     const kyle_conmment = tool.get(conmment, 'Kyle');
     // 设置评论格式
-    let commentStr = tool.set(commentStr, 'Kyle', kyle_conmment);
+    commentStr = tool.set(commentStr, 'Kyle', kyle_conmment);
     // 包含shelley的评论
     const shelley_conmment = tool.set(commentStr, "Shelley", dialogValue);
     const action = e.type;
@@ -328,7 +327,6 @@ Page({
     /*
       popupVisible: 关闭弹窗
       popupValue: 清空评论内容
-      popupTitle: 清空评论的标题
     */
     this.setData({
       popupVisible: e.detail.visible,
@@ -343,8 +341,9 @@ Page({
   // 查看评论弹窗 - 查看
   onOpenPopup(e) {
     /*
-      id: 当条记录的id
-      commentContent: 评论内容
+      clickObject: 查看的是谁的评论
+      fmrConmment: 评论内容
+      shelleyConmment：评论内容
       popupVisible: 唤起弹窗
       commentStatus: 评论的状态
     */
@@ -462,21 +461,6 @@ Page({
     }
 
   },
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   // 下拉菜单-图稿
   onArtworkChange(e) {
     this.setData({
