@@ -5,12 +5,21 @@ let commentStr = tool.init();
 Page({
   data: {
     Data: [], // 页面渲染数据存储列表
-    pageSize: 2, // 每次加载几个ID
+    pageSize: 1, // 每次加载几个ID
     currentIndex: 0, // 当前加载到第几个ID
     allIdList: [], // 首页跳转后的存储的ID值列表
     loadedIdList: [], // 已经读取渲染到页面的ID
     skeletonLoading: true, // 骨架屏控制变量
-
+    // 下拉刷新与滚动底部刷新使用变量
+    isDownRefreshing: false, // 下拉刷新状态
+    isLoadingReachMore: false, // 滚动底部加载数据
+    noMoreData: false,    // 数据是否全部加载完毕
+    // 回到顶部变量
+    scrollTop: 0,
+    // 评论弹出层变量
+    dialogVisible: false,
+    dialogValue: "",
+    dialogId: null, // 当前点击的id
     // 筛选框变量-1
     dropdownDesigner: {
       value: 'all',
@@ -51,21 +60,6 @@ Page({
         },
       ],
     },
-    // 轮播图变量
-    current: 0, // 当前轮播在哪一项（下标）默认第0个索引
-    autoplay: false, // 是否启动自动播放
-    duration: 500, // 滑动动画时长
-    interval: 5000, // 轮播间隔时间，只有开启自动播放才有用
-    // 下拉刷新与滚动底部刷新使用变量
-    isDownRefreshing: false, // 下拉刷新状态
-    isLoadingReachMore: false, // 滚动底部加载数据
-    noMoreData: false,    // 数据是否全部加载完毕
-    // 回到顶部变量
-    scrollTop: 0,
-    // 评论弹出层变量
-    dialogVisible: false,
-    dialogValue: "",
-    dialogId: null, // 当前点击的id
   },
   // 数据结构处理
   dataStructure(dataList) {
@@ -200,18 +194,6 @@ Page({
       scrollTop: e.scrollTop
     });
   },
-  // 下拉菜单-设计师
-  onDesignerChange(e) {
-    this.setData({
-      'dropdownDesigner.value': e.detail.value,
-    });
-  },
-  // 下拉菜单-状态
-  onStatusChange(e) {
-    this.setData({
-      'dropdownStatus.value': e.detail.value,
-    });
-  },
   // 弹窗-评论-打开
   onOpenDialog(e) {
     const { timelineid, comment } = e.currentTarget.dataset;
@@ -231,7 +213,7 @@ Page({
   onCloseDialog(e) {
     const that = this;
     const { dialogValue, dialogId } = this.data; // 输入的评论的数据
-    
+
     const action = e.type; // "confirm" 或 "cancel"
     if (action === 'confirm') {
       if (!dialogValue) {
@@ -350,5 +332,17 @@ Page({
       })
     }
 
+  },
+  // 下拉菜单-设计师
+  onDesignerChange(e) {
+    this.setData({
+      'dropdownDesigner.value': e.detail.value,
+    });
+  },
+  // 下拉菜单-状态
+  onStatusChange(e) {
+    this.setData({
+      'dropdownStatus.value': e.detail.value,
+    });
   },
 })

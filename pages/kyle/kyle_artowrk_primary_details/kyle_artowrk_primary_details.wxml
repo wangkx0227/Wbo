@@ -28,7 +28,7 @@
           <text>Code：{{ item.code }}</text>
         </view>
         <view class="cell-swiper">
-          <t-swiper wx:if="{{item.picture_list.length}}" current="{{current}}" autoplay="{{autoplay}}" duration="{{duration}}" interval="{{interval}}" navigation="{{ { type: 'dots' } }}" list="{{item.picture_list}}" bind:click="onSwiperImagesTap" data-images="{{item.picture_list}}">
+          <t-swiper wx:if="{{item.picture_list.length}}"  autoplay="{{false}}" duration="{{500}}"  navigation="{{ { type: 'dots' } }}" list="{{item.picture_list}}" bind:click="onSwiperImagesTap" data-images="{{item.picture_list}}">
           </t-swiper>
           <!-- 9宫格遮罩层 -->
           <view class="grid-overlay" wx:if="{{item.picture_list.length}}">
