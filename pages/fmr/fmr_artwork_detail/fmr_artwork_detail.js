@@ -347,6 +347,8 @@ Page({
     }
     that.setData({ popupVisible: true, popupValue: fmrConmment }); // 触发弹窗
   },
+
+
   // 下拉菜单-图稿
   onArtworkChange(e) {
     this.setData({
@@ -362,35 +364,25 @@ Page({
 
   // 页面上拉刷新 - 用于页面重置
   onPullDownRefresh() {
-    console.log("下拉刷新触发");
-    // 如果正在加载更多，则禁止下拉刷新
-    if (this.data.isLoadingReachMore) return;
-    this.setData({ isDownRefreshing: true });
-    // 模拟数据加载
-    setTimeout(() => {
-      wx.stopPullDownRefresh(); // 必须手动停止
-      this.setData({
-        isDownRefreshing: false, // 修改状态
-      });
-    }, 1500);
+    if (this.data.isLoadingReachMore) return; // 如果正在加载更多，则禁止下拉刷新
+    // 重置 currentIndex 让它从头开始访问
+    this.setData({
+      currentIndex: 0,
+      noMoreData: false,
+      isLoadingReachMore: false
+    })
+    this.multiIdRequest('refresh');
   },
   // 页面上拉触底事件的处理函数-用于加载更多数据
   onReachBottom() {
     // 如果在下拉刷新，禁止滚动加载
     if (this.data.isDownRefreshing || this.data.noMoreData) return;
-    this.setData({ isLoadingReachMore: true });
-    setTimeout(() => {
-      wx.stopPullDownRefresh(); // 必须手动停止
+    this.multiIdRequest('more');
+    if (this.data.currentIndex === this.data.allIdList.length) {
       this.setData({
-        isLoadingReachMore: false, // 修改状态
-        // noMoreData:true // 如果数据已经读取完毕,就变为true,下拉就没有效果了
-      });
-    }, 1500);
+        noMoreData: true
+      })
+    }
 
   },
-
-
-
-
-
 })
