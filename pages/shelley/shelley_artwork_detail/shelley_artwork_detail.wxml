@@ -41,34 +41,30 @@
               <view slot="header" class="arrange-space-between">
                 <text class="title-font-main">FMR 可行性评估：</text>
                 <text class="title-font-other">指派FMR：</text>
-                <t-link size="small" content="{{item.fmr}}" hover underline catchtap="onOpenPicker" 
-                data-task-id="{{ item.id }}" />
+                <t-link size="small" content="{{item.fmr}}" hover underline catchtap="onOpenPicker" data-task-id="{{ item.id }}" />
               </view>
               <view>
-                <t-radio-group default-value="" >
-                  <t-radio disabled="{{item.fmr2.toString()  === '1'}}"  value="1" label="可生产 — 无需进一步说明{{item.fmr2}}" allow-uncheck style="text-align: start;" />
-                  <t-radio disabled="{{item.fmr2.toString()  === '2'}}" value="2" allow-uncheck>
+                <t-radio-group value="{{ item.fmr2 }}">
+                  <t-radio disabled="{{item.fmr2  !== 1}}" value="{{1}}" label="可生产 — 无需进一步说明" allow-uncheck style="text-align: start;" />
+                  <t-radio disabled="{{item.fmr2  !== 2}}" value="{{2}}" allow-uncheck>
                     <view slot="label" class="arrange-space-between">
                       <text>可生产 — 需小幅修改（需填写评论）</text>
-                      <t-link size="small" content="查看" hover underline  catch:tap="onOpenPopup" data-click-object="fmr"  data-conmment-status="{{item.fmr2}}" data-fmr-conmment="{{ item.fmr_conmment }}"/>
+                      <t-link size="small" content="查看" hover underline disabled="{{item.fmr2  !== 2}}" 
+                      catch:tap="{{ item.fmr2 === 2 ? 'onOpenPopup' : null }}" data-click-object="fmr" data-conmment-status="{{item.fmr2}}" data-fmr-conmment="{{ item.fmr_conmment }}" />
                     </view>
                   </t-radio>
-                  <t-radio disabled="{{item.fmr2.toString()  === '3'}}" value="3" label="不具备可行性（需大幅修改）" allow-uncheck style="text-align: start;" />
+                  <t-radio disabled="{{item.fmr2  !== 3}}" value="{{3}}" label="不具备可行性（需大幅修改）" allow-uncheck style="text-align: start;" />
                 </t-radio-group>
               </view>
             </t-collapse-panel>
           </t-collapse>
         </view>
         <view class="arrange-column">
-        <view class="arrange-center" style="margin-bottom: 15rpx;">
-          <text class="title-font-main">评估建议：</text>
-          <t-link size="small" content="查看评论" hover underline catchtap="onOpenPopup" 
-          data-shelley-conmment="{{ item.shelley_conmment }}" data-click-object="shelley"
-          data-conmment-status="{{item.confirmed2}}"/>
-        </view>
-          <t-radio-group t-class="radio-horizontal-box" value="{{item.confirmed2}}" bind:change="onRadioChange"
-          data-confirmed2="{{item.confirmed2}}" data-timelineid="{{ item.timeline_id }}" data-conmment="{{ item.conmment }}"
-          >
+          <view class="arrange-center" style="margin-bottom: 15rpx;">
+            <text class="title-font-main">评估建议：</text>
+            <t-link size="small" content="查看评论" hover underline catchtap="onOpenPopup" data-shelley-conmment="{{ item.shelley_conmment }}" data-click-object="shelley" data-conmment-status="{{item.confirmed2}}" />
+          </view>
+          <t-radio-group t-class="radio-horizontal-box" value="{{item.confirmed2}}" bind:change="onRadioChange" data-confirmed2="{{item.confirmed2}}" data-timelineid="{{ item.timeline_id }}" data-conmment="{{ item.conmment }}">
             <view class="radio-card   {{ item.confirmed2 == 1 ? 'radio-active' : ''}}">
               <t-icon name="check" t-class="radio-icon" />
               <t-radio value="1" label="可生产" icon="none" borderless />
