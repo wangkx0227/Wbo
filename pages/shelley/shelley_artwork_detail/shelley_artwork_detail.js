@@ -93,12 +93,12 @@ Page({
     pickerValue: [],
     pickerLabel: "暂未指派FMR",
     pickerItemList: [
-      { label: '王五', value: 'A' },
-      { label: '李四', value: 'B' },
-      { label: '张明', value: 'B' },
-      { label: '赵玉', value: 'B' },
-      { label: '张三', value: 'B' },
-      { label: '李明博', value: 'B' },
+      { label: '王五', value: '王五' },
+      { label: '李四', value: '李四' },
+      { label: '张明', value: '张明' },
+      { label: '赵玉', value: '赵玉' },
+      { label: '张三', value: '张三' },
+      { label: '李明博', value: '李明博' },
     ]
   },
   // 数据结构处理
@@ -272,7 +272,6 @@ Page({
     }
 
   },
-
   // 填写评论-双向绑定
   onDialogInput(e) {
     this.setData({
@@ -382,8 +381,46 @@ Page({
       scrollTop: e.scrollTop
     });
   },
-
-
+  // 关闭 FMR筛选器
+  onClosePicker(e) {
+    /*
+      pickerVisible：筛选器显示变量
+    */
+    this.setData({ pickerVisible: false, });
+  },
+  // 打开 FMR筛选器
+  onOpenPicker(e) {
+    /*
+      pickerVisible：筛选器显示变量
+      实际情况下需要加入一个默认值
+    */
+    const { taskId } = e.currentTarget.dataset; // task id值
+    this.setData({ pickerVisible: true, task_id: taskId });
+  },
+  // 提交 FMR筛选器 - 需要小调整
+  onPickerChange(e) {
+    /*
+      pickerVisible：筛选器显示变量
+      pickerValue： 选中的值
+    */
+    const that = this;
+    const task_id = that.data.task_id;
+    const { value, label } = e.detail;
+    const data = {
+      "type": "update_task",
+      "task_id": task_id,
+      "username": "admin",
+      "fmr": value[0],
+    }
+    this.setData({
+      pickerVisible: false,
+      task_id: null,
+      pickerValue: value,
+      pickerLabel: label
+    });
+    const message = `FMR已指派${label}`
+    utils.UpdateData({ page: that, data: data, message: message });
+  },
 
 
 
@@ -449,36 +486,7 @@ Page({
     }, 1500);
 
   },
-  // 筛选器-确定 
-  onPickerChange(e) {
-    /*
-      pickerVisible：筛选器显示变量
-      pickerValue： 选中的值
-    */
-    const that = this;
-    const { value, label } = e.detail;
-    this.setData({
-      pickerVisible: false,
-      pickerValue: value,
-      pickerLabel: label
-    });
-    const message = `FMR已指派${label}`
-    utils.showToast(that, message);
-  },
-  // 关闭 筛选器
-  onClosePicker(e) {
-    /*
-      pickerVisible：筛选器显示变量
-    */
-    this.setData({ pickerVisible: false, });
-  },
-  // 打开 筛选器
-  onOpenPicker() {
-    /*
-      pickerVisible：筛选器显示变量
-      实际情况下需要加入一个默认值
-    */
-    this.setData({ pickerVisible: true });
-  },
+
+
 
 })
