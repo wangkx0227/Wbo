@@ -10,6 +10,21 @@ Page({
     allIdList: [], // 首页跳转后的存储的ID值列表
     loadedIdList: [], // 已经读取渲染到页面的ID
     skeletonLoading: true, // 骨架屏控制变量
+    // 下拉刷新与滚动底部刷新使用变量
+    isDownRefreshing: false, // 下拉刷新状态
+    isLoadingReachMore: false, // 滚动底部加载数据
+    noMoreData: false,    // 数据是否全部加载完毕
+    // 回到顶部变量
+    scrollTop: 0,
+    // 查看评论弹窗控制变量
+    popupVisible: false,
+    popupValue: "",
+    // 填写评论弹出层变量
+    dialogVisible: false,
+    dialogValue: "",
+    // 筛选器
+    pickerVisible: false,
+    pickerItemList: [],// fmr全部的用户列表的数据
     // 筛选框变量-图稿
     dropdownArtwork: {
       value: 'all',
@@ -72,26 +87,6 @@ Page({
         },
       ],
     },
-    // 轮播图变量
-    current: 0, // 当前轮播在哪一项（下标）默认第0个索引
-    autoplay: false, // 是否启动自动播放
-    duration: 500, // 滑动动画时长
-    interval: 5000, // 轮播间隔时间，只有开启自动播放才有用
-    // 下拉刷新与滚动底部刷新使用变量
-    isDownRefreshing: false, // 下拉刷新状态
-    isLoadingReachMore: false, // 滚动底部加载数据
-    noMoreData: false,    // 数据是否全部加载完毕
-    // 回到顶部变量
-    scrollTop: 0,
-    // 查看评论弹窗控制变量
-    popupVisible: false,
-    popupValue: "",
-    // 填写评论弹出层变量
-    dialogVisible: false,
-    dialogValue: "",
-    // 筛选器
-    pickerVisible: false,
-    pickerItemList: [],// fmr全部的用户列表的数据
   },
 
   // 数据结构处理

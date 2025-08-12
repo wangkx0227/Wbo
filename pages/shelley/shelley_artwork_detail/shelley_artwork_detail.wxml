@@ -28,7 +28,7 @@
           <text style="border-bottom: 1px solid currentColor;">材质：{{ item.texture }}</text>
         </view>
         <view class="cell-swiper">
-          <t-swiper wx:if="{{item.picture_list.length}}" current="{{current}}" autoplay="{{autoplay}}" duration="{{duration}}" interval="{{interval}}" navigation="{{ { type: 'dots' } }}" list="{{item.picture_list}}" bind:click="onSwiperImagesTap" data-images="{{item.picture_list}}">
+          <t-swiper wx:if="{{item.picture_list.length}}"  autoplay="{{false}}" duration="{{500}}"  navigation="{{ { type: 'dots' } }}" list="{{item.picture_list}}" bind:click="onSwiperImagesTap" data-images="{{item.picture_list}}">
           </t-swiper>
           <!-- 无数据时显示占位内容 -->
           <t-image wx:else src="" shape="round" error="slot" width="690rpx" height="384rpx">
