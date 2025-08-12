@@ -5,7 +5,7 @@ let commentStr = tool.init();
 Page({
   data: {
     Data: [], // 页面渲染数据存储列表
-    pageSize: 1, // 每次加载几个ID
+    pageSize: 2, // 每次加载几个ID
     currentIndex: 0, // 当前加载到第几个ID
     allIdList: [], // 首页跳转后的存储的ID值列表
     loadedIdList: [], // 已经读取渲染到页面的ID
@@ -14,6 +14,14 @@ Page({
     isDownRefreshing: false, // 下拉刷新状态
     isLoadingReachMore: false, // 滚动底部加载数据
     noMoreData: false,    // 数据是否全部加载完毕
+    // 回到顶部变量
+    scrollTop: 0,
+    // 评论弹出层变量
+    dialogVisible: false,
+    dialogValue: "",
+    // 查看评论
+    popupVisible: false,
+    popupValue: "",
     // 筛选框变量-模板
     dropdownArtwork: {
       value: 'all',
@@ -58,14 +66,6 @@ Page({
         },
       ],
     },
-    // 回到顶部变量
-    scrollTop: 0,
-    // 评论弹出层变量
-    dialogVisible: false,
-    dialogValue: "",
-    // 查看评论
-    popupVisible: false,
-    popupValue: "",
   },
   // 数据结构处理
   dataStructure(dataList) {
@@ -73,13 +73,18 @@ Page({
     const image_url = dataList.WBO_URL
     const task_list = dataList.task_list
     for (const index in task_list) {
+      const fmr = task_list[index].fmr;
+      // 指派的FMR不是简老师就跳过，实际需要根据当前登录FMR用户确定
+      if(fmr !== "简老师"){
+        continue;
+      }
       let data_dict = {
         id: task_list[index].id,
         code: task_list[index].code,
         title: task_list[index].title,
         texture: task_list[index].texture,
         name: task_list[index].AIE_designer1,
-        fmr: task_list[index].fmr || "暂未指派FMR", // 当前指派的fmr
+        fmr: fmr || "暂未指派FMR", // 当前指派的fmr
         fmr2: task_list[index].fmr2  // 当前fmr的状态
       }
       // 需要增加一个判断当前用户
