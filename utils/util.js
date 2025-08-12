@@ -218,6 +218,7 @@ function UpdateData({
       },
       success: (res) => {
         if (res.statusCode === 200 && res.data) { // 请求成功
+          console.log(res);
           if (!theme) {
             showToast(page, message);
           } else {

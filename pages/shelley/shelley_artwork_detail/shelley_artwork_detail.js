@@ -223,7 +223,7 @@ Page({
       "username": "admin",
       "name": "管理员",
       "confirmed2": selectedValue,
-      comment: tool.set(conmment, "Shelley", "")
+      // "comment": tool.set(conmment, "Shelley", "")
     }
     const isConfirmedEqual = selectedValue.toString() === confirmed2.toString();
     // 如果选中的点选框的值等于记录的值那么就取消
@@ -235,6 +235,11 @@ Page({
       if (selectedValue === "2") {
         this.setData({ dialogVisible: true, timelineid: timelineid, conmment: conmment });
       } else {
+        // 如果当前存在评论，需要将评论修改为空
+        const shelley_conmment = tool.get(conmment, "Shelley");
+        if(shelley_conmment){
+          data["comment"] =  tool.set(conmment, "Shelley", "");
+        }
         if (confirmed2 !== 0) {
           utils.UpdateData({ page: that, data: data, message: "修改评估建议" });
         } else {
@@ -270,6 +275,8 @@ Page({
     const kyle_conmment = tool.get(conmment,'Kyle');
     // 设置评论格式
     let commentStr = tool.set(commentStr,'Kyle',kyle_conmment);
+    // 包含shelley的评论
+    const shelley_conmment = tool.set(commentStr, "Shelley", dialogValue);
     const action = e.type;
     if (action === 'confirm') {
       if (!dialogValue) {
@@ -284,13 +291,14 @@ Page({
         "username": "admin",
         "name": "管理员",
         "confirmed2": 2,
-        "comment": tool.set(commentStr, "Shelley", dialogValue), // 携带其他人原来的评论
+        "comment": shelley_conmment, // 携带其他人原来的评论
       }
       utils.UpdateData({ page: that, data: data, message: "提交评估建议" });
       const updatedData = that.data.Data.map(item => {
         if (item.timeline_id === timelineid) {
           item["confirmed2"] = 2;
           item["shelley_conmment"] = dialogValue;
+          item["conmment"] = shelley_conmment;
         }
         return item;
       })
