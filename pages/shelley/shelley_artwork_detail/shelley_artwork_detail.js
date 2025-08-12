@@ -93,15 +93,9 @@ Page({
     pickerVisible: false,
     pickerValue: [],
     pickerLabel: "暂未指派FMR",
-    pickerItemList: [
-      { label: '王五', value: '王五' },
-      { label: '李四', value: '李四' },
-      { label: '张明', value: '张明' },
-      { label: '赵玉', value: '赵玉' },
-      { label: '张三', value: '张三' },
-      { label: '李明博', value: '李明博' },
-    ]
+    pickerItemList: [],// fmr的数据
   },
+
   // 数据结构处理
   dataStructure(dataList) {
     let arrangeData = [];
@@ -196,6 +190,29 @@ Page({
       });
     })
   },
+  // 获取 fmr 用户数据
+  fmrRequest() {
+    const that = this;
+    const data = {
+      "type": "get_names_by_role",
+      "role_name": "FMR",
+      "username": "Jasonyu"
+    }
+    utils.LoadDataList({
+      page: that,
+      data: data,
+      showLoading: false,
+      showSkeleton: false,
+    }).then(list => { // list 就是data数据
+      let fmrData = [];
+      for (let i = 0; i < list.length; i++) {
+        fmrData.push({ label: list[i], value: list[i] },)
+      }
+      that.setData({
+        pickerItemList:fmrData
+      })
+    });
+  },
   /* 生命周期函数--监听页面加载 */
   onLoad(options) {
     const that = this;
@@ -204,6 +221,7 @@ Page({
       allIdList: groupIdList, // 记录全部的id数据
     })
     this.multiIdRequest('init');
+    this.fmrRequest();
   },
   // 评估建议单选框
   onRadioChange(e) {
@@ -237,8 +255,8 @@ Page({
       } else {
         // 如果当前存在评论，需要将评论修改为空
         const shelley_conmment = tool.get(conmment, "Shelley");
-        if(shelley_conmment){
-          data["comment"] =  tool.set(conmment, "Shelley", "");
+        if (shelley_conmment) {
+          data["comment"] = tool.set(conmment, "Shelley", "");
         }
         if (confirmed2 !== 0) {
           utils.UpdateData({ page: that, data: data, message: "修改评估建议" });
@@ -272,9 +290,9 @@ Page({
     const that = this;
     const { dialogValue, timelineid, conmment } = that.data; // 输入的评论的数据
     // 确定格式
-    const kyle_conmment = tool.get(conmment,'Kyle');
+    const kyle_conmment = tool.get(conmment, 'Kyle');
     // 设置评论格式
-    let commentStr = tool.set(commentStr,'Kyle',kyle_conmment);
+    let commentStr = tool.set(commentStr, 'Kyle', kyle_conmment);
     // 包含shelley的评论
     const shelley_conmment = tool.set(commentStr, "Shelley", dialogValue);
     const action = e.type;
