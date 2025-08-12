@@ -1,6 +1,7 @@
 const utils = require('../../../utils/util')
 // 评论筛选工具
 const tool = new utils.CommentTool();
+let commentStr = tool.init();
 Page({
   data: {
     Data: [], // 页面渲染数据存储列表
@@ -115,15 +116,19 @@ Page({
         name: task_list[index].AIE_designer1,
       }
       const timeline_list = task_list[index].timeline_list;
-      for (let i = 0; i < timeline_list.length; i++) {
-        if (i > 0) {
-          continue;  // 跳过第2个及以后
+      for (let i = timeline_list.length - 1; i >= 0; i--) {
+        if (i < timeline_list.length - 1) {
+          continue; // 跳过倒序的第2个及以后
         }
         const image_list = task_list[index].timeline_list[i].image_list;
         if (image_list.length === 0) {
           data_dict["picture_list"] = [];
         } else {
-          data_dict["picture_list"] = [image_url + image_list[0].imageURL];
+          let picture_list = []
+          for (let img_num = 0; img_num < image_list.length; img_num++) {
+            picture_list.push(image_url + image_list[img_num].imageURL)
+          }
+          data_dict["picture_list"] = picture_list;
         }
         const conmment = task_list[index].timeline_list[i].comment; // 全部的评论
         const shelley_conmment = tool.get(conmment, "Shelley"); // 只获取Shelley的评论
@@ -138,27 +143,6 @@ Page({
         // 第一条时间线的id 1-5步都是按照第一条时间线操作
         data_dict["timeline_id"] = task_list[index].timeline_list[i].id;
       }
-
-      // for (const timeline in task_list[index].timeline_list) {
-      //   const image_list = task_list[index].timeline_list[timeline].image_list;
-      //   if (image_list.length === 0) {
-      //     data_dict["picture_list"] = [];
-      //   } else {
-      //     data_dict["picture_list"] = [image_url + image_list[0].imageURL];
-      //   }
-      //   const conmment = task_list[index].timeline_list[timeline].comment; // 全部的评论
-      //   const shelley_conmment = tool.get(conmment, "Shelley"); // 只获取Shelley的评论
-      //   const fmr_conmment = tool.get(conmment, "FMR"); // 只获取FMR的评论
-      //   data_dict["conmment"] = conmment; // 全部评论，需要在shelley评论时携带
-      //   data_dict["shelley_conmment"] = shelley_conmment;
-      //   data_dict["fmr_conmment"] = fmr_conmment;
-      //   // kyle标记 3 舍弃 1 保留
-      //   data_dict["confirmed"] = task_list[index].timeline_list[timeline].confirmed;
-      //   // shelley 1可生产 2修改 3不具备可行性
-      //   data_dict["confirmed2"] = task_list[index].timeline_list[timeline].confirmed2;
-      //   // 第一条时间线的id 1-5步都是按照第一条时间线操作
-      //   data_dict["timeline_id"] = task_list[index].timeline_list[timeline].id;
-      // }
       // kyle 标记如果时3舍弃，就直接过滤掉
       if (data_dict["confirmed"] === 3) {
         continue
@@ -282,6 +266,10 @@ Page({
   onCloseDialog(e) {
     const that = this;
     const { dialogValue, timelineid, conmment } = that.data; // 输入的评论的数据
+    // 确定格式
+    const kyle_conmment = tool.get(conmment,'Kyle');
+    // 设置评论格式
+    let commentStr = tool.set(commentStr,'Kyle',kyle_conmment);
     const action = e.type;
     if (action === 'confirm') {
       if (!dialogValue) {
@@ -296,7 +284,7 @@ Page({
         "username": "admin",
         "name": "管理员",
         "confirmed2": 2,
-        "comment": tool.set(conmment, "Shelley", dialogValue), // 携带其他人原来的评论
+        "comment": tool.set(commentStr, "Shelley", dialogValue), // 携带其他人原来的评论
       }
       utils.UpdateData({ page: that, data: data, message: "提交评估建议" });
       const updatedData = that.data.Data.map(item => {
@@ -352,7 +340,6 @@ Page({
         popupValue: fmrConmment
       })
     } else {
-      console.log(shelleyConmment);
       this.setData({
         popupValue: shelleyConmment
       })
