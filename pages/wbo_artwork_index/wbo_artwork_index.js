@@ -220,7 +220,7 @@ Page({
     } else if (userRole === "fmr") { // fmr可行性与样品图上传
       if (tabBarValue === "primary") { // fmr 可行性评估与样品图上传
         wx.navigateTo({
-          url: `/pages/fmr/fmr_artwork_detail/fmr_artwork_detail?groupId=${groupId}`,
+          url: `/pages/fmr/fmr_artwork_detail/fmr_artwork_detail?groupIdList=${JSON.stringify(groupIdList)}`,
         });
       } else {
         wx.navigateTo({
