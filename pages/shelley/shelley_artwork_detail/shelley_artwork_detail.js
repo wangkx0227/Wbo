@@ -108,6 +108,8 @@ Page({
         title: task_list[index].title,
         texture: task_list[index].texture,
         name: task_list[index].AIE_designer1,
+        fmr: task_list[index].fmr || "暂未指派FMR", // 当前指派的fmr
+        fmr2: task_list[index].fmr2 || 1// 当前fmr的状态
       }
       const timeline_list = task_list[index].timeline_list;
       for (let i = timeline_list.length - 1; i >= 0; i--) {
@@ -209,7 +211,7 @@ Page({
         fmrData.push({ label: list[i], value: list[i] },)
       }
       that.setData({
-        pickerItemList:fmrData
+        pickerItemList: fmrData
       })
     });
   },

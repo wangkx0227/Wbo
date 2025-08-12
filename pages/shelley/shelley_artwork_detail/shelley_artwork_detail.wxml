@@ -41,19 +41,19 @@
               <view slot="header" class="arrange-space-between">
                 <text class="title-font-main">FMR 可行性评估：</text>
                 <text class="title-font-other">指派FMR：</text>
-                <t-link size="small" content="{{pickerLabel}}" hover underline catchtap="onOpenPicker" 
+                <t-link size="small" content="{{item.fmr}}" hover underline catchtap="onOpenPicker" 
                 data-task-id="{{ item.id }}" />
               </view>
               <view>
                 <t-radio-group default-value="" >
-                  <t-radio disabled value="0" label="可生产 — 无需进一步说明" allow-uncheck style="text-align: start;" />
-                  <t-radio disabled value="1" allow-uncheck>
+                  <t-radio disabled="{{item.fmr2.toString()  === '1'}}"  value="1" label="可生产 — 无需进一步说明{{item.fmr2}}" allow-uncheck style="text-align: start;" />
+                  <t-radio disabled="{{item.fmr2.toString()  === '2'}}" value="2" allow-uncheck>
                     <view slot="label" class="arrange-space-between">
                       <text>可生产 — 需小幅修改（需填写评论）</text>
-                      <t-link size="small" content="查看" hover underline  bind:tap="onOpenPopup" data-click-object="fmr"  data-conmment-status="{{item.confirmed2}}" data-fmr-conmment="{{ item.fmr_conmment }}"/>
+                      <t-link size="small" content="查看" hover underline  catch:tap="onOpenPopup" data-click-object="fmr"  data-conmment-status="{{item.fmr2}}" data-fmr-conmment="{{ item.fmr_conmment }}"/>
                     </view>
                   </t-radio>
-                  <t-radio disabled value="2" label="不具备可行性（需大幅修改）" allow-uncheck style="text-align: start;" />
+                  <t-radio disabled="{{item.fmr2.toString()  === '3'}}" value="3" label="不具备可行性（需大幅修改）" allow-uncheck style="text-align: start;" />
                 </t-radio-group>
               </view>
             </t-collapse-panel>
