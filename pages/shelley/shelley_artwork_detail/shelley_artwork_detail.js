@@ -91,9 +91,7 @@ Page({
     dialogValue: "",
     // 筛选器
     pickerVisible: false,
-    pickerValue: [],
-    pickerLabel: "暂未指派FMR",
-    pickerItemList: [],// fmr的数据
+    pickerItemList: [],// fmr全部的用户列表的数据
   },
 
   // 数据结构处理
@@ -109,7 +107,7 @@ Page({
         texture: task_list[index].texture,
         name: task_list[index].AIE_designer1,
         fmr: task_list[index].fmr || "暂未指派FMR", // 当前指派的fmr
-        fmr2: task_list[index].fmr2 || 1// 当前fmr的状态
+        fmr2: task_list[index].fmr2  // 当前fmr的状态
       }
       const timeline_list = task_list[index].timeline_list;
       for (let i = timeline_list.length - 1; i >= 0; i--) {
@@ -426,15 +424,25 @@ Page({
       "task_id": task_id,
       "username": "admin",
       "fmr": value[0],
+      "fmr2": 0,
     }
     this.setData({
       pickerVisible: false,
       task_id: null,
-      pickerValue: value,
-      pickerLabel: label
     });
     const message = `FMR已指派${label}`
     utils.UpdateData({ page: that, data: data, message: message });
+    // 修改新的fmr时，重置之前的选中
+    const updatedData = that.data.Data.map(item => {
+      if (item.id === task_id) {
+        item["fmr"] = value[0];
+        item["fmr2"] = 0;
+      }
+      return item;
+    })
+    that.setData({
+      Data: updatedData
+    });
   },
 
 
@@ -487,6 +495,7 @@ Page({
       });
     }, 1500);
   },
+  
   // 页面上拉触底事件的处理函数-用于加载更多数据
   onReachBottom() {
     // 如果在下拉刷新，禁止滚动加载
