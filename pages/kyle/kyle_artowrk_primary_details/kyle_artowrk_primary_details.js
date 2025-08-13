@@ -1,7 +1,4 @@
 const utils = require('../../../utils/util')
-// 评论筛选工具
-const tool = new utils.CommentTool();
-let commentStr = tool.init();
 Page({
   data: {
     Data: [], // 页面渲染数据存储列表
@@ -14,6 +11,8 @@ Page({
     isDownRefreshing: false, // 下拉刷新状态
     isLoadingReachMore: false, // 滚动底部加载数据
     noMoreData: false,    // 数据是否全部加载完毕
+    userRole:null, // 用户角色
+    userName:null, // 用户名称
     // 回到顶部变量
     scrollTop: 0,
     // 评论弹出层变量
@@ -80,8 +79,7 @@ Page({
           continue; // 跳过倒序的第2个及以后
         }
         const comment = task_list[index].timeline_list[i].comment; // 全部的评论
-        const kyle_conmment = tool.get(comment, "Kyle"); // 只获取kyle的评论
-        data_dict["comment"] = kyle_conmment; // kyle评审信息
+        data_dict["comment"] = comment; // kyle评审信息
         const confirmed = task_list[index].timeline_list[i].confirmed; // 标记舍弃(3)还是保留(1)
         data_dict["confirmed"] = confirmed;
         if (confirmed === 0) {
@@ -155,9 +153,11 @@ Page({
   // 页面初次加载数据
   onLoad(options) {
     const that = this;
+    const userRole = wx.getStorageSync('userRole');
     const groupIdList = JSON.parse(options.groupIdList || '[]'); // 首页跳转后的存储的id值
     that.setData({
       allIdList: groupIdList, // 记录全部的id数据
+      userRole:userRole,
     })
     this.multiIdRequest('init');
   },
@@ -229,17 +229,15 @@ Page({
         const message = "无评审无法提交"
         utils.showToast(that, message, theme);
         return;
-      } else {
-        commentStr = tool.set(commentStr, "Kyle", dialogValue);
       }
       utils.UpdateData({
         page: that,
         data: {
           "type": "update_timeline",
           "timeLine_id": dialogId,
-          "username": "admin",
-          "name": "管理员",
-          "comment": commentStr
+          "username": "admin", // 参数需要修改
+          "name": "管理员", // 参数需要修改
+          "comment": dialogValue
         },
         message: "评审记录完成"
       })
@@ -263,7 +261,7 @@ Page({
       this.setData({ dialogValue: "", })
     }, 500)
   },
-  // 修改当前图稿状态（舍弃与保留，默认都是保留）- 小问题，需要修改
+  // 修改当前图稿状态（舍弃与保留，默认都是保留）
   onModifyArtworkStatus(e) {
     const that = this;
     const { timelineid, contentStatus } = e.currentTarget.dataset;
