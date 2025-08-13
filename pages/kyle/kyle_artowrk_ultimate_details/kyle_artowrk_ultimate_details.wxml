@@ -104,8 +104,6 @@
             </view>
           </t-radio-group>
         </view> -->
-        <!-- 时间线展示 -->
-
         <!-- 最终评论 -->
         <view class="arrange-center">
           <view class="arrange-center title-font-other">
