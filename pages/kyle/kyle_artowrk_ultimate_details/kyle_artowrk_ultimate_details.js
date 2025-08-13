@@ -4,13 +4,13 @@ let commentStr = tool.init();
 Page({
   data: {
     Data: [], // 存储数据
-    tabBar: null,// 记录切换值
+    tabBar: null, // 记录切换值
     pageSize: 1, // 每次加载几个ID
     currentIndex: 0, // 当前加载到第几个ID
     allIdList: [], // 首页跳转后的存储的id值
     loadedIdList: [], // 已经读取渲染到页面的ID
     skeletonLoading: true, // 骨架屏控制变量
-    noMoreData: false,    // 数据是否全部加载完毕
+    noMoreData: false, // 数据是否全部加载完毕
     isDownRefreshing: false, // 下拉刷新状态
     isLoadingReachMore: false, // 滚动底部加载数据
     // 回到顶部变量
@@ -18,8 +18,7 @@ Page({
     // 筛选框变量-1
     dropdownDesigner: {
       value: 'all',
-      options: [
-        {
+      options: [{
           value: 'all',
           label: '全部',
         },
@@ -40,8 +39,7 @@ Page({
     // 筛选框变量-2
     dropdownStatus: {
       value: 'all',
-      options: [
-        {
+      options: [{
           value: 'all',
           label: '全部状态',
         },
@@ -101,13 +99,12 @@ Page({
         data_dict["confirmed2"] = task_list[index].timeline_list[i].confirmed2; // shelley的状态
         data_dict["confirmed"] = confirmed;
         // 最终选择字段
-        data_dict["final_selection"] = 1;
-        if (confirmed === 0) {
-          data_dict["confirmed_text"] = "未标记";
-        } else if (confirmed === 1) {
+        if (confirmed === 3) {
           data_dict["confirmed_text"] = "保留";
-        } else if (confirmed === 3) {
+        } else if (confirmed === 4) {
           data_dict["confirmed_text"] = "舍弃";
+        } else {
+          data_dict["confirmed_text"] = "未标记";
         }
         const image_list = task_list[index].timeline_list[i].image_list;
         if (image_list.length === 0) {
@@ -121,8 +118,8 @@ Page({
         }
         data_dict["timeline_id"] = task_list[index].timeline_list[i].id;
       }
-      // 初选 kyle 标记如果时3舍弃，就直接过滤掉
-      if (data_dict["confirmed"] === 3) {
+      // 初选 kyle 标记如果时2舍弃，就直接过滤掉
+      if (data_dict["confirmed"] === 2) {
         continue
       }
       arrangeData.push(data_dict);
@@ -145,7 +142,11 @@ Page({
     let successIds = []; // 用于记录成功的 id 
     const promises = nextIds.map(id => {
       return loader.request({
-        data: { type: "getTaskByLinePlan", username: "admin", "lp_id": id, },
+        data: {
+          type: "getTaskByLinePlan",
+          username: "admin",
+          "lp_id": id,
+        },
         mode: mode,
       }).then(res => {
         successIds.push(id); // 用于记录成功的 id
@@ -226,6 +227,166 @@ Page({
     }
 
   },
+  // 修改当前图稿状态-终审
+  onModifyArtworkStatus(e) {
+    const that = this;
+    const {
+      timelineid,
+      contentStatus
+    } = e.currentTarget.dataset;
+    if (contentStatus === "Y") {
+      wx.showModal({
+        title: '提示',
+        content: '是否"保留"当前图稿',
+        success(res) {
+          if (res.confirm) {
+            utils.UpdateData({
+              page: that,
+              data: {
+                "type": "update_timeline",
+                "timeLine_id": timelineid,
+                "username": "admin",
+                "name": "管理员",
+                "confirmed": 3
+              },
+
+              message: "图稿已标记保留"
+            })
+            const updatedData = that.data.Data.map(item => {
+              if (item.timeline_id === timelineid) {
+                item["confirmed"] = 3;
+                item["confirmed_text"] = "保留";
+              }
+              return item;
+            })
+            that.setData({
+              Data: updatedData
+            });
+          } else if (res.cancel) {
+            // 取消
+            const theme = "warning"
+            const message = "用户已取消操作"
+            utils.showToast(that, message, theme);
+          }
+        }
+      })
+    } else {
+      wx.showModal({
+        title: '提示',
+        content: '是否"舍弃"当前图稿',
+        success(res) {
+          if (res.confirm) {
+            utils.UpdateData({
+              page: that,
+              data: {
+                "type": "update_timeline",
+                "timeLine_id": timelineid,
+                "username": "admin",
+                "name": "管理员",
+                "confirmed": 4
+              },
+              message: "图稿已标记舍弃"
+            })
+            const updatedData = that.data.Data.map(item => {
+              if (item.timeline_id === timelineid) {
+                item["confirmed"] = 3;
+                item["confirmed_text"] = "舍弃";
+              }
+              return item;
+            })
+            that.setData({
+              Data: updatedData
+            });
+          } else if (res.cancel) {
+            // 取消
+            const theme = "warning"
+            const message = "用户已取消操作"
+            utils.showToast(that, message, theme);
+          }
+        }
+      })
+    }
+  },
+  // 弹窗-评论-打开
+  onOpenDialog(e) {
+    const {
+      timelineid,
+      comment
+    } = e.currentTarget.dataset;
+    // 展示评审信息
+    if (comment) {
+      this.setData({
+        dialogValue: comment
+      });
+    }
+    this.setData({
+      dialogVisible: true,
+      dialogId: timelineid
+    });
+  },
+  // 弹窗-评论-双向绑定
+  onDialogInput(e) {
+    this.setData({
+      dialogValue: e.detail.value
+    });
+  },
+  // 弹窗-评论-关闭（包含提交功能）
+  onCloseDialog(e) {
+    const that = this;
+    const {
+      dialogValue,
+      dialogId
+    } = this.data; // 输入的评论的数据
+
+    const action = e.type; // "confirm" 或 "cancel"
+    if (action === 'confirm') {
+      if (!dialogValue) {
+        const theme = "warning"
+        const message = "无评审无法提交"
+        utils.showToast(that, message, theme);
+        return;
+      }
+      utils.UpdateData({
+        page: that,
+        data: {
+          "type": "update_timeline",
+          "timeLine_id": dialogId,
+          "username": "admin", // 参数需要修改
+          "name": "管理员", // 参数需要修改
+          "comment": dialogValue
+        },
+        message: "评审记录完成"
+      })
+      // 数据更新
+      const updatedData = that.data.Data.map(item => {
+        if (item.timeline_id === dialogId) {
+          item["comment"] = dialogValue;
+        }
+        return item;
+      })
+      this.setData({
+        Data: updatedData
+      });
+    } else if (action === 'cancel') {
+      const theme = "warning"
+      const message = "评审记录取消"
+      utils.showToast(that, message, theme);
+    }
+    this.setData({
+      dialogVisible: false,
+      dialogId: null
+    });
+    setTimeout(() => {
+      this.setData({
+        dialogValue: "",
+      })
+    }, 500)
+  },
+
+
+
+
+
   // 查看评论弹窗函数 - 关闭
   onClosePopup(e) {
     this.setData({
@@ -242,7 +403,13 @@ Page({
   onOpenPopup(e) {
     /* kyleConmment 需要确定时终极选择 */
     const that = this;
-    const { shelleyConmment, conmmentStatus, fmrConmment, clickObject, kyleConmment } = e.currentTarget.dataset;
+    const {
+      shelleyConmment,
+      conmmentStatus,
+      fmrConmment,
+      clickObject,
+      kyleConmment
+    } = e.currentTarget.dataset;
     if (conmmentStatus.toString() !== "2" && clickObject === "shelley" || clickObject === "kyle") {
       const theme = "warning"
       const message = "当前评估没有评论"
@@ -268,33 +435,10 @@ Page({
         popupValue: kyleConmment
       })
     }
-    that.setData({ popupVisible: true }); // 触发弹窗
+    that.setData({
+      popupVisible: true
+    }); // 触发弹窗
   },
-
-  // 弹窗-评论输入-打开
-  onOpenDialog(e) {
-    const { id } = e.currentTarget.dataset;
-    this.setData({ dialogVisible: true });
-  },
-  // 弹窗-评论-双向绑定
-  onDialogInput(e) {
-    this.setData({
-      dialogValue: e.detail.value
-    });
-  },
-  // 弹窗-评论-关闭（包含提交功能）
-  onCloseDialog(e) {
-    const { dialogValue } = this.data; // 输入的评论的数据
-    const action = e.type; // "confirm" 或 "cancel"
-    if (action === 'confirm') {
-      console.log("提交数据");
-      this.setData({ radioValue: "1" }); // 选中单选框
-    } else if (action === 'cancel') {
-      console.log("提交取消");
-    }
-    this.setData({ dialogVisible: false, dialogValue: "" });
-  },
-
   // 下拉菜单-设计师
   onDesignerChange(e) {
     this.setData({
@@ -307,11 +451,8 @@ Page({
       'dropdownStatus.value': e.detail.value,
     });
   },
-
-
-
-   // 单选框
-   onRadioChange(e) {
+  // 单选框
+  onRadioChange(e) {
     /*
       radioValue：记录选中的单选值
     */

@@ -21,7 +21,7 @@
         </view>
         <view class="title-font-other arrange-space-between">
           <text style="border-bottom: 1px solid currentColor;">材质：{{ item.texture }}</text>
-          <text style="color: {{ item.confirmed == 3 ? 'red' : 'black' }};;">初选状态：{{ item.confirmed_text }}</text>
+          <text style="color: {{ item.confirmed == 4 ? 'red' : 'black' }};;">终选状态：{{ item.confirmed_text }}</text>
         </view>
         <view class="title-font-other arrange-space-between">
           <text>Name：{{ item.name }}</text>

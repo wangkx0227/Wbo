@@ -115,8 +115,8 @@ Page({
         // 第一条时间线的id 1-5步都是按照第一条时间线操作
         data_dict["timeline_id"] = task_list[index].timeline_list[i].id;
       }
-      // kyle 标记如果时3舍弃，就直接过滤掉
-      if (data_dict["confirmed"] === 3) {
+      // kyle 标记如果时2舍弃，就直接过滤掉
+      if (data_dict["confirmed"] === 2) {
         continue
       }
       arrangeData.push(data_dict);

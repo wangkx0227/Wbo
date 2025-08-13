@@ -82,12 +82,12 @@ Page({
         data_dict["comment"] = comment; // kyle评审信息
         const confirmed = task_list[index].timeline_list[i].confirmed; // 标记舍弃(3)还是保留(1)
         data_dict["confirmed"] = confirmed;
-        if (confirmed === 0) {
-          data_dict["confirmed_text"] = "未标记";
-        } else if (confirmed === 1) {
+        if (confirmed === 1) {
           data_dict["confirmed_text"] = "保留";
-        } else if (confirmed === 3) {
+        } else if (confirmed === 2) {
           data_dict["confirmed_text"] = "舍弃";
+        }else  {
+          data_dict["confirmed_text"] = "未标记";
         }
         const image_list = task_list[index].timeline_list[i].image_list;
         if (image_list.length === 0) {
@@ -259,7 +259,7 @@ Page({
       this.setData({ dialogValue: "", })
     }, 500)
   },
-  // 修改当前图稿状态（舍弃与保留，默认都是保留）
+  // 修改当前图稿状态
   onModifyArtworkStatus(e) {
     const that = this;
     const { timelineid, contentStatus } = e.currentTarget.dataset;
@@ -312,13 +312,13 @@ Page({
                 "timeLine_id": timelineid,
                 "username": "admin",
                 "name": "管理员",
-                "confirmed": 3
+                "confirmed": 2
               },
               message: "图稿已标记舍弃"
             })
             const updatedData = that.data.Data.map(item => {
               if (item.timeline_id === timelineid) {
-                item["confirmed"] = 3;
+                item["confirmed"] = 2;
                 item["confirmed_text"] = "舍弃";
               }
               return item;
