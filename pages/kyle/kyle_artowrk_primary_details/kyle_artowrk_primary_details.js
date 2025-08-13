@@ -156,7 +156,6 @@ Page({
     const groupIdList = JSON.parse(options.groupIdList || '[]'); // 首页跳转后的存储的id值
     that.setData({
       allIdList: groupIdList, // 记录全部的id数据
-      userRole:userRole,
     })
     this.multiIdRequest('init');
   },

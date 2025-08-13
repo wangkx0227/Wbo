@@ -85,9 +85,9 @@ Page({
         fmr2: task_list[index].fmr2, // 这是fmr选中状态
       }
       const timeline_list = task_list[index].timeline_list;
-      for (let i = timeline_list.length - 1; i >= 0; i--) {
-        if (i < timeline_list.length - 1) {
-          continue; // 跳过倒序的第2个及以后
+      for (let i = 0; i < timeline_list.length; i++) {
+        if (i > 0) {
+          break; // 跳过倒序的第2个及以后
         }
         const conmment = task_list[index].timeline_list[i].comment; // 全部的评论
         data_dict["conmment"] = conmment
@@ -243,7 +243,6 @@ Page({
     /* kyleConmment 需要确定时终极选择 */
     const that = this;
     const { shelleyConmment, conmmentStatus, fmrConmment, clickObject, kyleConmment } = e.currentTarget.dataset;
-    console.log(clickObject);
     if (conmmentStatus.toString() !== "2" && clickObject === "shelley" || clickObject === "kyle") {
       const theme = "warning"
       const message = "当前评估没有评论"
@@ -295,8 +294,24 @@ Page({
     }
     this.setData({ dialogVisible: false, dialogValue: "" });
   },
-  // 单选框
-  onRadioChange(e) {
+
+  // 下拉菜单-设计师
+  onDesignerChange(e) {
+    this.setData({
+      'dropdownDesigner.value': e.detail.value,
+    });
+  },
+  // 下拉菜单-状态
+  onStatusChange(e) {
+    this.setData({
+      'dropdownStatus.value': e.detail.value,
+    });
+  },
+
+
+
+   // 单选框
+   onRadioChange(e) {
     /*
       radioValue：记录选中的单选值
     */
@@ -348,17 +363,5 @@ Page({
     //     Data: updatedData
     //   });
     // }
-  },
-  // 下拉菜单-设计师
-  onDesignerChange(e) {
-    this.setData({
-      'dropdownDesigner.value': e.detail.value,
-    });
-  },
-  // 下拉菜单-状态
-  onStatusChange(e) {
-    this.setData({
-      'dropdownStatus.value': e.detail.value,
-    });
   },
 })

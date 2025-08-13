@@ -21,7 +21,7 @@
         </view>
         <view class="title-font-other arrange-space-between">
           <text style="border-bottom: 1px solid currentColor;">材质：{{ item.texture }}</text>
-          <text style="color: {{ item.confirmed == 3 ? 'red' : 'black' }};;">状态：{{ item.confirmed_text }}</text>
+          <text style="color: {{ item.confirmed == 3 ? 'red' : 'black' }};;">初选状态：{{ item.confirmed_text }}</text>
         </view>
         <view class="title-font-other arrange-space-between">
           <text>Name：{{ item.name }}</text>
@@ -39,7 +39,8 @@
             <text class="error-text" slot="error">轮播图加载失败</text>
           </t-image>
         </view>
-        <view class="shelley">
+        <!-- 需要调整 -->
+        <!-- <view class="shelley">
           <t-collapse>
             <t-collapse-panel value="0" expandIcon>
               <view slot="header" class="arrange-center">
@@ -59,8 +60,8 @@
               </view>
             </t-collapse-panel>
           </t-collapse>
-        </view>
-        <view class="fmr">
+        </view> -->
+        <!-- <view class="fmr">
           <t-collapse>
             <t-collapse-panel value="0" expandIcon>
               <view slot="header" class="arrange-space-between">
@@ -81,15 +82,14 @@
               </view>
             </t-collapse-panel>
           </t-collapse>
-        </view>
-        <view class="arrange-column ">
+        </view> -->
+        <!-- 需要调整 -->
+        <!-- <view class="arrange-column ">
           <view class="arrange-center" style="margin-bottom: 15rpx;">
             <text class="title-font-main">最终评审：</text>
             <t-link size="small" content="查看评论" hover underline catchtap="onOpenPopup" data-shelley-conmment="{{ item.kyle_conmment }}" data-click-object="kyle" data-conmment-status="{{item.final_selection}}" />
           </view>
-          <t-radio-group t-class="radio-horizontal-box" value="{{item.final_selection}}" bind:change="onRadioChange" 
-          data-timelineid="{{ item.timeline_id }}"  data-conmment="{{ item.conmment }}"
-          >
+          <t-radio-group t-class="radio-horizontal-box" value="{{item.final_selection}}" bind:change="onRadioChange" data-timelineid="{{ item.timeline_id }}" data-conmment="{{ item.conmment }}">
             <view class="radio-card   {{ item.final_selection == '1' ? 'radio-active' : ''}}">
               <t-icon name="check" t-class="radio-icon" />
               <t-radio value="1" label="保留" icon="none" borderless />
@@ -103,6 +103,18 @@
               <t-radio value="3" label="舍弃" icon="none" borderless />
             </view>
           </t-radio-group>
+        </view> -->
+        <!-- 终身评论 -->
+        <view class="arrange-center title-font-other">
+          <text>终审评论：</text>
+          <t-link size="small" content="点击评论" hover underline suffixIcon="chat-message" variant="outline" bind:tap="onOpenDialog" data-timelineid="{{ item.timeline_id }}" data-comment="{{ item.comment }}" />
+        </view>
+        <!-- 终审 -->
+        <view class="arrange-center title-font-other">
+          <text>操作：</text>
+          <t-link size="small" content="舍弃" data-content-status="N" hover underline theme="danger" bindtap="onModifyArtworkStatus" data-timelineid="{{ item.timeline_id }}" />
+          <t-divider layout="vertical" />
+          <t-link size="small" content="保留" data-content-status="Y" hover underline bindtap="onModifyArtworkStatus" data-timelineid="{{ item.timeline_id }}" />
         </view>
       </view>
     </view>
