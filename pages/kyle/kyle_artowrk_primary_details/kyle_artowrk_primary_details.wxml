@@ -20,7 +20,7 @@
           <text>Title：{{ item.title }}</text>
         </view>
         <view class="arrange-space-between title-font-other">
-          <text>Material：{{ item.texture }}</text>
+          <text style="border-bottom: 1px solid currentColor;">Material：{{ item.texture }}</text>
           <text style="color: {{ item.confirmed == 2 ? 'red' : 'black' }};;">初选状态：{{ item.confirmed_text }}</text>
         </view>
         <view class="title-font-other arrange-space-between">
