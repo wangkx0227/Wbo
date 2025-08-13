@@ -191,7 +191,7 @@ Page({
     const data = {
       "type": "get_names_by_role",
       "role_name": "FMR",
-      "username": "Jasonyu"
+      "username": "admin"
     }
     utils.LoadDataList({
       page: that,
@@ -283,12 +283,17 @@ Page({
   onCloseDialog(e) {
     const that = this;
     const { dialogValue, timelineid, conmment } = that.data; // 输入的评论的数据
+
     // 确定格式
     const kyle_conmment = tool.get(conmment, 'Kyle');
+    const fmr_conmment = tool.get(conmment, 'FMR');
     // 设置评论格式
     commentStr = tool.set(commentStr, 'Kyle', kyle_conmment);
+    commentStr = tool.set(commentStr, 'FMR', fmr_conmment);
+
     // 包含shelley的评论
     const shelley_conmment = tool.set(commentStr, "Shelley", dialogValue);
+
     const action = e.type;
     if (action === 'confirm') {
       if (!dialogValue) {
@@ -306,6 +311,7 @@ Page({
         "comment": shelley_conmment, // 携带其他人原来的评论
       }
       utils.UpdateData({ page: that, data: data, message: "提交评估建议" });
+      // 刷新数据
       const updatedData = that.data.Data.map(item => {
         if (item.timeline_id === timelineid) {
           item["confirmed2"] = 2;
@@ -349,7 +355,13 @@ Page({
     */
     const that = this;
     const { shelleyConmment, conmmentStatus, fmrConmment, clickObject } = e.currentTarget.dataset;
-    if (conmmentStatus.toString() !== "2") {
+    if (conmmentStatus.toString() !== "2" && clickObject === "shelley") {
+      const theme = "warning"
+      const message = "当前评估没有评论"
+      utils.showToast(that, message, theme);
+      return
+    }
+    if (conmmentStatus.toString() !== "3" && clickObject === "fmr") {
       const theme = "warning"
       const message = "当前评估没有评论"
       utils.showToast(that, message, theme);

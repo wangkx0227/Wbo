@@ -49,8 +49,8 @@
                   <t-radio disabled="{{item.fmr2  !== 3}}" value="{{3}}" allow-uncheck>
                     <view slot="label" class="arrange-space-between">
                       <text>可生产 — 需小幅修改（需填写评论）</text>
-                      <t-link size="small" content="查看" hover underline disabled="{{item.fmr2  !== 2}}" 
-                      catch:tap="{{ item.fmr2 === 2 ? 'onOpenPopup' : null }}" data-click-object="fmr" data-conmment-status="{{item.fmr2}}" data-fmr-conmment="{{ item.fmr_conmment }}" />
+                      <t-link size="small" content="查看" hover underline disabled="{{item.fmr2  !== 3}}" 
+                      catch:tap="{{ item.fmr2 === 3 ? 'onOpenPopup' : null }}" data-click-object="fmr" data-conmment-status="{{item.fmr2}}" data-fmr-conmment="{{ item.fmr_conmment }}" />
                     </view>
                   </t-radio>
                   <t-radio disabled="{{item.fmr2  !== 2}}" value="{{2}}" label="不具备可行性（需大幅修改）" allow-uncheck style="text-align: start;" />

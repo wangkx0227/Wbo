@@ -52,7 +52,7 @@
                     <view slot="label" class="arrange-space-between">
                       <text>可生产 — 需小幅修改（需填写评论）</text>
                       <t-link size="small" content="查看" hover underline disabled="{{item.confirmed2  !== 2}}" 
-                      catch:tap="{{ item.confirmed2 === 2 ? 'onOpenPopup' : null }}" data-click-object="shelley" data-conmment-status="{{item.confirmed2}}" data-fmr-conmment="{{ item.shelley_conmment }}" />
+                      catch:tap="{{ item.confirmed2 === 2 ? 'onOpenPopup' : null }}" data-click-object="shelley" data-conmment-status="{{item.confirmed2}}" data-shelley-conmment="{{ item.shelley_conmment }}" />
                     </view>
                   </t-radio>
                   <t-radio disabled="{{item.confirmed2  !== 3}}" value="{{3}}" label="不具备可行性（需大幅修改）" allow-uncheck style="text-align: start;" />
@@ -122,7 +122,7 @@
 <t-popup visible="{{popupVisible}}" bind:visible-change="onClosePopup" placement="bottom">
   <view class="popup-block">
     <view class="popup-header">
-      <view class="popup-title">{{popupTitle}}：</view>
+      <view class="popup-title">评论意见查看：</view>
     </view>
     <view class="popup-comments">
       <text>{{ popupValue }}</text>

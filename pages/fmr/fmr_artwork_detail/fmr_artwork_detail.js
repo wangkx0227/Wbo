@@ -227,6 +227,7 @@ Page({
     if (fmr_conmment) {
       timeline_data["comment"] = tool.set(conmment, "FMR", "");
     }
+    console.log(conmment);
     const isConfirmedEqual = selectedValue.toString() === fmr2.toString();
     // 如果选中的点选框的值等于记录的值那么就取消
     if (isConfirmedEqual) {
@@ -269,6 +270,7 @@ Page({
   onCloseDialog(e) {
     const that = this;
     const { dialogValue, timelineid, conmment, task_id } = that.data; // 输入的评论的数据
+    console.log(conmment);
     const action = e.type; // "confirm" 或 "cancel"
     if (action === 'confirm') {
       if (!dialogValue) {
@@ -280,8 +282,8 @@ Page({
       // 确定格式
       const kyle_conmment = tool.get(conmment, 'Kyle');
       commentStr = tool.set(commentStr, 'Kyle', kyle_conmment);
-      const shelley_conmment = tool.get(conmment, 'Kyle');
-      commentStr = tool.set(commentStr, 'Kyle', shelley_conmment);
+      const shelley_conmment = tool.get(conmment, 'Shelley');
+      commentStr = tool.set(commentStr, 'Shelley', shelley_conmment);
       // 包含shelley的评论
       const fmr_conmment = tool.set(commentStr, "FMR", dialogValue);
       // 提交fmr的状态

@@ -263,20 +263,25 @@ Page({
       assessStatus: 状态(只针对 可行性评估 shelley与fmr) 1(可生产) 2(小幅度修改 有评论内容) 3(不具备生产条件)
     */
     const that = this;
-    const { id, commentator, commentStatus } = e.currentTarget.dataset; // 点击按钮的存储的数据 id 点击id designer_comments 点击的自评文字
-    if (commentStatus !== "1") {
+    const { shelleyConmment, conmmentStatus, fmrConmment, clickObject } = e.currentTarget.dataset;
+    if (conmmentStatus.toString() !== "2") {
       const theme = "warning"
-      const message = "未选择评估选项"
+      const message = "当前评估没有评论"
       utils.showToast(that, message, theme);
       return
     }
-    if (commentator === "shelley") {
-      this.setData({ popupValue: "无内容", popupTitle: "Shelley 评估" });
-    } else if (commentator === "fmr") {
-      this.setData({ popupValue: "无内容", popupTitle: "FMR 评估" });
+    if (clickObject === "fmr") {
+      this.setData({
+        popupValue: fmrConmment
+      })
+    } else {
+      this.setData({
+        popupValue: shelleyConmment
+      })
     }
-    this.setData({ popupVisible: true, popupValue: "无内容" }); /// 触发弹窗
+    that.setData({ popupVisible: true }); // 触发弹窗
   },
+
   // 弹窗-评论输入-打开
   onOpenDialog(e) {
     const { id } = e.currentTarget.dataset;
