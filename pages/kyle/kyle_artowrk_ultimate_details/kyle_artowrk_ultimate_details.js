@@ -5,7 +5,7 @@ Page({
   data: {
     Data: [], // 存储数据
     tabBar: null,// 记录切换值
-    pageSize: 1, // 每次加载几个ID
+    pageSize: 2, // 每次加载几个ID
     currentIndex: 0, // 当前加载到第几个ID
     allIdList: [], // 首页跳转后的存储的id值
     loadedIdList: [], // 已经读取渲染到页面的ID
@@ -119,6 +119,9 @@ Page({
         data_dict["timeline_id"] = task_list[index].timeline_list[i].id;
       }
       // 初选 kyle 标记如果时3舍弃，就直接过滤掉
+      console.log(
+        data_dict["confirmed"]
+      );
       if (data_dict["confirmed"] === 3) {
         continue
       }
@@ -200,19 +203,6 @@ Page({
       scrollTop: e.scrollTop
     });
   },
-
-  // 下拉菜单-设计师
-  onDesignerChange(e) {
-    this.setData({
-      'dropdownDesigner.value': e.detail.value,
-    });
-  },
-  // 下拉菜单-状态
-  onStatusChange(e) {
-    this.setData({
-      'dropdownStatus.value': e.detail.value,
-    });
-  },
   // 页面上拉刷新 - 用于页面重置
   onPullDownRefresh() {
     console.log("下拉刷新触发");
@@ -250,21 +240,20 @@ Page({
     setTimeout(() => {
       this.setData({
         popupValue: "",
-        popupTitle: ""
       });
     }, 300);
   },
-  // 查看评论弹窗函数 - 唤起
+  // 查看评论弹窗函数 - 打开
   onOpenPopup(e) {
-    /*
-      id: 当条记录的id
-      designer_comments: 当前按钮的属性,用来确定点击内容
-      commentator: 评论的内容
-      assessStatus: 状态(只针对 可行性评估 shelley与fmr) 1(可生产) 2(小幅度修改 有评论内容) 3(不具备生产条件)
-    */
     const that = this;
     const { shelleyConmment, conmmentStatus, fmrConmment, clickObject } = e.currentTarget.dataset;
-    if (conmmentStatus.toString() !== "2") {
+    if (conmmentStatus.toString() !== "2" && clickObject === "shelley") {
+      const theme = "warning"
+      const message = "当前评估没有评论"
+      utils.showToast(that, message, theme);
+      return
+    }
+    if (conmmentStatus.toString() !== "3" && clickObject === "fmr") {
       const theme = "warning"
       const message = "当前评估没有评论"
       utils.showToast(that, message, theme);
@@ -281,6 +270,10 @@ Page({
     }
     that.setData({ popupVisible: true }); // 触发弹窗
   },
+
+
+
+
 
   // 弹窗-评论输入-打开
   onOpenDialog(e) {
@@ -335,4 +328,16 @@ Page({
       }
     }
   },
+    // 下拉菜单-设计师
+    onDesignerChange(e) {
+      this.setData({
+        'dropdownDesigner.value': e.detail.value,
+      });
+    },
+    // 下拉菜单-状态
+    onStatusChange(e) {
+      this.setData({
+        'dropdownStatus.value': e.detail.value,
+      });
+    },
 })
