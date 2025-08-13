@@ -90,6 +90,7 @@ Page({
           continue; // 跳过倒序的第2个及以后
         }
         const conmment = task_list[index].timeline_list[i].comment; // 全部的评论
+        data_dict["conmment"] = conmment
         const kyle_conmment = tool.get(conmment, "Kyle"); // 只获取kyle的评论
         const shelley_conmment = tool.get(conmment, "Shelley"); // 只获取Shelley的评论
         const fmr_conmment = tool.get(conmment, "FMR"); // 只获取FMR的评论
@@ -99,6 +100,8 @@ Page({
         const confirmed = task_list[index].timeline_list[i].confirmed; // kyle 标记舍弃(3)还是保留(1)
         data_dict["confirmed2"] = task_list[index].timeline_list[i].confirmed2; // shelley的状态
         data_dict["confirmed"] = confirmed;
+        // 最终选择字段
+        data_dict["final_selection"] = 1;
         if (confirmed === 0) {
           data_dict["confirmed_text"] = "未标记";
         } else if (confirmed === 1) {
@@ -119,9 +122,6 @@ Page({
         data_dict["timeline_id"] = task_list[index].timeline_list[i].id;
       }
       // 初选 kyle 标记如果时3舍弃，就直接过滤掉
-      console.log(
-        data_dict["confirmed"]
-      );
       if (data_dict["confirmed"] === 3) {
         continue
       }
@@ -240,9 +240,11 @@ Page({
   },
   // 查看评论弹窗函数 - 打开
   onOpenPopup(e) {
+    /* kyleConmment 需要确定时终极选择 */
     const that = this;
-    const { shelleyConmment, conmmentStatus, fmrConmment, clickObject } = e.currentTarget.dataset;
-    if (conmmentStatus.toString() !== "2" && clickObject === "shelley") {
+    const { shelleyConmment, conmmentStatus, fmrConmment, clickObject, kyleConmment } = e.currentTarget.dataset;
+    console.log(clickObject);
+    if (conmmentStatus.toString() !== "2" && clickObject === "shelley" || clickObject === "kyle") {
       const theme = "warning"
       const message = "当前评估没有评论"
       utils.showToast(that, message, theme);
@@ -258,17 +260,17 @@ Page({
       this.setData({
         popupValue: fmrConmment
       })
-    } else {
+    } else if (clickObject === "shelley") {
       this.setData({
         popupValue: shelleyConmment
+      })
+    } else {
+      this.setData({
+        popupValue: kyleConmment
       })
     }
     that.setData({ popupVisible: true }); // 触发弹窗
   },
-
-
-
-
 
   // 弹窗-评论输入-打开
   onOpenDialog(e) {
@@ -300,28 +302,52 @@ Page({
     */
     const that = this;
     const selectedradioValue = e.detail.value;
-    const radioValue = that.data.radioValue;
-    // 如果选中的点选框的值等于记录的值那么就取消
-    if (selectedradioValue === radioValue) {
-      this.setData({ radioValue: null });
-      const theme = "warning"
-      const message = "取消最终评审"
-      utils.showToast(that, message, theme);
-    } else {
-      // 如果选择小幅度修改，需要输入评估建议
-      if (selectedradioValue === "1") {
-        this.setData({ dialogVisible: true });
-      } else {
-        if (radioValue) {
-          const message = "修改最终评审";
-          utils.showToast(that, message);
-        } else {
-          const message = "提交最终评审";
-          utils.showToast(that, message);
-        }
-        this.setData({ radioValue: selectedradioValue });
-      }
-    }
+    const timelineid = e.currentTarget.dataset.timelineid;
+    const conmment = e.currentTarget.dataset.conmment;
+    console.log(e.currentTarget.dataset);
+    // // 如果选中的点选框的值等于记录的值那么就取消
+    // let data = {
+    //   "type": "update_timeline",
+    //   "timeLine_id": timelineid,
+    //   "username": "admin",
+    //   "name": "管理员",
+    //   "confirmed2": selectedValue,
+    //   // "comment": tool.set(conmment, "Shelley", "")
+    // }
+    // const isConfirmedEqual = selectedValue.toString() === confirmed2.toString();
+    // // 如果选中的点选框的值等于记录的值那么就取消
+    // if (isConfirmedEqual) {
+    //   data["confirmed2"] = 0;
+    //   utils.UpdateData({ page: that, data: data, message: "取消评估建议", theme: "warning" });
+    // } else {
+    //   // 如果选择小幅度修改，需要输入评估建议
+    //   if (selectedValue === "2") {
+    //     this.setData({ dialogVisible: true, timelineid: timelineid, conmment: conmment });
+    //   } else {
+    //     // 如果当前存在评论，需要将评论修改为空
+    //     const shelley_conmment = tool.get(conmment, "Shelley");
+    //     if (shelley_conmment) {
+    //       data["comment"] = tool.set(conmment, "Shelley", "");
+    //     }
+    //     if (confirmed2 !== 0) {
+    //       utils.UpdateData({ page: that, data: data, message: "修改评估建议" });
+    //     } else {
+    //       utils.UpdateData({ page: that, data: data, message: "提交评估建议" });
+    //     }
+    //   }
+    // }
+    // if (selectedValue !== "2" || isConfirmedEqual) {
+    //   const updatedData = that.data.Data.map(item => {
+    //     if (item.timeline_id === timelineid) {
+    //       item["confirmed2"] = data["confirmed2"];
+    //       item["conmment"] = tool.set(conmment, "Shelley", "");
+    //     }
+    //     return item;
+    //   })
+    //   that.setData({
+    //     Data: updatedData
+    //   });
+    // }
   },
   // 下拉菜单-设计师
   onDesignerChange(e) {

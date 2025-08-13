@@ -148,6 +148,7 @@ Page({
     const userRole = that.data.userRole;
     const tabBarValue = that.data.tabBarValue;
     const groupIdList = e.currentTarget.dataset.groupIdList;
+    const groupId = 1;
     if (userRole === "kyle") {
       if (tabBarValue === "primary") { // kyle 初筛和终评
         wx.navigateTo({

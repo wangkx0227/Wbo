@@ -46,13 +46,12 @@
                 <text class="title-font-main">Shelley 可行性评估：</text>
               </view>
               <view>
-                <t-radio-group  value="{{ item.confirmed2 }}">
+                <t-radio-group value="{{ item.confirmed2 }}">
                   <t-radio disabled="{{ item.confirmed2  !== 1 }}" value="{{1}}" label="可生产 — 无需进一步说明" allow-uncheck style="text-align: start;" />
                   <t-radio disabled="{{item.confirmed2  !== 2}}" value="{{2}}" allow-uncheck>
                     <view slot="label" class="arrange-space-between">
                       <text>可生产 — 需小幅修改（需填写评论）</text>
-                      <t-link size="small" content="查看" hover underline disabled="{{item.confirmed2  !== 2}}" 
-                      catch:tap="{{ item.confirmed2 === 2 ? 'onOpenPopup' : null }}" data-click-object="shelley" data-conmment-status="{{item.confirmed2}}" data-shelley-conmment="{{ item.shelley_conmment }}" />
+                      <t-link size="small" content="查看" hover underline disabled="{{item.confirmed2  !== 2}}" catch:tap="{{ item.confirmed2 === 2 ? 'onOpenPopup' : null }}" data-click-object="shelley" data-conmment-status="{{item.confirmed2}}" data-shelley-conmment="{{ item.shelley_conmment }}" />
                     </view>
                   </t-radio>
                   <t-radio disabled="{{item.confirmed2  !== 3}}" value="{{3}}" label="不具备可行性（需大幅修改）" allow-uncheck style="text-align: start;" />
@@ -74,8 +73,7 @@
                   <t-radio disabled="{{item.fmr2  !== 3}}" value="{{3}}" allow-uncheck>
                     <view slot="label" class="arrange-space-between">
                       <text>可生产 — 需小幅修改（需填写评论）</text>
-                      <t-link size="small" content="查看" hover underline disabled="{{item.fmr2  !== 3}}" 
-                      catch:tap="{{ item.fmr2 === 3 ? 'onOpenPopup' : null }}" data-click-object="fmr" data-conmment-status="{{item.fmr2}}" data-fmr-conmment="{{ item.fmr_conmment }}" />
+                      <t-link size="small" content="查看" hover underline disabled="{{item.fmr2  !== 3}}" catch:tap="{{ item.fmr2 === 3 ? 'onOpenPopup' : null }}" data-click-object="fmr" data-conmment-status="{{item.fmr2}}" data-fmr-conmment="{{ item.fmr_conmment }}" />
                     </view>
                   </t-radio>
                   <t-radio disabled="{{item.fmr2  !== 2}}" value="{{2}}" label="不具备可行性（需大幅修改）" allow-uncheck style="text-align: start;" />
@@ -85,19 +83,24 @@
           </t-collapse>
         </view>
         <view class="arrange-column ">
-          <text class="title-font-main">最终评审：</text>
-          <t-radio-group t-class="radio-horizontal-box" value="{{radioValue}}" bind:change="onRadioChange">
-            <view class="radio-card   {{ radioValue == '0' ? 'radio-active' : ''}}">
+          <view class="arrange-center" style="margin-bottom: 15rpx;">
+            <text class="title-font-main">最终评审：</text>
+            <t-link size="small" content="查看评论" hover underline catchtap="onOpenPopup" data-shelley-conmment="{{ item.kyle_conmment }}" data-click-object="kyle" data-conmment-status="{{item.final_selection}}" />
+          </view>
+          <t-radio-group t-class="radio-horizontal-box" value="{{item.final_selection}}" bind:change="onRadioChange" 
+          data-timelineid="{{ item.timeline_id }}"  data-conmment="{{ item.conmment }}"
+          >
+            <view class="radio-card   {{ item.final_selection == '1' ? 'radio-active' : ''}}">
               <t-icon name="check" t-class="radio-icon" />
-              <t-radio value="0" label="保留" icon="none" borderless />
+              <t-radio value="1" label="保留" icon="none" borderless />
             </view>
-            <view class="radio-card  {{ radioValue == '1' ? 'radio-active' : ''}}">
+            <view class="radio-card  {{ item.final_selection == '2' ? 'radio-active' : ''}}">
               <t-icon name="check" t-class="radio-icon" />
-              <t-radio value="1" label="轻微修改" icon="none" borderless t-class="radio-text" />
+              <t-radio value="2" label="轻微修改" icon="none" borderless t-class="radio-text" />
             </view>
-            <view class="radio-card  {{ radioValue == '2' ? 'radio-active' : ''}}">
+            <view class="radio-card  {{ item.final_selection == '3' ? 'radio-active' : ''}}">
               <t-icon name="check" t-class=radio-icon" />
-              <t-radio value="2" label="舍弃" icon="none" borderless />
+              <t-radio value="3" label="舍弃" icon="none" borderless />
             </view>
           </t-radio-group>
         </view>
