@@ -144,11 +144,10 @@ Page({
   // 跳转到详情页面
   onJumpArtworkDeatails(e) {
     const that = this;
+    // 需要3类人进行跳转 Kyle Shelley FMR 进行跳转
     const userRole = that.data.userRole;
     const tabBarValue = that.data.tabBarValue;
     const groupIdList = e.currentTarget.dataset.groupIdList;
-    // 需要3类人进行跳转 Kyle Shelley FMR 进行跳转
-    const tabBarValue = that.data.tabBarValue;
     if (userRole === "kyle") {
       if (tabBarValue === "primary") { // kyle 初筛和终评
         wx.navigateTo({

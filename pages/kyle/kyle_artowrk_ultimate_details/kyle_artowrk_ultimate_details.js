@@ -1,19 +1,20 @@
-const app = getApp(); // 用户信息
 const utils = require('../../../utils/util')
-
-const swiperImages = [
-  'https://picsum.photos/800/600?random=1',  // 横版
-  // 物品类
-  'https://picsum.photos/700/900?random=5',  // 长竖版
-];
+const tool = new utils.CommentTool();
+let commentStr = tool.init();
 Page({
   data: {
-    skeletonLoading: true, // 骨架屏控制变量
-    allIdList: null, // 首页跳转后的存储的id值
+    Data: [], // 存储数据
     tabBar: null,// 记录切换值
+    pageSize: 1, // 每次加载几个ID
+    currentIndex: 0, // 当前加载到第几个ID
+    allIdList: [], // 首页跳转后的存储的id值
+    loadedIdList: [], // 已经读取渲染到页面的ID
+    skeletonLoading: true, // 骨架屏控制变量
+    noMoreData: false,    // 数据是否全部加载完毕
     isDownRefreshing: false, // 下拉刷新状态
     isLoadingReachMore: false, // 滚动底部加载数据
-    noMoreData: false,    // 数据是否全部加载完毕
+    // 回到顶部变量
+    scrollTop: 0,
     // 筛选框变量-1
     dropdownDesigner: {
       value: 'all',
@@ -58,15 +59,6 @@ Page({
         },
       ],
     },
-    // 轮播图变量
-    current: 0, // 当前轮播在哪一项（下标）默认第0个索引
-    autoplay: false, // 是否启动自动播放
-    duration: 500, // 滑动动画时长
-    interval: 5000, // 轮播间隔时间，只有开启自动播放才有用
-    swiperImages, // 轮播图 url变量
-
-    // 回到顶部变量
-    scrollTop: 0,
     // 设计师自评弹窗控制变量
     popupVisible: false,
     popupValue: "", // 评论的内容
@@ -77,26 +69,128 @@ Page({
     // 评审单选框变量
     radioValue: "",
   },
-  /**
-   * 生命周期函数--监听页面加载
-   */
+  // 数据结构处理
+  dataStructure(dataList) {
+    let arrangeData = [];
+    const image_url = dataList.WBO_URL
+    const task_list = dataList.task_list
+    for (const index in task_list) {
+      let data_dict = {
+        id: task_list[index].id,
+        code: task_list[index].code,
+        title: task_list[index].title,
+        texture: task_list[index].texture,
+        name: task_list[index].AIE_designer1,
+        fmr:task_list[index].fmr,
+      }
+      const timeline_list = task_list[index].timeline_list;
+      for (let i = timeline_list.length - 1; i >= 0; i--) {
+        if (i < timeline_list.length - 1) {
+          continue; // 跳过倒序的第2个及以后
+        }
+        const comment = task_list[index].timeline_list[i].comment; // 全部的评论
+        const kyle_conmment = tool.get(comment, "Kyle"); // 只获取kyle的评论
+        data_dict["comment"] = kyle_conmment; // kyle评审信息
+        const confirmed = task_list[index].timeline_list[i].confirmed; // 标记舍弃(3)还是保留(1)
+        data_dict["confirmed"] = confirmed;
+        if (confirmed === 0) {
+          data_dict["confirmed_text"] = "未标记";
+        } else if (confirmed === 1) {
+          data_dict["confirmed_text"] = "保留";
+        } else if (confirmed === 3) {
+          data_dict["confirmed_text"] = "舍弃";
+        }
+        const image_list = task_list[index].timeline_list[i].image_list;
+        if (image_list.length === 0) {
+          data_dict["picture_list"] = [];
+        } else {
+          let picture_list = []
+          for (let img_num = 0; img_num < image_list.length; img_num++) {
+            picture_list.push(image_url + image_list[img_num].imageURL)
+          }
+          data_dict["picture_list"] = picture_list;
+        }
+        data_dict["timeline_id"] = task_list[index].timeline_list[i].id;
+      }
+      arrangeData.push(data_dict);
+    }
+    return arrangeData; // 返回整理的结构体
+  },
+  // 请求后端接口数据处理
+  multiIdRequest(mode) {
+    const that = this;
+    // 读取id
+    const nextIds = utils.readIdStructure(that);
+    // 判断，如果nextIds的长度小于预设pageSize的长度，就totalRequests重置，避免加载动作卡死
+    let totalRequests = that.data.pageSize;
+    if (nextIds.length !== that.data.pageSize) {
+      totalRequests = nextIds.length;
+    }
+    // 实例化请求类
+    const loader = new utils.MultiRequestLoader(that, totalRequests);
+    // 读取数据
+    let successIds = []; // 用于记录成功的 id 
+    const promises = nextIds.map(id => {
+      return loader.request({
+        data: { type: "getTaskByLinePlan", username: "admin", "lp_id": id, },
+        mode: mode,
+      }).then(res => {
+        successIds.push(id); // 用于记录成功的 id
+        return res;
+      }).catch(err => {
+        console.warn(`ID ${id} 请求失败`, err);
+        return null; // 保证 Promise.all 能跑完
+      });
+    })
+    Promise.all(promises).then(results => {
+      const arrangedData = results.flatMap(list => that.dataStructure(list));
+      // refresh刷新时重置，其他的数据追加
+      if (mode === 'refresh') {
+        that.setData({
+          Data: arrangedData,
+        })
+      } else {
+        that.setData({
+          Data: that.data.Data.concat(arrangedData),
+        })
+      }
+      that.setData({
+        // 只记录访问成功的id
+        loadedIdList: that.data.loadedIdList.concat(successIds),
+        currentIndex: that.data.currentIndex + successIds.length
+      });
+    })
+  },
   onLoad(options) {
     const that = this;
     const tabBarValue = options.tabBarValue || ''; // 切换时的tab值
     const groupIdList = JSON.parse(options.groupIdList || '[]'); // 首页跳转后的存储的id值
-
     that.setData({
       allIdList: groupIdList, // 记录全部的id数据
       tabBar: tabBarValue, // 记录当前tab属性
     })
-    wx.showLoading({ title: '正在加载...', });
-    setTimeout(() => {
-      wx.hideLoading();
-      this.setData({
-        skeletonLoading: false,
-      })
-    }, 2000)
+    this.multiIdRequest('init');
   },
+  // 轮播图函数 - 点击轮播图 - 图片预览
+  onSwiperImagesTap(e) {
+    const el = e;
+    const that = this;
+    utils.ImagesPreview(el, that);
+  },
+  // 回到顶部
+  onToTop(e) {
+    wx.pageScrollTo({
+      scrollTop: 0,
+      duration: 300
+    });
+  },
+  //  实时监听滚动距离，把这个值传给回到顶部的按钮，让它知道是否应该出现
+  onPageScroll(e) {
+    this.setData({
+      scrollTop: e.scrollTop
+    });
+  },
+
   // 下拉菜单-设计师
   onDesignerChange(e) {
     this.setData({
@@ -108,12 +202,6 @@ Page({
     this.setData({
       'dropdownStatus.value': e.detail.value,
     });
-  },
-  // 轮播图函数 - 点击轮播图 - 图片预览
-  onSwiperImagesTap(e) {
-    const el = e;
-    const that = this;
-    utils.ImagesPreview(el, that);
   },
   // 页面上拉刷新 - 用于页面重置
   onPullDownRefresh() {
@@ -142,19 +230,6 @@ Page({
       });
     }, 1500);
 
-  },
-  // 回到顶部
-  onToTop(e) {
-    wx.pageScrollTo({
-      scrollTop: 0,
-      duration: 300
-    });
-  },
-  //  实时监听滚动距离，把这个值传给回到顶部的按钮，让它知道是否应该出现
-  onPageScroll(e) {
-    this.setData({
-      scrollTop: e.scrollTop
-    });
   },
   // 查看评论弹窗函数 - 关闭
   onClosePopup(e) {
