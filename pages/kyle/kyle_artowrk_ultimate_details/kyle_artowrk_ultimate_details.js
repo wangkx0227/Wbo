@@ -386,7 +386,7 @@ Page({
 
 
 
-
+  /* 下面的需要进行修改 */
   // 查看评论弹窗函数 - 关闭
   onClosePopup(e) {
     this.setData({
