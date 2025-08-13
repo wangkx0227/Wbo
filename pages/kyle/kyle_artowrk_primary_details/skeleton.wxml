@@ -36,21 +36,21 @@
               <!-- 时间线骨架 -->
               <view class="arrange-center">
                 <view class="arrange-center" style="gap: 10px;">
-                  <t-skeleton theme="text" loading animation="gradient" rowCol="{{ [{ width: '105px', height: '32rpx'}]}}"></t-skeleton>
+                  <t-skeleton theme="text" loading animation="gradient" rowCol="{{ [{ width: '105px', height: '38rpx'}]}}"></t-skeleton>
                   <t-skeleton theme="text" loading animation="gradient" rowCol="{{ [{ width: '43px', height: '38rpx'}]}}"></t-skeleton>
                 </view>
                 <t-divider layout="vertical" />
                 <view class="arrange-center" style="gap: 10px;">
-                  <t-skeleton theme="text" loading animation="gradient" rowCol="{{ [{ width: '40px', height: '32rpx'}]}}"></t-skeleton>
+                  <t-skeleton theme="text" loading animation="gradient" rowCol="{{ [{ width: '40px', height: '38rpx'}]}}"></t-skeleton>
                   <t-skeleton theme="text" loading animation="gradient" rowCol="{{ [{ width: '85px', height: '38rpx'}]}}"></t-skeleton>
                 </view>
               </view>
               <view class="arrange-center" style="gap: 10px;">
-                <t-skeleton theme="text" loading animation="gradient" rowCol="{{ [{ width: '25px', height: '32rpx'}]}}"></t-skeleton>
+                <t-skeleton theme="text" loading animation="gradient" rowCol="{{ [{ width: '25px', height: '38rpx'}]}}"></t-skeleton>
                 <view class="arrange-center">
-                  <t-skeleton theme="text" loading animation="gradient" rowCol="{{ [{ width: '25px', height: '40rpx'}]}}"></t-skeleton>
+                  <t-skeleton theme="text" loading animation="gradient" rowCol="{{ [{ width: '25px', height: '38rpx'}]}}"></t-skeleton>
                   <t-divider layout="vertical" />
-                  <t-skeleton theme="text" loading animation="gradient" rowCol="{{ [{ width: '25px', height: '40rpx'}]}}"></t-skeleton>
+                  <t-skeleton theme="text" loading animation="gradient" rowCol="{{ [{ width: '25px', height: '38rpx'}]}}"></t-skeleton>
                 </view>
               </view>
             </view>

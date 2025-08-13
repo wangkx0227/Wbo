@@ -346,7 +346,6 @@ Page({
   },
   // 打开抽屉，查看历史时间线
   onOpenHistoryTimeLine(e) {
-    // 打开弹窗，显示upload组件
     const { taskId } = e.currentTarget.dataset;
     const taskTimeLineData = this.data.taskTimeLineData;
     const timeLineValue = taskTimeLineData[`${taskId}`];

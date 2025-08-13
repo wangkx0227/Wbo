@@ -42,28 +42,30 @@
         <!-- shelley审核与FMR审核 -->
         <view class="arrange-center">
           <view class="arrange-center title-font-other">
-            <text>shelley可行性：{{ item.confirmed2_text }}</text>
+            <text class="title-font-main">Shelley可行性：</text>
+            <text>{{ item.confirmed2_text }}</text>
           </view>
           <t-divider layout="vertical" />
           <view class="arrange-center title-font-other">
-            <text>FMR可行性：{{ item.fmr2_text }}</text>
+            <text class="title-font-main">FMR可行性：</text>
+            <text>{{ item.fmr2_text }}</text>
           </view>
         </view>
         <!-- 最终评论 -->
         <view class="arrange-center">
           <view class="arrange-center title-font-other">
-            <text>终审评论：</text>
+            <text class="title-font-main">终审评论：</text>
             <t-link size="small" content="点击评论" hover underline suffixIcon="chat-message" variant="outline" bind:tap="onOpenDialog" data-timelineid="{{ item.timeline_id }}" />
           </view>
           <t-divider layout="vertical" />
           <view class="arrange-center title-font-other">
-            <text>时间线：</text>
+            <text class="title-font-main">时间线：</text>
             <t-link size="small" content="查看历史时间线" hover underline variant="outline" bind:tap="onOpenHistoryTimeLine" data-task-id="{{ item.id }}" d />
           </view>
         </view>
         <!-- 终审 -->
         <view class="arrange-center title-font-other">
-          <text>操作：</text>
+          <text class="title-font-main">操作：</text>
           <t-link size="small" content="舍弃" data-content-status="N" hover underline theme="danger" bindtap="onModifyArtworkStatus" data-timelineid="{{ item.timeline_id }}" />
           <t-divider layout="vertical" />
           <t-link size="small" content="保留" data-content-status="Y" hover underline bindtap="onModifyArtworkStatus" data-timelineid="{{ item.timeline_id }}" />
