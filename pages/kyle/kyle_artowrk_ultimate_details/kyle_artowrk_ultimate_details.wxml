@@ -20,11 +20,12 @@
           <text>Title：{{ item.title }}</text>
         </view>
         <view class="title-font-other arrange-space-between">
+          <text style="border-bottom: 1px solid currentColor;">材质：{{ item.texture }}</text>
+          <text style="color: {{ item.confirmed == 3 ? 'red' : 'black' }};;">状态：{{ item.confirmed_text }}</text>
+        </view>
+        <view class="title-font-other arrange-space-between">
           <text>Name：{{ item.name }}</text>
           <text>Code：{{ item.code }}</text>
-        </view>
-        <view class="title-font-other">
-          <text style="border-bottom: 1px solid currentColor;">材质：{{ item.texture }}</text>
         </view>
         <view class="cell-swiper">
           <t-swiper wx:if="{{item.picture_list.length}}" autoplay="{{false}}" duration="{{500}}" navigation="{{ { type: 'dots' } }}" list="{{item.picture_list}}" bind:click="onSwiperImagesTap" data-images="{{item.picture_list}}">
@@ -45,15 +46,16 @@
                 <text class="title-font-main">Shelley 可行性评估：</text>
               </view>
               <view>
-                <t-radio-group default-value="0" disabled>
-                  <t-radio value="0" label="可生产 — 无需进一步说明" allow-uncheck style="text-align: start;" />
-                  <t-radio value="1" allow-uncheck>
+                <t-radio-group  value="{{ item.confirmed2 }}">
+                  <t-radio disabled="{{ item.confirmed2  !== 1 }}" value="{{1}}" label="可生产 — 无需进一步说明" allow-uncheck style="text-align: start;" />
+                  <t-radio disabled="{{item.confirmed2  !== 2}}" value="{{2}}" allow-uncheck>
                     <view slot="label" class="arrange-space-between">
                       <text>可生产 — 需小幅修改（需填写评论）</text>
-                      <t-link size="small" content="查看" hover underline data-commentator="shelley" bind:tap="onOpenPopup" data-comment-status="0" />
+                      <t-link size="small" content="查看" hover underline disabled="{{item.confirmed2  !== 2}}" 
+                      catch:tap="{{ item.confirmed2 === 2 ? 'onOpenPopup' : null }}" data-click-object="shelley" data-conmment-status="{{item.confirmed2}}" data-fmr-conmment="{{ item.shelley_conmment }}" />
                     </view>
                   </t-radio>
-                  <t-radio value="2" label="不具备可行性（需大幅修改）" allow-uncheck style="text-align: start;" />
+                  <t-radio disabled="{{item.confirmed2  !== 3}}" value="{{3}}" label="不具备可行性（需大幅修改）" allow-uncheck style="text-align: start;" />
                 </t-radio-group>
               </view>
             </t-collapse-panel>
@@ -67,15 +69,16 @@
                 <text class="title-font-other">FMR：{{ item.fmr }}</text>
               </view>
               <view>
-                <t-radio-group default-value="0" disabled>
-                  <t-radio value="0" label="可生产 — 无需进一步说明" allow-uncheck style="text-align: start;" />
-                  <t-radio value="1" allow-uncheck>
+                <t-radio-group value="{{ item.fmr2 }}">
+                  <t-radio disabled="{{ item.fmr2  !== 1 }}" value="{{1}}" label="可生产 — 无需进一步说明" allow-uncheck style="text-align: start;" />
+                  <t-radio disabled="{{item.fmr2  !== 3}}" value="{{3}}" allow-uncheck>
                     <view slot="label" class="arrange-space-between">
                       <text>可生产 — 需小幅修改（需填写评论）</text>
-                      <t-link size="small" content="查看" hover underline data-commentator="fmr" bind:tap="onOpenPopup" data-comment-status="0" />
+                      <t-link size="small" content="查看" hover underline disabled="{{item.fmr2  !== 3}}" 
+                      catch:tap="{{ item.fmr2 === 3 ? 'onOpenPopup' : null }}" data-click-object="fmr" data-conmment-status="{{item.fmr2}}" data-fmr-conmment="{{ item.fmr_conmment }}" />
                     </view>
                   </t-radio>
-                  <t-radio value="2" label="不具备可行性（需大幅修改）" allow-uncheck style="text-align: start;" />
+                  <t-radio disabled="{{item.fmr2  !== 2}}" value="{{2}}" label="不具备可行性（需大幅修改）" allow-uncheck style="text-align: start;" />
                 </t-radio-group>
               </view>
             </t-collapse-panel>

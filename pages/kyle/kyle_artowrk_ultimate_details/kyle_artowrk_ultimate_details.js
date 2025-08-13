@@ -81,17 +81,23 @@ Page({
         title: task_list[index].title,
         texture: task_list[index].texture,
         name: task_list[index].AIE_designer1,
-        fmr:task_list[index].fmr,
+        fmr: task_list[index].fmr,
+        fmr2: task_list[index].fmr2, // 这是fmr选中状态
       }
       const timeline_list = task_list[index].timeline_list;
       for (let i = timeline_list.length - 1; i >= 0; i--) {
         if (i < timeline_list.length - 1) {
           continue; // 跳过倒序的第2个及以后
         }
-        const comment = task_list[index].timeline_list[i].comment; // 全部的评论
-        const kyle_conmment = tool.get(comment, "Kyle"); // 只获取kyle的评论
-        data_dict["comment"] = kyle_conmment; // kyle评审信息
-        const confirmed = task_list[index].timeline_list[i].confirmed; // 标记舍弃(3)还是保留(1)
+        const conmment = task_list[index].timeline_list[i].comment; // 全部的评论
+        const kyle_conmment = tool.get(conmment, "Kyle"); // 只获取kyle的评论
+        const shelley_conmment = tool.get(conmment, "Shelley"); // 只获取Shelley的评论
+        const fmr_conmment = tool.get(conmment, "FMR"); // 只获取FMR的评论
+        data_dict["kyle_comment"] = kyle_conmment; // kyle评审信息
+        data_dict["shelley_conmment"] = shelley_conmment; //Shelley评审信息
+        data_dict["fmr_conmment"] = fmr_conmment; // FMR评审信息
+        const confirmed = task_list[index].timeline_list[i].confirmed; // kyle 标记舍弃(3)还是保留(1)
+        data_dict["confirmed2"] = task_list[index].timeline_list[i].confirmed2; // shelley的状态
         data_dict["confirmed"] = confirmed;
         if (confirmed === 0) {
           data_dict["confirmed_text"] = "未标记";
@@ -111,6 +117,10 @@ Page({
           data_dict["picture_list"] = picture_list;
         }
         data_dict["timeline_id"] = task_list[index].timeline_list[i].id;
+      }
+      // 初选 kyle 标记如果时3舍弃，就直接过滤掉
+      if (data_dict["confirmed"] === 3) {
+        continue
       }
       arrangeData.push(data_dict);
     }
