@@ -74,6 +74,7 @@ Page({
     const task_list = dataList.task_list
     for (const index in task_list) {
       const task_id = task_list[index].id;
+      const fmr2 = task_list[index].fmr2;
       let data_dict = {
         id: task_id,
         code: task_list[index].code,
@@ -81,7 +82,14 @@ Page({
         texture: task_list[index].texture,
         name: task_list[index].AIE_designer1,
         fmr: task_list[index].fmr,
-        fmr2: task_list[index].fmr2, // 这是fmr选中状态
+        fmr2: fmr2, // 这是fmr选中状态
+      }
+      if (fmr2 === 1) {
+        data_dict["fmr2_text"] = "可生产";
+      } else if (fmr2 === 2) {
+        data_dict["fmr2_text"] = "不可生产";
+      }  else {
+        data_dict["fmr2_text"] = "未标记";
       }
       let timeLineData = []; // 时间线存储数据
       const timeline_list = task_list[index].timeline_list;
@@ -99,8 +107,9 @@ Page({
           })
           continue; // 跳过
         }
-        const confirmed = task_list[index].timeline_list[i].confirmed; // kyle 标记舍弃(3)还是保留(1)
-        data_dict["confirmed2"] = task_list[index].timeline_list[i].confirmed2; // shelley的状态
+        const confirmed = task_list[index].timeline_list[i].confirmed; // kyle 标记
+        const confirmed2 = task_list[index].timeline_list[i].confirmed2; // shelley 标记
+        data_dict["confirmed2"] = confirmed2;
         data_dict["confirmed"] = confirmed;
         // 最终选择字段
         if (confirmed === 3) {
@@ -109,6 +118,15 @@ Page({
           data_dict["confirmed_text"] = "舍弃";
         } else {
           data_dict["confirmed_text"] = "未标记";
+        }
+        if (confirmed2 === 1) {
+          data_dict["confirmed2_text"] = "可生产";
+        } else if (confirmed === 2) {
+          data_dict["confirmed2_text"] = "需要小幅度修改";
+        } else if (confirmed === 3) {
+          data_dict["confirmed2_text"] = "不具备可行性";
+        } else {
+          data_dict["confirmed2_text"] = "未标记";
         }
         data_dict["picture_list"] = picture_list;
         data_dict["timeline_id"] = timeline_id;
