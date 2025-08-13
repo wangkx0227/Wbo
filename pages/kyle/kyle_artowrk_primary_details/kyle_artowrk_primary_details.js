@@ -19,8 +19,9 @@ Page({
     dialogVisible: false,
     dialogValue: "",
     dialogId: null, // 当前点击的id
-    // 时间线
+    // 时间线抽屉
     popupTimeLineVisible: false,
+    taskTimeLineData:{}, // 存储时间线的数据
     // 筛选框变量-1
     dropdownDesigner: {
       value: 'all',
@@ -64,20 +65,33 @@ Page({
   },
   // 数据结构处理
   dataStructure(dataList) {
-    let arrangeData = [];
+    let arrangeData = []; // 显示数据
+    const taskTimeLineData = {}; // 时间线数据
     const image_url = dataList.WBO_URL
     const task_list = dataList.task_list
     for (const index in task_list) {
+      const task_id = task_list[index].id;
       let data_dict = {
-        id: task_list[index].id,
+        id: task_id,
         code: task_list[index].code,
         title: task_list[index].title,
         texture: task_list[index].texture,
         name: task_list[index].AIE_designer1,
       }
+      let timeLineData = []; // 时间线存储数据
       const timeline_list = task_list[index].timeline_list;
       for (let i = timeline_list.length - 1; i >= 0; i--) {
+        const image_list = task_list[index].timeline_list[i].image_list;
+        const picture_list = image_list.length === 0 ? [] : image_list.map(img => image_url + img.imageURL);
+        const timeline_id = task_list[index].timeline_list[i].id;
         if (i < timeline_list.length - 1) {
+          timeLineData.push({
+            "id": timeline_id, // id 
+            "time": task_list[index].timeline_list[i].time, // 提交时间
+            "name": task_list[index].timeline_list[i].name, // 提交人
+            "comment": task_list[index].timeline_list[i].comment, // 评论内容
+            "picture_list": picture_list, // 图片
+          })
           continue; // 跳过倒序的第2个及以后
         }
         const comment = task_list[index].timeline_list[i].comment; // 全部的评论
@@ -91,21 +105,14 @@ Page({
         } else {
           data_dict["confirmed_text"] = "未标记";
         }
-        const image_list = task_list[index].timeline_list[i].image_list;
-        if (image_list.length === 0) {
-          data_dict["picture_list"] = [];
-        } else {
-          let picture_list = []
-          for (let img_num = 0; img_num < image_list.length; img_num++) {
-            picture_list.push(image_url + image_list[img_num].imageURL)
-          }
-          data_dict["picture_list"] = picture_list;
-        }
-        data_dict["timeline_id"] = task_list[index].timeline_list[i].id;
+        data_dict["picture_list"] = picture_list;
+        data_dict["timeline_id"] = timeline_id;
       }
+      // 时间线数据
+      taskTimeLineData[`${task_id}`] = timeLineData;
       arrangeData.push(data_dict);
     }
-    return arrangeData; // 返回整理的结构体
+    return { arrangeData, taskTimeLineData }; // 返回整理的结构体
   },
   // 请求后端接口数据处理
   multiIdRequest(mode) {
@@ -134,15 +141,19 @@ Page({
       });
     })
     Promise.all(promises).then(results => {
-      const arrangedData = results.flatMap(list => that.dataStructure(list));
+      const allResults = results.flatMap(list => that.dataStructure(list));
+      const arrangeData = allResults.flatMap(item => item.arrangeData); // 展示数据
+      const taskTimeLineData = allResults.flatMap(item => item.taskTimeLineData); // 时间线数据
       // refresh刷新时重置，其他的数据追加
       if (mode === 'refresh') {
         that.setData({
-          Data: arrangedData,
+          Data: arrangeData,
+          taskTimeLineData:taskTimeLineData,
         })
       } else {
         that.setData({
-          Data: that.data.Data.concat(arrangedData),
+          Data: that.data.Data.concat(arrangeData),
+          taskTimeLineData:Object.assign({}, that.data.taskTimeLineData, taskTimeLineData)
         })
       }
       that.setData({
