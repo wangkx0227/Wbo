@@ -177,8 +177,8 @@ class MultiRequestLoader {
           // 关闭加载状态
           if (isInit) {
             if (this.loadingCount === this.totalRequests) {
-              // wx.hideLoading();
-              // this.page.setData({ skeletonLoading: false });
+              wx.hideLoading();
+              this.page.setData({ skeletonLoading: false });
             }
           }
           if (isRefresh) {
