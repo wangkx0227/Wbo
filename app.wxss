@@ -218,13 +218,11 @@ page {
   flex-direction: column;
   height: 100%;
 }
-
 .popup-comments {
   flex: 1;
   overflow-y: auto; /* 允许垂直滚动 */
 }
-
 /* 防止滚动穿透（关键） */
 t-popup {
-  overflow: hidden; /* 禁止外部滚动 */
+  overflow: hidden !important; /* 禁止外部滚动 */
 }

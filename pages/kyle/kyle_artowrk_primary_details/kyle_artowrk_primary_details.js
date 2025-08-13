@@ -352,7 +352,8 @@ Page({
       this.setData({ timeLineValue: [] });
     },500)
   },
-
+  // 空方法，避免抽屉的滚动
+  onDummyTouchMove() {}, 
 
 
   // 下拉菜单-设计师
