@@ -135,7 +135,7 @@ Page({
       if (data_dict["confirmed"] === 2) {
         continue
       }
-      taskTimeLineData[`${task_id}`] = timeLineData; // 时间先数据
+      taskTimeLineData[`${task_id}`] = timeLineData; // 时间线数据
       arrangeData.push(data_dict);
     }
     return { arrangeData, taskTimeLineData }; // 返回整理的结构体

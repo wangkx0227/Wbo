@@ -15,72 +15,73 @@ Page({
     userName: null, // 用户名称
     // 回到顶部变量
     scrollTop: 0,
-    // 查看评论弹窗控制变量
-    popupVisible: false,
-    popupValue: "",
     // 填写评论弹出层变量
     dialogVisible: false,
     dialogValue: "",
     // 筛选器
     pickerVisible: false,
     pickerItemList: [], // fmr全部的用户列表的数据
+    // 时间线抽屉
+    popupTimeLineVisible: false,
+    taskTimeLineData: {}, // 存储时间线的数据
+    timeLineValue: [], // 具体查看的时间线
     // 筛选框变量-图稿
     dropdownArtwork: {
       value: 'all',
       options: [{
-          value: 'all',
-          label: '全部图稿',
-        },
-        {
-          value: 'NAQ',
-          label: '宁安琪',
-        },
-        {
-          value: 'LSL',
-          label: '黎善玲',
-        },
-        {
-          value: 'HYJ',
-          label: '韩奕君'
-        }
+        value: 'all',
+        label: '全部图稿',
+      },
+      {
+        value: 'NAQ',
+        label: '宁安琪',
+      },
+      {
+        value: 'LSL',
+        label: '黎善玲',
+      },
+      {
+        value: 'HYJ',
+        label: '韩奕君'
+      }
       ],
     },
     // 筛选框变量-指派
     dropdownAssign: {
       value: 'all',
       options: [{
-          value: 'all',
-          label: '全部指派',
-        },
-        {
-          value: 'discard',
-          label: '未指派',
-        },
-        {
-          value: 'reserve',
-          label: '已指派',
-        },
+        value: 'all',
+        label: '全部指派',
+      },
+      {
+        value: 'discard',
+        label: '未指派',
+      },
+      {
+        value: 'reserve',
+        label: '已指派',
+      },
       ],
     },
     // 筛选框变量-评估
     dropdownAssess: {
       value: 'all',
       options: [{
-          value: 'all',
-          label: '全部评估',
-        },
-        {
-          value: 'discard',
-          label: '可生产',
-        },
-        {
-          value: 'reserve',
-          label: '小幅度修改',
-        },
-        {
-          value: 'reserve',
-          label: '不具备可行性',
-        },
+        value: 'all',
+        label: '全部评估',
+      },
+      {
+        value: 'discard',
+        label: '可生产',
+      },
+      {
+        value: 'reserve',
+        label: '小幅度修改',
+      },
+      {
+        value: 'reserve',
+        label: '不具备可行性',
+      },
       ],
     },
   },
@@ -88,12 +89,14 @@ Page({
   // 数据结构处理
   dataStructure(dataList) {
     let arrangeData = [];
+    const taskTimeLineData = {}; // 时间线数据
     const image_url = dataList.WBO_URL
     const task_list = dataList.task_list
     for (const index in task_list) {
+      const task_id = task_list[index].id;
       const fmr2 = task_list[index].fmr2;
       let data_dict = {
-        id: task_list[index].id,
+        id: task_id,
         code: task_list[index].code,
         title: task_list[index].title,
         texture: task_list[index].texture,
@@ -101,45 +104,45 @@ Page({
         fmr: task_list[index].fmr || "暂未指派FMR", // 当前指派的fmr
         fmr2: fmr2 // 当前fmr的状态
       }
+      if (fmr2 === 1) {
+        data_dict["fmr2_text"] = "可生产";
+      } else if (fmr2 === 2) {
+        data_dict["fmr2_text"] = "不可生产";
+      } else {
+        data_dict["fmr2_text"] = "未标记";
+      }
+      let timeLineData = []; // 时间线存储数据
       const timeline_list = task_list[index].timeline_list;
       for (let i = 0; i < timeline_list.length; i++) {
-        if (i > 0) {
-          break; // 跳过倒序的第2个及以后
-        }
-        let conmment = "";
-        // 说明当前fmr有评论
-        if (fmr2 === 3) {
-          conmment = task_list[index].timeline_list[i + 1].comment;
-          data_dict["fmr_conmment"] = conmment;
-        } else {
-          // 全部的评论
-          conmment = task_list[index].timeline_list[i].comment;
-          data_dict["conmment"] = conmment;
-        }
         const image_list = task_list[index].timeline_list[i].image_list;
-        if (image_list.length === 0) {
-          data_dict["picture_list"] = [];
-        } else {
-          let picture_list = []
-          for (let img_num = 0; img_num < image_list.length; img_num++) {
-            picture_list.push(image_url + image_list[img_num].imageURL)
-          }
-          data_dict["picture_list"] = picture_list;
+        const picture_list = image_list.length === 0 ? [] : image_list.map(img => image_url + img.imageURL);
+        const timeline_id = task_list[index].timeline_list[i].id;
+        if (i > 0) {
+          timeLineData.push({
+            "id": timeline_id, // id 
+            "time": task_list[index].timeline_list[i].time, // 提交时间
+            "name": task_list[index].timeline_list[i].name, // 提交人
+            "comment": task_list[index].timeline_list[i].comment, // 评论内容
+            "picture_list": picture_list, // 图片
+          })
+          continue; // 跳过
         }
+        data_dict["picture_list"] = picture_list;
         // kyle标记 3 舍弃 1 保留
         data_dict["confirmed"] = task_list[index].timeline_list[i].confirmed;
         // shelley 1可生产 2修改 3不具备可行性
         data_dict["confirmed2"] = task_list[index].timeline_list[i].confirmed2;
         // 第一条时间线的id 1-5步都是按照第一条时间线操作
-        data_dict["timeline_id"] = task_list[index].timeline_list[i].id;
+        data_dict["timeline_id"] = timeline_id;
       }
       // kyle 标记如果时2舍弃，就直接过滤掉
       if (data_dict["confirmed"] === 2) {
         continue
       }
+      taskTimeLineData[`${task_id}`] = timeLineData; // 时间线数据
       arrangeData.push(data_dict);
     }
-    return arrangeData; // 返回整理的结构体
+    return { arrangeData, taskTimeLineData }; // 返回整理的结构体
   },
   // 请求后端接口数据处理
   multiIdRequest(mode) {
@@ -172,15 +175,21 @@ Page({
       });
     })
     Promise.all(promises).then(results => {
-      const arrangedData = results.flatMap(list => that.dataStructure(list));
-      // refresh刷新时重置，其他的数据追加
+      const allResults = results.flatMap(list => that.dataStructure(list));
+      const arrangeData = allResults.flatMap(item => item.arrangeData); // 展示数据
+      const taskTimeLineData = Object.assign(
+        {},
+        ...allResults.map(x => x.taskTimeLineData)
+      );
       if (mode === 'refresh') {
         that.setData({
-          Data: arrangedData,
+           Data: arrangeData,
+          taskTimeLineData: taskTimeLineData,
         })
       } else {
         that.setData({
-          Data: that.data.Data.concat(arrangedData),
+          Data: that.data.Data.concat(arrangeData),
+          taskTimeLineData: { ...that.data.taskTimeLineData, ...taskTimeLineData }
         })
       }
       that.setData({
@@ -209,7 +218,7 @@ Page({
         fmrData.push({
           label: list[i],
           value: list[i]
-        }, )
+        })
       }
       that.setData({
         pickerItemList: fmrData
@@ -225,166 +234,6 @@ Page({
     })
     this.multiIdRequest('init');
     this.fmrRequest();
-  },
-  // 评估建议单选框
-  onRadioChange(e) {
-    const that = this;
-    // 点击的选中的
-    const selectedValue = e.detail.value;
-    // 修改前的数据
-    const confirmed2 = e.currentTarget.dataset.confirmed2;
-    const timelineid = e.currentTarget.dataset.timelineid;
-    const conmment = e.currentTarget.dataset.conmment;
-    let data = {
-      "type": "update_timeline",
-      "timeLine_id": timelineid,
-      "username": "admin",
-      "name": "管理员",
-      "confirmed2": selectedValue,
-    }
-    const isConfirmedEqual = selectedValue.toString() === confirmed2.toString();
-    // 如果选中的点选框的值等于记录的值那么就取消
-    if (isConfirmedEqual) {
-      data["confirmed2"] = 0;
-      utils.UpdateData({
-        page: that,
-        data: data,
-        message: "取消评估建议",
-        theme: "warning"
-      });
-    } else {
-      // 如果选择小幅度修改，需要输入评估建议
-      if (selectedValue === "2") {
-        this.setData({
-          dialogVisible: true,
-          timelineid: timelineid
-        });
-      } else {
-        if (confirmed2 !== 0) {
-          utils.UpdateData({
-            page: that,
-            data: data,
-            message: "修改评估建议"
-          });
-        } else {
-          utils.UpdateData({
-            page: that,
-            data: data,
-            message: "提交评估建议"
-          });
-        }
-      }
-    }
-    if (selectedValue !== "2" || isConfirmedEqual) {
-      const updatedData = that.data.Data.map(item => {
-        if (item.timeline_id === timelineid) {
-          item["confirmed2"] = data["confirmed2"];
-        }
-        return item;
-      })
-      that.setData({
-        Data: updatedData
-      });
-    }
-  },
-  // 填写评论-双向绑定
-  onDialogInput(e) {
-    this.setData({
-      dialogValue: e.detail.value
-    });
-  },
-  // 填写弹窗-关闭（包含评论提交功能）
-  onCloseDialog(e) {
-    const that = this;
-    const {
-      dialogValue,
-      timelineid
-    } = that.data; // 输入的评论的数据
-    const action = e.type;
-    if (action === 'confirm') {
-      if (!dialogValue) {
-        const theme = "warning"
-        const message = "无评审无法提交"
-        utils.showToast(that, message, theme);
-        return;
-      }
-      const data = {
-        "type": "update_timeline",
-        "timeLine_id": timelineid,
-        "username": "admin",
-        "name": "管理员",
-        "confirmed2": 2,
-        "comment": dialogValue, // 携带其他人原来的评论
-      }
-      utils.UpdateData({
-        page: that,
-        data: data,
-        message: "提交评估建议"
-      });
-      // 刷新数据
-      const updatedData = that.data.Data.map(item => {
-        if (item.timeline_id === timelineid) {
-          item["confirmed2"] = 2;
-          item["conmment"] = dialogValue;
-        }
-        return item;
-      })
-      that.setData({
-        Data: updatedData
-      });
-    } else if (action === 'cancel') {
-      utils.showToast(that, "取消评估建议", "warning");
-    }
-    this.setData({
-      dialogVisible: false,
-      dialogValue: "",
-      timelineid: null
-    });
-  },
-  // 查看评论弹窗 - 关闭
-  onClosePopup(e) {
-    this.setData({
-      popupVisible: e.detail.visible,
-    });
-    // 延迟清空内容，确保动画完成后执行
-    setTimeout(() => {
-      this.setData({
-        popupValue: ""
-      });
-    }, 300);
-  },
-  // 查看评论弹窗 - 查看
-  onOpenPopup(e) {
-    const that = this;
-    const {
-      conmmentStatus,
-      conmment,
-      clickObject,
-      fmrConmment
-    } = e.currentTarget.dataset;
-    if (conmmentStatus.toString() !== "2" && clickObject === "shelley") {
-      const theme = "warning"
-      const message = "当前评估没有评论"
-      utils.showToast(that, message, theme);
-      return
-    } else {
-      this.setData({
-        popupValue: conmment
-      })
-    }
-    if (conmmentStatus.toString() !== "3" && clickObject === "fmr") {
-      const theme = "warning"
-      const message = "当前评估没有评论"
-      utils.showToast(that, message, theme);
-      return
-    } else {
-      this.setData({
-        popupValue: fmrConmment
-      })
-    }
-    that.setData({
-      popupVisible: true
-    }); // 触发弹窗
   },
   // 轮播图函数 - 点击轮播图 - 图片预览
   onSwiperImagesTap(e) {
@@ -495,6 +344,139 @@ Page({
     }
 
   },
+  // 打开抽屉，查看历史时间线
+  onOpenHistoryTimeLine(e) {
+    // 打开弹窗，显示upload组件
+    const { taskId } = e.currentTarget.dataset;
+    const taskTimeLineData = this.data.taskTimeLineData;
+    const timeLineValue = taskTimeLineData[`${taskId}`];
+    this.setData({ popupTimeLineVisible: true, timeLineValue: timeLineValue });
+  },
+  // 关闭抽屉
+  onCloseHistoryTimeLine(e) {
+    // 打开弹窗，显示upload组件
+    this.setData({ popupTimeLineVisible: false });
+    setTimeout(() => {
+      this.setData({ timeLineValue: [] });
+    }, 500)
+  },
+  // 空方法，避免抽屉的滚动
+  onDummyTouchMove() { },
+  // 评估建议单选框
+  onRadioChange(e) {
+    const that = this;
+    // 点击的选中的
+    const selectedValue = e.detail.value;
+    // 修改前的数据
+    const confirmed2 = e.currentTarget.dataset.confirmed2;
+    const timelineid = e.currentTarget.dataset.timelineid;
+    let data = {
+      "type": "update_timeline",
+      "timeLine_id": timelineid,
+      "username": "admin",
+      "name": "管理员",
+      "confirmed2": selectedValue,
+    }
+    const isConfirmedEqual = selectedValue.toString() === confirmed2.toString();
+    // 如果选中的点选框的值等于记录的值那么就取消
+    if (isConfirmedEqual) {
+      data["confirmed2"] = 0;
+      utils.UpdateData({
+        page: that,
+        data: data,
+        message: "取消评估建议",
+        theme: "warning"
+      });
+    } else {
+      // 如果选择小幅度修改，需要输入评估建议
+      if (selectedValue === "2") {
+        this.setData({
+          dialogVisible: true,
+          timelineid: timelineid
+        });
+      } else {
+        if (confirmed2 !== 0) {
+          utils.UpdateData({
+            page: that,
+            data: data,
+            message: "修改评估建议"
+          });
+        } else {
+          utils.UpdateData({
+            page: that,
+            data: data,
+            message: "提交评估建议"
+          });
+        }
+      }
+    }
+    if (selectedValue !== "2" || isConfirmedEqual) {
+      const updatedData = that.data.Data.map(item => {
+        if (item.timeline_id === timelineid) {
+          item["confirmed2"] = data["confirmed2"];
+        }
+        return item;
+      })
+      that.setData({
+        Data: updatedData
+      });
+    }
+  },
+  // 填写评论-双向绑定
+  onDialogInput(e) {
+    this.setData({
+      dialogValue: e.detail.value
+    });
+  },
+  // 填写弹窗-关闭（包含评论提交功能）
+  onCloseDialog(e) {
+    const that = this;
+    const {
+      dialogValue,
+      timelineid
+    } = that.data; // 输入的评论的数据
+    const action = e.type;
+    if (action === 'confirm') {
+      if (!dialogValue) {
+        const theme = "warning"
+        const message = "无评审无法提交"
+        utils.showToast(that, message, theme);
+        return;
+      }
+      const data = {
+        "type": "update_timeline",
+        "timeLine_id": timelineid,
+        "username": "admin",
+        "name": "管理员",
+        "confirmed2": 2,
+        "comment": dialogValue, // 携带其他人原来的评论
+      }
+      utils.UpdateData({
+        page: that,
+        data: data,
+        message: "提交评估建议"
+      });
+      // 刷新数据
+      const updatedData = that.data.Data.map(item => {
+        if (item.timeline_id === timelineid) {
+          item["confirmed2"] = 2;
+        }
+        return item;
+      })
+      that.setData({
+        Data: updatedData
+      });
+    } else if (action === 'cancel') {
+      utils.showToast(that, "取消评估建议", "warning");
+    }
+    this.setData({
+      dialogVisible: false,
+      dialogValue: "",
+      timelineid: null
+    });
+  },
+
+
   // 下拉菜单-图稿
   onArtworkChange(e) {
     this.setData({
