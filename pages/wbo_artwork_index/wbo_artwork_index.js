@@ -129,6 +129,7 @@ Page({
   // 生命周期函数
   onLoad() {
     this.loadUserRole();
+    // 需要根据不同角色加载数据
     utils.LoadDataList({
       page: this,
       data: { type: "getProjectList", username: "admin" },
@@ -139,62 +140,6 @@ Page({
         Data: arrangeData
       })
     });
-  },
-  // 页面下拉刷新 - 用于页面重置
-  onPullDownRefresh() {
-    if (this.data.isLoadingReachMore) return;
-    utils.LoadDataList({
-      page: this,
-      data: {
-        type: 'getProjectList',
-        username: 'admin',
-      },
-      mode: 'refresh',
-      // 如果有分页加入分页，或者搜索条件等等
-    }).then(list => { // list 就是data数据
-      const arrangeData = this.dataStructure(list);
-      this.setData({
-        Data: arrangeData
-      })
-    });
-  },
-  // 页面上拉触底事件的处理函数-用于加载更多数据
-  onReachBottom() {
-    // noMoreData:true, 下拉时，如果数据没有了，将这个值进行设置
-    // 如果在下拉刷新，禁止滚动加载
-    if (this.data.isDownRefreshing || this.data.noMoreData) return;
-    utils.LoadDataList({
-      page: this,
-      data: {
-        type: 'getProjectList',
-        username: 'admin',
-      },
-      mode: 'more',
-      // 如果有分页加入分页，或者搜索条件等等
-    }).then(list => { // list 就是data数据
-      const arrangeData = this.dataStructure(list);
-      this.setData({
-        Data: this.data.Data.concat(arrangeData),
-      })
-    });
-  },
-  // 下拉菜单-模板
-  onTemplateChange(e) {
-    this.setData({
-      'dropdownTemplate.value': e.detail.value,
-    });
-  },
-  // 下拉菜单-排序
-  onSorterChange(e) {
-    this.setData({
-      'dropdownSorter.value': e.detail.value,
-    });
-  },
-  // 搜索
-  onSearchConfirm() {
-    const keyword = e.detail.value;
-    console.log("用户点击搜索，输入内容为：", keyword);
-    console.log(this.data.searchValue);
   },
   // 跳转到详情页面
   onJumpArtworkDeatails(e) {
@@ -268,14 +213,74 @@ Page({
       scrollTop: e.scrollTop
     });
   },
+  // 页面下拉刷新 - 用于页面重置
+  onPullDownRefresh() {
+    if (this.data.isLoadingReachMore) return;
+    utils.LoadDataList({
+      page: this,
+      data: {
+        type: 'getProjectList',
+        username: 'admin',
+      },
+      mode: 'refresh',
+      // 如果有分页加入分页，或者搜索条件等等
+    }).then(list => { // list 就是data数据
+      const arrangeData = this.dataStructure(list);
+      this.setData({
+        Data: arrangeData
+      })
+    });
+  },
+  // 页面上拉触底事件的处理函数-用于加载更多数据
+  onReachBottom() {
+    // noMoreData:true, 下拉时，如果数据没有了，将这个值进行设置
+    // 如果在下拉刷新，禁止滚动加载
+    if (this.data.isDownRefreshing || this.data.noMoreData) return;
+    utils.LoadDataList({
+      page: this,
+      data: {
+        type: 'getProjectList',
+        username: 'admin',
+      },
+      mode: 'more',
+      // 如果有分页加入分页，或者搜索条件等等
+    }).then(list => { // list 就是data数据
+      const arrangeData = this.dataStructure(list);
+      this.setData({
+        Data: this.data.Data.concat(arrangeData),
+      })
+    });
+    // // 触底操作数据完成后处理
+    // if (this.data.currentIndex === this.data.allIdList.length) {
+    //   this.setData({
+    //     noMoreData: true
+    //   })
+    // }
+  },
+  // 下拉菜单-模板
+  onTemplateChange(e) {
+    this.setData({
+      'dropdownTemplate.value': e.detail.value,
+    });
+  },
+  // 下拉菜单-排序
+  onSorterChange(e) {
+    this.setData({
+      'dropdownSorter.value': e.detail.value,
+    });
+  },
+  // 搜索
+  onSearchConfirm() {
+    const keyword = e.detail.value;
+    console.log("用户点击搜索，输入内容为：", keyword);
+    console.log(this.data.searchValue);
+  },
+
   // 胶囊悬浮框切换函数
   onTabBarChange(e) {
-    let data = [];
     const that = this;
-    console.log("点击胶囊按钮");
-    // 对 胶囊悬浮框 进行复制，开启骨架
+    // 设置切换值
     wx.showLoading({ title: '正在加载...' });
-    // 设置值
     that.setData({
       tabBarValue: e.detail.value,
       skeletonLoading: true,
@@ -287,36 +292,17 @@ Page({
         tabBarTabLabel: current.label
       });
     }
-    // 加载假数据
-    const randomNum = Math.floor(Math.random() * 5) + 1;
-    for (let i = 0; i < randomNum; i++) {
-      data.push({
-        id: i,
-        to_confirmed: i + 5,
-        client_name: `TG D51-${i}`,
-        stage: "初步评审",
-        program: `Outfitters_${i}`,
-        Year: 2025,
-        create_time: `2025-08-2${i}`,
-      });
-    }
-    const tabBarValue = that.data.tabBarValue;
-    if (tabBarValue === "primary") {
-      data.forEach((item) => {
-        item["stage"] = "初步评审"
+    // 需要根据不同角色加载数据
+    utils.LoadDataList({
+      page: this,
+      data: { type: "getProjectList", username: "admin" },
+      mode: 'init'
+    }).then(list => { // list 就是data数据
+      const arrangeData = this.dataStructure(list);
+      this.setData({
+        Data: arrangeData
       })
-    } else {
-      data.forEach((item) => {
-        item["stage"] = "最终评审"
-      })
-    }
-    setTimeout(() => {
-      wx.hideLoading();
-      that.setData({
-        skeletonLoading: false,
-        dataAllList: data,
-      })
-    }, 2000)
+    });
   },
   // 导出附件
   exportAttachments(e) {

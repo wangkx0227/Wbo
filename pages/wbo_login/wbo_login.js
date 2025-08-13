@@ -48,10 +48,14 @@ Page({
     const app = getApp()
     this.setData({ app })
     wx.removeStorageSync('userInfo')
-    // 赋值跳转url
-    this.setData({
-      redirect: options.redirect
-    })
+    const redirect = options.redirect;
+    if (redirect) {
+      // 赋值跳转url
+      this.setData({
+        redirect: redirect
+      })
+    }
+
   },
 
   switchToWechat() {
