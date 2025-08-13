@@ -11,14 +11,16 @@ Page({
     isDownRefreshing: false, // 下拉刷新状态
     isLoadingReachMore: false, // 滚动底部加载数据
     noMoreData: false,    // 数据是否全部加载完毕
-    userRole:null, // 用户角色
-    userName:null, // 用户名称
+    userRole: null, // 用户角色
+    userName: null, // 用户名称
     // 回到顶部变量
     scrollTop: 0,
     // 评论弹出层变量
     dialogVisible: false,
     dialogValue: "",
     dialogId: null, // 当前点击的id
+    // 时间线
+    popupTimeLineVisible: false,
     // 筛选框变量-1
     dropdownDesigner: {
       value: 'all',
@@ -86,7 +88,7 @@ Page({
           data_dict["confirmed_text"] = "保留";
         } else if (confirmed === 2) {
           data_dict["confirmed_text"] = "舍弃";
-        }else  {
+        } else {
           data_dict["confirmed_text"] = "未标记";
         }
         const image_list = task_list[index].timeline_list[i].image_list;
@@ -337,6 +339,20 @@ Page({
     }
 
   },
+
+  // 打开抽屉，查看历史时间线
+  onOpenHistoryTimeLine(e) {
+    // 打开弹窗，显示upload组件
+    this.setData({ popupTimeLineVisible: true });
+  },
+  // 关闭抽屉
+  onCloseHistoryTimeLine(e) {
+    // 打开弹窗，显示upload组件
+    this.setData({ popupTimeLineVisible: false });
+  },
+
+
+
   // 下拉菜单-设计师
   onDesignerChange(e) {
     this.setData({
