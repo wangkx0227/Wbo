@@ -104,10 +104,19 @@
             </view>
           </t-radio-group>
         </view> -->
-        <!-- 终身评论 -->
-        <view class="arrange-center title-font-other">
-          <text>终审评论：</text>
-          <t-link size="small" content="点击评论" hover underline suffixIcon="chat-message" variant="outline" bind:tap="onOpenDialog" data-timelineid="{{ item.timeline_id }}" data-comment="{{ item.comment }}" />
+        <!-- 时间线展示 -->
+
+        <!-- 最终评论 -->
+        <view class="arrange-center">
+          <view class="arrange-center title-font-other">
+            <text>终审评论：</text>
+            <t-link size="small" content="点击评论" hover underline suffixIcon="chat-message" variant="outline" bind:tap="onOpenDialog" data-timelineid="{{ item.timeline_id }}" data-comment="{{ item.comment }}" />
+          </view>
+          <t-divider layout="vertical" />
+          <view class="arrange-center title-font-other">
+            <text>时间线：</text>
+            <t-link size="small" content="查看历史时间线" hover underline variant="outline" bind:tap="onOpenDialog" data-timelineid="{{ item.timeline_id }}" data-comment="{{ item.comment }}" />
+          </view>
         </view>
         <!-- 终审 -->
         <view class="arrange-center title-font-other">
