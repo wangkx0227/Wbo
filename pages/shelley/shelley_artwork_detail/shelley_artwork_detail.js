@@ -1,7 +1,4 @@
 const utils = require('../../../utils/util')
-// 评论筛选工具
-const tool = new utils.CommentTool();
-let commentStr = tool.init();
 Page({
   data: {
     Data: [], // 页面渲染数据存储列表
@@ -13,7 +10,9 @@ Page({
     // 下拉刷新与滚动底部刷新使用变量
     isDownRefreshing: false, // 下拉刷新状态
     isLoadingReachMore: false, // 滚动底部加载数据
-    noMoreData: false,    // 数据是否全部加载完毕
+    noMoreData: false, // 数据是否全部加载完毕
+    userRole:null, // 用户角色
+    userName:null, // 用户名称
     // 回到顶部变量
     scrollTop: 0,
     // 查看评论弹窗控制变量
@@ -24,12 +23,11 @@ Page({
     dialogValue: "",
     // 筛选器
     pickerVisible: false,
-    pickerItemList: [],// fmr全部的用户列表的数据
+    pickerItemList: [], // fmr全部的用户列表的数据
     // 筛选框变量-图稿
     dropdownArtwork: {
       value: 'all',
-      options: [
-        {
+      options: [{
           value: 'all',
           label: '全部图稿',
         },
@@ -50,8 +48,7 @@ Page({
     // 筛选框变量-指派
     dropdownAssign: {
       value: 'all',
-      options: [
-        {
+      options: [{
           value: 'all',
           label: '全部指派',
         },
@@ -68,8 +65,7 @@ Page({
     // 筛选框变量-评估
     dropdownAssess: {
       value: 'all',
-      options: [
-        {
+      options: [{
           value: 'all',
           label: '全部评估',
         },
@@ -102,12 +98,12 @@ Page({
         texture: task_list[index].texture,
         name: task_list[index].AIE_designer1,
         fmr: task_list[index].fmr || "暂未指派FMR", // 当前指派的fmr
-        fmr2: task_list[index].fmr2  // 当前fmr的状态
+        fmr2: task_list[index].fmr2 // 当前fmr的状态
       }
       const timeline_list = task_list[index].timeline_list;
-      for (let i = timeline_list.length - 1; i >= 0; i--) {
-        if (i < timeline_list.length - 1) {
-          continue; // 跳过倒序的第2个及以后
+      for (let i = 0; i < timeline_list.length; i++) {
+        if (i > 0) {
+          break; // 跳过倒序的第2个及以后
         }
         const image_list = task_list[index].timeline_list[i].image_list;
         if (image_list.length === 0) {
@@ -120,11 +116,7 @@ Page({
           data_dict["picture_list"] = picture_list;
         }
         const conmment = task_list[index].timeline_list[i].comment; // 全部的评论
-        const shelley_conmment = tool.get(conmment, "Shelley"); // 只获取Shelley的评论
-        const fmr_conmment = tool.get(conmment, "FMR"); // 只获取FMR的评论
         data_dict["conmment"] = conmment; // 全部评论，需要在shelley评论时携带
-        data_dict["shelley_conmment"] = shelley_conmment;
-        data_dict["fmr_conmment"] = fmr_conmment;
         // kyle标记 3 舍弃 1 保留
         data_dict["confirmed"] = task_list[index].timeline_list[i].confirmed;
         // shelley 1可生产 2修改 3不具备可行性
@@ -156,7 +148,11 @@ Page({
     let successIds = []; // 用于记录成功的 id 
     const promises = nextIds.map(id => {
       return loader.request({
-        data: { type: "getTaskByLinePlan", username: "admin", "lp_id": id, },
+        data: {
+          type: "getTaskByLinePlan",
+          username: "admin",
+          "lp_id": id,
+        },
         mode: mode,
       }).then(res => {
         successIds.push(id); // 用于记录成功的 id
@@ -201,7 +197,10 @@ Page({
     }).then(list => { // list 就是data数据
       let fmrData = [];
       for (let i = 0; i < list.length; i++) {
-        fmrData.push({ label: list[i], value: list[i] },)
+        fmrData.push({
+          label: list[i],
+          value: list[i]
+        }, )
       }
       that.setData({
         pickerItemList: fmrData
@@ -220,9 +219,6 @@ Page({
   },
   // 评估建议单选框
   onRadioChange(e) {
-    /*
-      radioValue：记录选中的单选值
-    */
     const that = this;
     // 点击的选中的
     const selectedValue = e.detail.value;
@@ -236,27 +232,37 @@ Page({
       "username": "admin",
       "name": "管理员",
       "confirmed2": selectedValue,
-      // "comment": tool.set(conmment, "Shelley", "")
     }
     const isConfirmedEqual = selectedValue.toString() === confirmed2.toString();
     // 如果选中的点选框的值等于记录的值那么就取消
     if (isConfirmedEqual) {
       data["confirmed2"] = 0;
-      utils.UpdateData({ page: that, data: data, message: "取消评估建议", theme: "warning" });
+      utils.UpdateData({
+        page: that,
+        data: data,
+        message: "取消评估建议",
+        theme: "warning"
+      });
     } else {
       // 如果选择小幅度修改，需要输入评估建议
       if (selectedValue === "2") {
-        this.setData({ dialogVisible: true, timelineid: timelineid, conmment: conmment });
+        this.setData({
+          dialogVisible: true,
+          timelineid: timelineid
+        });
       } else {
-        // 如果当前存在评论，需要将评论修改为空
-        const shelley_conmment = tool.get(conmment, "Shelley");
-        if (shelley_conmment) {
-          data["comment"] = tool.set(conmment, "Shelley", "");
-        }
         if (confirmed2 !== 0) {
-          utils.UpdateData({ page: that, data: data, message: "修改评估建议" });
+          utils.UpdateData({
+            page: that,
+            data: data,
+            message: "修改评估建议"
+          });
         } else {
-          utils.UpdateData({ page: that, data: data, message: "提交评估建议" });
+          utils.UpdateData({
+            page: that,
+            data: data,
+            message: "提交评估建议"
+          });
         }
       }
     }
@@ -264,7 +270,6 @@ Page({
       const updatedData = that.data.Data.map(item => {
         if (item.timeline_id === timelineid) {
           item["confirmed2"] = data["confirmed2"];
-          item["conmment"] = tool.set(conmment, "Shelley", "");
         }
         return item;
       })
@@ -282,18 +287,10 @@ Page({
   // 填写弹窗-关闭（包含评论提交功能）
   onCloseDialog(e) {
     const that = this;
-    const { dialogValue, timelineid, conmment } = that.data; // 输入的评论的数据
-
-    // 确定格式
-    const kyle_conmment = tool.get(conmment, 'Kyle');
-    const fmr_conmment = tool.get(conmment, 'FMR');
-    // 设置评论格式
-    commentStr = tool.set(commentStr, 'Kyle', kyle_conmment);
-    commentStr = tool.set(commentStr, 'FMR', fmr_conmment);
-
-    // 包含shelley的评论
-    const shelley_conmment = tool.set(commentStr, "Shelley", dialogValue);
-
+    const {
+      dialogValue,
+      timelineid
+    } = that.data; // 输入的评论的数据
     const action = e.type;
     if (action === 'confirm') {
       if (!dialogValue) {
@@ -308,15 +305,18 @@ Page({
         "username": "admin",
         "name": "管理员",
         "confirmed2": 2,
-        "comment": shelley_conmment, // 携带其他人原来的评论
+        "comment": dialogValue, // 携带其他人原来的评论
       }
-      utils.UpdateData({ page: that, data: data, message: "提交评估建议" });
+      utils.UpdateData({
+        page: that,
+        data: data,
+        message: "提交评估建议"
+      });
       // 刷新数据
       const updatedData = that.data.Data.map(item => {
         if (item.timeline_id === timelineid) {
           item["confirmed2"] = 2;
-          item["shelley_conmment"] = dialogValue;
-          item["conmment"] = shelley_conmment;
+          item["conmment"] = dialogValue;
         }
         return item;
       })
@@ -326,7 +326,11 @@ Page({
     } else if (action === 'cancel') {
       utils.showToast(that, "取消评估建议", "warning");
     }
-    this.setData({ dialogVisible: false, dialogValue: "", timelineid: null });
+    this.setData({
+      dialogVisible: false,
+      dialogValue: "",
+      timelineid: null
+    });
   },
   // 查看评论弹窗 - 关闭
   onClosePopup(e) {
@@ -346,37 +350,35 @@ Page({
   },
   // 查看评论弹窗 - 查看
   onOpenPopup(e) {
-    /*
-      clickObject: 查看的是谁的评论
-      fmrConmment: 评论内容
-      shelleyConmment：评论内容
-      popupVisible: 唤起弹窗
-      commentStatus: 评论的状态
-    */
     const that = this;
-    const { shelleyConmment, conmmentStatus, fmrConmment, clickObject } = e.currentTarget.dataset;
+    const {
+      conmmentStatus,
+      conmment,
+      clickObject
+    } = e.currentTarget.dataset;
     if (conmmentStatus.toString() !== "2" && clickObject === "shelley") {
       const theme = "warning"
       const message = "当前评估没有评论"
       utils.showToast(that, message, theme);
       return
+    } else {
+      this.setData({
+        popupValue: conmment
+      })
     }
     if (conmmentStatus.toString() !== "3" && clickObject === "fmr") {
       const theme = "warning"
       const message = "当前评估没有评论"
       utils.showToast(that, message, theme);
       return
-    }
-    if (clickObject === "fmr") {
-      this.setData({
-        popupValue: fmrConmment
-      })
     } else {
       this.setData({
-        popupValue: shelleyConmment
+        popupValue: conmment
       })
     }
-    that.setData({ popupVisible: true }); // 触发弹窗
+    that.setData({
+      popupVisible: true
+    }); // 触发弹窗
   },
   // 轮播图函数 - 点击轮播图 - 图片预览
   onSwiperImagesTap(e) {
@@ -405,7 +407,9 @@ Page({
     /*
       pickerVisible：筛选器显示变量
     */
-    this.setData({ pickerVisible: false, });
+    this.setData({
+      pickerVisible: false,
+    });
   },
   // 打开 FMR筛选器
   onOpenPicker(e) {
@@ -413,8 +417,13 @@ Page({
       pickerVisible：筛选器显示变量
       实际情况下需要加入一个默认值
     */
-    const { taskId } = e.currentTarget.dataset; // task id值
-    this.setData({ pickerVisible: true, task_id: taskId });
+    const {
+      taskId
+    } = e.currentTarget.dataset; // task id值
+    this.setData({
+      pickerVisible: true,
+      task_id: taskId
+    });
   },
   // 提交 FMR筛选器 - 需要小调整
   onPickerChange(e) {
@@ -424,7 +433,10 @@ Page({
     */
     const that = this;
     const task_id = that.data.task_id;
-    const { value, label } = e.detail;
+    const {
+      value,
+      label
+    } = e.detail;
     const data = {
       "type": "update_task",
       "task_id": task_id,
@@ -437,7 +449,11 @@ Page({
       task_id: null,
     });
     const message = `FMR已指派${label}`
-    utils.UpdateData({ page: that, data: data, message: message });
+    utils.UpdateData({
+      page: that,
+      data: data,
+      message: message
+    });
     // 修改新的fmr时，重置之前的选中
     const updatedData = that.data.Data.map(item => {
       if (item.id === task_id) {

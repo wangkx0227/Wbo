@@ -32,7 +32,7 @@
           </t-swiper>
           <!-- 无数据时显示占位内容 -->
           <t-image wx:else src="" shape="round" error="slot" width="690rpx" height="384rpx">
-            <text class="error-text" slot="error">轮播图加载失败</text>
+            <text class="error-text" slot="error">没有图片</text>
           </t-image>
         </view>
         <view class="fmr">
@@ -62,7 +62,7 @@
         <view class="arrange-column">
           <view class="arrange-center" style="margin-bottom: 15rpx;">
             <text class="title-font-main">评估建议：</text>
-            <t-link size="small" content="查看评论" hover underline catchtap="onOpenPopup" data-shelley-conmment="{{ item.shelley_conmment }}" data-click-object="shelley" data-conmment-status="{{item.confirmed2}}" />
+            <t-link size="small" content="查看我的评论" hover underline catchtap="onOpenPopup" data-conmment="{{ item.conmment }}" data-click-object="shelley" data-conmment-status="{{item.confirmed2}}" />
           </view>
           <t-radio-group t-class="radio-horizontal-box" value="{{item.confirmed2}}" bind:change="onRadioChange" data-confirmed2="{{item.confirmed2}}" data-timelineid="{{ item.timeline_id }}" data-conmment="{{ item.conmment }}">
             <view class="radio-card   {{ item.confirmed2 == 1 ? 'radio-active' : ''}}">

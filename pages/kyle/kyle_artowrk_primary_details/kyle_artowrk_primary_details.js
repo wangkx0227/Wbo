@@ -153,7 +153,6 @@ Page({
   // 页面初次加载数据
   onLoad(options) {
     const that = this;
-    const userRole = wx.getStorageSync('userRole');
     const groupIdList = JSON.parse(options.groupIdList || '[]'); // 首页跳转后的存储的id值
     that.setData({
       allIdList: groupIdList, // 记录全部的id数据
