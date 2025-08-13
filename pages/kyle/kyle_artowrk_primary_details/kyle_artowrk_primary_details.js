@@ -95,8 +95,6 @@ Page({
           })
           continue; // 跳过倒序的第2个及以后
         }
-        const comment = task_list[index].timeline_list[i].comment; // 全部的评论
-        data_dict["comment"] = comment; // kyle评审信息
         const confirmed = task_list[index].timeline_list[i].confirmed; // 标记舍弃(3)还是保留(1)
         data_dict["confirmed"] = confirmed;
         if (confirmed === 1) {
@@ -350,6 +348,9 @@ Page({
   onCloseHistoryTimeLine(e) {
     // 打开弹窗，显示upload组件
     this.setData({ popupTimeLineVisible: false });
+    setTimeout(()=>{
+      this.setData({ timeLineValue: [] });
+    },500)
   },
 
 
