@@ -21,7 +21,8 @@ Page({
     dialogId: null, // 当前点击的id
     // 时间线抽屉
     popupTimeLineVisible: false,
-    taskTimeLineData:{}, // 存储时间线的数据
+    taskTimeLineData: {}, // 存储时间线的数据
+    timeLineValue:[], // 具体查看的时间线
     // 筛选框变量-1
     dropdownDesigner: {
       value: 'all',
@@ -143,17 +144,21 @@ Page({
     Promise.all(promises).then(results => {
       const allResults = results.flatMap(list => that.dataStructure(list));
       const arrangeData = allResults.flatMap(item => item.arrangeData); // 展示数据
-      const taskTimeLineData = allResults.flatMap(item => item.taskTimeLineData); // 时间线数据
+      const taskTimeLineData = Object.assign(
+        {},
+        ...allResults.map(x => x.taskTimeLineData)
+      );
       // refresh刷新时重置，其他的数据追加
       if (mode === 'refresh') {
         that.setData({
           Data: arrangeData,
-          taskTimeLineData:taskTimeLineData,
+          taskTimeLineData: taskTimeLineData,
         })
+
       } else {
         that.setData({
           Data: that.data.Data.concat(arrangeData),
-          taskTimeLineData:Object.assign({}, that.data.taskTimeLineData, taskTimeLineData)
+          taskTimeLineData: { ...that.data.taskTimeLineData, ...taskTimeLineData }
         })
       }
       that.setData({
@@ -215,11 +220,7 @@ Page({
   },
   // 弹窗-评论-打开
   onOpenDialog(e) {
-    const { timelineid, comment } = e.currentTarget.dataset;
-    // 展示评审信息
-    if (comment) {
-      this.setData({ dialogValue: comment });
-    }
+    const { timelineid } = e.currentTarget.dataset;
     this.setData({ dialogVisible: true, dialogId: timelineid });
   },
   // 弹窗-评论-双向绑定
@@ -232,7 +233,6 @@ Page({
   onCloseDialog(e) {
     const that = this;
     const { dialogValue, dialogId } = this.data; // 输入的评论的数据
-
     const action = e.type; // "confirm" 或 "cancel"
     if (action === 'confirm') {
       if (!dialogValue) {
@@ -252,25 +252,12 @@ Page({
         },
         message: "评审记录完成"
       })
-      // 数据更新
-      const updatedData = that.data.Data.map(item => {
-        if (item.timeline_id === dialogId) {
-          item["comment"] = dialogValue;
-        }
-        return item;
-      })
-      this.setData({
-        Data: updatedData
-      });
     } else if (action === 'cancel') {
       const theme = "warning"
       const message = "评审记录取消"
       utils.showToast(that, message, theme);
     }
     this.setData({ dialogVisible: false, dialogId: null });
-    setTimeout(() => {
-      this.setData({ dialogValue: "", })
-    }, 500)
   },
   // 修改当前图稿状态
   onModifyArtworkStatus(e) {
@@ -354,7 +341,10 @@ Page({
   // 打开抽屉，查看历史时间线
   onOpenHistoryTimeLine(e) {
     // 打开弹窗，显示upload组件
-    this.setData({ popupTimeLineVisible: true });
+    const { taskId } = e.currentTarget.dataset;
+    const taskTimeLineData = this.data.taskTimeLineData;
+    const timeLineValue = taskTimeLineData[`${taskId}`];
+    this.setData({ popupTimeLineVisible: true, timeLineValue:timeLineValue});
   },
   // 关闭抽屉
   onCloseHistoryTimeLine(e) {
