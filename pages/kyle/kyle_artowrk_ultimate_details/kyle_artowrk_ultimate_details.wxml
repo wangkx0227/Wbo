@@ -15,23 +15,26 @@
   </view>
   <view class="page-main">
     <view class="wrapper">
-      <view class="cell">
+      <view class="cell" wx:for="{{Data}}" wx:key="index">
         <view class="arrange-space-between title-font-main">
-          <text>Title：Animals in sleeping bags</text>
+          <text>Title：{{ item.title }}</text>
         </view>
         <view class="title-font-other arrange-space-between">
-          <text>Name：黎善玲</text>
-          <text>Code：LSL__AIE MJ_2025_01</text>
+          <text>Name：{{ item.name }}</text>
+          <text>Code：{{ item.code }}</text>
+        </view>
+        <view class="title-font-other">
+          <text style="border-bottom: 1px solid currentColor;">材质：{{ item.texture }}</text>
         </view>
         <view class="cell-swiper">
-          <t-swiper wx:if="{{swiperImages.length}}" current="{{current}}" autoplay="{{autoplay}}" duration="{{duration}}" interval="{{interval}}" navigation="{{ { type: 'dots' } }}" list="{{swiperImages}}" bind:click="onSwiperImagesTap" data-images="{{swiperImages}}">
+          <t-swiper wx:if="{{item.picture_list.length}}" autoplay="{{false}}" duration="{{500}}" navigation="{{ { type: 'dots' } }}" list="{{item.picture_list}}" bind:click="onSwiperImagesTap" data-images="{{item.picture_list}}">
           </t-swiper>
           <!-- 9宫格遮罩层 -->
-          <view class="grid-overlay" wx:if="{{swiperImages.length}}">
+          <view class="grid-overlay" wx:if="{{item.picture_list.length}}">
             <view class="grid-cell" wx:for="{{9}}" wx:key="index"></view>
           </view>
           <!-- 无数据时显示占位内容 -->
-          <t-image wx:else src="" shape="round" error="slot" width="640rpx" height="384rpx">
+          <t-image wx:else src="" shape="round" error="slot" width="690rpx" height="384rpx">
             <text class="error-text" slot="error">轮播图加载失败</text>
           </t-image>
         </view>
@@ -43,14 +46,14 @@
               </view>
               <view>
                 <t-radio-group default-value="0" disabled>
-                  <t-radio value="0" label="可生产 — 无需进一步说明" allow-uncheck style="text-align: start;"/>
+                  <t-radio value="0" label="可生产 — 无需进一步说明" allow-uncheck style="text-align: start;" />
                   <t-radio value="1" allow-uncheck>
                     <view slot="label" class="arrange-space-between">
                       <text>可生产 — 需小幅修改（需填写评论）</text>
-                      <t-link size="small" content="查看" hover underline data-commentator="shelley" bind:tap="onOpenPopup"  data-comment-status="0"/>
+                      <t-link size="small" content="查看" hover underline data-commentator="shelley" bind:tap="onOpenPopup" data-comment-status="0" />
                     </view>
                   </t-radio>
-                  <t-radio value="2" label="不具备可行性（需大幅修改）" allow-uncheck style="text-align: start;"/>
+                  <t-radio value="2" label="不具备可行性（需大幅修改）" allow-uncheck style="text-align: start;" />
                 </t-radio-group>
               </view>
             </t-collapse-panel>
@@ -65,15 +68,14 @@
               </view>
               <view>
                 <t-radio-group default-value="0" disabled>
-                  <t-radio value="0" label="可生产 — 无需进一步说明" allow-uncheck style="text-align: start;"/>
+                  <t-radio value="0" label="可生产 — 无需进一步说明" allow-uncheck style="text-align: start;" />
                   <t-radio value="1" allow-uncheck>
-                    <view slot="label" class="arrange-space-between" >
-                      <text >可生产 — 需小幅修改（需填写评论）</text>
-                      <t-link size="small" content="查看" hover underline data-commentator="fmr" bind:tap="onOpenPopup"  
-                      data-comment-status="0"/>
+                    <view slot="label" class="arrange-space-between">
+                      <text>可生产 — 需小幅修改（需填写评论）</text>
+                      <t-link size="small" content="查看" hover underline data-commentator="fmr" bind:tap="onOpenPopup" data-comment-status="0" />
                     </view>
                   </t-radio>
-                  <t-radio value="2" label="不具备可行性（需大幅修改）" allow-uncheck style="text-align: start;"/>
+                  <t-radio value="2" label="不具备可行性（需大幅修改）" allow-uncheck style="text-align: start;" />
                 </t-radio-group>
               </view>
             </t-collapse-panel>

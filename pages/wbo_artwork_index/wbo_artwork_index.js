@@ -145,6 +145,7 @@ Page({
   onJumpArtworkDeatails(e) {
     const that = this;
     const userRole = that.data.userRole;
+    const tabBarValue = that.data.tabBarValue;
     const groupIdList = e.currentTarget.dataset.groupIdList;
     // 需要3类人进行跳转 Kyle Shelley FMR 进行跳转
     const tabBarValue = that.data.tabBarValue;
@@ -154,8 +155,9 @@ Page({
           url: `/pages/kyle/kyle_artowrk_primary_details/kyle_artowrk_primary_details?groupIdList=${JSON.stringify(groupIdList)}`
         });
       } else {
+        // 多携带一个参数tabBarValue，表明当前切换的时用户负责的阶段
         wx.navigateTo({
-          url: `/pages/kyle/kyle_artowrk_ultimate_details/kyle_artowrk_ultimate_details?groupIdList=${JSON.stringify(groupIdList)}`
+          url: `/pages/kyle/kyle_artowrk_ultimate_details/kyle_artowrk_ultimate_details?groupIdList=${JSON.stringify(groupIdList)}&tabBarValue=${tabBarValue}`
         });
       }
     } else if (userRole === "shelley") { // shelley可行性
@@ -257,25 +259,6 @@ Page({
     //   })
     // }
   },
-  // 下拉菜单-模板
-  onTemplateChange(e) {
-    this.setData({
-      'dropdownTemplate.value': e.detail.value,
-    });
-  },
-  // 下拉菜单-排序
-  onSorterChange(e) {
-    this.setData({
-      'dropdownSorter.value': e.detail.value,
-    });
-  },
-  // 搜索
-  onSearchConfirm() {
-    const keyword = e.detail.value;
-    console.log("用户点击搜索，输入内容为：", keyword);
-    console.log(this.data.searchValue);
-  },
-
   // 胶囊悬浮框切换函数
   onTabBarChange(e) {
     const that = this;
@@ -335,4 +318,28 @@ Page({
     //   }
     // });
   },
+
+
+
+
+  // 下拉菜单-模板
+  onTemplateChange(e) {
+    this.setData({
+      'dropdownTemplate.value': e.detail.value,
+    });
+  },
+  // 下拉菜单-排序
+  onSorterChange(e) {
+    this.setData({
+      'dropdownSorter.value': e.detail.value,
+    });
+  },
+  // 搜索
+  onSearchConfirm() {
+    const keyword = e.detail.value;
+    console.log("用户点击搜索，输入内容为：", keyword);
+    console.log(this.data.searchValue);
+  },
+
+
 })

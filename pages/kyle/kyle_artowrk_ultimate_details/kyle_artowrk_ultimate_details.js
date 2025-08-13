@@ -9,7 +9,11 @@ const swiperImages = [
 Page({
   data: {
     skeletonLoading: true, // 骨架屏控制变量
-    groupId: null, // 首页跳转后的存储的id值
+    allIdList: null, // 首页跳转后的存储的id值
+    tabBar: null,// 记录切换值
+    isDownRefreshing: false, // 下拉刷新状态
+    isLoadingReachMore: false, // 滚动底部加载数据
+    noMoreData: false,    // 数据是否全部加载完毕
     // 筛选框变量-1
     dropdownDesigner: {
       value: 'all',
@@ -60,10 +64,7 @@ Page({
     duration: 500, // 滑动动画时长
     interval: 5000, // 轮播间隔时间，只有开启自动播放才有用
     swiperImages, // 轮播图 url变量
-    // 下拉刷新与滚动底部刷新使用变量
-    isDownRefreshing: false, // 下拉刷新状态
-    isLoadingReachMore: false, // 滚动底部加载数据
-    noMoreData: false,    // 数据是否全部加载完毕
+
     // 回到顶部变量
     scrollTop: 0,
     // 设计师自评弹窗控制变量
@@ -80,7 +81,14 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad(options) {
-    const groupId = options.groupId; // 首页跳转后的存储的id值
+    const that = this;
+    const tabBarValue = options.tabBarValue || ''; // 切换时的tab值
+    const groupIdList = JSON.parse(options.groupIdList || '[]'); // 首页跳转后的存储的id值
+
+    that.setData({
+      allIdList: groupIdList, // 记录全部的id数据
+      tabBar: tabBarValue, // 记录当前tab属性
+    })
     wx.showLoading({ title: '正在加载...', });
     setTimeout(() => {
       wx.hideLoading();
@@ -105,7 +113,7 @@ Page({
   onSwiperImagesTap(e) {
     const el = e;
     const that = this;
-    utils.ImagesPreview(el,that);
+    utils.ImagesPreview(el, that);
   },
   // 页面上拉刷新 - 用于页面重置
   onPullDownRefresh() {
