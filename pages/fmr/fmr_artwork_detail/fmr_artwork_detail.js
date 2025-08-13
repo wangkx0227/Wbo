@@ -233,12 +233,10 @@ Page({
         theme: "warning"
       });
     } else {
-      if (selectedValue === "3") {
-        // 只进行评价
+      if (selectedValue === "3") { // 只进行评价
         that.setData({
           dialogVisible: true,
           timelineid: timelineid,
-          conmment: conmment,
           task_id: task_id
         });
       } else {
@@ -260,8 +258,7 @@ Page({
     if (selectedValue !== "3" || isConfirmedEqual) {
       const updatedData = that.data.Data.map(item => {
         if (item.id === task_id) {
-          item["fmr2"] = task_data["fmr2"];
-          item["conmment"] = conmment;
+          item["fmr2"] = task_data["fmr2"]
         }
         return item;
       })

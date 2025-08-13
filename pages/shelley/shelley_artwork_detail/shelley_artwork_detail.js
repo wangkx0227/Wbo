@@ -11,8 +11,8 @@ Page({
     isDownRefreshing: false, // 下拉刷新状态
     isLoadingReachMore: false, // 滚动底部加载数据
     noMoreData: false, // 数据是否全部加载完毕
-    userRole:null, // 用户角色
-    userName:null, // 用户名称
+    userRole: null, // 用户角色
+    userName: null, // 用户名称
     // 回到顶部变量
     scrollTop: 0,
     // 查看评论弹窗控制变量
@@ -91,6 +91,7 @@ Page({
     const image_url = dataList.WBO_URL
     const task_list = dataList.task_list
     for (const index in task_list) {
+      const fmr2 = task_list[index].fmr2;
       let data_dict = {
         id: task_list[index].id,
         code: task_list[index].code,
@@ -98,12 +99,22 @@ Page({
         texture: task_list[index].texture,
         name: task_list[index].AIE_designer1,
         fmr: task_list[index].fmr || "暂未指派FMR", // 当前指派的fmr
-        fmr2: task_list[index].fmr2 // 当前fmr的状态
+        fmr2: fmr2 // 当前fmr的状态
       }
       const timeline_list = task_list[index].timeline_list;
       for (let i = 0; i < timeline_list.length; i++) {
         if (i > 0) {
           break; // 跳过倒序的第2个及以后
+        }
+        let conmment = "";
+        // 说明当前fmr有评论
+        if (fmr2 === 3) {
+          conmment = task_list[index].timeline_list[i + 1].comment;
+          data_dict["fmr_conmment"] = conmment;
+        } else {
+          // 全部的评论
+          conmment = task_list[index].timeline_list[i].comment;
+          data_dict["conmment"] = conmment;
         }
         const image_list = task_list[index].timeline_list[i].image_list;
         if (image_list.length === 0) {
@@ -115,8 +126,6 @@ Page({
           }
           data_dict["picture_list"] = picture_list;
         }
-        const conmment = task_list[index].timeline_list[i].comment; // 全部的评论
-        data_dict["conmment"] = conmment; // 全部评论，需要在shelley评论时携带
         // kyle标记 3 舍弃 1 保留
         data_dict["confirmed"] = task_list[index].timeline_list[i].confirmed;
         // shelley 1可生产 2修改 3不具备可行性
@@ -334,10 +343,6 @@ Page({
   },
   // 查看评论弹窗 - 关闭
   onClosePopup(e) {
-    /*
-      popupVisible: 关闭弹窗
-      popupValue: 清空评论内容
-    */
     this.setData({
       popupVisible: e.detail.visible,
     });
@@ -354,7 +359,8 @@ Page({
     const {
       conmmentStatus,
       conmment,
-      clickObject
+      clickObject,
+      fmrConmment
     } = e.currentTarget.dataset;
     if (conmmentStatus.toString() !== "2" && clickObject === "shelley") {
       const theme = "warning"
@@ -373,7 +379,7 @@ Page({
       return
     } else {
       this.setData({
-        popupValue: conmment
+        popupValue: fmrConmment
       })
     }
     that.setData({
