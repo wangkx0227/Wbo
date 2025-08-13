@@ -37,9 +37,10 @@
         <view class="arrange-column">
           <view class="arrange-center" style="margin-bottom: 15rpx;">
             <text class="title-font-main">评估建议：</text>
-            <t-link size="small" content="查看评论" hover underline catchtap="onOpenPopup" data-fmr-conmment="{{ item.fmr_conmment }}" data-conmment-status="{{item.fmr2}}" />
+            <t-link size="small" content="查看评论" hover underline catchtap="onOpenPopup" 
+            data-conmment="{{ item.conmment }}" data-conmment-status="{{item.fmr2}}" />
           </view>
-          <t-radio-group t-class="radio-horizontal-box" value="{{item.fmr2}}" bind:change="onRadioChange" data-fmr2="{{item.fmr2}}" data-task-id="{{ item.id }}" data-conmment="{{ item.conmment }}" data-timelineid="{{ item.timeline_id }}">
+          <t-radio-group t-class="radio-horizontal-box" value="{{item.fmr2}}" bind:change="onRadioChange" data-fmr2="{{item.fmr2}}" data-task-id="{{ item.id }}"  data-timelineid="{{ item.timeline_id }}">
             <view class="radio-card   {{ item.fmr2 == 1 ? 'radio-active' : ''}}">
               <t-icon name="check" t-class="radio-icon" />
               <t-radio value="1" label="可生产" icon="none" borderless />
