@@ -188,7 +188,7 @@ Page({
     } else if (userRole === "d") { // 设计师对上传工厂稿
       if (tabBarValue === "primary") { // 设计师工厂稿上传，样品图审查
         wx.navigateTo({
-          url: `/pages/designer/designer_artwork_detail/designer_artwork_detail?groupId=${groupId}`,
+          url: `/pages/designer/designer_artwork_detail/designer_artwork_detail?groupIdList=${JSON.stringify(groupIdList)}`,
         });
       } else {
         wx.navigateTo({
