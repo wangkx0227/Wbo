@@ -177,7 +177,7 @@ Page({
     } else if (userRole === "ms") { // 选稿阶段r1
       if (tabBarValue === "primary") { // fmr 可行性评估与样品图上传
         wx.navigateTo({
-          url: `/pages/guest_selection/guest_selection_first_round/guest_selection_first_round?groupId=${groupId}`,
+          url: `/pages/guest_selection/guest_selection_first_round/guest_selection_first_round?groupIdList=${JSON.stringify(groupIdList)}`,
         });
       } else {
         wx.navigateTo({

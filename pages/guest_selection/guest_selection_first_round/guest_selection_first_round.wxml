@@ -15,36 +15,42 @@
   </view>
   <view class="page-main">
     <view class="wrapper">
-      <view class="cell">
-        <view class="title-font-main">
-          <text>Title：Animals in sleeping bags</text>
+      <view class="cell" wx:for="{{Data}}" wx:key="index">
+        <view class="arrange-space-between title-font-main">
+          <text>Title：{{ item.title }}</text>
+        </view>
+        <view class="arrange-space-between title-font-other">
+          <text style="border-bottom: 1px solid currentColor;">Material：{{ item.texture }}</text>
+          <text style="color: {{ item.be_chosen2 == 2 ? 'red' : 'black' }};;">R1选中状态：{{ item.be_chosen2_text }}</text>
         </view>
         <view class="title-font-other arrange-space-between">
-          <text>Name：黎善玲</text>
-          <text>Code：LSL__AIE MJ_2025_01</text>
+          <text>Name：{{ item.name }}</text>
+          <text>Code：{{ item.code }}</text>
         </view>
         <view class="cell-swiper">
-          <t-swiper wx:if="{{swiperImages.length}}" current="{{current}}" autoplay="{{autoplay}}" duration="{{duration}}" interval="{{interval}}" navigation="{{ { type: 'dots' } }}" list="{{swiperImages}}" bind:click="onSwiperImagesTap" data-images="{{swiperImages}}">
+          <t-swiper wx:if="{{item.picture_list.length}}" autoplay="{{false}}" duration="{{500}}" navigation="{{ { type: 'dots' } }}" list="{{item.picture_list}}" bind:click="onSwiperImagesTap" data-images="{{item.picture_list}}">
           </t-swiper>
           <!-- 无数据时显示占位内容 -->
-          <t-image wx:else src="" shape="round" error="slot" width="360" height="192">
-            <text class="error-text" slot="error">轮播图加载失败</text>
+          <t-image wx:else src="" shape="round" error="slot" width="690rpx" height="384rpx">
+            <text class="error-text" slot="error">图片加载失败</text>
           </t-image>
         </view>
-        <view class="arrange-column">
-          <text class="title-font-main">客户选稿（R1）：</text>
-          <t-radio-group value="{{radioValue}}" bind:change="onRadioChange">
-            <t-radio value="0" label="已选中" borderless />
-            <t-radio value="1" label="已淘汰" borderless />
-          </t-radio-group>
-        </view>
         <view class="arrange-center">
-          <text class="title-font-main">客户反馈评论（R1）：</text>
-          <view class="arrange-center">
-            <t-link size="small" content="录入" hover underline bindtap="onOpenDialog" data-id="2" />
-            <t-divider layout="vertical" />
-            <t-link size="small" content="查看" hover underline bindtap="onOpenPopup" data-id="2" data-comment-content="无内容" />
+          <view class="arrange-center title-font-other">
+            <text class="title-font-main">客户反馈评论：</text>
+            <t-link size="small" content="评论" hover underline suffixIcon="chat-message" variant="outline" bind:tap="onOpenDialog" data-timelineid="{{ item.timeline_id }}" />
           </view>
+          <t-divider layout="vertical" />
+          <view class="arrange-center title-font-other">
+            <text class="title-font-main">时间线：</text>
+            <t-link size="small" content="查看历史时间线" hover underline variant="outline" bind:tap="onOpenHistoryTimeLine" data-task-id="{{ item.id }}" />
+          </view>
+        </view>
+        <view class="arrange-center title-font-other">
+          <text class="title-font-main">操作：</text>
+          <t-link size="small" content="未选中" data-content-status="N" hover underline theme="danger" bindtap="onModifyArtworkStatus" data-task-id="{{ item.id }}" />
+          <t-divider layout="vertical" />
+          <t-link size="small" content="已选中" data-content-status="Y" hover underline bindtap="onModifyArtworkStatus" data-task-id="{{ item.id }}" />
         </view>
       </view>
     </view>
@@ -65,17 +71,6 @@
 <t-back-top theme="half-round" text="顶部" scroll-top="{{scrollTop}}" bind:to-top="onToTop" />
 <!-- 添加个新的图稿按钮 -->
 <t-fab icon="add" bind:click="onOpenAddArtwork" aria-label="增加" usingCustomNavbar draggable y-bounds="{{[0, 32]}}"></t-fab>
-<!-- 查看评论弹窗-下 -->
-<t-popup visible="{{popupVisible}}" bind:visible-change="onClosePopup" placement="bottom">
-  <view class="popup-block">
-    <view class="popup-header">
-      <view class="popup-title">客户反馈评论：</view>
-    </view>
-    <view class="popup-comments">
-      <text>{{ popupValue }}</text>
-    </view>
-  </view>
-</t-popup>
 <!-- 评论弹窗 -->
 <t-dialog visible="{{dialogVisible}}" title="客户反馈评论：" confirm-btn="确定" cancel-btn="取消" bind:confirm="onCloseDialog" bind:cancel="onCloseDialog">
   <view slot="content">
@@ -109,9 +104,9 @@
         </t-upload>
       </view>
       <view class="button-example">
-        <t-button theme="light" block  t-class="group-btn" bindtap="onCloseAddDialog">关闭</t-button>
+        <t-button theme="light" block t-class="group-btn" bindtap="onCloseAddDialog">关闭</t-button>
         <t-divider layout="vertical" style="height:64rpx" />
-        <t-button theme="primary" block  t-class="group-btn" bindtap="onSubmitAddDialog">提交</t-button>
+        <t-button theme="primary" block t-class="group-btn" bindtap="onSubmitAddDialog">提交</t-button>
       </view>
     </view>
   </view>
@@ -120,3 +115,37 @@
 <t-picker visible="{{pickerDesignerVisible}}" value="{{pickerDesignerValue}}" title="设计师" cancelBtn="取消" confirmBtn="确认" usingCustomNavbar bindchange="onPickerDesignerChange" bindcancel="onCloseDesignerPicker">
   <t-picker-item options="{{pickerDesignerItemList}}"></t-picker-item>
 </t-picker>
+<!-- 抽屉/展示时间线 -->
+<t-popup visible="{{popupTimeLineVisible}}" placement="left">
+  <view class="popup-block" style="padding: 10rpx;height: 100vh;">
+    <view class="popup-header arrange-column">
+      <view class="popup-title">时间线历史（非实时产生时间线）：</view>
+    </view>
+    <view class="popup-comments">
+      <scroll-view scroll-y style="height: calc(100% - 120rpx);padding: 0 20rpx;" class="popup-comments" bindtouchmove="onDummyTouchMove" catchtouchmove>
+        <view wx:for="{{timeLineValue}}" wx:key="index" style="width: 93%;">
+          <view class="arrange-space-between title-font-main">
+            <text>评论人：{{item.name}}</text>
+            <text>评论时间：{{item.time}}</text>
+          </view>
+          <view class="cell-swiper" style="margin-top: 20rpx;">
+            <t-swiper wx:if="{{item.picture_list.length}}" autoplay="{{false}}" duration="{{500}}" navigation="{{ { type: 'dots' } }}" list="{{item.picture_list}}" bind:click="onSwiperImagesTap" data-images="{{item.picture_list}}">
+            </t-swiper>
+            <!-- 无数据时显示占位内容 -->
+            <t-image wx:else src="" shape="round" error="slot" width="660rpx" height="384rpx">
+              <text class="error-text" slot="error">图片加载失败</text>
+            </t-image>
+          </view>
+          <view class="arrange-column" style="margin-top: 20rpx;">
+            <text class="title-font-main">评论内容：</text>
+            <text class="title-font-other" style="margin-left: 20rpx;font-size:14px">{{item.comment}}</text>
+          </view>
+          <t-divider content="时间线-{{index+1}}" />
+        </view>
+      </scroll-view>
+      <view style="padding: 10rpx 0;">
+        <t-button theme="light" block t-class="group-btn" bindtap="onCloseHistoryTimeLine">关闭</t-button>
+      </view>
+    </view>
+  </view>
+</t-popup>

@@ -247,7 +247,7 @@ function UpdateData({
 function readIdStructure(that) {
   const { allIdList, pageSize, currentIndex } = that.data;
   if (allIdList.length === 0) {
-    utils.showToast(this.page, "无数据", "warning");
+    showToast(this.page, "无数据", "warning");
     that.setData({
       skeletonLoading: false
     })
