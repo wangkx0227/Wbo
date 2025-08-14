@@ -92,9 +92,19 @@
     <view class="popup-comments">
       <scroll-view scroll-y style="height: calc(100% - 120rpx);padding: 0 20rpx;" class="popup-comments" bindtouchmove="onDummyTouchMove" catchtouchmove >
         <view wx:for="{{timeLineValue}}" wx:key="index" style="width: 93%;">
-          <view class="arrange-space-between title-font-main" >
-            <text>评论人：{{item.name}}</text>
-            <text>评论时间：{{item.time}}</text>
+          <view class="arrange-space-between " >
+            <view>
+            <text class="title-font-main">类型：</text>
+            <text class="title-font-other">{{item.timeline_type_text}}</text>
+            </view>
+            <view>
+            <text class="title-font-main">评论人：</text>
+            <text class="title-font-other">{{item.name}}</text>
+            </view>
+            <view>
+            <text class="title-font-main">评论时间：</text>
+            <text class="title-font-other">{{item.time}}</text>
+            </view>
           </view>
           <view class="cell-swiper" style="margin-top: 20rpx;">
             <t-swiper wx:if="{{item.picture_list.length}}" autoplay="{{false}}" duration="{{500}}" navigation="{{ { type: 'dots' } }}" list="{{item.picture_list}}" bind:click="onSwiperImagesTap" data-images="{{item.picture_list}}">

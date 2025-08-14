@@ -97,13 +97,21 @@ Page({
         const image_list = task_list[index].timeline_list[i].image_list;
         const picture_list = image_list.length === 0 ? [] : image_list.map(img => image_url + img.imageURL);
         const timeline_id = task_list[index].timeline_list[i].id;
+        const timeline_type  = task_list[index].timeline_list[i].timeline_type;
         if (i > 0) {
+          let timeline_type_text = ""
+          if(timeline_type === 1){
+            timeline_type_text = "设计稿"
+          }else{
+            timeline_type_text = "生产稿"
+          }
           timeLineData.push({
             "id": timeline_id, // id 
             "time": task_list[index].timeline_list[i].time, // 提交时间
             "name": task_list[index].timeline_list[i].name, // 提交人
             "comment": task_list[index].timeline_list[i].comment, // 评论内容
             "picture_list": picture_list, // 图片
+            "timeline_type_text":timeline_type_text // 图稿类型
           })
           continue; // 跳过
         }
