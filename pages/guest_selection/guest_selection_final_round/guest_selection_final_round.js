@@ -73,10 +73,10 @@ Page({
     const task_list = dataList.task_list
     for (const index in task_list) {
       const task_id = task_list[index].id;
-      const be_chosen2  = task_list[index].be_chosen2;
+      const be_chosen2 = task_list[index].be_chosen2;
       const be_ordered2 = task_list[index].be_ordered2;
       // 第一轮选稿没有选中
-      if(be_chosen2 !== 1 ){
+      if (be_chosen2 !== 1) {
         continue;
       }
       let data_dict = {

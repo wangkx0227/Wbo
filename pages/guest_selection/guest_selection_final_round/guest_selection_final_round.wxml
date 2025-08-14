@@ -36,45 +36,17 @@
           </t-image>
         </view>
         <view class="arrange-center">
-          <text class="title-font-main">时间线：</text>
-          <t-link size="small" content="查看历史时间线" hover underline variant="outline" bind:tap="onOpenHistoryTimeLine" data-task-id="{{ item.id }}" />
-        </view>
-        <view class="arrange-center title-font-other">
-          <text class="title-font-main">标记操作：</text>
-          <t-link size="small" content="未选中" data-content-status="N" hover underline theme="danger" bindtap="onModifyArtworkStatus" data-timelineid="{{ item.timeline_id }}" />
+          <view class="arrange-center">
+            <text class="title-font-main">时间线：</text>
+            <t-link size="small" content="查看历史时间线" hover underline variant="outline" bind:tap="onOpenHistoryTimeLine" data-task-id="{{ item.id }}" />
+          </view>
           <t-divider layout="vertical" />
-          <t-link size="small" content="已完成" data-content-status="Y" hover underline bindtap="onModifyArtworkStatus" data-timelineid="{{ item.timeline_id }}" />
-        </view>
-        <!-- 工厂稿与工厂打样稿照片 -->
-        <view class="cell-collapse">
-          <t-collapse>
-            <t-collapse-panel value="0">
-              <view slot="header">
-                <text class="title-font-main">工厂打样稿：</text>
-              </view>
-              <view class="cell-swiper">
-                <t-swiper wx:if="{{swiperImages.length !== 0 }}" current="{{current}}" autoplay="{{autoplay}}" duration="{{duration}}" interval="{{interval}}" navigation="{{ { type: 'dots' } }}" list="{{swiperImages}}" bind:click="onSwiperImagesTap" data-images="{{swiperImages}}">
-                </t-swiper>
-                <!-- 无数据时显示占位内容 -->
-                <t-image wx:else src="" shape="round" error="slot" width="640rpx" height="384rpx">
-                  <text class="error-text" slot="error">轮播图加载失败</text>
-                </t-image>
-              </view>
-            </t-collapse-panel>
-            <t-collapse-panel value="1">
-              <view slot="header">
-                <text class="title-font-main">样品照片：</text>
-              </view>
-              <view class="cell-swiper">
-                <t-swiper wx:if="{{swiperImages.length !== 0 }}" current="{{current}}" autoplay="{{autoplay}}" duration="{{duration}}" interval="{{interval}}" navigation="{{ { type: 'dots' } }}" list="{{swiperImages}}" bind:click="onSwiperImagesTap" data-images="{{swiperImages}}">
-                </t-swiper>
-                <!-- 无数据时显示占位内容 -->
-                <t-image wx:else src="" shape="round" error="slot" width="640rpx" height="384rpx">
-                  <text class="error-text" slot="error">轮播图加载失败</text>
-                </t-image>
-              </view>
-            </t-collapse-panel>
-          </t-collapse>
+          <view class="arrange-center">
+            <text class="title-font-main">标记操作：</text>
+            <t-link size="small" content="未选中" data-content-status="N" hover underline theme="danger" bindtap="onModifyArtworkStatus" data-task-id="{{ item.id }}" />
+            <t-divider layout="vertical" />
+            <t-link size="small" content="已完成" data-content-status="Y" hover underline bindtap="onModifyArtworkStatus" data-task-id="{{ item.id }}" />
+          </view>
         </view>
       </view>
     </view>
