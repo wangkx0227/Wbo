@@ -22,29 +22,37 @@
               <view class="arrange-space-between">
                 <t-skeleton theme="text" loading animation="gradient" rowCol="{{ [{ width: '410rpx', height: '38rpx'}]}}"></t-skeleton>
               </view>
-              <view class=" arrange-space-between">
+              <view class="arrange-space-between title-font-other">
+                <t-skeleton theme="text" loading animation="gradient" rowCol="{{ [{ width: '180rpx', height: '32rpx'}]}}"></t-skeleton>
+                <t-skeleton theme="text" loading animation="gradient" rowCol="{{ [{ width: '80px', height: '32rpx'}]}}"></t-skeleton>
+              </view>
+              <view class="arrange-space-between">
                 <t-skeleton theme="text" loading animation="gradient" rowCol="{{ [{ width: '135rpx', height: '32rpx'}]}}"></t-skeleton>
                 <t-skeleton theme="text" loading animation="gradient" rowCol="{{ [{ width: '300rpx', height: '32rpx'}]}}"></t-skeleton>
               </view>
               <view class="cell-swiper">
                 <t-skeleton theme="image" loading animation="gradient" rowCol="{{ [{ width: '695rpx', height: '370rpx'}]}}"></t-skeleton>
               </view>
-              <view class="arrange-column" style="gap: 1px;">
-                <t-skeleton theme="text" loading animation="gradient" rowCol="{{ [{ width: '210rpx', height: '38rpx'}]}}"></t-skeleton>
-                <view class="arrange-column" style="gap: 2px;">
-                  <t-skeleton theme="text" loading animation="gradient" rowCol="{{ [{ width: '100%', height: '70rpx'}]}}"></t-skeleton>
-                  <t-skeleton theme="text" loading animation="gradient" rowCol="{{ [{ width: '100%', height: '70rpx'}]}}"></t-skeleton>
+              <!-- 时间线骨架 -->
+              <view class="arrange-center">
+                <view class="arrange-center" style="gap: 10px;">
+                  <t-skeleton theme="text" loading animation="gradient" rowCol="{{ [{ width: '105px', height: '38rpx'}]}}"></t-skeleton>
+                  <t-skeleton theme="text" loading animation="gradient" rowCol="{{ [{ width: '43px', height: '38rpx'}]}}"></t-skeleton>
+                </view>
+                <t-divider layout="vertical" />
+                <view class="arrange-center" style="gap: 10px;">
+                  <t-skeleton theme="text" loading animation="gradient" rowCol="{{ [{ width: '40px', height: '38rpx'}]}}"></t-skeleton>
+                  <t-skeleton theme="text" loading animation="gradient" rowCol="{{ [{ width: '85px', height: '38rpx'}]}}"></t-skeleton>
                 </view>
               </view>
-              <view class="arrange-center" style="gap: 5px;">
-                <t-skeleton theme="text" loading animation="gradient" rowCol="{{ [{ width: '260rpx', height: '38rpx'}]}}"></t-skeleton>
-                <view class="arrange-center" >
-                  <t-skeleton theme="text" loading animation="gradient" rowCol="{{ [{ width: '60rpx', height: '40rpx'}]}}"></t-skeleton>
+              <view class="arrange-center" style="gap: 10px;">
+                <t-skeleton theme="text" loading animation="gradient" rowCol="{{ [{ width: '25px', height: '38rpx'}]}}"></t-skeleton>
+                <view class="arrange-center">
+                  <t-skeleton theme="text" loading animation="gradient" rowCol="{{ [{ width: '25px', height: '38rpx'}]}}"></t-skeleton>
                   <t-divider layout="vertical" />
-                  <t-skeleton theme="text" loading animation="gradient" rowCol="{{ [{ width: '60rpx', height: '40rpx'}]}}"></t-skeleton>
+                  <t-skeleton theme="text" loading animation="gradient" rowCol="{{ [{ width: '25px', height: '38rpx'}]}}"></t-skeleton>
                 </view>
               </view>
-              
             </view>
           </view>
         </view>
