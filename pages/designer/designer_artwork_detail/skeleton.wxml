@@ -21,7 +21,9 @@
             <view class="cell" style="margin-bottom: 15rpx;">
               <view class="arrange-space-between">
                 <t-skeleton theme="text" loading animation="gradient" rowCol="{{ [{ width: '410rpx', height: '38rpx'}]}}"></t-skeleton>
-                <t-skeleton theme="text" loading animation="gradient" rowCol="{{ [{ width: '165rpx', height: '38rpx'}]}}"></t-skeleton>
+              </view>
+              <view class="arrange-space-between">
+                <t-skeleton theme="text" loading animation="gradient" rowCol="{{ [{ width: '180rpx', height: '32rpx'}]}}"></t-skeleton>
               </view>
               <view class="arrange-space-between">
                 <t-skeleton theme="text" loading animation="gradient" rowCol="{{ [{ width: '155rpx', height: '32rpx'}]}}"></t-skeleton>
@@ -30,9 +32,19 @@
               <view class="cell-swiper">
                 <t-skeleton theme="image" loading animation="gradient" rowCol="{{ [{ width: '695rpx', height: '370rpx'}]}}"></t-skeleton>
               </view>
-              <view class="arrange-column" style="gap: 2px;">
-                <t-skeleton theme="text" loading animation="gradient" rowCol="{{ [{ width: '690rpx', height: '105rpx'}]}}"></t-skeleton>
+              <view class="arrange-center">
+                <view class="arrange-center" style="gap: 10px;">
+                  <t-skeleton theme="text" loading animation="gradient" rowCol="{{ [{ width: '105px', height: '38rpx'}]}}"></t-skeleton>
+                  <t-skeleton theme="text" loading animation="gradient" rowCol="{{ [{ width: '43px', height: '38rpx'}]}}"></t-skeleton>
+                </view>
+                <t-divider layout="vertical" />
+                <view class="arrange-center" style="gap: 10px;">
+                  <t-skeleton theme="text" loading animation="gradient" rowCol="{{ [{ width: '40px', height: '38rpx'}]}}"></t-skeleton>
+                  <t-skeleton theme="text" loading animation="gradient" rowCol="{{ [{ width: '85px', height: '38rpx'}]}}"></t-skeleton>
+                </view>
               </view>
+
+
             </view>
           </view>
         </view>

@@ -23,7 +23,7 @@ Page({
     scrollTop: 0, // 回到顶部变量
     popupFactoryArtworkVisible: false, // 上传工厂稿弹窗
     imageFileList: [], // 存储图片列表
-    
+
     // 筛选框变量-模板
     dropdownArtwork: {
       value: 'all',
@@ -70,11 +70,10 @@ Page({
     for (const index in task_list) {
       const task_id = task_list[index].id;
       const be_chosen2 = task_list[index].be_chosen2;
-      // 说明没被选中，就过滤
+      // 说明没被选中，就过滤 需要增加一个关于当前用户的判断，只有当前用户才可以看到自己的图稿并上传
       if (be_chosen2 !== 1) {
         continue;
       }
-      // 需要增加一个关于当前用户的判断，只有当前用户才可以看到自己的图稿并上传
       let data_dict = {
         id: task_id,
         code: task_list[index].code,
@@ -258,8 +257,14 @@ Page({
   // 打开-上传工厂打样稿
   onOpenUploadFactoryArtwork(e) {
     // 打开弹窗，显示upload组件
+    const {
+      taskId,
+      timelineId
+    } = e.currentTarget.dataset;
     this.setData({
-      popupFactoryArtworkVisible: true
+      popupFactoryArtworkVisible: true,
+      task_id: taskId,
+      timeline_id:timelineId
     });
   },
   // 关闭-上传工厂打样稿
@@ -274,31 +279,6 @@ Page({
       })
     }, 500)
   },
-
-
-
-
-
-
-
-
-
-
-
-  // 下拉菜单-图稿
-  onArtworkChange(e) {
-    this.setData({
-      'dropdownArtwork.value': e.detail.value,
-    });
-  },
-  // 下拉菜单-评估
-  onAssessChange(e) {
-    this.setData({
-      'dropdownAssess.value': e.detail.value,
-    });
-  },
-
-
   // 上传图稿函数
   onImageAdd(e) {
     const {
@@ -307,7 +287,6 @@ Page({
     const {
       files
     } = e.detail;
-    console.log();
     // 方法1：选择完所有图片之后，统一上传，因此选择完就直接展示
     this.setData({
       imageFileList: [...imageFileList, ...files], // 此时设置了 fileList 之后才会展示选择的图片
@@ -331,17 +310,38 @@ Page({
   // 提交上传数据
   onSubmitFactoryArtwork(e) {
     const that = this;
+    const task_id = that.data.task_id;
+    const timeline_id = that.data.timeline_id;
+    console.log(task_id,timeline_id,"-未完成");
+    let data = {
+      "type": "update_timeline",
+      "timeLine_id": "12588",
+      "name_str": "管理员",
+      "username": "admin"
+    }
     this.setData({
-      popupAddVisible: false,
-      UpdatefactoryArtworkStatus: "已上传",
-      swiperImages2: ['https://xcx.1bizmail.com:8153/static/images/wpb_images/D51_ResinGlitter_Ornament_CS25-SKR-120_HgS7tjR.jpg']
+      popupFactoryArtworkVisible: false,
     });
-    const message = "新增图稿成功";
-    utils.showToast(that, message);
+    utils.showToast(that, "上传工厂稿成功");
     setTimeout(() => {
       this.setData({
         imageFileList: []
       })
     }, 500)
-  }
+  },
+
+
+
+  // 下拉菜单-图稿
+  onArtworkChange(e) {
+    this.setData({
+      'dropdownArtwork.value': e.detail.value,
+    });
+  },
+  // 下拉菜单-评估
+  onAssessChange(e) {
+    this.setData({
+      'dropdownAssess.value': e.detail.value,
+    });
+  },
 })

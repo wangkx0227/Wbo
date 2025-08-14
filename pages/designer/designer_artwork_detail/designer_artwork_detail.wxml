@@ -42,7 +42,7 @@
           <t-divider layout="vertical" />
           <view class="arrange-center ">
             <text class="title-font-main">工厂稿：</text>
-            <t-link size="small" content="点击上传" hover underline catchtap="onOpenUploadFactoryArtwork" prefixIcon="upload" />
+            <t-link size="small" content="点击上传" hover underline catchtap="onOpenUploadFactoryArtwork" prefixIcon="upload" data-task-id="{{ item.id }}" data-timeline-id="{{ item.timeline_id }}"/>
           </view>
         </view>
       </view>
@@ -73,14 +73,14 @@
   </view>
 </t-popup>
 <!-- 抽屉 -->
-<t-popup visible="{{popupAddVisible}}" placement="left">
+<t-popup visible="{{popupFactoryArtworkVisible}}" placement="left">
   <view class="popup-block" style="padding: 10rpx;height: 100%;">
     <view class="popup-header">
       <view class="popup-title">工厂打样稿：</view>
     </view>
     <view class="popup-comments">
       <view class="input-example">
-        <t-upload mediaType="{{['image']}}" max="{{5}}" files="{{imageFileList}}" bind:add="onImageAdd" bind:remove="onImageRemove">
+        <t-upload mediaType="{{['image']}}" max="{{10}}" files="{{imageFileList}}" bind:add="onImageAdd" bind:remove="onImageRemove">
         </t-upload>
       </view>
       <view class="button-example">
