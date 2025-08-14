@@ -1,20 +1,13 @@
 import { Toast } from 'tdesign-miniprogram'; // 轻提示
 const app = getApp();
-const formatTime = date => {
-  const year = date.getFullYear()
-  const month = date.getMonth() + 1
-  const day = date.getDate()
-  const hour = date.getHours()
-  const minute = date.getMinutes()
-  const second = date.getSeconds()
-
-  return `${[year, month, day].map(formatNumber).join('/')} ${[hour, minute, second].map(formatNumber).join(':')}`
+function currentTime() {
+  const date = new Date();
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`
 }
 
-const formatNumber = n => {
-  n = n.toString()
-  return n[1] ? n : `0${n}`
-}
 // 提示
 function showToast(that, content, theme = "success") {
   Toast({
@@ -258,26 +251,52 @@ function readIdStructure(that) {
 }
 // 登录
 function checkLogin() {
-	const userInfo = wx.getStorageSync('userInfo')
-	console.log('check!',!userInfo)
-	if (!userInfo) {
-	  wx.redirectTo({
-		url: '/pages/wxLogin/wxLogin'
-	  })
-	  return false
-	}
-	return true
+  const userInfo = wx.getStorageSync('userInfo')
+  console.log('check!', !userInfo)
+  if (!userInfo) {
+    wx.redirectTo({
+      url: '/pages/wxLogin/wxLogin'
+    })
+    return false
   }
+  return true
+}
 
+// 无刷新更新时间线
+function updateTimeLine(page, task_id, timeline_id, comment, username) {
+  let picture_list = [];
+  let timeline_type_text = "";
+  const data = page.data.Data;
+  for (let i = 0; data.length > i; i++) {
+    if (data[i].timeline_id === timeline_id) {
+      picture_list = data[i].picture_list;
+      timeline_type_text = data[i].timeline_type === 1 ? "设计稿" : "生产稿";
+    }
+  }
+  let updateTaskTimeLineData = { ...page.data.taskTimeLineData };
+  let timeLineValue = updateTaskTimeLineData[task_id] || [];
+  timeLineValue.unshift({
+    id: "", // 无法获取没有
+    name: username,
+    time: currentTime(),
+    picture_list: picture_list, // 可以获取当前时间线的图片
+    comment: comment,
+    timeline_type_text: timeline_type_text,
+  })
+  updateTaskTimeLineData[`${task_id}`] = timeLineValue;
+  page.setData({
+    taskTimeLineData: updateTaskTimeLineData
+  })
+}
 
 
 module.exports = {
-  formatTime,
   showToast,
   ImagesPreview,
   LoadDataList,
   MultiRequestLoader,
   UpdateData,
   readIdStructure,
-  checkLogin
+  checkLogin,
+  updateTimeLine
 }

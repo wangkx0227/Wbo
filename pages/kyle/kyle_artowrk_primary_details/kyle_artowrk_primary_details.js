@@ -97,7 +97,7 @@ Page({
           timeLineData.push({
             "id": timeline_id, // id 
             "time": task_list[index].timeline_list[i].time, // 提交时间
-            "name": task_list[index].timeline_list[i].name, // 提交人
+            "name": task_list[index].timeline_list[i].name || "无提交人", // 提交人
             "comment": task_list[index].timeline_list[i].comment, // 评论内容
             "picture_list": picture_list, // 图片
             "timeline_type_text":timeline_type_text // 图稿类型
@@ -115,6 +115,7 @@ Page({
         }
         data_dict["picture_list"] = picture_list;
         data_dict["timeline_id"] = timeline_id;
+        data_dict["timeline_type"] = timeline_type; // 图稿类型
       }
       // 时间线数据
       taskTimeLineData[`${task_id}`] = timeLineData;
@@ -227,8 +228,8 @@ Page({
   },
   // 弹窗-评论-打开
   onOpenDialog(e) {
-    const { timelineid } = e.currentTarget.dataset;
-    this.setData({ dialogVisible: true, dialogId: timelineid });
+    const { timelineId,taskId } = e.currentTarget.dataset;
+    this.setData({ dialogVisible: true, timeline_id: timelineId,task_id:taskId});
   },
   // 弹窗-评论-双向绑定
   onDialogInput(e) {
@@ -239,7 +240,7 @@ Page({
   // 弹窗-评论-关闭（包含提交功能）
   onCloseDialog(e) {
     const that = this;
-    const { dialogValue, dialogId } = this.data; // 输入的评论的数据
+    const { dialogValue, timeline_id,task_id,userName } = this.data; // 输入的评论的数据
     const action = e.type; // "confirm" 或 "cancel"
     if (action === 'confirm') {
       if (!dialogValue) {
@@ -252,12 +253,16 @@ Page({
         page: that,
         data: {
           "type": "update_timeline",
-          "timeLine_id": dialogId,
+          "timeLine_id": timeline_id,
           "username": "admin", // 参数需要修改
           "name": "管理员", // 参数需要修改
           "comment": dialogValue
         },
         message: "评审记录完成"
+      }).then((res)=>{
+        if (res.statusCode === 200) {
+          utils.updateTimeLine(that, task_id, timeline_id, dialogValue, userName);
+        }
       })
     } else if (action === 'cancel') {
       const theme = "warning"

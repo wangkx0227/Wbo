@@ -106,7 +106,11 @@ page {
   flex-direction: column;
   /* 设置为上下布局 */
 }
-
+.arrange-center-flex-end {
+  display: flex;
+  align-items: center;  /* 垂直居中 */
+  justify-content: flex-end;  /* 水平靠右 */
+}
 /* 弹窗的css */
 .popup-block {
   width: 100vw;

@@ -120,16 +120,17 @@ Page({
           timeLineData.push({
             "id": timeline_id, // id 
             "time": task_list[index].timeline_list[i].time, // 提交时间
-            "name": task_list[index].timeline_list[i].name, // 提交人
+            "name": task_list[index].timeline_list[i].name || "无提交人", // 提交人
             "comment": task_list[index].timeline_list[i].comment, // 评论内容
             "picture_list": picture_list, // 图片
             "timeline_type_text": timeline_type_text // 图稿类型
           })
           continue; // 跳过
         }
+
         data_dict["picture_list"] = picture_list;
-        // 第一条时间线的id
-        data_dict["timeline_id"] = timeline_id;
+        data_dict["timeline_type"] = timeline_type; // 图稿类型
+        data_dict["timeline_id"] = timeline_id; // 第一条时间线的id
       }
       taskTimeLineData[`${task_id}`] = timeLineData; // 时间线数据
       arrangeData.push(data_dict);
