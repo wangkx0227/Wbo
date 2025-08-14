@@ -46,11 +46,22 @@
             <t-link size="small" content="查看历史时间线" hover underline variant="outline" bind:tap="onOpenHistoryTimeLine" data-task-id="{{ item.id }}" />
           </view>
         </view>
-        <view class="arrange-center title-font-other">
-          <text class="title-font-main">操作：</text>
-          <t-link size="small" content="未选中" data-content-status="N" hover underline theme="danger" bindtap="onModifyArtworkStatus" data-task-id="{{ item.id }}" />
+        <view class="arrange-center">
+          <view class="arrange-center title-font-other">
+            <text class="title-font-main">操作：</text>
+            <t-link size="small" content="未选中" data-content-status="N" hover underline theme="danger" bindtap="onModifyArtworkStatus" data-task-id="{{ item.id }}" />
+            <t-divider layout="vertical" />
+            <t-link size="small" content="已选中" data-content-status="Y" hover underline bindtap="onModifyArtworkStatus" data-task-id="{{ item.id }}" />
+          </view>
           <t-divider layout="vertical" />
-          <t-link size="small" content="已选中" data-content-status="Y" hover underline bindtap="onModifyArtworkStatus" data-task-id="{{ item.id }}" />
+          <view class="arrange-center title-font-other">
+            <text class="title-font-main">是否需要工厂稿：</text>
+            <t-link size="small" content="否" data-content-status="N" hover underline theme="danger" 
+            bindtap="none" data-task-id="{{ item.id }}" />
+            <t-divider layout="vertical" />
+            <t-link size="small" content="是" data-content-status="Y" hover underline 
+            bindtap="none"  data-task-id="{{ item.id }}" />
+          </view>
         </view>
       </view>
     </view>
@@ -124,18 +135,18 @@
     <view class="popup-comments">
       <scroll-view scroll-y style="height: calc(100% - 120rpx);padding: 0 20rpx;" class="popup-comments" bindtouchmove="onDummyTouchMove" catchtouchmove>
         <view wx:for="{{timeLineValue}}" wx:key="index" style="width: 93%;">
-          <view class="arrange-space-between " >
+          <view class="arrange-space-between ">
             <view>
-            <text class="title-font-main">类型：</text>
-            <text class="title-font-other">{{item.timeline_type_text}}</text>
+              <text class="title-font-main">类型：</text>
+              <text class="title-font-other">{{item.timeline_type_text}}</text>
             </view>
             <view>
-            <text class="title-font-main">评论人：</text>
-            <text class="title-font-other">{{item.name}}</text>
+              <text class="title-font-main">评论人：</text>
+              <text class="title-font-other">{{item.name}}</text>
             </view>
             <view>
-            <text class="title-font-main">评论时间：</text>
-            <text class="title-font-other">{{item.time}}</text>
+              <text class="title-font-main">评论时间：</text>
+              <text class="title-font-other">{{item.time}}</text>
             </view>
           </view>
           <view class="cell-swiper" style="margin-top: 20rpx;">

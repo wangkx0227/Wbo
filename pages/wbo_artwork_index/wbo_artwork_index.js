@@ -181,7 +181,7 @@ Page({
         });
       } else {
         wx.navigateTo({
-          url: `/pages/guest_selection/guest_selection_final_round/guest_selection_final_round?groupId=${groupId}`
+          url: `/pages/guest_selection/guest_selection_final_round/guest_selection_final_round?groupIdList=${JSON.stringify(groupIdList)}`
         });
       }
 
