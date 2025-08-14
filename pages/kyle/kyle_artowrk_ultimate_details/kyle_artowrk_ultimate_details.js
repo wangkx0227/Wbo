@@ -88,7 +88,7 @@ Page({
         data_dict["fmr2_text"] = "可生产";
       } else if (fmr2 === 2) {
         data_dict["fmr2_text"] = "不可生产";
-      }  else {
+      } else {
         data_dict["fmr2_text"] = "未标记";
       }
       let timeLineData = []; // 时间线存储数据
@@ -97,21 +97,21 @@ Page({
         const image_list = task_list[index].timeline_list[i].image_list;
         const picture_list = image_list.length === 0 ? [] : image_list.map(img => image_url + img.imageURL);
         const timeline_id = task_list[index].timeline_list[i].id;
-        const timeline_type  = task_list[index].timeline_list[i].timeline_type;
+        const timeline_type = task_list[index].timeline_list[i].timeline_type;
         if (i > 0) {
           let timeline_type_text = ""
-          if(timeline_type === 1){
+          if (timeline_type === 1) {
             timeline_type_text = "设计稿"
-          }else{
+          } else {
             timeline_type_text = "生产稿"
           }
           timeLineData.push({
             "id": timeline_id, // id 
             "time": task_list[index].timeline_list[i].time, // 提交时间
-            "name": task_list[index].timeline_list[i].name, // 提交人
+            "name": task_list[index].timeline_list[i].name || "无提交人", // 提交人
             "comment": task_list[index].timeline_list[i].comment, // 评论内容
             "picture_list": picture_list, // 图片
-            "timeline_type_text":timeline_type_text // 图稿类型
+            "timeline_type_text": timeline_type_text // 图稿类型
           })
           continue; // 跳过
         }
@@ -138,6 +138,7 @@ Page({
         }
         data_dict["picture_list"] = picture_list;
         data_dict["timeline_id"] = timeline_id;
+        data_dict["timeline_type"] = timeline_type; // 图稿类型
       }
       // 初选 kyle 标记如果时2舍弃，就直接过滤掉
       if (data_dict["confirmed"] === 2) {
@@ -339,11 +340,13 @@ Page({
   // 弹窗-评论-打开
   onOpenDialog(e) {
     const {
-      timelineid
+      timelineId,
+      taskId
     } = e.currentTarget.dataset;
     this.setData({
       dialogVisible: true,
-      dialogId: timelineid
+      timeline_id: timelineId,
+      task_id: taskId
     });
   },
   // 弹窗-评论-双向绑定
@@ -356,8 +359,10 @@ Page({
   onCloseDialog(e) {
     const that = this;
     const {
+      task_id,
+      timeline_id,
       dialogValue,
-      dialogId
+      userName
     } = this.data; // 输入的评论的数据
 
     const action = e.type; // "confirm" 或 "cancel"
@@ -372,13 +377,15 @@ Page({
         page: that,
         data: {
           "type": "update_timeline",
-          "timeLine_id": dialogId,
+          "timeLine_id": timeline_id,
           "username": "admin", // 参数需要修改
           "name": "管理员", // 参数需要修改
           "comment": dialogValue
         },
         message: "评审记录完成"
       })
+      // 更新时间线
+      utils.updateTimeLine(that, task_id, timeline_id, dialogValue, userName);
     } else if (action === 'cancel') {
       const theme = "warning"
       const message = "评审记录取消"

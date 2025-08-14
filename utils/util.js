@@ -273,19 +273,17 @@ function updateTimeLine(page, task_id, timeline_id, comment, username) {
       timeline_type_text = data[i].timeline_type === 1 ? "设计稿" : "生产稿";
     }
   }
-  let updateTaskTimeLineData = { ...page.data.taskTimeLineData };
-  let timeLineValue = updateTaskTimeLineData[task_id] || [];
-  timeLineValue.unshift({
+  let newArray = JSON.parse(JSON.stringify(page.data.taskTimeLineData[task_id] || []));
+  newArray.unshift({
     id: "", // 无法获取没有
-    name: username,
+    name: username || "无提交人",
     time: currentTime(),
     picture_list: picture_list, // 可以获取当前时间线的图片
     comment: comment,
     timeline_type_text: timeline_type_text,
   })
-  updateTaskTimeLineData[`${task_id}`] = timeLineValue;
   page.setData({
-    taskTimeLineData: updateTaskTimeLineData
+    [`taskTimeLineData.${task_id}`]: newArray
   })
 }
 

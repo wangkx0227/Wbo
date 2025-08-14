@@ -269,12 +269,9 @@ Page({
           "comment": dialogValue
         },
         message: "评估建议完成"
-      }).then(res => {
-        // 更新时间线数据
-        if (res.statusCode === 200) {
-          utils.updateTimeLine(that, task_id, timeline_id, dialogValue, userName);
-        }
       })
+      // 更新时间线数据
+      utils.updateTimeLine(that, task_id, timeline_id, dialogValue, userName);
     } else if (action === 'cancel') {
       const theme = "warning"
       const message = "评估建议取消"
