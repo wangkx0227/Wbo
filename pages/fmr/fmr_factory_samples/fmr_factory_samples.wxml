@@ -15,21 +15,35 @@
   </view>
   <view class="page-main">
     <view class="wrapper">
-      <view class="cell">
+      <view class="cell" wx:for="{{Data}}" wx:key="index">
         <view class="title-font-main arrange-space-between">
-          <text>Title：Animals in sleeping bags</text>
+          <text>Title：{{ item.title }}</text>
+        </view>
+        <view class="arrange-space-between title-font-other">
+          <text style="border-bottom: 1px solid currentColor;">材质：{{ item.texture }}</text>
         </view>
         <view class="title-font-other arrange-space-between">
-          <text>Name：黎善玲</text>
-          <text>Code：LSL__AIE MJ_2025_01</text>
+          <text>Name：{{ item.name }}</text>
+          <text>Code：{{ item.code }}</text>
         </view>
         <view class="cell-swiper">
-          <t-swiper wx:if="{{swiperImages.length !== 0}}" current="{{current}}" autoplay="{{autoplay}}" duration="{{duration}}" interval="{{interval}}" navigation="{{ { type: 'dots' } }}" list="{{swiperImages}}" bind:click="onSwiperImagesTap" data-images="{{swiperImages}}">
+          <t-swiper wx:if="{{item.picture_list.length}}" autoplay="{{false}}" duration="{{500}}" navigation="{{ { type: 'dots' } }}" list="{{item.picture_list}}" bind:click="onSwiperImagesTap" data-images="{{item.picture_list}}">
           </t-swiper>
           <!-- 无数据时显示占位内容 -->
-          <t-image wx:else src="" shape="round" error="slot" width="640rpx" height="384rpx">
+          <t-image wx:else src="" shape="round" error="slot" width="690rpx" height="384rpx">
             <text class="error-text" slot="error">轮播图加载失败</text>
           </t-image>
+        </view>
+        <view class="arrange-center">
+          <view class="arrange-center">
+            <text class="title-font-main">时间线：</text>
+            <t-link size="small" content="查看历史时间线" hover underline variant="outline" bind:tap="onOpenHistoryTimeLine" data-task-id="{{ item.id }}" />
+          </view>
+          <t-divider layout="vertical" />
+          <view class="arrange-center">
+            <text class="title-font-main">设计师审查：</text>
+            <text class="title-font-other">未标记</text>
+          </view>
         </view>
         <view class="arrange-center">
           <view class="arrange-center">
@@ -37,41 +51,12 @@
             <t-link size="small" content="{{pickerLabel}}" hover underline catchtap="onOpenPicker" data-id="2" />
           </view>
           <t-divider layout="vertical" />
-          <view>
-            <text class="title-font-main">确定时间：</text>
-            <text class="title-font-other ">2025-10-11</text>
+          <view class="arrange-center">
+            <text class="title-font-main">样品照片：</text>
+            <t-link size="small" content="点击上传" hover underline catchtap="onOpenUploadFactorySample" prefixIcon="upload" />
           </view>
         </view>
-        <!-- 打样照片与设计师审查 -->
-        <t-collapse value="{{collapseValue}}" bind:change="onCollapseChange">
-          <t-collapse-panel value="{{0}}">
-            <view slot="header">
-              <text class="title-font-main">样品照片：{{UpdatefactorySampleStatus}}</text>
-            </view>
-            <view slot="header-right-content">
-              <t-link size="small" content="上传" hover underline catchtap="onOpenUploadFactorySample" prefixIcon="upload" />
-            </view>
-            <view class="cell-swiper">
-              <t-swiper wx:if="{{swiperImages2.length !== 0 }}" current="{{current}}" autoplay="{{autoplay}}" duration="{{duration}}" interval="{{interval}}" navigation="{{ { type: 'dots' } }}" list="{{swiperImages2}}" bind:click="onSwiperImagesTap" data-images="{{swiperImages2}}">
-              </t-swiper>
-              <!-- 无数据时显示占位内容 -->
-              <t-image wx:else src="" shape="round" error="slot" width="640rpx" height="384rpx">
-                <text class="error-text" slot="error">轮播图加载失败</text>
-              </t-image>
-            </view>
-          </t-collapse-panel>
-          <t-collapse-panel value="{{1}}">
-            <view slot="header">
-              <text class="title-font-main">设计师审查（点开查看）：{{designerReviewStatus}}</text>
-            </view>
-            <view>
-              <text class="title-font-other">标记时间：2025-08-11</text>
-              <view class="title-font-other">
-                暂无修正意见
-              </view>
-            </view>
-          </t-collapse-panel>
-        </t-collapse>
+
       </view>
     </view>
   </view>
@@ -88,26 +73,15 @@
 <t-toast id="t-toast" />
 <!-- 回到顶部 -->
 <t-back-top theme="half-round" text="顶部" scroll-top="{{scrollTop}}" bind:to-top="onToTop" />
-<!-- 查看自评弹窗 -->
-<t-popup visible="{{popupVisible}}" bind:visible-change="onClosePopup" placement="bottom">
-  <view class="popup-block">
-    <view class="popup-header">
-      <view class="popup-title">反馈建议</view>
-    </view>
-    <view class="popup-comments">
-      <text>{{ popupValue }}</text>
-    </view>
-  </view>
-</t-popup>
 <!-- 抽屉 -->
-<t-popup visible="{{popupAddVisible}}" placement="left">
+<t-popup visible="{{popupFactorySampleVisible}}" placement="left">
   <view class="popup-block" style="padding: 10rpx;height: 100%;">
     <view class="popup-header">
       <view class="popup-title">样品照片：</view>
     </view>
     <view class="popup-comments">
       <view class="input-example">
-        <t-upload mediaType="{{['image']}}" max="{{5}}" files="{{imageFileList}}" bind:add="onImageAdd" bind:remove="onImageRemove">
+        <t-upload mediaType="{{['image']}}" max="{{10}}" files="{{imageFileList}}" bind:add="onImageAdd" bind:remove="onImageRemove">
         </t-upload>
       </view>
       <view class="button-example">
@@ -122,3 +96,47 @@
 <t-picker visible="{{pickerVisible}}" value="{{pickerValue}}" title="请选择工厂" cancelBtn="取消" confirmBtn="确认" bindchange="onPickerChange" bindcancel="onClosePicker" catchtouchmove>
   <t-picker-item options="{{pickerItemList}}"></t-picker-item>
 </t-picker>
+<!-- 抽屉/展示时间线 -->
+<t-popup visible="{{popupTimeLineVisible}}" placement="left">
+  <view class="popup-block" style="padding: 10rpx;height: 100%;">
+    <view class="popup-header arrange-column">
+      <view class="popup-title">时间线历史（非实时产生时间线）：</view>
+    </view>
+    <view class="popup-comments">
+      <scroll-view scroll-y style="height: calc(100% - 120rpx);padding: 0 20rpx;" class="popup-comments" bindtouchmove="onDummyTouchMove" catchtouchmove>
+        <view wx:for="{{timeLineValue}}" wx:key="index" style="width: 93%;">
+          <view class="arrange-space-between ">
+            <view>
+              <text class="title-font-main">类型：</text>
+              <text class="title-font-other">{{item.timeline_type_text}}</text>
+            </view>
+            <view>
+              <text class="title-font-main">评论人：</text>
+              <text class="title-font-other">{{item.name}}</text>
+            </view>
+            <view>
+              <text class="title-font-main">评论时间：</text>
+              <text class="title-font-other">{{item.time}}</text>
+            </view>
+          </view>
+          <view class="cell-swiper" style="margin-top: 20rpx;">
+            <t-swiper wx:if="{{item.picture_list.length}}" autoplay="{{false}}" duration="{{500}}" navigation="{{ { type: 'dots' } }}" list="{{item.picture_list}}" bind:click="onSwiperImagesTap" data-images="{{item.picture_list}}">
+            </t-swiper>
+            <!-- 无数据时显示占位内容 -->
+            <t-image wx:else src="" shape="round" error="slot" width="660rpx" height="384rpx">
+              <text class="error-text" slot="error">图片加载失败</text>
+            </t-image>
+          </view>
+          <view class="arrange-column" style="margin-top: 20rpx;">
+            <text class="title-font-main">评论内容：</text>
+            <text class="title-font-other" style="margin-left: 20rpx;font-size:14px">{{item.comment}}</text>
+          </view>
+          <t-divider content="时间线-{{index+1}}" />
+        </view>
+      </scroll-view>
+      <view style="padding: 10rpx 0;">
+        <t-button theme="light" block t-class="group-btn" bindtap="onCloseHistoryTimeLine">关闭</t-button>
+      </view>
+    </view>
+  </view>
+</t-popup>

@@ -171,7 +171,7 @@ Page({
         });
       } else {
         wx.navigateTo({
-          url: `/pages/fmr/fmr_factory_samples/fmr_factory_samples?groupId=${groupId}`
+          url: `/pages/fmr/fmr_factory_samples/fmr_factory_samples?groupIdList=${JSON.stringify(groupIdList)}`
         });
       }
     } else if (userRole === "ms") { // 选稿阶段r1

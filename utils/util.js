@@ -256,52 +256,18 @@ function readIdStructure(that) {
   const nextIds = allIdList.slice(currentIndex, currentIndex + pageSize); // 取读取id的范围
   return nextIds; // 返回需要读取的id列表
 }
-// 评论工具
-class CommentTool {
-  constructor() {
-    this.name_list = ["Kyle", "Shelley", "FMR"];
+// 登录
+function checkLogin() {
+	const userInfo = wx.getStorageSync('userInfo')
+	console.log('check!',!userInfo)
+	if (!userInfo) {
+	  wx.redirectTo({
+		url: '/pages/wxLogin/wxLogin'
+	  })
+	  return false
+	}
+	return true
   }
-
-  /**
-   * 初始化评论字符串（确保三个人都有）
-   */
-  init() {
-    return this.name_list.map(name => `${name}：`).join("；");
-  }
-
-  /**
-   * 获取当前用户的评论
-   */
-  get(raw, currentUser) {
-    if (!raw) return "";
-    const slots = raw.split("；");
-    for (let i = 0; i < slots.length; i++) {
-      const [name, comment] = slots[i].split("：");
-      if (name === currentUser) {
-        return comment || "";
-      }
-    }
-    return "";
-  }
-
-  /**
-   * 设置/修改当前用户的评论
-   */
-  set(raw, currentUser, newComment) {
-    let slots = raw
-      ? raw.split("；")
-      : this.name_list.map(name => `${name}：`);
-
-    slots = slots.map(slot => {
-      const [name, comment] = slot.split("：");
-      if (name === currentUser) {
-        return `${name}：${newComment || ""}`;
-      }
-      return `${name}：${comment || ""}`;
-    });
-    return slots.join("；");
-  }
-}
 
 
 
@@ -313,5 +279,5 @@ module.exports = {
   MultiRequestLoader,
   UpdateData,
   readIdStructure,
-  CommentTool
+  checkLogin
 }

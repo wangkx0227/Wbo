@@ -1,0 +1,278 @@
+const util = require('../../utils/util.js');
+Page({
+	data: {
+	  username:'管理员',
+	  task_id:0,
+	  code:'暂无',
+	  images_0:[],
+	  images_1:[],
+	  reviewList:['待审核','接受','拒绝'],
+	  status:['pending','accepted','rejected'],
+	  blank_images:[],
+	  drawings_images:[],
+	  factory:'暂无',
+	  material:'暂无',
+	  fmr:'暂无'
+
+	},
+
+	updateImageList(list, target, newImage) {
+		const index = list.findIndex(item => item.id === target.id);
+		if (index !== -1) {
+		  // ✅ 已存在：添加到 images 数组
+		  list[index].images.push(newImage);
+		} else {
+		  // ❌ 不存在：新建一项并加入 list
+		  const newItem = {
+			id: target.id,
+			images: [newImage],
+			state: 0, // 你可以自定义默认 state
+			state2:0,
+			note: '',
+			create_time: target.create_time, // 你可替换为实际时间
+			update_time: '',
+			created_by:this.data.userInfo.name
+		  };
+		  list = [newItem,...list];
+		}
+		return list
+	  },
+
+	  onStatusTap(e) {
+		const that = this
+		const {index,type,id,state} = e.currentTarget.dataset;
+		if(!that.data.userInfo.name){
+			return
+		}
+		wx.request({
+				url: that.data.app.globalData.reqUrl+'/wbo/wpb-api/',
+				method:"POST",
+				data:{
+					"type": "updateWpbTimeline",
+					"tl_id": id,
+					"state": state,
+					"state_updated_by":that.data.userInfo.name,
+					"username": "admin"
+				},
+				success(res){
+					if(res.data.code===200){
+						const tasks = that.sortByCreateTimeDesc(res.data.task_data[type])
+						that.setData({[`${type}`]:tasks})
+					}
+				}
+		})
+		
+		
+	  },
+
+	
+	  onChooseImage(e) {
+		var type = e.currentTarget.dataset.type;
+		const type_id = e.currentTarget.dataset.tp;
+		const that = this;
+		if(!that.data.userInfo.name){
+			return
+		}
+		wx.chooseMedia({
+				count: 9,
+				success: (resp) => {
+					
+					wx.request({
+					  url: that.data.app.globalData.reqUrl+'/wbo/wpb-api/',
+					  method:"POST",
+					  data:{
+						"type": "createWpbTimeline",
+						"task_id": that.data.id, 
+						"tl_type": type_id,
+						"created_by": that.data.userInfo.name,
+						"username": "admin"
+					},
+					success(res){
+						if(res.data.code===200){
+							const tl_data = res.data.tl_data
+							resp.tempFiles.forEach((file, idx) => {
+								const path = file.tempFilePath;
+								wx.uploadFile({
+									url: that.data.app.globalData.reqUrl + '/wbo/upload-wpb-timeline-image/',
+									filePath: path,
+									name: 'image',
+									method: 'POST',
+									formData: {
+										timeline:tl_data.id
+									},
+									success: uploadRes => {
+										const data = JSON.parse(uploadRes.data);
+										
+										if (data.code === 200) {
+											const newImg = {
+												id: data.data.id,
+												image: data.data.image
+											};
+											const updatedImages =that.updateImageList(that.data[type],tl_data,newImg)
+											that.setData({
+												[`${type}`]: updatedImages
+											});
+										} else {
+											wx.showToast({ title: '上传失败', icon: 'error' });
+										}
+									},
+									fail: err => {
+										wx.showToast({ title: '上传失败', icon: 'none' });
+									}
+								});
+								});
+						}else{
+							wx.showToast({ title: '生成timeline失败', icon: 'error' });
+						}
+					},
+					/**
+					 * 生成timeline失败回调函数
+					 * @param {Object} err - 错误对象，包含失败详情
+					 */
+					fail(err){
+						wx.showToast({ title: '生成timeline失败', icon: 'error' });
+					}
+					})
+				}
+		});
+		
+		
+		
+
+	  },
+
+
+	  onPreviewImage(e) {
+		const type = e.currentTarget.dataset.type
+		const index = e.currentTarget.dataset.index;
+		const bar = parseInt(e.currentTarget.dataset.bar);
+		const imageList =!isNaN(bar)?this.data[type][bar].images:this.data[type];
+		
+		
+		
+		const urls = imageList.map(item=> this.data.app.globalData.reqUrl +item.image);
+
+		wx.previewImage({
+		  current: urls[index], // 当前显示图片的链接
+		  urls: urls // 图片数组
+		});
+	  },
+		// 将url中的参数转成对象{key:value}的形式
+	urlParams (scene) {
+			// scene 需要使用 decodeURIComponent 才能获取到生成二维码时传入的 scene
+			const str = decodeURIComponent(scene).replace('?', '&')
+			let strArr = str.split('&')
+			strArr = strArr.filter(item => item)
+			const result = {}
+			strArr.filter(item => {
+				const key = item.split('=')
+				result[key[0]] = key[1]
+			})
+		return result
+	},
+
+	onLoad(options){
+		if (!util.checkLogin()) return;
+
+		// 正常流程
+		// 从缓存中获取数据
+		const userInfo = wx.getStorageSync('userInfo')
+		userInfo.name = userInfo.fmr.name?userInfo.fmr.name:userInfo.factory.name
+		this.setData({ userInfo })
+
+		if(options.scene){
+			const scene = this.urlParams(options.scene)
+			this.setData({project_id:scene.project_id})
+		}else{
+			this.setData({project_id:options.project_id})
+		}
+		
+		const app = getApp()
+		this.setData({app})
+		
+		this.getTlData()
+	},
+
+	// 降序排序（最新时间排最前）
+	sortByCreateTimeDesc(arr) {
+		return [...arr].sort((a, b) => 
+		new Date(b.create_time) - new Date(a.create_time)
+		);
+  	},
+
+	getTlData(){
+		const that= this
+		wx.request({
+			url: that.data.app.globalData.reqUrl + '/wbo/wpb-api/',
+			method: "POST",
+			data: {
+				"type": "getWpbTaskByCode",
+				"code": that.data.project_id,
+				"username": "admin"
+			},
+			success:(res)=>{
+				if(res.data.code===200){
+					const data = res.data.data.tasks[0]
+					console.log('加载数据请求成功!',res.data)
+					if(data.blank_images){
+						data.blank_images = that.sortByCreateTimeDesc(data.blank_images)
+					}
+					if(data.drawings_images){
+						data.drawings_images = that.sortByCreateTimeDesc(data.drawings_images)
+					}
+					that.setData(data)
+				}else{
+					console.log('加载数据请求失败!',res)
+				}
+			},
+			fail(err){
+				console.log('加载数据请求失败!',err)
+			}
+		})
+	},
+
+	UpdateStatus(){
+		const that = this
+		if(!that.data.userInfo.name){
+			return
+		}
+		if(!that.data.proofing){
+			wx.showModal({
+			  title: '开始打样',
+			  content: '确定开始打样吗',
+			  complete: (res) => {
+				if (res.cancel) {
+				  
+				}
+			
+				if (res.confirm) {
+					wx.request({
+						url: that.data.app.globalData.reqUrl+'/wbo/wpb-api/',
+						method:"POST",
+						data:{
+						  "type": "updateWpbTask",
+						  "task_id": that.data.id,
+						  "proofing": 1,
+						  "username": "admin"
+					  },
+					  success(res){
+						  if(res.data.code=200){
+							  that.setData({proofing:1})
+						  }
+					  },
+					  fail(err){
+						  console.log('err',err)
+					  }
+					  })
+				}
+			  }
+			})
+			
+		}else{
+			wx.showToast({
+			  title: '打样已开始',
+			})
+		}
+		
+	},
+})

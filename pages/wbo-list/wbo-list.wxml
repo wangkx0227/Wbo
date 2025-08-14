@@ -1,0 +1,30 @@
+<view class="filter-bar">
+  <view  class="filter-picker">
+    <picker disabled="{{userInfo.factory.loginState}}" bindchange="filterFactory" value="{{factory_index}}" range="{{factory_list}}">
+      <view class="status-picker">
+        工厂: {{factory_list[factory_index]}}
+      </view>
+    </picker>
+  </view>
+</view>
+
+<view class="detail-box" wx:for="{{selectedItem}}" wx:key="id">
+  <text>图稿编号: {{item.code}}</text>
+  <view class="image-box">
+    <image src="{{item.imgSrc}}" bindtap="previewImage" data-index="{{index}}" data-url="{{item.imgSrc}}" lazy-load></image>
+  </view>
+  <text class='dataTXT'>材质: {{item.material}}</text>
+  <text class='dataTXT'>工厂: {{item.factory}}</text>
+  <button bindtap="viewDetail"  data-id="{{item.code}}">查看详情</button>
+</view>
+
+<!-- 加载更多按钮 -->
+<view class="load-more-btn">
+  <button wx:if="{{hasMore}}" bindtap="loadMore" disabled="{{isLoading}}">
+		<text wx:if="{{!isLoading}}">加载更多</text>
+		<view wx:else class="loading-container">
+			<text>加载中...</text>
+		</view>
+  </button>
+  <button wx:else disabled>暂无更多</button>
+</view>
