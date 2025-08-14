@@ -117,21 +117,21 @@ Page({
         const image_list = task_list[index].timeline_list[i].image_list;
         const picture_list = image_list.length === 0 ? [] : image_list.map(img => image_url + img.imageURL);
         const timeline_id = task_list[index].timeline_list[i].id;
-        const timeline_type  = task_list[index].timeline_list[i].timeline_type;
+        const timeline_type = task_list[index].timeline_list[i].timeline_type;
         if (i > 0) {
           let timeline_type_text = ""
-          if(timeline_type === 1){
+          if (timeline_type === 1) {
             timeline_type_text = "设计稿"
-          }else{
+          } else {
             timeline_type_text = "生产稿"
           }
           timeLineData.push({
             "id": timeline_id, // id 
             "time": task_list[index].timeline_list[i].time, // 提交时间
-            "name": task_list[index].timeline_list[i].name, // 提交人
+            "name": task_list[index].timeline_list[i].name || "无提交人", // 提交人
             "comment": task_list[index].timeline_list[i].comment, // 评论内容
             "picture_list": picture_list, // 图片
-            "timeline_type_text":timeline_type_text // 图稿类型
+            "timeline_type_text": timeline_type_text // 图稿类型
           })
           continue; // 跳过
         }
@@ -142,6 +142,7 @@ Page({
         data_dict["confirmed2"] = task_list[index].timeline_list[i].confirmed2;
         // 第一条时间线的id 1-5步都是按照第一条时间线操作
         data_dict["timeline_id"] = timeline_id;
+        data_dict["timeline_type"] = timeline_type; // 图稿类型
       }
       // kyle 标记如果时2舍弃，就直接过滤掉
       if (data_dict["confirmed"] === 2) {
@@ -191,7 +192,7 @@ Page({
       );
       if (mode === 'refresh') {
         that.setData({
-           Data: arrangeData,
+          Data: arrangeData,
           taskTimeLineData: taskTimeLineData,
         })
       } else {
@@ -376,10 +377,11 @@ Page({
     const selectedValue = e.detail.value;
     // 修改前的数据
     const confirmed2 = e.currentTarget.dataset.confirmed2;
-    const timelineid = e.currentTarget.dataset.timelineid;
+    const timeline_id = e.currentTarget.dataset.timelineId;
+    const task_id = e.currentTarget.dataset.taskId;
     let data = {
       "type": "update_timeline",
-      "timeLine_id": timelineid,
+      "timeLine_id": timeline_id,
       "username": "admin",
       "name": "管理员",
       "confirmed2": selectedValue,
@@ -399,7 +401,8 @@ Page({
       if (selectedValue === "2") {
         this.setData({
           dialogVisible: true,
-          timelineid: timelineid
+          timeline_id: timeline_id,
+          task_id: task_id
         });
       } else {
         if (confirmed2 !== 0) {
@@ -419,7 +422,7 @@ Page({
     }
     if (selectedValue !== "2" || isConfirmedEqual) {
       const updatedData = that.data.Data.map(item => {
-        if (item.timeline_id === timelineid) {
+        if (item.timeline_id === timeline_id) {
           item["confirmed2"] = data["confirmed2"];
         }
         return item;
@@ -440,7 +443,9 @@ Page({
     const that = this;
     const {
       dialogValue,
-      timelineid
+      timeline_id,
+      task_id,
+      userName
     } = that.data; // 输入的评论的数据
     const action = e.type;
     if (action === 'confirm') {
@@ -452,7 +457,7 @@ Page({
       }
       const data = {
         "type": "update_timeline",
-        "timeLine_id": timelineid,
+        "timeLine_id": timeline_id,
         "username": "admin",
         "name": "管理员",
         "confirmed2": 2,
@@ -463,9 +468,11 @@ Page({
         data: data,
         message: "提交评估建议"
       });
+      // 更新时间线
+      utils.updateTimeLine(that, task_id, timeline_id, dialogValue, userName);
       // 刷新数据
       const updatedData = that.data.Data.map(item => {
-        if (item.timeline_id === timelineid) {
+        if (item.timeline_id === timeline_id) {
           item["confirmed2"] = 2;
         }
         return item;
@@ -479,7 +486,7 @@ Page({
     this.setData({
       dialogVisible: false,
       dialogValue: "",
-      timelineid: null
+      timeline_id: null
     });
   },
 
