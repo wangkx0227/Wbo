@@ -103,7 +103,7 @@
             </view>
           </view>
           <view class="cell-swiper" style="margin-top: 20rpx;">
-            <t-swiper wx:if="{{item.picture_list.length}}" autoplay="{{false}}" duration="{{500}}" navigation="{{ { type: 'dots' } }}" list="{{item.picture_list}}" bind:click="onSwiperImagesTap" data-images="{{item.picture_list}}">
+            <t-swiper wx:if="{{item.picture_list.length}}" autoplay="{{false}}" duration="{{500}}" navigation="{{ { type: 'dots' } }}" list="{{item.picture_list}}" bind:click="onSwiperImagesTap" data-images="{{item.picture_list}}"  >
             </t-swiper>
             <!-- 无数据时显示占位内容 -->
             <t-image wx:else src="" shape="round" error="slot" width="660rpx" height="384rpx">

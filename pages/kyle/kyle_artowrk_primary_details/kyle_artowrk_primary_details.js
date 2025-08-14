@@ -22,7 +22,7 @@ Page({
     // 时间线抽屉
     popupTimeLineVisible: false,
     taskTimeLineData: {}, // 存储时间线的数据
-    timeLineValue:[], // 具体查看的时间线
+    timeLineValue: [], // 具体查看的时间线
     // 筛选框变量-1
     dropdownDesigner: {
       value: 'all',
@@ -85,13 +85,13 @@ Page({
         const image_list = task_list[index].timeline_list[i].image_list;
         const picture_list = image_list.length === 0 ? [] : image_list.map(img => image_url + img.imageURL);
         const timeline_id = task_list[index].timeline_list[i].id;
-        const timeline_type  = task_list[index].timeline_list[i].timeline_type;
+        const timeline_type = task_list[index].timeline_list[i].timeline_type;
 
         if (i < timeline_list.length - 1) {
           let timeline_type_text = ""
-          if(timeline_type === 1){
+          if (timeline_type === 1) {
             timeline_type_text = "设计稿"
-          }else{
+          } else {
             timeline_type_text = "生产稿"
           }
           timeLineData.push({
@@ -100,7 +100,7 @@ Page({
             "name": task_list[index].timeline_list[i].name || "无提交人", // 提交人
             "comment": task_list[index].timeline_list[i].comment, // 评论内容
             "picture_list": picture_list, // 图片
-            "timeline_type_text":timeline_type_text // 图稿类型
+            "timeline_type_text": timeline_type_text // 图稿类型
           })
           continue; // 跳过倒序的第2个及以后
         }
@@ -228,8 +228,8 @@ Page({
   },
   // 弹窗-评论-打开
   onOpenDialog(e) {
-    const { timelineId,taskId } = e.currentTarget.dataset;
-    this.setData({ dialogVisible: true, timeline_id: timelineId,task_id:taskId});
+    const { timelineId, taskId } = e.currentTarget.dataset;
+    this.setData({ dialogVisible: true, timeline_id: timelineId, task_id: taskId });
   },
   // 弹窗-评论-双向绑定
   onDialogInput(e) {
@@ -240,7 +240,7 @@ Page({
   // 弹窗-评论-关闭（包含提交功能）
   onCloseDialog(e) {
     const that = this;
-    const { dialogValue, timeline_id,task_id,userName } = this.data; // 输入的评论的数据
+    const { dialogValue, timeline_id, task_id, userName } = this.data; // 输入的评论的数据
     const action = e.type; // "confirm" 或 "cancel"
     if (action === 'confirm') {
       if (!dialogValue) {
@@ -352,18 +352,18 @@ Page({
     const { taskId } = e.currentTarget.dataset;
     const taskTimeLineData = this.data.taskTimeLineData;
     const timeLineValue = taskTimeLineData[`${taskId}`];
-    this.setData({ popupTimeLineVisible: true, timeLineValue:timeLineValue});
+    this.setData({ popupTimeLineVisible: true, timeLineValue: timeLineValue });
   },
   // 关闭抽屉
   onCloseHistoryTimeLine(e) {
     // 打开弹窗，显示upload组件
     this.setData({ popupTimeLineVisible: false });
-    setTimeout(()=>{
+    setTimeout(() => {
       this.setData({ timeLineValue: [] });
-    },500)
+    }, 500)
   },
   // 空方法，避免抽屉的滚动
-  onDummyTouchMove() {}, 
+  onDummyTouchMove() { },
 
 
   // 下拉菜单-设计师
