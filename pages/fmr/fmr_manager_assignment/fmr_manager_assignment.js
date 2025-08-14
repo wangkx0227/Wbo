@@ -56,31 +56,33 @@ Page({
     pickerVisible: false,
     pickerValue: [],
     pickerLabel: "暂未指派FMR",
-    pickerItemList: [{
-        label: '王五',
-        value: 'A'
-      },
-      {
-        label: '李四',
-        value: 'B'
-      },
-      {
-        label: '张明',
-        value: 'B'
-      },
-      {
-        label: '赵玉',
-        value: 'B'
-      },
-      {
-        label: '张三',
-        value: 'B'
-      },
-      {
-        label: '李明博',
-        value: 'B'
-      },
-    ],
+    pickerItemList: [], // fmr 信息
+  },
+  // 获取 fmr 用户数据
+  fmrRequest() {
+    const that = this;
+    const data = {
+      "type": "get_names_by_role",
+      "role_name": "FMR",
+      "username": "admin"
+    }
+    utils.LoadDataList({
+      page: that,
+      data: data,
+      showLoading: false,
+      showSkeleton: false,
+    }).then(list => { // list 就是data数据
+      let fmrData = [];
+      for (let i = 0; i < list.length; i++) {
+        fmrData.push({
+          label: list[i],
+          value: list[i]
+        })
+      }
+      that.setData({
+        pickerItemList: fmrData
+      })
+    });
   },
   // 数据结构处理
   dataStructure(dataList) {
@@ -196,6 +198,7 @@ Page({
       allIdList: groupIdList, // 记录全部的id数据
     })
     this.multiIdRequest('init');
+    this.fmrRequest();
   },
   // 轮播图函数 - 点击轮播图 - 图片预览
   onSwiperImagesTap(e) {
