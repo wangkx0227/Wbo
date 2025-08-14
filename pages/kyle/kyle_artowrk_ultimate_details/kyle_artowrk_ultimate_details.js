@@ -11,6 +11,8 @@ Page({
     noMoreData: false, // 数据是否全部加载完毕
     isDownRefreshing: false, // 下拉刷新状态
     isLoadingReachMore: false, // 滚动底部加载数据
+    userName:null, // 用户名
+    userRloe:null,  // 角色名
     // 回到顶部变量
     scrollTop: 0,
     // 时间线抽屉

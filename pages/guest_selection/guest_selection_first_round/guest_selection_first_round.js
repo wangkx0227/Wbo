@@ -18,38 +18,40 @@ Page({
     dialogVisible: false, // 评论弹出层变量
     dialogValue: "", // 评论
     dialogId: null, // 当前点击的id
+    userName: null, // 用户名
+    userRloe: null,  // 角色名
     // 筛选框变量-模板
     dropdownArtwork: {
       value: 'all',
       options: [{
-          value: 'all',
-          label: '全部图稿',
-        },
-        {
-          value: 'NAQ',
-          label: '宁安琪',
-        }
+        value: 'all',
+        label: '全部图稿',
+      },
+      {
+        value: 'NAQ',
+        label: '宁安琪',
+      }
       ],
     },
     // 筛选框变量-客户选中
     dropdownSelected: {
       value: 'all',
       options: [{
-          value: 'all',
-          label: '全部状态',
-        },
-        {
-          value: 'bot_selected',
-          label: '未选',
-        },
-        {
-          value: 'selected',
-          label: '已选中',
-        },
-        {
-          value: 'eliminate',
-          label: '已淘汰',
-        },
+        value: 'all',
+        label: '全部状态',
+      },
+      {
+        value: 'bot_selected',
+        label: '未选',
+      },
+      {
+        value: 'selected',
+        label: '已选中',
+      },
+      {
+        value: 'eliminate',
+        label: '已淘汰',
+      },
 
       ],
     },
@@ -60,29 +62,29 @@ Page({
     pickerDesignerValue: [],
     pickerDesignerTitile: "指派设计师",
     pickerDesignerItemList: [{
-        label: '王五',
-        value: 'A'
-      },
-      {
-        label: '李四',
-        value: 'B'
-      },
-      {
-        label: '张明',
-        value: 'B'
-      },
-      {
-        label: '赵玉',
-        value: 'B'
-      },
-      {
-        label: '张三',
-        value: 'B'
-      },
-      {
-        label: '李明博',
-        value: 'B'
-      },
+      label: '王五',
+      value: 'A'
+    },
+    {
+      label: '李四',
+      value: 'B'
+    },
+    {
+      label: '张明',
+      value: 'B'
+    },
+    {
+      label: '赵玉',
+      value: 'B'
+    },
+    {
+      label: '张三',
+      value: 'B'
+    },
+    {
+      label: '李明博',
+      value: 'B'
+    },
     ],
     // 上传图稿变量
     imageFileList: [],
@@ -117,21 +119,21 @@ Page({
         const image_list = task_list[index].timeline_list[i].image_list;
         const picture_list = image_list.length === 0 ? [] : image_list.map(img => image_url + img.imageURL);
         const timeline_id = task_list[index].timeline_list[i].id;
-        const timeline_type  = task_list[index].timeline_list[i].timeline_type;
+        const timeline_type = task_list[index].timeline_list[i].timeline_type;
         if (i > 0) {
           let timeline_type_text = ""
-          if(timeline_type === 1){
+          if (timeline_type === 1) {
             timeline_type_text = "设计稿"
-          }else{
+          } else {
             timeline_type_text = "生产稿"
           }
           timeLineData.push({
             "id": timeline_id, // id 
             "time": task_list[index].timeline_list[i].time, // 提交时间
-            "name": task_list[index].timeline_list[i].name, // 提交人
+            "name": task_list[index].timeline_list[i].name || "无提交人", // 提交人
             "comment": task_list[index].timeline_list[i].comment, // 评论内容
             "picture_list": picture_list, // 图片
-            "timeline_type_text":timeline_type_text // 图稿类型
+            "timeline_type_text": timeline_type_text // 图稿类型
           })
           continue; // 跳过
         }
@@ -140,6 +142,7 @@ Page({
         data_dict["confirmed"] = task_list[index].timeline_list[i].confirmed;
         // 第一条时间线的id 1-5步都是按照第一条时间线操作
         data_dict["timeline_id"] = timeline_id;
+        data_dict["timeline_type"] = timeline_type; // 类型
       }
       // kyle 标记如果时2舍弃，就直接过滤掉
       if (data_dict["confirmed"] !== 3) {
@@ -265,7 +268,7 @@ Page({
     }, 500)
   },
   // 空方法，避免抽屉的滚动
-  onDummyTouchMove() {},
+  onDummyTouchMove() { },
   // 页面上拉刷新 - 用于页面重置
   onPullDownRefresh() {
     if (this.data.isLoadingReachMore) return; // 如果正在加载更多，则禁止下拉刷新
@@ -292,11 +295,13 @@ Page({
   // 打开评论框
   onOpenDialog(e) {
     const {
-      timelineid
+      timelineId,
+      taskId
     } = e.currentTarget.dataset;
     this.setData({
       dialogVisible: true,
-      dialogId: timelineid
+      timeline_id: timelineId,
+      task_id: taskId
     });
   },
   // 输入评论-双向记录
@@ -310,7 +315,9 @@ Page({
     const that = this;
     const {
       dialogValue,
-      dialogId
+      timeline_id,
+      task_id,
+      userName
     } = this.data; // 输入的评论的数据
     const action = e.type; // "confirm" 或 "cancel"
     if (action === 'confirm') {
@@ -324,13 +331,15 @@ Page({
         page: that,
         data: {
           "type": "update_timeline",
-          "timeLine_id": dialogId,
+          "timeLine_id": timeline_id,
           "username": "admin", // 参数需要修改
           "name": "管理员", // 参数需要修改
           "comment": dialogValue
         },
         message: "提交评论完成"
       })
+      // 更新时间线
+      utils.updateTimeLine(that, task_id, timeline_id, dialogValue, userName);
     } else if (action === 'cancel') {
       const theme = "warning"
       const message = "评论取消"
@@ -392,7 +401,7 @@ Page({
             task_data["be_chosen2"] = 2
             utils.UpdateData({
               page: that,
-              data:task_data,
+              data: task_data,
               message: "图稿标记未选中"
             })
             const updatedData = that.data.Data.map(item => {
@@ -421,7 +430,7 @@ Page({
 
 
 
-/* 未完成 */
+  /* 未完成 */
 
   // 新增图稿
   onOpenAddArtwork(e) {

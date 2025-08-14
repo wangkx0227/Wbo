@@ -24,6 +24,8 @@ Page({
     dialogVisible: false, // 评论弹出层变量
     dialogValue: "", // 评论
     dialogId: null, // 当前点击的id
+    userRole: null, // 用户角色
+    userName: null, // 用户名称
     // 筛选框变量-模板
     dropdownArtwork: {
       value: 'all',
