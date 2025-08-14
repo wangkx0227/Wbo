@@ -34,8 +34,8 @@
 
 	<view class="status-section">
 		<button class="status-btn {{proofing?'active':''}}" bindtap="UpdateStatus" >开始打样</button>
-		<view class="status-item blank_{{blank}}">胚体</view>
-		<view class="status-item drawings_{{drawings}}">完成样</view>
+		<view class="status-item  blank_{{blank}}" style="width: 330rpx;margin: 0 auto;">胚体</view>
+		<view class="status-item drawings_{{drawings}}" style="width: 330rpx;margin: 0 auto;">完成样</view>
 	</view>
 
 	<view class="photo-buttons">

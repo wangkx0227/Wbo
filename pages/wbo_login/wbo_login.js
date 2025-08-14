@@ -172,7 +172,7 @@ Page({
       }
     });
   },
-
+  // 工厂登录
   onAccountLogin(e) {
     const that = this
     wx.request({
@@ -196,7 +196,7 @@ Page({
           });
           setTimeout(() => {
             wx.reLaunch({
-              url: '/pages/wbo-list/wbo-list'
+              url: '/pages/factory_login_page/wbo-list/wbo-list'
             });
           }, 1500);
         } else {

@@ -1,4 +1,4 @@
-const util = require('../../utils/util.js');
+const util = require('../../../utils/util.js');
 // pages/wbo-list/wbo-list.js
 Page({
 
@@ -150,7 +150,7 @@ Page({
   viewDetail(e) {
     const projectId = e.currentTarget.dataset.id;
     wx.navigateTo({
-      url: `/pages/wbo-detail/wbo-detail?project_id=${projectId}`
+      url: `/pages/factory_login_page/wbo-detail/wbo-detail?project_id=${projectId}`
     });
   }
 })

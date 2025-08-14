@@ -2,8 +2,8 @@
   "entryPagePath": "pages/wbo_login/wbo_login",
   "pages": [
     "pages/wbo_login/wbo_login",
-    "pages/wbo-list/wbo-list",
-    "pages/wbo-detail/wbo-detail",
+    "pages/factory_login_page/wbo-list/wbo-list",
+    "pages/factory_login_page/wbo-detail/wbo-detail",
     "pages/wbo_artwork_index/wbo_artwork_index",
     "pages/fmr/fmr_artwork_detail/fmr_artwork_detail",
     "pages/fmr/fmr_manager_assignment/fmr_manager_assignment",
