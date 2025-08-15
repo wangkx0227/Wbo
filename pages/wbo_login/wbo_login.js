@@ -123,10 +123,16 @@ Page({
                 // 正式版
                 // that.data.userInfo.fmr = data.userinfo
                 // 保存信息至缓存中，userinfo={type:'fmr',name:'kyle',openid:'xxxx',....}
-                
-                // 另外添加数据
-                wx.setStorageSync('userRole', 'd'); // 类型
+
+                // 测试 另外添加数据
+                if(that.data.nickName === "ethan"){
+                  wx.setStorageSync('userRole', 'd'); // 设计师
+                }else{
+                  wx.setStorageSync('userRole', 'fmr'); // fmr
+                }
                 wx.setStorageSync('userName', '薛天亮'); // 存储名字
+
+
                 // 存储信息
                 wx.setStorageSync('userInfo', that.data.userInfo); // 全部信息
                 // 提示
