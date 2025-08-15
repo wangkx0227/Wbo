@@ -8,7 +8,7 @@ const swiperImages = [
 Page({
   data: {
     Data: [], // 页面渲染数据存储列表
-    pageSize: 1, // 每次加载几个ID
+    pageSize: 5, // 每次加载几个ID
     currentIndex: 0, // 当前加载到第几个ID
     allIdList: [], // 首页跳转后的存储的ID值列表
     loadedIdList: [], // 已经读取渲染到页面的ID
@@ -58,10 +58,8 @@ Page({
         value: 'eliminate',
         label: '未选中',
       },
-
       ],
     },
-
     // 回到顶部变量
     scrollTop: 0,
     // 单选框变量
@@ -77,8 +75,7 @@ Page({
       const task_id = task_list[index].id;
       const be_chosen2 = task_list[index].be_chosen2;
       const be_ordered2 = task_list[index].be_ordered2;
-      // 第一轮选稿没有选中
-      if (be_chosen2 !== 1) {
+      if (be_chosen2 !== 1) {  // 第一轮选稿没有选中
         continue;
       }
       let data_dict = {
@@ -125,10 +122,6 @@ Page({
         data_dict["confirmed"] = task_list[index].timeline_list[i].confirmed;
         // 第一条时间线的
         data_dict["timeline_id"] = timeline_id;
-      }
-      // kyle 标记如果时2舍弃，就直接过滤掉
-      if (data_dict["confirmed"] !== 3) {
-        continue
       }
       taskTimeLineData[`${task_id}`] = timeLineData; // 时间线数据
       arrangeData.push(data_dict);
@@ -201,7 +194,7 @@ Page({
     that.setData({
       allIdList: groupIdList, // 记录全部的id数据
     })
-    this.multiIdRequest('init');
+    that.multiIdRequest('init');
   },
   // 回到顶部
   onToTop(e) {

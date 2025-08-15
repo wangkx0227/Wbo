@@ -152,8 +152,7 @@ Page({
         data_dict["timeline_id"] = timeline_id;
         data_dict["timeline_type"] = timeline_type; // 类型
       }
-      // kyle 标记如果时2舍弃，就直接过滤掉
-      if (data_dict["confirmed"] !== 3) {
+      if (data_dict["confirmed"] !== 3) { // kyle 标记如果是3，kyle终选择ok
         continue
       }
       taskTimeLineData[`${task_id}`] = timeLineData; // 时间线数据

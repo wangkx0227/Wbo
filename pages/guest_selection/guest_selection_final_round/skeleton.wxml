@@ -46,19 +46,6 @@
                   <t-skeleton theme="text" loading animation="gradient" rowCol="{{ [{ width: '40px', height: '38rpx'}]}}"></t-skeleton>
                 </view>
               </view>
-              <view class="arrange-center">
-                <view class="arrange-center">
-                  <text class="title-font-main">时间线：</text>
-                  <t-link size="small" content="查看历史时间线" hover underline variant="outline" bind:tap="onOpenHistoryTimeLine" data-task-id="{{ item.id }}" />
-                </view>
-                <t-divider layout="vertical" />
-                <view class="arrange-center">
-                  <text class="title-font-main">标记操作：</text>
-                  <t-link size="small" content="未选中" data-content-status="N" hover underline theme="danger" bindtap="onModifyArtworkStatus" data-task-id="{{ item.id }}" />
-                  <t-divider layout="vertical" />
-                  <t-link size="small" content="已完成" data-content-status="Y" hover underline bindtap="onModifyArtworkStatus" data-task-id="{{ item.id }}" />
-                </view>
-              </view>
             </view>
           </view>
         </view>
