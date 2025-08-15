@@ -30,7 +30,7 @@
         <view class="cell-swiper">
           <!-- <t-swiper wx:if="{{item.picture_list.length}}" autoplay="{{false}}" duration="{{500}}" navigation="{{ { type: 'dots' } }}" list="{{item.picture_list}}" bind:click="onSwiperImagesTap" data-images="{{item.picture_list}}">
           </t-swiper> -->
-          <swiper wx:if="{{item.picture_list.length}}" autoplay="true" interval="3000" duration="500" circular="true" indicator-dots="true" indicator-color="#ccc" indicator-active-color="#fff">
+          <swiper wx:if="{{item.picture_list.length}}" autoplay="{{false}}" interval="3000" duration="500" circular="{{false}}" indicator-dots="{{true}}" indicator-color="#ccc" indicator-active-color="#fff">
             <block wx:for="{{item.picture_list}}" wx:key="index">
               <view>{{item.url}}</view>
               <swiper-item>
@@ -125,7 +125,7 @@
           <view class="cell-swiper" style="margin-top: 20rpx;">
             <!-- <t-swiper wx:if="{{item.picture_list.length}}" autoplay="{{false}}" duration="{{500}}" navigation="{{ { type: 'dots' } }}" list="{{item.picture_list}}" bind:click="onSwiperImagesTap" data-images="{{item.picture_list}}">
             </t-swiper> -->
-            <swiper wx:if="{{item.picture_list.length}}" autoplay="true" interval="3000" duration="500" circular="true" indicator-dots="true" indicator-color="#ccc" indicator-active-color="#fff">
+            <swiper wx:if="{{item.picture_list.length}}" autoplay="{{false}}" interval="3000" duration="500" circular="{{false}}" indicator-dots="{{true}}" indicator-color="#ccc" indicator-active-color="#fff">
               <block wx:for="{{item.picture_list}}" wx:key="index">
                 <view>{{item.url}}</view>
                 <swiper-item>
