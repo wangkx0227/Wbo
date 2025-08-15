@@ -70,9 +70,6 @@ Page({
     if (!username) {
       return
     }
-
-
-
     wx.request({
       url: that.data.app.globalData.reqUrl + '/wbo/wpb-api/',
       method: "POST",
@@ -80,7 +77,7 @@ Page({
         "type": "updateWpbTimeline",
         "tl_id": id,
         "state2": state,
-        "state2_updated_by": "管理员",
+        "state2_updated_by": username,
         "username": "admin"
       },
       success(res) {

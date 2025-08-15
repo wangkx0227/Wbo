@@ -40,7 +40,7 @@
                 <text>创建时间：{{ item.start_date }}</text>
               </view>
               <!-- 只有kyle导出ppt或者第二轮标记导出附件 -->
-              <view style="position:absolute;right: 50rpx;bottom: 38rpx;" wx:if="{{userRole === 'kyle' || userRole === 'ms'}}">
+              <view style="position:absolute;right: 50rpx;bottom: 38rpx;" wx:if="{{userRole === 'kyle' || (userRole === 'ms' && tabBarValue === 'ultimate')}}">
                 <t-link size="small" content="导出附件" underline hover catch:tap="exportAttachments" />
               </view>
             </view>
