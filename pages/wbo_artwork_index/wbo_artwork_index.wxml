@@ -26,7 +26,7 @@
             <view slot="title">
               <view class="arrange-space-between">
                 <view>
-                  <text class="title-main">开发案名称：</text>
+                  <text class="title-main">LP名称：</text>
                   <text class="title-other">{{ item.name }}</text>
                 </view>
                 <t-tag variant="light" size="small" wx:if="{{tabBarShow}}" style="position: absolute;right: 130rpx;"> 阶段：{{ tabBarTabLabel }} </t-tag>

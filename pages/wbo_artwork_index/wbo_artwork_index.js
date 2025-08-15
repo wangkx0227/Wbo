@@ -103,7 +103,8 @@ Page({
     } else if (userRole === "d") {
       this.setData({
         tabBarShow: true, userTabs: [
-          { value: 'primary', label: '工厂稿上传' },
+          { value: 'primary', label: "AI稿修改" },
+          { value: 'factory', label: '工厂稿上传' },
           { value: 'ultimate', label: '样品图审查' }
         ]
       });
@@ -183,15 +184,13 @@ Page({
     } else if (userRole === "d") { // 设计师对上传工厂稿
       if (tabBarValue === "primary") { // 设计师工厂稿上传，样品图审查
         wx.navigateTo({
+          url: `/pages/designer/designer_review_detail/designer_review_detail?groupIdList=${JSON.stringify(groupIdList)}`
+        });
+      } else if (tabBarValue === "factory") {
+        wx.navigateTo({
           url: `/pages/designer/designer_artwork_detail/designer_artwork_detail?groupIdList=${JSON.stringify(groupIdList)}`,
         });
       }
-      //  else {
-      //   wx.navigateTo({
-      //     url: `/pages/designer/designer_review_detail/designer_review_detail?groupId=${groupId}`
-      //   });
-      // }
-
     } else if (userRole === "fma") { // fmr主管分配fmr图稿
       wx.navigateTo({
         url: `/pages/fmr/fmr_manager_assignment/fmr_manager_assignment?groupIdList=${JSON.stringify(groupIdList)}`,
@@ -262,7 +261,7 @@ Page({
     const value = e.detail.value;// 值
     const current = that.data.userTabs.find(item => item.value === value); // 动态显示tab
     // 如果fmr点击的时样品上传，进行跳转
-    if (current.value === "ultimate" && userRole === "fmr" || userRole === "d") {
+    if (current.value === "ultimate" && (userRole === "fmr" || userRole === "d")) {
       wx.navigateTo({
         url: `/pages/factory_login_page/wbo-list/wbo-list` // 样品图上传，使用原来项目
       });
