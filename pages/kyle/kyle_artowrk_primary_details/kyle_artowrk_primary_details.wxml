@@ -15,7 +15,7 @@
   </view>
   <view class="page-main">
     <view class="wrapper">
-      <view class="cell" wx:for="{{Data}}" wx:key="index">
+      <view class="cell" wx:for="{{Data}}" wx:key="index" wx:for-index="outerIndex">
         <view class="arrange-space-between title-font-main">
           <text>Title：{{ item.title }}</text>
         </view>
@@ -32,9 +32,8 @@
           </t-swiper> -->
           <swiper wx:if="{{item.picture_list.length}}" autoplay="{{false}}" interval="3000" duration="500" circular="{{false}}" indicator-dots="{{true}}" indicator-color="#ccc" indicator-active-color="#fff">
             <block wx:for="{{item.picture_list}}" wx:key="index">
-              <view>{{item.url}}</view>
               <swiper-item>
-                <image src="{{item}}" mode="widthFix" style="width:45%;display: block; margin: 0 auto; " />
+                <image src="{{item}}" mode="widthFix" style="width:45%;display: block; margin: 0 auto; " bindtap="onSwiperImagesTap" data-outer-index="{{outerIndex}}" data-index="{{index}}" />
               </swiper-item>
             </block>
           </swiper>
@@ -92,7 +91,7 @@
   </view>
 </t-dialog>
 <!-- 抽屉/展示时间线 -->
-<t-popup visible="{{popupTimeLineVisible}}" placement="left">
+<t-popup visible="{{popupTimeLineVisible}}" placement="left" >
   <view class="popup-block" style="padding: 10rpx;height: 100%;">
     <view class="popup-header arrange-column">
       <view class="popup-title">时间线历史（非实时产生时间线）：</view>
@@ -115,7 +114,6 @@
             </t-swiper> -->
             <swiper wx:if="{{item.picture_list.length}}" autoplay="{{false}}" interval="3000" duration="500" circular="{{false}}" indicator-dots="{{true}}" indicator-color="#ccc" indicator-active-color="#fff">
               <block wx:for="{{item.picture_list}}" wx:key="index">
-                <view>{{item.url}}</view>
                 <swiper-item>
                   <image src="{{item}}" mode="widthFix" style="width:45%;display: block; margin: 0 auto; " />
                 </swiper-item>

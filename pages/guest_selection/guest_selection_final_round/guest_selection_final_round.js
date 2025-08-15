@@ -30,34 +30,34 @@ Page({
     dropdownArtwork: {
       value: 'all',
       options: [{
-          value: 'all',
-          label: '全部图稿',
-        },
-        {
-          value: 'NAQ',
-          label: '宁安琪',
-        }
+        value: 'all',
+        label: '全部图稿',
+      },
+      {
+        value: 'NAQ',
+        label: '宁安琪',
+      }
       ],
     },
     // 筛选框变量-客户选中
     dropdownSelected: {
       value: 'all',
       options: [{
-          value: 'all',
-          label: '全部状态',
-        },
-        {
-          value: 'bot_selected',
-          label: '未选',
-        },
-        {
-          value: 'selected',
-          label: '已完成',
-        },
-        {
-          value: 'eliminate',
-          label: '未选中',
-        },
+        value: 'all',
+        label: '全部状态',
+      },
+      {
+        value: 'bot_selected',
+        label: '未选',
+      },
+      {
+        value: 'selected',
+        label: '已完成',
+      },
+      {
+        value: 'eliminate',
+        label: '未选中',
+      },
 
       ],
     },
@@ -223,7 +223,8 @@ Page({
   onSwiperImagesTap(e) {
     const el = e;
     const that = this;
-    utils.ImagesPreview(el, that);
+    // utils.ImagesPreview(el, that);
+    utils.onSwiperImagesTap(el, that);
   },
   // 打开抽屉，查看历史时间线
   onOpenHistoryTimeLine(e) {
@@ -250,7 +251,7 @@ Page({
     }, 500)
   },
   // 空方法，避免抽屉的滚动
-  onDummyTouchMove() {},
+  onDummyTouchMove() { },
   // 页面上拉刷新 - 用于页面重置
   onPullDownRefresh() {
     if (this.data.isLoadingReachMore) return; // 如果正在加载更多，则禁止下拉刷新

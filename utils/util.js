@@ -46,6 +46,17 @@ function ImagesPreview(el, that) {
     urls: imagesList
   });
 }
+// 图片预览2
+function onSwiperImagesTap(el, that) {
+  const outerIndex = el.currentTarget.dataset.outerIndex; // 外层 Data 索引
+  const index = el.currentTarget.dataset.index;           // 内层 picture_list 索引
+  const list = that.data.Data[outerIndex].picture_list;
+  const current = list[index];
+  wx.previewImage({
+    current,
+    urls: list
+  });
+}
 // 单次请求获取数据
 function LoadDataList({
   page,                // 页面 this
@@ -297,4 +308,5 @@ module.exports = {
   readIdStructure,
   checkLogin,
   updateTimeLine,
+  onSwiperImagesTap
 }

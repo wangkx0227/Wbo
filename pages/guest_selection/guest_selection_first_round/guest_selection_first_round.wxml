@@ -15,7 +15,7 @@
   </view>
   <view class="page-main">
     <view class="wrapper">
-      <view class="cell" wx:for="{{Data}}" wx:key="index">
+      <view class="cell" wx:for="{{Data}}" wx:key="index" wx:for-index="outerIndex">
         <view class="arrange-space-between title-font-main">
           <text>Title：{{ item.title }}</text>
         </view>
@@ -34,7 +34,8 @@
               <block wx:for="{{item.picture_list}}" wx:key="index">
                 <view>{{item.url}}</view>
                 <swiper-item>
-                  <image src="{{item}}" mode="widthFix" style="width:45%;display: block; margin: 0 auto; " />
+                  <image src="{{item}}" mode="widthFix" style="width:45%;display: block; margin: 0 auto; " 
+                  data-outer-index="{{outerIndex}}" data-index="{{index}}" bindtap="onSwiperImagesTap"/>
                 </swiper-item>
               </block>
             </swiper>

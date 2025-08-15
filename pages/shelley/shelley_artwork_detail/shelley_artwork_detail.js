@@ -248,7 +248,8 @@ Page({
   onSwiperImagesTap(e) {
     const el = e;
     const that = this;
-    utils.ImagesPreview(el, that);
+    // utils.ImagesPreview(el, that);
+    utils.onSwiperImagesTap(el, that);
   },
   // 回到顶部
   onToTop(e) {

@@ -24,62 +24,62 @@ Page({
     pickerValue: [],
     pickerLabel: "未选择工厂",
     pickerItemList: [{
-        label: '深圳工厂',
-        value: 'A'
-      },
-      {
-        label: '佛山工厂',
-        value: 'B'
-      },
-      {
-        label: '惠州工厂',
-        value: 'B'
-      },
-      {
-        label: '浙江工厂',
-        value: 'B'
-      },
-      {
-        label: '越南工厂',
-        value: 'B'
-      },
-      {
-        label: '缅甸工厂',
-        value: 'B'
-      },
+      label: '深圳工厂',
+      value: 'A'
+    },
+    {
+      label: '佛山工厂',
+      value: 'B'
+    },
+    {
+      label: '惠州工厂',
+      value: 'B'
+    },
+    {
+      label: '浙江工厂',
+      value: 'B'
+    },
+    {
+      label: '越南工厂',
+      value: 'B'
+    },
+    {
+      label: '缅甸工厂',
+      value: 'B'
+    },
     ],
     // 筛选框变量-模板
     dropdownArtwork: {
       value: 'all',
       options: [{
-          value: 'all',
-          label: '全部图稿',
-        },
-        {
-          value: 'NAQ',
-          label: '已上传样品照片',
-        },
-        {
-          value: 'NAQ',
-          label: '未上传样品照片',
-        },
+        value: 'all',
+        label: '全部图稿',
+      },
+      {
+        value: 'NAQ',
+        label: '已上传样品照片',
+      },
+      {
+        value: 'NAQ',
+        label: '未上传样品照片',
+      },
       ],
     },
     // 筛选框变量建议
     dropdownAssess: {
       value: 'all',
       options: [{
-          value: 'all',
-          label: '全部选择',
-        },
-        {
-          value: 'discard',
-          label: '未选择工厂',
-        },
-        {
-          value: 'reserve',
-          label: '已选择工厂',
-        },
+        value: 'all',
+        label: '全部选择',
+      },
+      {
+        value: 'discard',
+        label: '未选择工厂',
+      },
+      {
+        value: 'reserve',
+        label: '已选择工厂',
+      },
       ],
     },
   },
@@ -211,7 +211,8 @@ Page({
   onSwiperImagesTap(e) {
     const el = e;
     const that = this;
-    utils.ImagesPreview(el, that);
+    // utils.ImagesPreview(el, that);
+    utils.onSwiperImagesTap(el, that);
   },
   // 回到顶部
   onToTop(e) {
@@ -254,7 +255,7 @@ Page({
     }, 500)
   },
   // 空方法，避免抽屉的滚动
-  onDummyTouchMove() {},
+  onDummyTouchMove() { },
   // 页面上拉刷新 - 用于页面重置
   onPullDownRefresh() {
     if (this.data.isLoadingReachMore) return; // 如果正在加载更多，则禁止下拉刷新
