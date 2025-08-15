@@ -64,6 +64,7 @@ Page({
     for (const index in task_list) {
       const task_id = task_list[index].id;
       const be_chosen2 = task_list[index].be_chosen2;
+      const whether_to_proof = task_list[index].whether_to_proof;
       // 说明没被选中，就过滤 需要增加一个关于当前用户的判断，只有当前用户才可以看到自己的图稿并上传
       if (be_chosen2 !== 1) {
         continue;
@@ -74,6 +75,12 @@ Page({
         title: task_list[index].title,
         texture: task_list[index].texture,
         name: task_list[index].AIE_designer1,
+        whether_to_proof:whether_to_proof,
+      }
+      if(whether_to_proof === 1){
+        data_dict["whether_to_proof_text"] = "是"
+      }else {
+        data_dict["whether_to_proof_text"] = "否"
       }
       let timeLineData = []; // 时间线存储数据
       const timeline_list = task_list[index].timeline_list;

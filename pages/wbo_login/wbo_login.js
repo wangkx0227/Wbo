@@ -123,7 +123,7 @@ Page({
                 // 正式版
                 // that.data.userInfo.fmr = data.userinfo
                 // 保存信息至缓存中，userinfo={type:'fmr',name:'kyle',openid:'xxxx',....}
-                wx.setStorageSync('userRole', 'ms'); // 类型
+                wx.setStorageSync('userRole', 'd'); // 类型
                 wx.setStorageSync('userName', '薛天亮'); // 存储名字
                 wx.setStorageSync('userInfo', that.data.userInfo); // 全部信息
                 wx.showToast({ title: '登录成功', icon: 'success' });

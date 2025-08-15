@@ -78,7 +78,7 @@
 <t-popup visible="{{popupTimeLineVisible}}" placement="left">
   <view class="popup-block" style="padding: 10rpx;height: 100vh;">
     <view class="popup-header arrange-column">
-      <view class="popup-title">时间线历史（非实时产生时间线）：</view>
+      <view class="popup-title">时间线历史：</view>
     </view>
     <view class="popup-comments">
       <scroll-view scroll-y style="height: calc(100% - 120rpx);padding: 0 20rpx;" class="popup-comments" bindtouchmove="onDummyTouchMove" catchtouchmove>
