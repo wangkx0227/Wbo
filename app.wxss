@@ -52,7 +52,8 @@ page {
   padding: 20rpx 0;
   background-color: #fff;
   text-align: center;
-  z-index: 999; /* 确保在上层 */
+  z-index: 999;
+  /* 确保在上层 */
   box-shadow: 0 -2rpx 10rpx rgba(0, 0, 0, 0.05);
 }
 
@@ -88,6 +89,20 @@ page {
   font-weight: normal;
 }
 
+/* 字体截断 */
+.title-other {
+  display: inline-block;
+  /* 或 block */
+  width: 200rpx;
+  /* 固定宽度 */
+  white-space: nowrap;
+  /* 禁止换行 */
+  overflow: hidden;
+  /* 隐藏溢出部分 */
+  text-overflow: ellipsis;
+  /* 显示省略号 */
+}
+
 .arrange-space-between {
   display: flex;
   justify-content: space-between;
@@ -106,11 +121,15 @@ page {
   flex-direction: column;
   /* 设置为上下布局 */
 }
+
 .arrange-center-flex-end {
   display: flex;
-  align-items: center;  /* 垂直居中 */
-  justify-content: flex-end;  /* 水平靠右 */
+  align-items: center;
+  /* 垂直居中 */
+  justify-content: flex-end;
+  /* 水平靠右 */
 }
+
 /* 弹窗的css */
 .popup-block {
   width: 100vw;
@@ -216,17 +235,22 @@ page {
   top: 1px;
   z-index: 1;
 }
+
 /* 确保滚动容器高度计算正确 */
 .popup-block {
   display: flex;
   flex-direction: column;
   height: 100%;
 }
+
 .popup-comments {
   flex: 1;
-  overflow-y: auto; /* 允许垂直滚动 */
+  overflow-y: auto;
+  /* 允许垂直滚动 */
 }
+
 /* 防止滚动穿透（关键） */
 t-popup {
-  overflow: hidden !important; /* 禁止外部滚动 */
+  overflow: hidden !important;
+  /* 禁止外部滚动 */
 }

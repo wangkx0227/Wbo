@@ -15,15 +15,6 @@
   margin-bottom: 0;
 }
 
-.title-main {
-  font-size: 12px;
-  font-weight: 600;
-  color: #333;
-}
-.title-other {
-  font-size: 12px;
-  color: #606266  ;
-}
 
 
 /* 重写标签栏组件样式*/

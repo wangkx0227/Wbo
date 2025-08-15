@@ -2,14 +2,24 @@ const app = getApp();
 const utils = require('../../utils/util')
 Page({
   data: {
-    // 悬浮胶囊标签栏变量
+    Data: [], // 页面展示数据
+    allData: [],// 全部的数据
+    pageSize: 6, // 每次加载多少条数据
+    currentIndex: 0, // 加载到数据的第几个索引
+
     tabBarTabLabel: "", // 胶囊的label
     tabBarValue: 'primary', // 胶囊选中的值
     userTabs: [], // 胶囊框的数据
     tabBarShow: false, // 显示胶囊标签和tab
     userRole: null, // 角色
-    // 骨架控制变量
-    skeletonLoading: true,
+    userName: null, // 名称
+    // 下拉刷新与滚动底部刷新使用变量
+    isDownRefreshing: false, // 下拉刷新状态
+    isLoadingReachMore: false, // 滚动底部加载数据
+    noMoreData: false,    // 数据是否全部加载完毕
+    skeletonLoading: true, // 骨架控制变量
+    scrollTop: 0, // 回到顶部变量
+
     // 筛选框变量-1
     dropdownTemplate: {
       value: 'all',
@@ -53,34 +63,7 @@ Page({
     },
     // 搜索变量
     searchValue: '',
-    // 下拉刷新与滚动底部刷新使用变量
-    isDownRefreshing: false, // 下拉刷新状态
-    isLoadingReachMore: false, // 滚动底部加载数据
-    noMoreData: false,    // 数据是否全部加载完毕
-    // 回到顶部变量
-    scrollTop: 0,
-    // 数据
-    Data: [],
-  },
-  // 数据结构处理
-  dataStructure(dataList) {
-    let arrangeData = [];
-    dataList.forEach(item => {
-      // 对内部的line_plan_list变量进行循环
-      let lp_list = [];
-      item.line_plan_list.forEach((line_plan) => {
-        lp_list.push(line_plan.id)
-      })
-      arrangeData.push({
-        id: item.id,
-        name: item.name,
-        director: item.director,
-        start_date: item.start_date,
-        line_plan_list: lp_list,
-        to_confirmed: 80, // 假数据
-      })
-    })
-    return arrangeData
+
   },
   // 加载用户角色
   loadUserRole() {
@@ -127,20 +110,73 @@ Page({
       userRole: userRole
     })
   },
-  // 生命周期函数
-  onLoad() {
-    this.loadUserRole();
-    // 需要根据不同角色加载数据
+  // 首页数据结构处理
+  dataStructure(dataList) {
+    let arrangeData = [];
+    dataList.forEach(item => {
+      const development_name = item.name; // 开发案名称
+      const development_director = item.director; // 主导人
+      const development_start_data = item.start_date; // 开发案开始时间
+      // 对内部的line_plan_list变量进行循环
+      item.line_plan_list.forEach((line_plan) => {
+        const lp_data = {
+          line_plan_id: line_plan.id, // id
+          line_plan_title: `${development_name}-${line_plan.title}`, // 名称
+          line_plan_client: line_plan.client || "未记录", // 客户
+          line_plan_year: line_plan.year || "未记录", // 年
+          line_plan_season: line_plan.season || "未记录", // 风格
+          line_plan_is_new_development: line_plan.is_new_development, // 是否结案
+          development_director: development_director,// 主导人
+          development_start_data: development_start_data, //开发案时间
+        }
+        if (lp_data['line_plan_is_new_development']) {
+          lp_data['is_new_development_text'] = "完结"
+        } else {
+          lp_data['is_new_development_text'] = "未完结"
+        }
+        arrangeData.push(lp_data)
+      })
+    })
+    return arrangeData
+  },
+  // 数据分页显示处理
+  dataPage(mode) {
+    const that = this;
     utils.LoadDataList({
       page: this,
       data: { type: "getProjectList", username: "admin" },
-      mode: 'init'
+      mode: mode
     }).then(list => { // list 就是data数据
-      const arrangeData = this.dataStructure(list);
-      this.setData({
-        Data: arrangeData
+      const arrangeData = that.dataStructure(list);
+      that.setData({
+        allData: arrangeData
       })
+      // 数据逻辑构建
+      const pageData = utils.readPageStructure(that); // 分页数据
+      let totalRequests = that.data.pageSize;
+      if (pageData.length !== totalRequests) {
+        totalRequests = pageData.length;
+      }
+      // 针对刷线和第一次加载使用
+      if (mode === 'refresh') {
+        that.setData({
+          Data: pageData,
+        })
+      } else {
+        that.setData({
+          Data: that.data.Data.concat(pageData),
+        })
+      }
+      that.setData({
+        currentIndex: that.data.currentIndex + pageData.length // 记录下标索引
+      });
     });
+  },
+  // 生命周期函数
+  onLoad() {
+    this.loadUserRole(); // 需要根据不同角色加载数据
+    this.dataPage("init"); // 分页处理
+
   },
   // 跳转到详情页面
   onJumpArtworkDeatails(e) {
@@ -210,49 +246,38 @@ Page({
       scrollTop: e.scrollTop
     });
   },
-  // 页面下拉刷新 - 用于页面重置
+  // 页面下拉刷新
   onPullDownRefresh() {
-    if (this.data.isLoadingReachMore) return;
-    utils.LoadDataList({
-      page: this,
-      data: {
-        type: 'getProjectList',
-        username: 'admin',
-      },
-      mode: 'refresh',
-      // 如果有分页加入分页，或者搜索条件等等
-    }).then(list => { // list 就是data数据
-      const arrangeData = this.dataStructure(list);
-      this.setData({
-        Data: arrangeData
-      })
-    });
+    if (this.data.isLoadingReachMore) return; // 如果正在加载更多，则禁止下拉刷新
+    // 重置 currentIndex 让它从头开始访问
+    this.setData({
+      currentIndex: 0,
+      noMoreData: false,
+      isLoadingReachMore: false
+    })
+    this.dataPage('refresh');
   },
-  // 页面上拉触底事件的处理函数-用于加载更多数据
+  // 页面上拉触底加载更多数据
   onReachBottom() {
-    // noMoreData:true, 下拉时，如果数据没有了，将这个值进行设置
+    // 下拉刷线，读取原来的加载过的数据即可
+    const that = this;
     // 如果在下拉刷新，禁止滚动加载
-    if (this.data.isDownRefreshing || this.data.noMoreData) return;
-    utils.LoadDataList({
-      page: this,
-      data: {
-        type: 'getProjectList',
-        username: 'admin',
-      },
-      mode: 'more',
-      // 如果有分页加入分页，或者搜索条件等等
-    }).then(list => { // list 就是data数据
-      const arrangeData = this.dataStructure(list);
-      this.setData({
-        Data: this.data.Data.concat(arrangeData),
-      })
+    if (that.data.isDownRefreshing || that.data.noMoreData) return;
+    const pageData = utils.readPageStructure(that); // 分页数据
+    let totalRequests = that.data.pageSize;
+    if (pageData.length !== totalRequests) {
+      totalRequests = pageData.length;
+    }
+    that.setData({
+      Data: that.data.Data.concat(pageData),
+      currentIndex: that.data.currentIndex + pageData.length // 记录下标索引
     });
-    // // 触底操作数据完成后处理
-    // if (this.data.currentIndex === this.data.allIdList.length) {
-    //   this.setData({
-    //     noMoreData: true
-    //   })
-    // }
+    console.log(pageData);
+    if (that.data.currentIndex === that.data.allData.length) {
+      that.setData({
+        noMoreData: true
+      })
+    }
   },
   // 胶囊悬浮框切换函数
   onTabBarChange(e) {
@@ -322,6 +347,16 @@ Page({
     //   }
     // });
   },
+
+
+
+
+
+
+
+
+
+
   // 下拉菜单-模板
   onTemplateChange(e) {
     this.setData({

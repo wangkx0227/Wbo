@@ -1,5 +1,6 @@
 import { Toast } from 'tdesign-miniprogram'; // 轻提示
 const app = getApp();
+// 时间处理
 function currentTime() {
   const date = new Date();
   const year = date.getFullYear();
@@ -7,7 +8,6 @@ function currentTime() {
   const day = String(date.getDate()).padStart(2, '0');
   return `${year}-${month}-${day}`
 }
-
 // 提示
 function showToast(that, content, theme = "success") {
   Toast({
@@ -260,18 +260,19 @@ function readIdStructure(that) {
   const nextIds = allIdList.slice(currentIndex, currentIndex + pageSize); // 取读取id的范围
   return nextIds; // 返回需要读取的id列表
 }
-// 登录
-function checkLogin() {
-  const userInfo = wx.getStorageSync('userInfo')
-  if (!userInfo) {
-    wx.redirectTo({
-      url: '/pages/wxLogin/wxLogin'
+// 读取访问数据-分页处理
+function readPageStructure(page) {
+  const { allData, pageSize, currentIndex } = page.data;
+  if (allData.length === 0) {
+    showToast(page, "无数据", "warning");
+    page.setData({
+      skeletonLoading: false
     })
-    return false
+    return [];
   }
-  return true
+  const pageData = allData.slice(currentIndex, currentIndex + pageSize); // 取读数据范围
+  return pageData; // 返回需要读取的id列表
 }
-
 // 无刷新更新时间线
 function updateTimeLine(page, task_id, timeline_id, comment, username) {
   let picture_list = [];
@@ -296,6 +297,17 @@ function updateTimeLine(page, task_id, timeline_id, comment, username) {
     [`taskTimeLineData.${task_id}`]: newArray
   })
 }
+// 登录
+function checkLogin() {
+  const userInfo = wx.getStorageSync('userInfo')
+  if (!userInfo) {
+    wx.redirectTo({
+      url: '/pages/wxLogin/wxLogin'
+    })
+    return false
+  }
+  return true
+}
 
 
 module.exports = {
@@ -307,5 +319,6 @@ module.exports = {
   readIdStructure,
   checkLogin,
   updateTimeLine,
-  onSwiperImagesTap
+  onSwiperImagesTap,
+  readPageStructure
 }
