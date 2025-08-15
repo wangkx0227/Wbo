@@ -24,7 +24,7 @@
           <t-cell hover>
             <!-- <t-badge count="{{ item.to_confirmed }}" slot="note" shape="ribbon"  /> -->
             <t-tag variant="outline" slot="note" shape="mark" size="medium" wx:if="{{tabBarShow}}" style="position: absolute;right: 25rpx;" theme="{{tabBarValue === 'primary' ? 'primary' : 'success'}}"> 阶段：{{ tabBarTabLabel }} </t-tag>
-            <t-tag variant="outline" slot="note" shape="mark" size="medium" wx:else style="position: absolute;right: 25rpx;" theme="{{tabBarValue === 'primary' ? 'primary' : 'success'}}"> 阶段：可行性分析 </t-tag>
+            <t-tag variant="outline" slot="note" shape="mark" size="medium" wx:if="{{userRole==='shelley'}}" style="position: absolute;right: 25rpx;" theme="primary"> 阶段：可行性分析 </t-tag>
             <view slot="title">
               <view class="arrange-space-between">
                 <view>
