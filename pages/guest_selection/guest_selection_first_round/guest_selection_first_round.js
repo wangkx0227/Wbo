@@ -98,13 +98,15 @@ Page({
     for (const index in task_list) {
       const task_id = task_list[index].id;
       const be_chosen2 = task_list[index].be_chosen2;
+      const whether_to_proof = task_list[index].whether_to_proof;
       let data_dict = {
         id: task_id,
         code: task_list[index].code,
         title: task_list[index].title,
         texture: task_list[index].texture,
         name: task_list[index].AIE_designer1,
-        be_chosen2: be_chosen2
+        be_chosen2: be_chosen2,
+        whether_to_proof:whether_to_proof
       }
       if (be_chosen2 === 1) {
         data_dict["be_chosen2_text"] = "已选中";
@@ -113,6 +115,12 @@ Page({
       } else {
         data_dict["be_chosen2_text"] = "未标记";
       }
+      if (whether_to_proof === 1) {
+        data_dict["whether_to_proof_text"] = "是";
+      } else {
+        data_dict["whether_to_proof_text"] = "否";
+      }
+
       let timeLineData = []; // 时间线存储数据
       const timeline_list = task_list[index].timeline_list;
       for (let i = 0; i < timeline_list.length; i++) {
@@ -427,6 +435,81 @@ Page({
 
   },
 
+  // 是否画工厂稿
+  onFactoryDraftStatus(e) {
+    const that = this;
+    const {
+      taskId,
+      contentStatus
+    } = e.currentTarget.dataset;
+    let task_data = {
+      "type": "update_task",
+      "task_id": taskId,
+      "username": "admin",
+    }
+    if (contentStatus === "Y") {
+      wx.showModal({
+        title: '提示',
+        content: '是否标记"需要工厂稿"',
+        success(res) {
+          if (res.confirm) {
+            task_data["whether_to_proof"] = 1
+            utils.UpdateData({
+              page: that,
+              data: task_data,
+              message: '标记完成'
+            })
+            const updatedData = that.data.Data.map(item => {
+              if (item.id === taskId) {
+                item["whether_to_proof"] = 1;
+                item["whether_to_proof_text"] = "是";
+              }
+              return item;
+            })
+            that.setData({
+              Data: updatedData
+            });
+          } else if (res.cancel) {
+            // 取消
+            const theme = "warning"
+            const message = "用户已取消操作"
+            utils.showToast(that, message, theme);
+          }
+        }
+      })
+    } else {
+      wx.showModal({
+        title: '提示',
+        content: '是否标记"不需要工厂稿"',
+        success(res) {
+          if (res.confirm) {
+            task_data["whether_to_proof"] = 0
+            utils.UpdateData({
+              page: that,
+              data: task_data,
+              message: "标记完成"
+            })
+            const updatedData = that.data.Data.map(item => {
+              if (item.id === taskId) {
+                item["whether_to_proof"] = 0;
+                item["whether_to_proof_text"] = "否";
+              }
+              return item;
+            })
+            that.setData({
+              Data: updatedData
+            });
+          } else if (res.cancel) {
+            // 取消
+            const theme = "warning"
+            const message = "用户已取消操作"
+            utils.showToast(that, message, theme);
+          }
+        }
+      })
+    }
+
+  },
 
 
 

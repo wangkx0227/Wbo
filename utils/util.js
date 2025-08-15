@@ -263,7 +263,6 @@ function readIdStructure(that) {
 // 登录
 function checkLogin() {
   const userInfo = wx.getStorageSync('userInfo')
-  console.log('check!', !userInfo)
   if (!userInfo) {
     wx.redirectTo({
       url: '/pages/wxLogin/wxLogin'

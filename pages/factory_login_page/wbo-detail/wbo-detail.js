@@ -213,7 +213,6 @@ Page({
 			success:(res)=>{
 				if(res.data.code===200){
 					const data = res.data.data.tasks[0]
-					console.log('加载数据请求成功!',res.data)
 					if(data.blank_images){
 						data.blank_images = that.sortByCreateTimeDesc(data.blank_images)
 					}

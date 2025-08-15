@@ -148,7 +148,6 @@ Page({
     const userRole = that.data.userRole;
     const tabBarValue = that.data.tabBarValue;
     const groupIdList = e.currentTarget.dataset.groupIdList;
-    const groupId = 1;
     if (userRole === "kyle") {
       if (tabBarValue === "primary") { // kyle 初筛和终评
         wx.navigateTo({
@@ -168,10 +167,6 @@ Page({
       if (tabBarValue === "primary") { // fmr 可行性评估与样品图上传
         wx.navigateTo({
           url: `/pages/fmr/fmr_artwork_detail/fmr_artwork_detail?groupIdList=${JSON.stringify(groupIdList)}`,
-        });
-      } else {
-        wx.navigateTo({
-          url: `/pages/fmr/fmr_factory_samples/fmr_factory_samples?groupIdList=${JSON.stringify(groupIdList)}`
         });
       }
     } else if (userRole === "ms") { // 选稿阶段r1
@@ -262,30 +257,39 @@ Page({
   // 胶囊悬浮框切换函数
   onTabBarChange(e) {
     const that = this;
-    // 设置切换值
-    wx.showLoading({ title: '正在加载...' });
-    that.setData({
-      tabBarValue: e.detail.value,
-      skeletonLoading: true,
-    });
-    // 动态显示tab
-    const current = this.data.userTabs.find(item => item.value === this.data.tabBarValue);
-    if (current) {
-      this.setData({
-        tabBarTabLabel: current.label
+    const userRole = that.data.userRole; // 角色
+    const value = e.detail.value;// 值
+    const current = that.data.userTabs.find(item => item.value === value); // 动态显示tab
+    // 如果fmr点击的时样品上传，进行跳转
+    if (current.value === "ultimate" && userRole === "fmr") {
+      wx.navigateTo({
+        url: `/pages/factory_login_page/wbo-list/wbo-list` // 样品图上传，使用原来项目
+      });
+    } else {
+      that.setData({ // 设置切换值
+        tabBarValue: e.detail.value,
+      });
+      if (current) {
+        this.setData({
+          tabBarTabLabel: current.label
+        });
+      }
+      wx.showLoading({ title: '正在加载...' });
+      that.setData({
+        skeletonLoading: true,
+      })
+      // 需要根据不同角色加载数据
+      utils.LoadDataList({
+        page: this,
+        data: { type: "getProjectList", username: "admin" },
+        mode: 'init'
+      }).then(list => { // list 就是data数据
+        const arrangeData = this.dataStructure(list);
+        this.setData({
+          Data: arrangeData
+        })
       });
     }
-    // 需要根据不同角色加载数据
-    utils.LoadDataList({
-      page: this,
-      data: { type: "getProjectList", username: "admin" },
-      mode: 'init'
-    }).then(list => { // list 就是data数据
-      const arrangeData = this.dataStructure(list);
-      this.setData({
-        Data: arrangeData
-      })
-    });
   },
   // 导出附件
   exportAttachments(e) {
@@ -318,10 +322,6 @@ Page({
     //   }
     // });
   },
-
-
-
-
   // 下拉菜单-模板
   onTemplateChange(e) {
     this.setData({
@@ -340,6 +340,4 @@ Page({
     console.log("用户点击搜索，输入内容为：", keyword);
     console.log(this.data.searchValue);
   },
-
-
 })

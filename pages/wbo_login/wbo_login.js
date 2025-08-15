@@ -5,8 +5,8 @@ Page({
     buttonText: '微信一键登录',
     nickName: '',
     loginMode: 'examine', // 'wechat' or 'account'
-    account: 'GS',
-    password: 'aZ7gL3pN',
+    account: 'GS', // 工厂登录
+    password: 'aZ7gL3pN', // 密码
     userInfo: {
       fmr: {
         name: null,
@@ -20,33 +20,33 @@ Page({
     product: {
       value: 'all',
       options: [{
-          value: 'all',
-          label: '无',
-        },
-        {
-          value: 'kyle',
-          label: 'kyle（初选与终选）',
-        },
-        {
-          value: 'shelley',
-          label: 'shelley（可执行评估）',
-        },
-        {
-          value: 'fmr',
-          label: 'fmr（可执行评估和上传样品图）',
-        },
-        {
-          value: 'ms',
-          label: '客户选稿(r1/r2)',
-        },
-        {
-          value: 'd',
-          label: '设计师（工厂稿与样品图审查）',
-        },
-        {
-          value: 'fma',
-          label: 'FMR主管（指派图稿FMR）不需要',
-        },
+        value: 'all',
+        label: '无',
+      },
+      {
+        value: 'kyle',
+        label: 'kyle（初选与终选）',
+      },
+      {
+        value: 'shelley',
+        label: 'shelley（可执行评估）',
+      },
+      {
+        value: 'fmr',
+        label: 'fmr（可执行评估和上传样品图）',
+      },
+      {
+        value: 'ms',
+        label: '客户选稿(r1/r2)',
+      },
+      {
+        value: 'd',
+        label: '设计师（工厂稿与样品图审查）',
+      },
+      {
+        value: 'fma',
+        label: 'FMR主管（指派图稿FMR）不需要',
+      },
       ],
     },
     redirect: "", // 跳转参数，如果携带，那么需要在登陆后跳转指定路径
@@ -80,12 +80,7 @@ Page({
       loginMode: 'account'
     });
   },
-  // 审核员登录-测试
-  switchToExamine() {
-    this.setData({
-      loginMode: 'examine'
-    });
-  },
+
 
   inputNickName(e) {
     this.setData({
@@ -104,26 +99,12 @@ Page({
       password: e.detail.value
     });
   },
-
+  // 员工登录
   onLogin(e) {
     const that = this;
-    // if(that.data.nickName===""){
-    // 	wx.showToast({ title: '请输入昵称', icon: 'error' });
-    // 	return
-    // }
-    // const userInfo = {type:'fmr',name:that.data.nickName}
-    // wx.setStorageSync('userInfo', userInfo);
-    // setTimeout(() => {
-    // 	wx.reLaunch({ url: `/pages/wbo-list/wbo-list` });
-    //   }, 1500);
     wx.login({
       success(res) {
-        //   console.log(res.code)
-        // setTimeout(() => {
-        // 	wx.reLaunch({ url: '/pages/wbo-list/wbo-list' });
-        //   }, 1500);
         if (res.code) {
-
           wx.request({
             url: that.data.app.globalData.reqUrl + '/wbo/wx_login/',
             method: 'POST',
@@ -133,41 +114,35 @@ Page({
             },
             success(resp) {
               const data = resp.data;
-              if (data.code === 200) {
-                data.userinfo.type = "fmr"
-                wx.setStorageSync('userInfo', data.userinfo);
-                wx.showToast({
-                  title: '登录成功',
-                  icon: 'success'
+              if (data.code !== 200) {
+                // 测试管理员
+                // that.data.userInfo.fmr.name = '管理员'
+                // that.data.userInfo.fmr.position = ["管理员"]
+                that.data.userInfo.fmr.name = '薛天亮'
+                that.data.userInfo.fmr.position = ["FMR"]
+                // 正式版
+                // that.data.userInfo.fmr = data.userinfo
+                // 保存信息至缓存中，userinfo={type:'fmr',name:'kyle',openid:'xxxx',....}
+                wx.setStorageSync('userRole', 'ms'); // 类型
+                wx.setStorageSync('userName', '薛天亮'); // 存储名字
+                wx.setStorageSync('userInfo', that.data.userInfo); // 全部信息
+                wx.showToast({ title: '登录成功', icon: 'success' });
+                wx.reLaunch({
+                  url: `/pages/wbo_artwork_index/wbo_artwork_index`
                 });
-
-                setTimeout(() => {
-                  wx.reLaunch({
-                    url: '/pages/wbo-list/wbo-list'
-                  });
-                }, 1500);
-              } else if (data.code === 400) {
-                wx.showToast({
-                  title: `${data.errinfo}`,
-                  icon: 'error'
-                });
+              } else if (data.statusCode === 400) {
+                wx.showToast({ title: "登录错误", icon: 'error' });
               } else {
-                console.log('err!', resp)
-                wx.showToast({
-                  title: "请输入正确的名字",
-                  icon: 'error'
-                });
+                console.log('err!', resp.data)
+                wx.showToast({ title: "登录失败", icon: 'error' });
               }
             },
             fail(err) {
-              console.log('err!', err)
+              wx.showToast({ title: "网络错误", icon: 'error' });
             }
           });
         } else {
-          wx.showToast({
-            title: '登录失败：没有 code',
-            icon: 'none'
-          });
+          wx.showToast({ title: '登录失败：没有 code', icon: 'none' });
         }
       }
     });
@@ -212,7 +187,12 @@ Page({
       }
     });
   },
-
+  // 审核员登录-测试
+  switchToExamine() {
+    this.setData({
+      loginMode: 'examine'
+    });
+  },
   // 审核员登录-测试使用
   onChange(e) {
     this.setData({

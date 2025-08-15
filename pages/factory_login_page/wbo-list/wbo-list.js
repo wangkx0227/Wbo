@@ -37,7 +37,6 @@ Page({
       factory,
       userInfo
     })
-    // console.log('fmr',this.data.fmr, userInfo.fmr.position)
     this.get_wbpData()
   },
 
@@ -85,7 +84,6 @@ Page({
             isLoading: false,
             hasMore: tasks.length === that.data.pageSize
           })
-          console.log('加载数据请求成功!', res.data)
         } else {
           console.log('加载数据请求失败!', res)
         }

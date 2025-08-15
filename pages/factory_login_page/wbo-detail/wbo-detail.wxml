@@ -5,7 +5,7 @@
   <view class="image-section">
 	<view class="image-box">
 		<swiper class="image-swiper" indicator-dots circular>
-			<block wx:for="{{images_0}}">
+			<block wx:for="{{images_0}}" wx:key="index">
 				<swiper-item>
 					<image class="image" src="https://xcx.1bizmail.com:8153{{item.image}}" mode="aspectFit" bindtap="onPreviewImage" data-type="images_0" data-index="{{index}}"></image>
 				</swiper-item>
@@ -15,7 +15,7 @@
 	</view>
 	<view class="image-box">
 		<swiper class="image-swiper" indicator-dots circular>
-			<block wx:for="{{images_1}}">
+			<block wx:for="{{images_1}}" wx:key="index">
 				<swiper-item>
 					<image class="image" src="https://xcx.1bizmail.com:8153{{item.image}}" mode="aspectFit" bindtap="onPreviewImage" data-type="images_1" data-index="{{index}}"></image>
 				</swiper-item>
@@ -48,7 +48,7 @@
 
   <view wx:for="{{blank_images}}" wx:for-index="barIndex" wx:key="index" class="image-block">
 	<swiper class="image-swiper" indicator-dots circular>
-		<block wx:for="{{item.images}}">
+		<block wx:for="{{item.images}}" wx:key="image_index">
 			<swiper-item>
 				<image class="real-image" src="https://xcx.1bizmail.com:8153{{item.image}}" mode="aspectFit" bindtap="onPreviewImage" data-type="blank_images" data-bar="{{barIndex}}" data-index="{{index}}"></image>
 			</swiper-item>
@@ -116,7 +116,7 @@
 
   <view wx:for="{{drawings_images}}" wx:for-index="barIndex" wx:key="index" class="image-block">
     <swiper class="image-swiper" indicator-dots circular>
-		<block wx:for="{{item.images}}">
+		<block wx:for="{{item.images}}" wx:key="image_index">
 			<swiper-item>
 				<image class="real-image" src="https://xcx.1bizmail.com:8153{{item.image}}" mode="aspectFit" bindtap="onPreviewImage" data-type="drawings_images" data-bar="{{barIndex}}" data-index="{{index}}"></image>
 			</swiper-item>

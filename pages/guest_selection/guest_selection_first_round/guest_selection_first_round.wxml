@@ -23,6 +23,9 @@
           <text style="border-bottom: 1px solid currentColor;">Material：{{ item.texture }}</text>
           <text style="color: {{ item.be_chosen2 == 2 ? 'red' : 'black' }};;">R1选中状态：{{ item.be_chosen2_text }}</text>
         </view>
+        <view class="arrange-center-flex-end title-font-other">
+          <text style="color: {{ item.whether_to_proof == 0 ? 'red' : 'black' }};;">是否需要画工厂稿：{{ item.whether_to_proof_text }}</text>
+        </view>
         <view class="title-font-other arrange-space-between">
           <text>Name：{{ item.name }}</text>
           <text>Code：{{ item.code }}</text>
@@ -64,12 +67,12 @@
           </view>
           <t-divider layout="vertical" />
           <view class="arrange-center title-font-other">
-            <text class="title-font-main">是否需要工厂稿：</text>
+            <text class="title-font-main">是否需要画工厂稿：</text>
             <t-link size="small" content="否" data-content-status="N" hover underline theme="danger" 
-            bindtap="none" data-task-id="{{ item.id }}" />
+            bindtap="none" data-task-id="{{ item.id }}" bindtap="onFactoryDraftStatus"/>
             <t-divider layout="vertical" />
             <t-link size="small" content="是" data-content-status="Y" hover underline 
-            bindtap="none"  data-task-id="{{ item.id }}" />
+            bindtap="none"  data-task-id="{{ item.id }}" bindtap="onFactoryDraftStatus"/>
           </view>
         </view>
       </view>
