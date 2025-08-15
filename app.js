@@ -3,7 +3,6 @@ App({
     token: null,       // token
     userRole: null,     // 用户角色，比如 'kyle'
     userInfo: null,   // 当前登录用户信息
-    project_url: 'http://10.8.0.69:8080', // 项目路径
     url: 'http://10.8.0.69:8000/wbo/api/', // 后端接口路径
     reqUrl: 'https://xcx.1bizmail.com:8153', // 后端接口路径
     pictureUrl: 'http://10.8.0.69:8000/wbo/upload_task_image/', // 上传工厂稿
