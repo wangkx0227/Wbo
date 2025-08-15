@@ -103,7 +103,7 @@ Page({
     } else if (userRole === "d") {
       this.setData({
         tabBarShow: true, userTabs: [
-          { value: 'primary', label: "AI稿修改" },
+          { value: 'primary', label: "图稿修改" },
           { value: 'factory', label: '工厂稿上传' },
           { value: 'ultimate', label: '样品图审查' }
         ]

@@ -21,15 +21,16 @@
     <view class="wrapper">
       <view wx:for="{{Data}}" wx:key="index">
         <t-cell-group theme="card" class="t-cell-group" bindtap="onJumpArtworkDeatails" data-group-id-list="{{ item.line_plan_list }}">
-          <t-cell hover arrow>
-            <t-badge count="{{ item.to_confirmed }}" slot="note" shape="square" />
+          <t-cell hover>
+            <t-badge count="{{ item.to_confirmed }}" slot="note" shape="ribbon"  />
+            <t-tag variant="outline" slot="note" shape="mark" size="medium" wx:if="{{tabBarShow}}" style="position: absolute;right: 25rpx;" theme="{{tabBarValue === 'primary' ? 'primary' : 'success'}}"> 阶段：{{ tabBarTabLabel }} </t-tag>
             <view slot="title">
               <view class="arrange-space-between">
                 <view>
                   <text class="title-main">LP名称：</text>
                   <text class="title-other">{{ item.name }}</text>
                 </view>
-                <t-tag variant="light" size="small" wx:if="{{tabBarShow}}" style="position: absolute;right: 130rpx;"> 阶段：{{ tabBarTabLabel }} </t-tag>
+                
               </view>
               <view>
                 <text class="title-main">主导人：</text>
@@ -40,8 +41,8 @@
                 <text>创建时间：{{ item.start_date }}</text>
               </view>
               <!-- 只有kyle导出ppt或者第二轮标记导出附件 -->
-              <view style="position:absolute;right: 50rpx;bottom: 38rpx;" wx:if="{{userRole === 'kyle' || (userRole === 'ms' && tabBarValue === 'ultimate')}}">
-                <t-link size="small" content="导出附件" underline hover catch:tap="exportAttachments" />
+              <view style="position:absolute;right: 58rpx;bottom: 38rpx;" wx:if="{{userRole === 'kyle' || (userRole === 'ms' && tabBarValue === 'ultimate')}}">
+                <t-link  prefixIcon="folder-export" size="small" content="导出附件" underline hover catch:tap="exportAttachments"  theme="default"/>
               </view>
             </view>
           </t-cell>
