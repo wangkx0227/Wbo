@@ -185,11 +185,12 @@ Page({
         wx.navigateTo({
           url: `/pages/designer/designer_artwork_detail/designer_artwork_detail?groupIdList=${JSON.stringify(groupIdList)}`,
         });
-      } else {
-        wx.navigateTo({
-          url: `/pages/designer/designer_review_detail/designer_review_detail?groupId=${groupId}`
-        });
       }
+      //  else {
+      //   wx.navigateTo({
+      //     url: `/pages/designer/designer_review_detail/designer_review_detail?groupId=${groupId}`
+      //   });
+      // }
 
     } else if (userRole === "fma") { // fmr主管分配fmr图稿
       wx.navigateTo({
@@ -261,7 +262,7 @@ Page({
     const value = e.detail.value;// 值
     const current = that.data.userTabs.find(item => item.value === value); // 动态显示tab
     // 如果fmr点击的时样品上传，进行跳转
-    if (current.value === "ultimate" && userRole === "fmr") {
+    if (current.value === "ultimate" && userRole === "fmr" || userRole === "d") {
       wx.navigateTo({
         url: `/pages/factory_login_page/wbo-list/wbo-list` // 样品图上传，使用原来项目
       });

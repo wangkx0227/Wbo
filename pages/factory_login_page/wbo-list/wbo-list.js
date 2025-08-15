@@ -133,8 +133,6 @@ Page({
     });
   },
 
-
-
   previewImage(e) {
     const index = e.currentTarget.dataset.index;
     const url = e.currentTarget.dataset.url;
