@@ -296,5 +296,5 @@ module.exports = {
   UpdateData,
   readIdStructure,
   checkLogin,
-  updateTimeLine
+  updateTimeLine,
 }

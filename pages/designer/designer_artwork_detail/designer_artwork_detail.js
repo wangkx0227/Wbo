@@ -1,11 +1,5 @@
-const app = getApp(); // 用户信息
+const app = getApp();
 const utils = require('../../../utils/util')
-const swiperImages = [
-  'https://xcx.1bizmail.com:8153/static/images/wpb_images/D51_Resin_Ornament_CS25-LYD-095_Ur7N7rc.jpg', // 横版
-  // 物品类
-  'https://xcx.1bizmail.com:8153/static/images/wpb_images/D51_Resin_Ornament_CS25-HHR-129_JkE4FgU.jpg', // 长竖版
-];
-
 Page({
   data: {
     Data: [], // 页面渲染数据存储列表
@@ -28,34 +22,34 @@ Page({
     dropdownArtwork: {
       value: 'all',
       options: [{
-          value: 'all',
-          label: '全部图稿',
-        },
-        {
-          value: 'NAQ',
-          label: '已上传打样图稿',
-        },
-        {
-          value: 'NAQ',
-          label: '未上传打样图稿',
-        },
+        value: 'all',
+        label: '全部图稿',
+      },
+      {
+        value: 'NAQ',
+        label: '已上传打样图稿',
+      },
+      {
+        value: 'NAQ',
+        label: '未上传打样图稿',
+      },
       ],
     },
     // 筛选框变量建议
     dropdownAssess: {
       value: 'all',
       options: [{
-          value: 'all',
-          label: '全部反馈建议',
-        },
-        {
-          value: 'discard',
-          label: '无反馈建议',
-        },
-        {
-          value: 'reserve',
-          label: '有反馈建议',
-        },
+        value: 'all',
+        label: '全部反馈建议',
+      },
+      {
+        value: 'discard',
+        label: '无反馈建议',
+      },
+      {
+        value: 'reserve',
+        label: '有反馈建议',
+      },
       ],
     },
 
@@ -231,7 +225,7 @@ Page({
     }, 500)
   },
   // 空方法，避免抽屉的滚动
-  onDummyTouchMove() {},
+  onDummyTouchMove() { },
   // 页面上拉刷新 - 用于页面重置
   onPullDownRefresh() {
     if (this.data.isLoadingReachMore) return; // 如果正在加载更多，则禁止下拉刷新
@@ -264,7 +258,7 @@ Page({
     this.setData({
       popupFactoryArtworkVisible: true,
       task_id: taskId,
-      timeline_id:timelineId
+      timeline_id: timelineId
     });
   },
   // 关闭-上传工厂打样稿
@@ -307,30 +301,62 @@ Page({
       imageFileList,
     });
   },
-  // 提交上传数据
+  // 提交上传的图稿，一次一张
   onSubmitFactoryArtwork(e) {
     const that = this;
+    const pictureUrl = app.globalData.pictureUrl; // 请求后端接口
     const task_id = that.data.task_id;
     const timeline_id = that.data.timeline_id;
-    console.log(task_id,timeline_id,"-未完成");
-    let data = {
-      "type": "update_timeline",
-      "timeLine_id": "12588",
-      "name_str": "管理员",
-      "username": "admin"
+    const imageFileList = that.data.imageFileList;
+    if (imageFileList.length === 0) {
+      utils.showToast(that, "选择图片后上传", "error");
+      return;
     }
-    this.setData({
-      popupFactoryArtworkVisible: false,
+    wx.uploadFile({
+      url: pictureUrl,
+      filePath: imageFileList[0].url, // 临时文件路径
+      name: 'file',       // 与接口的 file 字段一致
+      formData: {
+        task_id: task_id   // 整数 ID
+      },
+      success(res) {
+        try {
+          const data = JSON.parse(res.data);
+          if (data.code === 200) {
+            const updatedData = that.data.Data.map(item => {
+              if (item.timeline_id === timeline_id) {
+                return {
+                  ...item,
+                  picture_list: [...item.picture_list,  imageFileList[0].url ]
+                };
+              }
+              return item;
+            })
+            that.setData({
+              Data: updatedData
+            });
+            that.setData({
+              popupFactoryArtworkVisible: false,
+            });
+            utils.showToast(that, "上传成功");
+          } else {
+            utils.showToast(that, "上传失败", "error");
+          }
+        } catch (e) {
+          console.log(e);
+          utils.showToast(that, "返回数据解析失败", "error");
+        }
+      },
+      fail(err) {
+        utils.showToast(that, "接口调用失败", "error");
+      }
     });
-    utils.showToast(that, "上传工厂稿成功");
     setTimeout(() => {
-      this.setData({
+      that.setData({
         imageFileList: []
       })
     }, 500)
   },
-
-
 
   // 下拉菜单-图稿
   onArtworkChange(e) {
