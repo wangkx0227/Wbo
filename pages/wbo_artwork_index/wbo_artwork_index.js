@@ -28,23 +28,6 @@ Page({
           value: 'all',
           label: '全部',
         },
-        {
-          value: 'HL',
-          label: 'HL',
-        },
-        {
-          value: 'D51',
-          label: 'TG-D51',
-        },
-        {
-          value: 'D240',
-          label: 'TG-D240',
-        },
-
-        {
-          value: 'D234',
-          label: 'TG-D240',
-        },
       ],
     },
     // 筛选框变量-2
@@ -272,7 +255,6 @@ Page({
       Data: that.data.Data.concat(pageData),
       currentIndex: that.data.currentIndex + pageData.length // 记录下标索引
     });
-    console.log(pageData);
     if (that.data.currentIndex === that.data.allData.length) {
       that.setData({
         noMoreData: true
