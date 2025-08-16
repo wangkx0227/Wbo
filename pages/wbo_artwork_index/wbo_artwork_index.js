@@ -324,34 +324,32 @@ Page({
   },
   // 导出附件
   exportAttachments(e) {
-    // const that = this;
-    // const fileUrl = app.globalData.fileUrl;
-    // wx.request({
-    //   url: fileUrl, // 请求地址
-    //   method: 'POST',
-    //   data: {
-    //     name: "11",
-    //     url: 'https://xcx.1bizmail.com:8153/static/images/wpb_images/D51_Resin_Ornament_CS25-HHR-129_JkE4FgU.jpg'
-    //   },
-    //   header: {
-    //     'content-type': 'application/json' // 根据后端要求设置
-    //   },
-    //   success(res) {
-    //     if (res.statusCode === 200) {
-    //       const message = "导出成功,请稍等"
-    //       utils.showToast(that, message);
-    //     } else {
-    //       const theme = "error"
-    //       const message = "导出失败"
-    //       utils.showToast(that, message, theme);
-    //     }
-    //   },
-    //   fail(err) {
-    //     const theme = "error"
-    //     const message = "导出失败"
-    //     utils.showToast(that, message, theme);
-    //   }
-    // });
+    const that = this;
+    const fileUrl = app.globalData.fileUrl;
+    wx.request({
+      url: fileUrl, // 请求地址
+      method: 'POST',
+      data: {
+        username: "11",
+        url: [
+          'https://xcx.1bizmail.com:8153/static/images/wpb_images/D51_Resin_Ornament_CS25-HHR-129_JkE4FgU.jpg',
+          'http://10.8.0.69:8080/board-assets/lps-203/slide_09117178-496e-4d0e-81c4-9e367c4c4274_image.jpg'
+        ]
+      },
+      header: {
+        'content-type': 'application/json' // 根据后端要求设置
+      },
+      success(res) {
+        if (res.statusCode === 200) {
+          utils.showToast(that, "请查看微信通知");
+        } else {
+          utils.showToast(that, "导出失败", "error");
+        }
+      },
+      fail(err) {
+        utils.showToast(that, "网络错误", "error");
+      }
+    });
   },
 /* 先不做 */
   // 下拉菜单-模板
