@@ -123,7 +123,7 @@ Page({
     return arrangeData
   },
   // 数据分页显示处理
-  dataPage(mode) {
+  dataRequest(mode) {
     const that = this;
     utils.LoadDataList({
       page: this,
@@ -158,8 +158,7 @@ Page({
   // 生命周期函数
   onLoad() {
     this.loadUserRole(); // 需要根据不同角色加载数据
-    this.dataPage("init"); // 分页处理
-
+    this.dataRequest("init"); // 分页处理
   },
   // 跳转到详情页面
   onJumpArtworkDeatails(e) {
@@ -167,16 +166,17 @@ Page({
     // 需要3类人进行跳转 Kyle Shelley FMR 进行跳转
     const userRole = that.data.userRole;
     const tabBarValue = that.data.tabBarValue;
-    const groupIdList = e.currentTarget.dataset.groupIdList;
+    const lineplan_id = e.currentTarget.dataset.lineplan_id;
     if (userRole === "kyle") {
       if (tabBarValue === "primary") { // kyle 初筛和终评
         wx.navigateTo({
-          url: `/pages/kyle/kyle_artowrk_primary_details/kyle_artowrk_primary_details?groupIdList=${JSON.stringify(groupIdList)}`
+          url: `/pages/kyle/kyle_artowrk_primary_details/kyle_artowrk_primary_details?lineplan_id=${lineplan_id}`
         });
       } else {
         // 多携带一个参数tabBarValue，表明当前切换的时用户负责的阶段
+        
         wx.navigateTo({
-          url: `/pages/kyle/kyle_artowrk_ultimate_details/kyle_artowrk_ultimate_details?groupIdList=${JSON.stringify(groupIdList)}&tabBarValue=${tabBarValue}`
+          url: `/pages/kyle/kyle_artowrk_ultimate_details/kyle_artowrk_ultimate_details?lineplan_id=${lineplan_id}&tabBarValue=${tabBarValue}`
         });
       }
     } else if (userRole === "shelley") { // shelley可行性

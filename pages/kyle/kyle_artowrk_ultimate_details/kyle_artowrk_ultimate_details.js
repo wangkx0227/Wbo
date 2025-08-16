@@ -1,18 +1,17 @@
 const utils = require('../../../utils/util')
 Page({
   data: {
+    lineplan_id:null, // id 只
     Data: [], // 存储数据
     tabBar: null, // 记录切换值
-    pageSize: 1, // 每次加载几个ID
+    pageSize: 6, // 每次加载几条数据
     currentIndex: 0, // 当前加载到第几个ID
-    allIdList: [], // 首页跳转后的存储的id值
-    loadedIdList: [], // 已经读取渲染到页面的ID
     skeletonLoading: true, // 骨架屏控制变量
     noMoreData: false, // 数据是否全部加载完毕
     isDownRefreshing: false, // 下拉刷新状态
     isLoadingReachMore: false, // 滚动底部加载数据
-    userName:null, // 用户名
-    userRloe:null,  // 角色名
+    userName: null, // 用户名
+    userRloe: null,  // 角色名
     // 回到顶部变量
     scrollTop: 0,
     // 时间线抽屉
@@ -151,71 +150,52 @@ Page({
     }
     return { arrangeData, taskTimeLineData }; // 返回整理的结构体
   },
-  // 请求后端接口数据处理
-  multiIdRequest(mode) {
+  // 后端请求
+  dataRequest(mode) {
     const that = this;
-    // 读取id
-    const nextIds = utils.readIdStructure(that);
-    // 判断，如果nextIds的长度小于预设pageSize的长度，就totalRequests重置，避免加载动作卡死
-    let totalRequests = that.data.pageSize;
-    if (nextIds.length !== that.data.pageSize) {
-      totalRequests = nextIds.length;
-    }
-    // 实例化请求类
-    const loader = new utils.MultiRequestLoader(that, totalRequests);
-    // 读取数据
-    let successIds = []; // 用于记录成功的 id 
-    const promises = nextIds.map(id => {
-      return loader.request({
-        data: {
-          type: "getTaskByLinePlan",
-          username: "admin",
-          "lp_id": id,
-        },
-        mode: mode,
-      }).then(res => {
-        successIds.push(id); // 用于记录成功的 id
-        return res;
-      }).catch(err => {
-        console.warn(`ID ${id} 请求失败`, err);
-        return null; // 保证 Promise.all 能跑完
-      });
-    })
-    Promise.all(promises).then(results => {
-      const allResults = results.flatMap(list => that.dataStructure(list));
-      const arrangeData = allResults.flatMap(item => item.arrangeData); // 展示数据
-      const taskTimeLineData = Object.assign(
-        {},
-        ...allResults.map(x => x.taskTimeLineData)
-      );
-      // refresh刷新时重置，其他的数据追加
+    const lineplan_id = that.data.lineplan_id;
+    utils.LoadDataList({
+      page: that,
+      data: { type: "getTaskByLinePlan", username: "admin", "lp_id": lineplan_id, },
+      mode: mode
+    }).then(list => { // list 就是data数据
+      const allResults = that.dataStructure(list);
+      const arrangeData = allResults.arrangeData; // 展示数据
+      const taskTimeLineData = allResults.taskTimeLineData; // 时间线
+      that.setData({
+        allData: arrangeData,
+        taskTimeLineData: taskTimeLineData,
+      })
+      // 数据逻辑构建
+      const pageData = utils.readPageStructure(that); // 分页数据
+      let totalRequests = that.data.pageSize;
+      if (pageData.length !== totalRequests) {
+        totalRequests = pageData.length;
+      }
+      // 针对刷线和第一次加载使用
       if (mode === 'refresh') {
         that.setData({
-          Data: arrangeData,
-          taskTimeLineData: taskTimeLineData,
+          Data: pageData,
         })
       } else {
         that.setData({
-          Data: that.data.Data.concat(arrangeData),
-          taskTimeLineData: { ...that.data.taskTimeLineData, ...taskTimeLineData }
+          Data: that.data.Data.concat(pageData),
         })
       }
       that.setData({
-        // 只记录访问成功的id
-        loadedIdList: that.data.loadedIdList.concat(successIds),
-        currentIndex: that.data.currentIndex + successIds.length
+        currentIndex: that.data.currentIndex + pageData.length // 记录下标索引
       });
-    })
+    });
   },
   onLoad(options) {
     const that = this;
     const tabBarValue = options.tabBarValue || ''; // 切换时的tab值
-    const groupIdList = JSON.parse(options.groupIdList || '[]'); // 首页跳转后的存储的id值
+    const lineplan_id = options.lineplan_id || ''; // 首页跳转后的存储的id值
     that.setData({
-      allIdList: groupIdList, // 记录全部的id数据
+      lineplan_id: lineplan_id,
       tabBar: tabBarValue, // 记录当前tab属性
     })
-    this.multiIdRequest('init');
+    that.dataRequest('init');
   },
   // 轮播图函数 - 点击轮播图 - 图片预览
   onSwiperImagesTap(e) {
@@ -237,7 +217,7 @@ Page({
       scrollTop: e.scrollTop
     });
   },
-  // 页面上拉刷新 - 用于页面重置
+  // 页面上拉刷新
   onPullDownRefresh() {
     if (this.data.isLoadingReachMore) return; // 如果正在加载更多，则禁止下拉刷新
     // 重置 currentIndex 让它从头开始访问
@@ -246,19 +226,28 @@ Page({
       noMoreData: false,
       isLoadingReachMore: false
     })
-    this.multiIdRequest('refresh');
+    this.dataRequest('refresh');
   },
-  // 页面上拉触底事件的处理函数-用于加载更多数据
+  // 页面上拉触底加载更多数据
   onReachBottom() {
+    // 下拉刷线，读取原来的加载过的数据即可
+    const that = this;
     // 如果在下拉刷新，禁止滚动加载
-    if (this.data.isDownRefreshing || this.data.noMoreData) return;
-    this.multiIdRequest('more');
-    if (this.data.currentIndex === this.data.allIdList.length) {
-      this.setData({
+    if (that.data.isDownRefreshing || that.data.noMoreData) return;
+    const pageData = utils.readPageStructure(that); // 分页数据
+    let totalRequests = that.data.pageSize;
+    if (pageData.length !== totalRequests) {
+      totalRequests = pageData.length;
+    }
+    that.setData({
+      Data: that.data.Data.concat(pageData),
+      currentIndex: that.data.currentIndex + pageData.length // 记录下标索引
+    });
+    if (that.data.currentIndex === that.data.allData.length) {
+      that.setData({
         noMoreData: true
       })
     }
-
   },
   // 修改当前图稿状态-终审
   onModifyArtworkStatus(e) {
@@ -322,7 +311,7 @@ Page({
             })
             const updatedData = that.data.Data.map(item => {
               if (item.timeline_id === timelineid) {
-                item["confirmed"] = 3;
+                item["confirmed"] = 4;
                 item["confirmed_text"] = "舍弃";
               }
               return item;
