@@ -236,7 +236,7 @@ Page({
       noMoreData: false,
       isLoadingReachMore: false
     })
-    this.dataPage('refresh');
+    this.dataRequest('refresh');
   },
   // 页面上拉触底加载更多数据
   onReachBottom() {

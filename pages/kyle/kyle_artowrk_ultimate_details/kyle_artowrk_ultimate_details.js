@@ -140,11 +140,12 @@ Page({
         data_dict["picture_list"] = picture_list;
         data_dict["timeline_id"] = timeline_id;
         data_dict["timeline_type"] = timeline_type; // 图稿类型
+        // 可行性分析，shelley 选3直接跳过
+        if (confirmed2 === 3) {
+          continue
+        }
       }
-      // 可行性分析，shelley 选3直接跳过
-      if (confirmed2 === 3) {
-        continue
-      }
+
       taskTimeLineData[`${task_id}`] = timeLineData; // 时间线数据
       arrangeData.push(data_dict);
     }

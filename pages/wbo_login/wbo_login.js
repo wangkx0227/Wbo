@@ -4,7 +4,7 @@ Page({
     isLoggingIn: false,
     buttonText: '微信一键登录',
     nickName: '',
-    loginMode: 'examine', // 'wechat' or 'account'
+    loginMode: 'wechat', // 'wechat' or 'account'
     account: 'GS', // 工厂登录
     password: 'aZ7gL3pN', // 密码
     userInfo: {
@@ -48,7 +48,6 @@ Page({
     redirect: "", // 跳转参数，如果携带，那么需要在登陆后跳转指定路径
 
   },
-
   onLoad(options) {
     const app = getApp()
     this.setData({
@@ -64,32 +63,26 @@ Page({
     }
 
   },
-
   switchToWechat() {
     this.setData({
       loginMode: 'wechat'
     });
   },
-
   switchToAccount() {
     this.setData({
       loginMode: 'account'
     });
   },
-
-
   inputNickName(e) {
     this.setData({
       nickName: e.detail.value
     })
   },
-
   onAccountInput(e) {
     this.setData({
       account: e.detail.value
     });
   },
-
   onPasswordInput(e) {
     this.setData({
       password: e.detail.value
@@ -194,18 +187,19 @@ Page({
       }
     });
   },
+   // 审核员登录-选中
+   onChange(e) {
+    this.setData({
+      'product.value': e.detail.value,
+    });
+  },
   // 审核员登录-测试
   switchToExamine() {
     this.setData({
       loginMode: 'examine'
     });
   },
-  // 审核员登录-测试使用
-  onChange(e) {
-    this.setData({
-      'product.value': e.detail.value,
-    });
-  },
+ 
   onExamineLogin(e) {
     const productValue = this.data.product.value;
     if (productValue === "all") {
@@ -214,13 +208,13 @@ Page({
         icon: 'error'
       });
     } else {
-      console.log(productValue);
       wx.setStorageSync('userRole', productValue); // 异步存储消息
       wx.showToast({
         title: '登录成功',
         icon: 'success'
       });
       const redirect = this.data.redirect;
+      
       if (redirect) {
         const decodedPath = decodeURIComponent(redirect); // 解码后的路径
         setTimeout(() => {

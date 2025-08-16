@@ -1,11 +1,19 @@
-const app = getApp();
 const utils = require('../../../utils/util')
 Page({
   data: {
     // 悬浮胶囊标签栏变量
     tabBarValue: 'todo',
-    // 骨架控制变量
-    skeletonLoading: true,
+    tabBarTabLabel: '最终审查',
+    Data: [], // 页面展示数据
+    allData: [],// 全部的数据
+    pageSize: 6, // 每次加载多少条数据
+    currentIndex: 0, // 加载到数据的第几个索引
+    userTabs: [], // 胶囊框的数据
+    tabBarShow: false, // 显示胶囊标签和tab
+    userRole: null, // 角色
+    userName: null, // 名称
+    scrollTop: 0, // 回到顶部变量
+
     // 筛选框变量-1
     dropdownTemplate: {
       value: 'all',
@@ -14,10 +22,6 @@ Page({
           value: 'all',
           label: '全部',
         },
-        {
-          value: 'HL',
-          label: 'HL',
-        }
       ],
     },
     // 筛选框变量-2
@@ -34,44 +38,6 @@ Page({
         },
       ],
     },
-    // 搜索变量
-    searchValue: '',
-    // 下拉刷新与滚动底部刷新使用变量
-    isDownRefreshing: false, // 下拉刷新状态
-    isLoadingReachMore: false, // 滚动底部加载数据
-    noMoreData: false,    // 数据是否全部加载完毕
-    // 回到顶部变量
-    scrollTop: 0,
-    // 假数据
-    dataAllList: [
-      {
-        id: 1,
-        to_confirmed: 15,
-        client_name: "TG D84",
-        stage: "待处理",
-        program: "The Outfitters",
-        Year: 2025,
-        create_time: "2025-07-21",
-      },
-      {
-        id: 2,
-        to_confirmed: 20,
-        client_name: "TG D240",
-        stage: "待处理",
-        program: "Outfitters_001",
-        Year: 2025,
-        create_time: "2025-07-25",
-      },
-      {
-        id: 3,
-        to_confirmed: 5,
-        client_name: "TG D51",
-        stage: "待处理",
-        program: "Outfitters_002",
-        Year: 2025,
-        create_time: "2025-08-25",
-      },
-    ]
   },
   // 滚动-回到顶部
   onToTop(e) {
@@ -94,10 +60,82 @@ Page({
       imageUrl: '/assets/images/log.jpg'     // 自定义分享封面
     };
   },
+  // 首页数据结构处理
+  dataStructure(dataList) {
+    let arrangeData = [];
+    dataList.forEach(item => {
+      const development_id = item.id; // 开发案id
+      const development_name = item.name; // 开发案名称
+      const development_director = item.director; // 主导人
+      const development_start_data = item.start_date; // 开发案开始时间
+      // 对内部的line_plan_list变量进行循环
+      item.line_plan_list.forEach((line_plan) => {
+        const lp_data = {
+          development_id: development_id, // 开发案id
+          line_plan_id: line_plan.id, // id
+          line_plan_title: `${development_name}-${line_plan.title}`, // 名称
+          line_plan_client: line_plan.client || "未记录", // 客户
+          line_plan_year: line_plan.year || "未记录", // 年
+          line_plan_season: line_plan.season || "未记录", // 风格
+          line_plan_is_new_development: line_plan.is_new_development, // 是否结案
+          development_director: development_director,// 主导人
+          development_start_data: development_start_data, //开发案时间
+        }
+        if (lp_data['line_plan_is_new_development']) {
+          lp_data['is_new_development_text'] = "完结"
+        } else {
+          lp_data['is_new_development_text'] = "未完结"
+        }
+        arrangeData.push(lp_data)
+      })
+    })
+    return arrangeData
+  },
+  // 数据分页显示处理
+  dataRequest(mode) {
+    const that = this;
+    utils.LoadDataList({
+      page: this,
+      data: { type: "getProjectList", username: "admin" },
+      mode: mode
+    }).then(list => { // list 就是data数据
+      const arrangeData = that.dataStructure(list);
+      that.setData({
+        allData: arrangeData
+      })
+      // 数据逻辑构建
+      const pageData = utils.readPageStructure(that); // 分页数据
+      let totalRequests = that.data.pageSize;
+      if (pageData.length !== totalRequests) {
+        totalRequests = pageData.length;
+      }
+      // 针对刷线和第一次加载使用
+      if (mode === 'refresh') {
+        that.setData({
+          Data: pageData,
+        })
+      } else {
+        that.setData({
+          Data: that.data.Data.concat(pageData),
+        })
+      }
+      that.setData({
+        currentIndex: that.data.currentIndex + pageData.length // 记录下标索引
+      });
+    });
+  },
   // 生命周期函数--监听页面加载 
   onLoad() {
     const that = this;
     const userRole = wx.getStorageSync('userRole');
+    let tabBarTabLabel = "最终审查"
+    if (userRole === "shelley") {
+      tabBarTabLabel = "可行性分析"
+    }
+    that.setData({
+      userRole: userRole,
+      tabBarTabLabel: tabBarTabLabel
+    });
     if (!userRole) {
       const theme = 'error'
       const message = "当前未登录状态"
@@ -116,14 +154,84 @@ Page({
       }, 500)
       return
     }
-    wx.showLoading({ title: '正在加载...', });
-    this.setData({ userRole: userRole });
-    setTimeout(() => {
-      wx.hideLoading();
-      this.setData({
-        skeletonLoading: false,
+    this.dataRequest("init"); // 分页处理
+  },
+  // 页面下拉刷新
+  onPullDownRefresh() {
+    if (this.data.isLoadingReachMore) return; // 如果正在加载更多，则禁止下拉刷新
+    // 重置 currentIndex 让它从头开始访问
+    this.setData({
+      currentIndex: 0,
+      noMoreData: false,
+      isLoadingReachMore: false
+    })
+    this.dataRequest('refresh');
+  },
+  // 页面上拉触底加载更多数据
+  onReachBottom() {
+    // 下拉刷线，读取原来的加载过的数据即可
+    const that = this;
+    // 如果在下拉刷新，禁止滚动加载
+    if (that.data.isDownRefreshing || that.data.noMoreData) return;
+    const pageData = utils.readPageStructure(that); // 分页数据
+    let totalRequests = that.data.pageSize;
+    if (pageData.length !== totalRequests) {
+      totalRequests = pageData.length;
+    }
+    that.setData({
+      Data: that.data.Data.concat(pageData),
+      currentIndex: that.data.currentIndex + pageData.length // 记录下标索引
+    });
+    if (that.data.currentIndex === that.data.allData.length) {
+      that.setData({
+        noMoreData: true
       })
-    }, 2000)
+    }
+  },
+  // 胶囊悬浮框切换函数
+  onTabBarChange(e) {
+    const that = this;
+    // 对 胶囊悬浮框 进行复制，开启骨架
+    const tabBarValue = e.detail.value;
+    const userRole = that.data.userRole;
+    let tabBarTabLabel = "最新";
+    if (tabBarValue === "todo" && userRole === "shelley") {
+      tabBarTabLabel = "可行性分析";
+    }else if(tabBarValue === "todo" && userRole === "kyle"){
+      tabBarTabLabel = "最终审查";
+    }
+    that.setData({
+      tabBarValue: e.detail.value,
+      tabBarTabLabel: tabBarTabLabel,
+    });
+  },
+  // 跳转到详情页面
+  onJumpArtworkDeatails(e) {
+    const that = this;
+    const groupId = e.currentTarget.dataset.groupId;
+    const userRole = that.data.userRole;
+    const tabBarValue = that.data.tabBarValue;
+    const lineplan_id = e.currentTarget.dataset.lineplan_id;
+    // 需要3类人进行跳转 Kyle Shelley FMR 进行跳转
+    if (tabBarValue === "todo") {
+      if (userRole === "kyle") {
+        wx.navigateTo({ url: `/pages/kyle/kyle_artowrk_ultimate_details/kyle_artowrk_ultimate_details?lineplan_id=${lineplan_id}` });
+      } else if (userRole === "shelley") {
+        wx.navigateTo({ url: `/pages/shelley/shelley_artwork_detail/shelley_artwork_detail?lineplan_id=${lineplan_id}` });
+      }
+    } else {
+      wx.navigateTo({ url: `/pages/todo/todo_detail/todo_detail?groupId=${groupId}`, });
+    }
+  },
+
+
+
+
+  // 搜索
+  onSearchConfirm() {
+    const keyword = e.detail.value;
+    console.log("用户点击搜索，输入内容为：", keyword);
+    console.log(this.data.searchValue);
   },
   // 下拉菜单-模板
   onTemplateChange(e) {
@@ -137,102 +245,4 @@ Page({
       'dropdownSorter.value': e.detail.value,
     });
   },
-  // 搜索
-  onSearchConfirm() {
-    const keyword = e.detail.value;
-    console.log("用户点击搜索，输入内容为：", keyword);
-    console.log(this.data.searchValue);
-  },
-  // 跳转到详情页面
-  onJumpArtworkDeatails(e) {
-    const that = this;
-    const groupId = e.currentTarget.dataset.groupId;
-    const userRole = that.data.userRole;
-    const tabBarValue = that.data.tabBarValue;
-    // 需要3类人进行跳转 Kyle Shelley FMR 进行跳转
-    if (tabBarValue === "todo") {
-      if (userRole === "kyle") {
-        wx.navigateTo({ url: `/pages/kyle/kyle_artowrk_ultimate_details/kyle_artowrk_ultimate_details?groupId=${groupId}` });
-      } else if (userRole === "shelley") {
-        wx.navigateTo({ url: `/pages/shelley/shelley_artwork_detail/shelley_artwork_detail?groupId=${groupId}` });
-      } else if (userRole === "fmr") {
-        wx.navigateTo({ url: `/pages/fmr/fmr_artwork_detail/fmr_artwork_detail?groupId=${groupId}`, });
-      }
-    }else{
-      wx.navigateTo({ url: `/pages/todo/todo_detail/todo_detail?groupId=${groupId}`, });
-    }
-
-  },
-  // 页面下拉刷新 - 用于页面重置
-  onPullDownRefresh() {
-    console.log("下拉刷新触发");
-    // 如果正在加载更多，则禁止下拉刷新
-    if (this.data.isLoadingReachMore) return;
-    this.setData({ isDownRefreshing: true });
-    // 模拟数据加载
-    setTimeout(() => {
-      wx.stopPullDownRefresh(); // 必须手动停止
-      this.setData({
-        isDownRefreshing: false, // 修改状态
-      });
-    }, 1500);
-  },
-  // 页面上拉触底事件的处理函数-用于加载更多数据
-  onReachBottom() {
-    // 如果在下拉刷新，禁止滚动加载
-    console.log("上拉触底触发");
-    if (this.data.isDownRefreshing || this.data.noMoreData) return;
-    this.setData({ isLoadingReachMore: true });
-    const oldList = this.data.dataAllList;
-    // 假数据
-    const newList = []
-    setTimeout(() => {
-      wx.stopPullDownRefresh(); // 必须手动停止
-      this.setData({
-        dataAllList: oldList.concat(newList),
-        isLoadingReachMore: false, // 修改状态
-      });
-    }, 1500);
-  },
-  // 胶囊悬浮框切换函数
-  onTabBarChange(e) {
-    let data = [];
-    const that = this;
-    // 对 胶囊悬浮框 进行复制，开启骨架
-    wx.showLoading({ title: '正在加载...' });
-    const tabBarValue = e.detail.value;
-    that.setData({
-      tabBarValue: e.detail.value,
-      skeletonLoading: true,
-    });
-    const randomNum = Math.floor(Math.random() * 3) + 1;
-    for (let i = 0; i < randomNum; i++) {
-      data.push({
-        id: i,
-        to_confirmed: i + 5,
-        client_name: `TG D51-${i}`,
-        stage: "待处理",
-        program: `Outfitters_${i}`,
-        Year: 2025,
-        create_time: `2025-08-2${i}`,
-      });
-    }
-    if (tabBarValue === "pending_processing") {
-      data.forEach((item) => {
-        item["stage"] = "待处理"
-      })
-    } else {
-      data.forEach((item) => {
-        item["stage"] = "最新"
-      })
-    }
-
-    setTimeout(() => {
-      wx.hideLoading();
-      that.setData({
-        skeletonLoading: false,
-        dataAllList: data,
-      })
-    }, 2000)
-  }
 })

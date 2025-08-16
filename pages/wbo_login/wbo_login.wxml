@@ -1,6 +1,6 @@
 <view class="login-container">
   <view class="switch-tabs">
-    <view class="tab {{loginMode === 'wechat' ? 'active' : ''}}" bindtap="switchToWechat">FMR登录</view>
+    <view class="tab {{loginMode === 'wechat' ? 'active' : ''}}" bindtap="switchToWechat">用户登录</view>
     <view class="tab {{loginMode === 'account' ? 'active' : ''}}" bindtap="switchToAccount">工厂登录</view>
     <view class="tab {{loginMode === 'examine' ? 'active' : ''}}" bindtap="switchToExamine">测试登录</view>
   </view>
