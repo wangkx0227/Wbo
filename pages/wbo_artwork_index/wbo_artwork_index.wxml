@@ -55,8 +55,8 @@
                 </view>
               </view>
               <!-- 只有kyle导出ppt或者第二轮标记导出附件 -->
-              <view style="position:absolute;right: 40rpx;bottom: 38rpx;" wx:if="{{userRole === 'kyle' || (userRole === 'ms' && tabBarValue === 'ultimate')}}">
-                <t-link prefixIcon="folder-export" size="small" content="导出附件" underline hover catch:tap="exportAttachments" theme="default" />
+              <view style="position:absolute;right: 40rpx;bottom: 38rpx;" wx:if="{{userRole === 'kyle' || (userRole === 'chosen_draft' && tabBarValue === 'ultimate')}}">
+                <t-link prefixIcon="folder-export" size="small" content="导出附件" underline hover catch:tap="exportAttachments" theme="default" data-lineplan_id="{{ item.line_plan_id }}"/>
               </view>
             </view>
           </t-cell>

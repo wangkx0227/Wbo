@@ -183,8 +183,14 @@ Page({
   },
   // 生命周期函数
   onLoad() {
+    const userRole = wx.getStorageSync('userRole');
+    const userName = wx.getStorageSync('userName');
     this.loadUserRole(); // 需要根据不同角色加载数据
     this.dataRequest("init"); // 分页处理
+    this.setData({
+      userRole:userRole,
+      userName:userName
+    })
   },
   // 跳转到详情页面
   onJumpArtworkDeatails(e) {
@@ -324,23 +330,51 @@ Page({
   // 导出附件
   exportAttachments(e) {
     const that = this;
+    const url = app.globalData.url;
     const fileUrl = app.globalData.fileUrl;
+    const userName = that.data.userName;
+    const lineplan_id = e.currentTarget.dataset.lineplan_id; // 注意属性名会自动转驼峰
     wx.request({
-      url: fileUrl, // 请求地址
+      url: url, // 请求地址
       method: 'POST',
       data: {
-        username: "11",
-        url: [
-          'https://xcx.1bizmail.com:8153/static/images/wpb_images/D51_Resin_Ornament_CS25-HHR-129_JkE4FgU.jpg',
-          'http://10.8.0.69:8080/board-assets/lps-203/slide_09117178-496e-4d0e-81c4-9e367c4c4274_image.jpg'
-        ]
+        "type": "exportPPT",
+        "lp_ids": [
+          lineplan_id,
+        ],
+        "username": userName
       },
       header: {
         'content-type': 'application/json' // 根据后端要求设置
       },
       success(res) {
         if (res.statusCode === 200) {
-          utils.showToast(that, "请查看微信通知");
+          const full_url_list = res.data.full_url_list || [];
+          if (full_url_list.length === 0) {
+            utils.showToast(that, "无附件", "error");
+          } else {
+            wx.request({
+              url: fileUrl, // 请求地址
+              method: 'POST',
+              data: {
+                username: userName,
+                url: full_url_list
+              },
+              header: {
+                'content-type': 'application/json' // 根据后端要求设置
+              },
+              success(res) {
+                if (res.statusCode === 200) {
+                  utils.showToast(that, "请查看微信通知");
+                } else {
+                  utils.showToast(that, "导出失败", "error");
+                }
+              },
+              fail(err) {
+                utils.showToast(that, "网络错误", "error");
+              }
+            });
+          }
         } else {
           utils.showToast(that, "导出失败", "error");
         }
@@ -350,7 +384,7 @@ Page({
       }
     });
   },
-/* 先不做 */
+  /* 先不做 */
   // 下拉菜单-模板
   onTemplateChange(e) {
     const that = this;
