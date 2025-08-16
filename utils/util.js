@@ -212,6 +212,18 @@ function updateTimeLine(page, task_id, timeline_id, comment, username) {
     [`taskTimeLineData.${task_id}`]: newArray
   })
 }
+// 条件筛选
+function filterData(data, filter, field) {
+  /*
+    data：全部数据
+    filter：筛选条件
+    value：筛选字段
+  */
+  const filteredData = data.filter(item =>
+    filter === 'all' ? true : item[field] === filter
+  );
+  return filteredData;
+}
 // 登录
 function checkLogin() {
   const userInfo = wx.getStorageSync('userInfo')
@@ -233,5 +245,6 @@ module.exports = {
   checkLogin,
   updateTimeLine,
   onSwiperImagesTap,
-  readPageStructure
+  readPageStructure,
+  filterData
 }

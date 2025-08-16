@@ -30,10 +30,14 @@
                 <text class="title-font-main">名称：</text>
                 <text class="title-font-other">{{ item.line_plan_title }}</text>
               </view>
+              <view class="arrange-center">
+                <text class="title-font-main">主导人：</text>
+                <text class="title-font-other">{{ item.development_director }}</text>
+              </view>
               <view class="arrange-space-between">
                 <view class="arrange-center">
-                  <text class="title-font-main">主导人：</text>
-                  <text class="title-font-other">{{ item.development_director }}</text>
+                  <text class="title-font-main">客人：</text>
+                  <text class="title-font-other">{{ item.line_plan_client }}</text>
                 </view>
                 <view class="arrange-center">
                   <text class="title-font-main">风格：</text>
@@ -82,4 +86,4 @@
   </t-tab-bar>
 </view>
 <!-- 回到顶部 -->
-<t-back-top theme="half-round" text="" scroll-top="{{scrollTop}}" bind:to-top="onToTop" style="z-index: 999;"/>
+<t-back-top theme="half-round" text="" scroll-top="{{scrollTop}}" bind:to-top="onToTop" style="z-index: 999;" />

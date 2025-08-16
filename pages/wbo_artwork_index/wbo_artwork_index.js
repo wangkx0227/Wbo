@@ -25,7 +25,7 @@ Page({
       options: [
         {
           value: 'all',
-          label: '全部',
+          label: '全部客户',
         },
       ],
     },
@@ -38,8 +38,8 @@ Page({
           label: '默认排序',
         },
         {
-          value: 'time',
-          label: '时间从高到低',
+          value: 'reverse',
+          label: '倒序',
         },
       ],
     },
@@ -95,6 +95,7 @@ Page({
   // 首页数据结构处理
   dataStructure(dataList) {
     let arrangeData = [];
+    let client_list = [];
     dataList.forEach(item => {
       const development_id = item.id; // 开发案id
       const development_name = item.name; // 开发案名称
@@ -103,7 +104,7 @@ Page({
       // 对内部的line_plan_list变量进行循环
       item.line_plan_list.forEach((line_plan) => {
         const lp_data = {
-          development_id:development_id, // 开发案id
+          development_id: development_id, // 开发案id
           line_plan_id: line_plan.id, // id
           line_plan_title: `${development_name}-${line_plan.title}`, // 名称
           line_plan_client: line_plan.client || "未记录", // 客户
@@ -118,13 +119,37 @@ Page({
         } else {
           lp_data['is_new_development_text'] = "未完结"
         }
+        client_list.push(lp_data["line_plan_client"]); // 客户列表加入
         arrangeData.push(lp_data)
       })
     })
-    return arrangeData
+    // 筛选条件加入
+    const uniqueClients = [...new Set(client_list)]; // 去重
+    const options = this.data.dropdownTemplate.options;
+    let clientsData = []; // 客户列表
+    uniqueClients.flatMap(item => {
+      clientsData.push({
+        value: item,
+        label: item
+      })
+    })
+    // 只有 筛选框的列表为1（内部默认有一条数据）才会添加
+    if (options.length === 1) {
+      this.setData({
+        "dropdownTemplate.options": this.data.dropdownTemplate.options.concat(clientsData)
+      })
+    }
+
+    return arrangeData // 全部数据
   },
   // 数据分页显示处理
   dataRequest(mode) {
+    /*
+        mode：模式
+        filter：筛选条件
+        field: 筛选数据内的key也就是字段
+        , filter = "all", field
+    */
     const that = this;
     utils.LoadDataList({
       page: this,
@@ -132,6 +157,7 @@ Page({
       mode: mode
     }).then(list => { // list 就是data数据
       const arrangeData = that.dataStructure(list);
+      // const allData = utils.filterData(arrangeData, filter, field) // 先不做
       that.setData({
         allData: arrangeData
       })
@@ -176,7 +202,7 @@ Page({
         });
       } else {
         // 多携带一个参数tabBarValue，表明当前切换的时用户负责的阶段
-        
+
         wx.navigateTo({
           url: `/pages/kyle/kyle_artowrk_ultimate_details/kyle_artowrk_ultimate_details?lineplan_id=${lineplan_id}&tabBarValue=${tabBarValue}`
         });
@@ -327,20 +353,15 @@ Page({
     //   }
     // });
   },
-
-
-
-
-
-
-
-
-
-
+/* 先不做 */
   // 下拉菜单-模板
   onTemplateChange(e) {
-    this.setData({
-      'dropdownTemplate.value': e.detail.value,
+    const that = this;
+    const value = e.detail.value;
+    const field = 'line_plan_client';
+    // that.dataRequest("refresh", value, field);
+    that.setData({
+      'dropdownTemplate.value': value,
     });
   },
   // 下拉菜单-排序
