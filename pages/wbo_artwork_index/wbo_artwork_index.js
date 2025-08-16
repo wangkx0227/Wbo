@@ -210,10 +210,6 @@ Page({
           url: `/pages/designer/designer_artwork_detail/designer_artwork_detail?lineplan_id=${lineplan_id}`,
         });
       }
-    } else if (userRole === "fma") { // fmr主管分配fmr图稿
-      wx.navigateTo({
-        url: `/pages/fmr/fmr_manager_assignment/fmr_manager_assignment?groupIdList=${JSON.stringify(groupIdList)}`,
-      });
     }
   },
   // 回到顶部

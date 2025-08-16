@@ -6,7 +6,6 @@
     "pages/factory_login_page/wbo-detail/wbo-detail",
     "pages/wbo_artwork_index/wbo_artwork_index",
     "pages/fmr/fmr_artwork_detail/fmr_artwork_detail",
-    "pages/fmr/fmr_manager_assignment/fmr_manager_assignment",
     "pages/fmr/fmr_factory_samples/fmr_factory_samples",
     "pages/shelley/shelley_artwork_detail/shelley_artwork_detail",
     "pages/kyle/kyle_artowrk_primary_details/kyle_artowrk_primary_details",
