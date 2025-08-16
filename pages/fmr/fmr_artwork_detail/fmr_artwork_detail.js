@@ -29,18 +29,6 @@ Page({
         value: 'all',
         label: '全部图稿',
       },
-      {
-        value: 'NAQ',
-        label: '宁安琪',
-      },
-      {
-        value: 'LSL',
-        label: '黎善玲',
-      },
-      {
-        value: 'HYJ',
-        label: '韩奕君'
-      }
       ],
     },
     // 筛选框变量-评估

@@ -25,14 +25,6 @@ Page({
         value: 'all',
         label: '全部图稿',
       },
-      {
-        value: 'NAQ',
-        label: '已上传打样图稿',
-      },
-      {
-        value: 'NAQ',
-        label: '未上传打样图稿',
-      },
       ],
     },
     // 筛选框变量建议
@@ -41,14 +33,6 @@ Page({
       options: [{
         value: 'all',
         label: '全部反馈建议',
-      },
-      {
-        value: 'discard',
-        label: '无反馈建议',
-      },
-      {
-        value: 'reserve',
-        label: '有反馈建议',
       },
       ],
     },

@@ -27,10 +27,6 @@ Page({
         value: 'all',
         label: '全部图稿',
       },
-      {
-        value: 'NAQ',
-        label: '宁安琪',
-      }
       ],
     },
     // 筛选框变量-客户选中
