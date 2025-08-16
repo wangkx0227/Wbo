@@ -12,7 +12,9 @@ Page({
     drawings_images: [],
     factory: '暂无',
     material: '暂无',
-    fmr: '暂无'
+    fmr: '暂无',
+    userRole:null,
+
 
   },
 
@@ -41,7 +43,12 @@ Page({
   onStatusTap(e) {
     const that = this
     const { index, type, id, state } = e.currentTarget.dataset;
+    const userRole = that.data.userRole; // 可能需要修改-新增
     if (!that.data.userInfo.name) {
+      return
+    }
+    if( userRole === "designer"){ // 可能需要修改-新增
+      wx.showToast({ title: '只能FMR点击', icon: 'error' });
       return
     }
     wx.request({
@@ -62,12 +69,17 @@ Page({
       }
     })
   },
-  // 设计师标记
+  // 设计师标记-新增
   onDesignerStatusTap(e) {
     const that = this
     const { index, type, id, state } = e.currentTarget.dataset;
     const username = that.data.userInfo.name;
+    const userRole = that.data.userRole; // 可能需要修改-新增
     if (!username) {
+      return
+    }
+    if( userRole === "fmr"){ // 可能需要修改-新增
+      wx.showToast({ title: '只能设计师点击', icon: 'error' });
       return
     }
     wx.request({
@@ -199,12 +211,12 @@ Page({
 
   onLoad(options) {
     if (!util.checkLogin()) return;
-
+    const userRole = wx.getStorageSync('userRole'); // 新增
     // 正常流程
     // 从缓存中获取数据
     const userInfo = wx.getStorageSync('userInfo')
     userInfo.name = userInfo.fmr.name ? userInfo.fmr.name : userInfo.factory.name
-    this.setData({ userInfo })
+    this.setData({ userInfo,userRole:userRole })
 
     if (options.scene) {
       const scene = this.urlParams(options.scene)

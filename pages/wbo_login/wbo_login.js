@@ -108,7 +108,7 @@ Page({
                 // 正式版
                 that.data.userInfo.fmr = data.userinfo
                 // 存储角色名称 ethan
-                wx.setStorageSync('userRole', 'kyle'); // 角色设置 shelley kyle fmr  designer(设计师) chosen_draft（选稿）
+                wx.setStorageSync('userRole', 'designer'); // 角色设置 shelley kyle fmr  designer(设计师) chosen_draft（选稿）
                 wx.setStorageSync('userName', data.userinfo.name); // 存储名字
                 wx.setStorageSync('userInfo', that.data.userInfo); // 全部存储信息
                 wx.showToast({ title: '登录成功', icon: 'success' }); // 提示

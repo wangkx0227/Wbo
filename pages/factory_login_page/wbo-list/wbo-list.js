@@ -30,7 +30,7 @@ Page({
     })
 
     const fmr = userInfo.fmr.position.includes("FMR") ? userInfo.fmr.name : null
-
+    console.log(fmr);
     const factory = userInfo.factory.name
     this.setData({
       fmr,
