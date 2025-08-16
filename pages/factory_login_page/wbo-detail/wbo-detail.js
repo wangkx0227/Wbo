@@ -14,8 +14,6 @@ Page({
     material: '暂无',
     fmr: '暂无',
     userRole:null,
-
-
   },
 
   updateImageList(list, target, newImage) {
