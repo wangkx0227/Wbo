@@ -1,4 +1,6 @@
+const app = getApp()
 const util = require('../../../utils/util.js');
+
 Page({
   data: {
     username: '管理员',
@@ -10,14 +12,16 @@ Page({
     status: ['pending', 'accepted', 'rejected'],
     blank_images: [],
     drawings_images: [],
+    id: null,
     factory: '暂无',
     material: '暂无',
     fmr: '暂无',
-    userRole:null,
+    userRole: null,
   },
 
   updateImageList(list, target, newImage) {
     const index = list.findIndex(item => item.id === target.id);
+    const userName = this.data.userName;
     if (index !== -1) {
       // ✅ 已存在：添加到 images 数组
       list[index].images.push(newImage);
@@ -31,7 +35,8 @@ Page({
         note: '',
         create_time: target.create_time, // 你可替换为实际时间
         update_time: '',
-        created_by: this.data.userInfo.name
+        // created_by: this.data.userInfo.name
+        created_by:userName
       };
       list = [newItem, ...list];
     }
@@ -42,22 +47,26 @@ Page({
     const that = this
     const { index, type, id, state } = e.currentTarget.dataset;
     const userRole = that.data.userRole; // 可能需要修改-新增
-    if (!that.data.userInfo.name) {
-      return
-    }
-    if( userRole === "designer"){ // 可能需要修改-新增
+    const userName = that.data.userName; // 可能需要修改-新增
+
+    console.log(userName); // 有问题
+    // if (!that.data.userInfo.name) {
+    //   return
+    // }
+    if (userRole === "designer") { // 可能需要修改-新增
       wx.showToast({ title: '只能FMR点击', icon: 'error' });
       return
     }
     wx.request({
-      url: that.data.app.globalData.reqUrl + '/wbo/wpb-api/',
+      url: "http://10.8.0.69:8000/wbo/api/",
       method: "POST",
       data: {
-        "type": "updateWpbTimeline",
+        "type": "updateProofingTimeline",
         "tl_id": id,
         "state": state,
-        "state_updated_by": that.data.userInfo.name,
-        "username": "admin"
+        // "state_updated_by": that.data.userInfo.name,
+        "state_updated_by":userName,
+        "username": userName
       },
       success(res) {
         if (res.data.code === 200) {
@@ -71,24 +80,25 @@ Page({
   onDesignerStatusTap(e) {
     const that = this
     const { index, type, id, state } = e.currentTarget.dataset;
-    const username = that.data.userInfo.name;
+    // const username = that.data.userInfo.name;
     const userRole = that.data.userRole; // 可能需要修改-新增
-    if (!username) {
-      return
-    }
-    if( userRole === "fmr"){ // 可能需要修改-新增
+    const userName = 'ethan';
+    // if (!username) {
+    //   return
+    // }
+    if (userRole === "fmr") { // 可能需要修改-新增
       wx.showToast({ title: '只能设计师点击', icon: 'error' });
       return
     }
     wx.request({
-      url: that.data.app.globalData.reqUrl + '/wbo/wpb-api/',
+      url: "http://10.8.0.69:8000/wbo/api/",
       method: "POST",
       data: {
-        "type": "updateWpbTimeline",
+        "type": "updateProofingTimeline",
         "tl_id": id,
         "state2": state,
-        "state2_updated_by": username,
-        "username": "admin"
+        "state2_updated_by": userName,
+        "username": userName
       },
       success(res) {
         if (res.data.code === 200) {
@@ -99,7 +109,7 @@ Page({
               return {
                 ...item,
                 state2: Number(state),
-                state2_updated_by: username,
+                state2_updated_by: userName,
                 state2_update_time: "暂未获取"
               }
             }
@@ -113,24 +123,25 @@ Page({
     })
   },
   onChooseImage(e) {
+    const that = this;
     var type = e.currentTarget.dataset.type;
     const type_id = e.currentTarget.dataset.tp;
-    const that = this;
-    if (!that.data.userInfo.name) {
-      return
-    }
+    const userName = that.data.userName;
+    const url = app.globalData.url;
+    // if (!that.data.userInfo.name) {
+    //   return
+    // }
     wx.chooseMedia({
       count: 9,
       success: (resp) => {
-
         wx.request({
-          url: that.data.app.globalData.reqUrl + '/wbo/wpb-api/',
+          url: "http://10.8.0.69:8000/wbo/api/",
           method: "POST",
           data: {
-            "type": "createWpbTimeline",
+            "type": "createProofingTimeline",
             "task_id": that.data.id,
             "tl_type": type_id,
-            "created_by": that.data.userInfo.name,
+            "created_by": userName,
             "username": "admin"
           },
           success(res) {
@@ -139,7 +150,7 @@ Page({
               resp.tempFiles.forEach((file, idx) => {
                 const path = file.tempFilePath;
                 wx.uploadFile({
-                  url: that.data.app.globalData.reqUrl + '/wbo/upload-wpb-timeline-image/',
+                  url: 'http://10.8.0.69:8000/wbo/upload-project-proofing-timeline-image/',
                   filePath: path,
                   name: 'image',
                   method: 'POST',
@@ -206,15 +217,15 @@ Page({
     })
     return result
   },
-
   onLoad(options) {
-    if (!util.checkLogin()) return;
-    const userRole = wx.getStorageSync('userRole'); // 新增
+    // if (!util.checkLogin()) return;
+    const userName = wx.getStorageSync('userName')
+    const userRole = wx.getStorageSync('userRole')
     // 正常流程
     // 从缓存中获取数据
-    const userInfo = wx.getStorageSync('userInfo')
-    userInfo.name = userInfo.fmr.name ? userInfo.fmr.name : userInfo.factory.name
-    this.setData({ userInfo,userRole:userRole })
+    // const userInfo = wx.getStorageSync('userInfo')
+    // userInfo.name = userInfo.fmr.name ? userInfo.fmr.name : userInfo.factory.name
+    // this.setData({ userInfo,userRole:userRole })
 
     if (options.scene) {
       const scene = this.urlParams(options.scene)
@@ -222,29 +233,27 @@ Page({
     } else {
       this.setData({ project_id: options.project_id })
     }
-
-    const app = getApp()
-    this.setData({ app })
-
+    this.setData({ app, userNam: userName, userRole: userRole })
     this.getTlData()
   },
-
   // 降序排序（最新时间排最前）
   sortByCreateTimeDesc(arr) {
     return [...arr].sort((a, b) =>
       new Date(b.create_time) - new Date(a.create_time)
     );
   },
-
+  // 获取数据
   getTlData() {
     const that = this
+    const url = app.globalData.url;
+    const userName = that.data.userName;
     wx.request({
-      url: that.data.app.globalData.reqUrl + '/wbo/wpb-api/',
+      url: url,
       method: "POST",
       data: {
-        "type": "getWpbTaskByCode",
-        "code": that.data.project_id,
-        "username": "admin"
+        "type": "getProofingTaskById",
+        "task_id": that.data.project_id,
+        "username": userName
       },
       success: (res) => {
         if (res.data.code === 200) {
@@ -255,6 +264,28 @@ Page({
           if (data.drawings_images) {
             data.drawings_images = that.sortByCreateTimeDesc(data.drawings_images)
           }
+          console.log(data);
+          // let fmr = '';
+          // let factory = '';
+          // let material = '';
+          // data.material.forEach(item => {
+          //   material += `${item.name},`
+          // });
+          // data.factory.forEach(item => {
+          //   factory += `${item.name},`
+          // });
+          // data.fmr.forEach(item => {
+          //   fmr += `${item.name},`
+          // });
+          // that.setData({
+          //   fmr: fmr,
+          //   id: data.id,
+          //   code: data.code,
+          //   factory: factory,
+          //   material: material,
+          //   images_0: data.images_0,
+          //   images_1: data.images_1,
+          // })
           that.setData(data)
         } else {
           console.log('加载数据请求失败!', res)
@@ -265,30 +296,28 @@ Page({
       }
     })
   },
-
   UpdateStatus() {
     const that = this
-    if (!that.data.userInfo.name) {
-      return
-    }
+    const url = app.globalData.url;
+    // if (!that.data.userInfo.name) {
+    //   return
+    // }
     if (!that.data.proofing) {
       wx.showModal({
         title: '开始打样',
         content: '确定开始打样吗',
         complete: (res) => {
           if (res.cancel) {
-
           }
-
           if (res.confirm) {
             wx.request({
-              url: that.data.app.globalData.reqUrl + '/wbo/wpb-api/',
+              url: url,
               method: "POST",
               data: {
-                "type": "updateWpbTask",
+                "type": "updateProofingTask",
                 "task_id": that.data.id,
-                "proofing": 1,
-                "username": "admin"
+                "username": "admin",
+                "proofing": 1
               },
               success(res) {
                 if (res.data.code = 200) {

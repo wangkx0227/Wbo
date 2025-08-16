@@ -208,8 +208,8 @@ Page({
       });
     } else {
       wx.setStorageSync('userRole', productValue); // 异步存储消息
-      // wx.setStorageSync('userName', "简老师"); // 异步存储消息
-      wx.setStorageSync('userName', "管理员"); // 异步存储消息
+      // wx.setStorageSync('userName', ); // 异步存储消息
+      wx.setStorageSync('userName', "ethan"); // 异步存储消息
       wx.showToast({
         title: '登录成功',
         icon: 'success'

@@ -344,15 +344,13 @@ Page({
   // 弹窗-评论-关闭（包含提交功能）
   onCloseDialog(e) {
     const that = this;
-    const userName = that.data.userName;
+    const action = e.type; // "confirm" 或 "cancel"
     const {
       task_id,
       timeline_id,
       dialogValue,
       userName
-    } = this.data; // 输入的评论的数据
-
-    const action = e.type; // "confirm" 或 "cancel"
+    } = that.data; // 输入的评论的数据
     if (action === 'confirm') {
       if (!dialogValue) {
         const theme = "warning"

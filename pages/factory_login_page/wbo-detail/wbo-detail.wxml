@@ -7,7 +7,7 @@
       <swiper class="image-swiper" indicator-dots circular>
         <block wx:for="{{images_0}}" wx:key="index">
           <swiper-item>
-            <image class="image" src="https://xcx.1bizmail.com:8153{{item.image}}" mode="aspectFit" bindtap="onPreviewImage" data-type="images_0" data-index="{{index}}"></image>
+            <image class="image" src="http://10.8.0.69:8000/{{item.image}}" mode="aspectFit" bindtap="onPreviewImage" data-type="images_0" data-index="{{index}}"></image>
           </swiper-item>
         </block>
       </swiper>
@@ -17,7 +17,7 @@
       <swiper class="image-swiper" indicator-dots circular>
         <block wx:for="{{images_1}}" wx:key="index">
           <swiper-item>
-            <image class="image" src="https://xcx.1bizmail.com:8153{{item.image}}" mode="aspectFit" bindtap="onPreviewImage" data-type="images_1" data-index="{{index}}"></image>
+            <image class="image" src="http://10.8.0.69:8000{{item.image}}" mode="aspectFit" bindtap="onPreviewImage" data-type="images_1" data-index="{{index}}"></image>
           </swiper-item>
         </block>
       </swiper>
@@ -42,7 +42,7 @@
     <swiper class="image-swiper" indicator-dots circular>
       <block wx:for="{{item.images}}" wx:key="image_index">
         <swiper-item>
-          <image class="real-image" src="https://xcx.1bizmail.com:8153{{item.image}}" mode="aspectFit" bindtap="onPreviewImage" data-type="blank_images" data-bar="{{barIndex}}" data-index="{{index}}"></image>
+          <image class="real-image" src="http://10.8.0.69:8000{{item.image}}" mode="aspectFit" bindtap="onPreviewImage" data-type="blank_images" data-bar="{{barIndex}}" data-index="{{index}}"></image>
         </swiper-item>
       </block>
     </swiper>
@@ -75,7 +75,7 @@
     <swiper class="image-swiper" indicator-dots circular>
       <block wx:for="{{item.images}}" wx:key="image_index">
         <swiper-item>
-          <image class="real-image" src="https://xcx.1bizmail.com:8153{{item.image}}" mode="aspectFit" bindtap="onPreviewImage" data-type="drawings_images" data-bar="{{barIndex}}" data-index="{{index}}"></image>
+          <image class="real-image" src="http://10.8.0.69:8000{{item.image}}" mode="aspectFit" bindtap="onPreviewImage" data-type="drawings_images" data-bar="{{barIndex}}" data-index="{{index}}"></image>
         </swiper-item>
       </block>
     </swiper>

@@ -11,11 +11,15 @@
 <view class="detail-box" wx:for="{{selectedItem}}" wx:key="id">
   <text>图稿编号: {{item.code}}</text>
   <view class="image-box">
-    <image src="{{item.imgSrc}}" bindtap="previewImage" data-index="{{index}}" data-url="{{item.imgSrc}}" lazy-load></image>
+    <image wx:if="{{item.image_status}}" src="{{item.imgSrc}}" bindtap="previewImage" data-index="{{index}}" data-url="{{item.imgSrc}}" lazy-load></image>
+    <view wx:else>
+      <text>图片加载失败</text>
+    </view>
   </view>
+  <text class='dataTXT'>FMR: {{item.fmr}}</text>
   <text class='dataTXT'>材质: {{item.material}}</text>
   <text class='dataTXT'>工厂: {{item.factory}}</text>
-  <button bindtap="viewDetail"  data-id="{{item.code}}">查看详情</button>
+  <button bindtap="viewDetail"  data-id="{{item.id}}">查看详情</button>
 </view>
 
 <!-- 加载更多按钮 -->

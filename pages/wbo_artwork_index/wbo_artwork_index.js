@@ -188,8 +188,8 @@ Page({
     this.loadUserRole(); // 需要根据不同角色加载数据
     this.dataRequest("init"); // 分页处理
     this.setData({
-      userRole:userRole,
-      userName:userName
+      userRole: userRole,
+      userName: userName
     })
   },
   // 跳转到详情页面
@@ -298,8 +298,11 @@ Page({
     const current = that.data.userTabs.find(item => item.value === value); // 动态显示tab
     // 如果fmr点击的时样品上传，进行跳转
     if (current.value === "ultimate" && (userRole === "fmr" || userRole === "designer")) {
+      // wx.navigateTo({
+      //   url: `/pages/factory_login_page/wbo-list/wbo-list` // 样品图上传，使用原来项目
+      // });
       wx.navigateTo({
-        url: `/pages/factory_login_page/wbo-list/wbo-list` // 样品图上传，使用原来项目
+        url: `/pages/factory_login_page/index/index` // 样品图上传，使用原来项目
       });
     } else {
       that.setData({ // 设置切换值
@@ -359,6 +362,7 @@ Page({
               data: {
                 username: userName,
                 url: full_url_list
+                // url:["http://10.8.0.69:8080/board-assets/lps-203/TG%20D51_C6_XmasModernCasual%20&%20Playful_2025_TPE_HSW_285.jpg","http://10.8.0.69:8080/board-assets/lps-203/TG51_C6_XmasModernCasual%20Playful_2025%20CCM_361.jpg"],
               },
               header: {
                 'content-type': 'application/json' // 根据后端要求设置
