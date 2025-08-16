@@ -56,6 +56,7 @@ Page({
   // 数据结构处理
   dataStructure(dataList) {
     let arrangeData = [];
+    const userName = this.data.userName;
     const taskTimeLineData = {}; // 时间线数据
     const image_url = dataList.WBO_URL
     const task_list = dataList.task_list
@@ -64,7 +65,7 @@ Page({
       const fmr2 = task_list[index].fmr2; // 当前fmr的状态
       const task_id = task_list[index].id;
       // 指派的FMR不是简老师就跳过，实际需要根据当前登录FMR用户确定 需要增加一个判断当前用户
-      if (fmr !== "简老师") {
+      if (fmr !== userName) {
         continue;
       }
       let data_dict = {

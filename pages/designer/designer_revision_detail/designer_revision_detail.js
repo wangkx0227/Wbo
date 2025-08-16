@@ -45,8 +45,13 @@ Page({
     const taskTimeLineData = {}; // 时间线数据
     const image_url = dataList.WBO_URL
     const task_list = dataList.task_list
+    const userName = this.data.userName;
     for (const index in task_list) {
       const task_id = task_list[index].id;
+      const AIE_designer1 = task_list[index].AIE_designer1;
+      if (AIE_designer1 !== userName) {
+        continue;
+      }
       // 需要增加一个关于当前用户的判断，只有当前用户才可以看到自己的图稿并上传
       let data_dict = {
         id: task_id,
