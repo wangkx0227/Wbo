@@ -199,7 +199,6 @@ Page({
       loginMode: 'examine'
     });
   },
- 
   onExamineLogin(e) {
     const productValue = this.data.product.value;
     if (productValue === "all") {
