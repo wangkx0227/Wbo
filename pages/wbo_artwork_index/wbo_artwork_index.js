@@ -181,22 +181,22 @@ Page({
       }
     } else if (userRole === "shelley") { // shelley可行性
       wx.navigateTo({
-        url: `/pages/shelley/shelley_artwork_detail/shelley_artwork_detail?groupIdList=${JSON.stringify(groupIdList)}`
+        url: `/pages/shelley/shelley_artwork_detail/shelley_artwork_detail?lineplan_id=${lineplan_id}`
       });
     } else if (userRole === "fmr") { // fmr可行性与样品图上传
       if (tabBarValue === "primary") { // fmr 可行性评估与样品图上传
         wx.navigateTo({
-          url: `/pages/fmr/fmr_artwork_detail/fmr_artwork_detail?groupIdList=${JSON.stringify(groupIdList)}`,
+          url: `/pages/fmr/fmr_artwork_detail/fmr_artwork_detail?lineplan_id=${lineplan_id}`,
         });
       }
     } else if (userRole === "ms") { // 选稿阶段r1
       if (tabBarValue === "primary") { // fmr 可行性评估与样品图上传
         wx.navigateTo({
-          url: `/pages/guest_selection/guest_selection_first_round/guest_selection_first_round?groupIdList=${JSON.stringify(groupIdList)}`,
+          url: `/pages/guest_selection/guest_selection_first_round/guest_selection_first_round?lineplan_id=${lineplan_id}`,
         });
       } else {
         wx.navigateTo({
-          url: `/pages/guest_selection/guest_selection_final_round/guest_selection_final_round?groupIdList=${JSON.stringify(groupIdList)}`
+          url: `/pages/guest_selection/guest_selection_final_round/guest_selection_final_round?lineplan_id=${lineplan_id}`
         });
       }
 
