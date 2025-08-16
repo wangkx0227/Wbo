@@ -93,7 +93,7 @@
 <!-- 回到顶部 -->
 <t-back-top theme="half-round" text="顶部" scroll-top="{{scrollTop}}" bind:to-top="onToTop" />
 <!-- 添加个新的图稿按钮 -->
-<t-fab icon="add" bind:click="onOpenAddArtwork" aria-label="增加" usingCustomNavbar draggable y-bounds="{{[0, 32]}}"></t-fab>
+<t-fab icon="add" bind:click="onOpenAddLP" aria-label="增加" usingCustomNavbar draggable y-bounds="{{[0, 32]}}"></t-fab>
 <!-- 评论弹窗 -->
 <t-dialog visible="{{dialogVisible}}" title="客户反馈评论：" confirm-btn="确定" cancel-btn="取消" bind:confirm="onCloseDialog" bind:cancel="onCloseDialog">
   <view slot="content">
@@ -106,14 +106,26 @@
 <t-popup visible="{{popupAddVisible}}" placement="left">
   <view class="popup-block" style="padding: 10rpx;height: 100%;">
     <view class="popup-header">
-      <view class="popup-title" style="text-align: left;">新增图稿：</view>
+      <view class="popup-title" style="text-align: left;">新增LP：</view>
     </view>
     <view class="popup-comments">
       <view class="input-example">
-        <view class="input-example-label"> 图稿标题 <text style=" color: red;">*</text></view>
-        <t-input placeholder="请输入标题" borderless="{{true}}" class="input-example-input" />
+        <view class="input-example-label"> 标题 <text style=" color: red;">*</text></view>
+        <t-input placeholder="请输入标题" borderless="{{true}}" class="input-example-input" value="{{addLPData.title}}" data-field="title" bindchange="handleInput" />
       </view>
       <view class="input-example">
+        <view class="input-example-label"> 客户 <text style=" color: red;">*</text></view>
+        <t-input placeholder="请输入客户简称" borderless="{{true}}" class="input-example-input" value="{{addLPData.client}}" data-field="client" bindchange="handleInput"/>
+      </view>
+      <view class="input-example">
+        <view class="input-example-label"> 年份 <text style=" color: red;">*</text></view>
+        <t-input placeholder="请输入年份" borderless="{{true}}" class="input-example-input" value="{{addLPData.year}}" data-field="year" bindchange="handleInput"/>
+      </view>
+      <view class="input-example">
+        <view class="input-example-label"> 风格类型 <text style=" color: red;">*</text></view>
+        <t-input placeholder="请输入风格类型" borderless="{{true}}" class="input-example-input" value="{{addLPData.season}}" data-field="season" bindchange="handleInput"/>
+      </view>
+      <!-- <view class="input-example">
         <view class="input-example-label"> 指派设计师 <text style=" color: red;">*</text></view>
         <t-cell title="{{pickerDesignerTitile}}" arrow hover bind:click="onDesignerPicker" />
       </view>
@@ -125,7 +137,7 @@
         <view class="input-example-label"> 上传图稿 <text style=" color: red;">*</text></view>
         <t-upload mediaType="{{['image']}}" max="{{5}}" files="{{imageFileList}}" bind:add="imageAdd" bind:remove="imageRemove">
         </t-upload>
-      </view>
+      </view> -->
       <view class="button-example">
         <t-button theme="light" block t-class="group-btn" bindtap="onCloseAddDialog">关闭</t-button>
         <t-divider layout="vertical" style="height:64rpx" />

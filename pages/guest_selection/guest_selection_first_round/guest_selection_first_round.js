@@ -2,6 +2,7 @@ const utils = require('../../../utils/util')
 Page({
   data: {
     lineplan_id: null, // 存储的lp id值
+    development_id: null, // 开发案id
     Data: [], // 页面渲染数据存储列表
     allData: [], // 全部的数据
     pageSize: 6, // 每次加载几个
@@ -20,6 +21,17 @@ Page({
     dialogId: null, // 当前点击的id
     userName: null, // 用户名
     userRloe: null,  // 角色名
+    addLPData: {
+      project_id: null,
+      type: "addLp",
+      lp_type: 0,
+      title: null,
+      client: null,
+      year: null,
+      season: null,
+      is_new_development: 1,
+      username: "管理员",
+    }, // 新增lp
     // 筛选框变量-模板
     dropdownArtwork: {
       value: 'all',
@@ -203,8 +215,10 @@ Page({
   onLoad(options) {
     const that = this;
     const lineplan_id = options.lineplan_id || ''; // 首页跳转后的存储的id值
+    const development_id = options.development_id || ''; // 开发案id
     that.setData({
       lineplan_id: lineplan_id, // 记录全部的id数据
+      development_id: development_id
     })
     that.dataRequest('init');
   },
@@ -497,14 +511,8 @@ Page({
     }
 
   },
-
-
-
-
-  /* 未完成 */
-
-  // 新增图稿
-  onOpenAddArtwork(e) {
+  // 新增lp
+  onOpenAddLP(e) {
     this.setData({
       popupAddVisible: true
     });
@@ -516,16 +524,43 @@ Page({
       popupAddVisible: false
     });
   },
+  // 通用输入处理
+  handleInput(e) {
+    const field = e.currentTarget.dataset.field; // 获取字段名（year/month）
+    this.setData({
+      [`addLPData.${field}`]: e.detail.value // 动态更新对应字段
+    });
+  },
   // 新增内部提交按钮
   onSubmitAddDialog(e) {
     const that = this;
-    this.setData({
-      popupAddVisible: false
+    const development_id = that.data.development_id;
+    that.setData({
+      'addLPData.project_id': development_id // 使用路径语法
     });
-    console.log(11);
-    const message = "新增图稿成功";
-    utils.showToast(that, message);
+    const { title, client, year, season } = that.data.addLPData;
+    if (!title || !client || !year || !season) {
+      utils.showToast(that, "数据不能为空", "error");
+      return
+    } else {
+      utils.UpdateData({
+        page: that,
+        data: that.data.addLPData,
+        message: "新增LP成功"
+      })
+      that.setData({
+        popupAddVisible: false
+      });
+    }
+
   },
+
+
+
+
+
+
+  /* 未完成 */
   // 新增内部的下拉框
   onDesignerPicker(e) {
     this.setData({

@@ -6,7 +6,6 @@ Page({
     allData: [],// 全部的数据
     pageSize: 6, // 每次加载多少条数据
     currentIndex: 0, // 加载到数据的第几个索引
-
     tabBarTabLabel: "", // 胶囊的label
     tabBarValue: 'primary', // 胶囊选中的值
     userTabs: [], // 胶囊框的数据
@@ -97,12 +96,14 @@ Page({
   dataStructure(dataList) {
     let arrangeData = [];
     dataList.forEach(item => {
+      const development_id = item.id; // 开发案id
       const development_name = item.name; // 开发案名称
       const development_director = item.director; // 主导人
       const development_start_data = item.start_date; // 开发案开始时间
       // 对内部的line_plan_list变量进行循环
       item.line_plan_list.forEach((line_plan) => {
         const lp_data = {
+          development_id:development_id, // 开发案id
           line_plan_id: line_plan.id, // id
           line_plan_title: `${development_name}-${line_plan.title}`, // 名称
           line_plan_client: line_plan.client || "未记录", // 客户
@@ -167,6 +168,7 @@ Page({
     const userRole = that.data.userRole;
     const tabBarValue = that.data.tabBarValue;
     const lineplan_id = e.currentTarget.dataset.lineplan_id;
+    const development_id = e.currentTarget.dataset.development_id;
     if (userRole === "kyle") {
       if (tabBarValue === "primary") { // kyle 初筛和终评
         wx.navigateTo({
@@ -192,7 +194,7 @@ Page({
     } else if (userRole === "ms") { // 选稿阶段r1
       if (tabBarValue === "primary") { // fmr 可行性评估与样品图上传
         wx.navigateTo({
-          url: `/pages/guest_selection/guest_selection_first_round/guest_selection_first_round?lineplan_id=${lineplan_id}`,
+          url: `/pages/guest_selection/guest_selection_first_round/guest_selection_first_round?lineplan_id=${lineplan_id}&development_id=${development_id}`,
         });
       } else {
         wx.navigateTo({
