@@ -145,7 +145,6 @@ Page({
           continue
         }
       }
-
       taskTimeLineData[`${task_id}`] = timeLineData; // 时间线数据
       arrangeData.push(data_dict);
     }
