@@ -203,11 +203,11 @@ Page({
     } else if (userRole === "d") { // 设计师对上传工厂稿
       if (tabBarValue === "primary") { // 设计师工厂稿上传，样品图审查
         wx.navigateTo({
-          url: `/pages/designer/designer_review_detail/designer_review_detail?groupIdList=${JSON.stringify(groupIdList)}`
+          url: `/pages/designer/designer_revision_detail/designer_revision_detail?lineplan_id=${lineplan_id}`
         });
       } else if (tabBarValue === "factory") {
         wx.navigateTo({
-          url: `/pages/designer/designer_artwork_detail/designer_artwork_detail?groupIdList=${JSON.stringify(groupIdList)}`,
+          url: `/pages/designer/designer_artwork_detail/designer_artwork_detail?lineplan_id=${lineplan_id}`,
         });
       }
     } else if (userRole === "fma") { // fmr主管分配fmr图稿

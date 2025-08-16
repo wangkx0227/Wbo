@@ -22,15 +22,3 @@
   margin: 32rpx;
   display: flex;
 }
-
-.cell-swiper {
-  width: 49%; /* 或具体的 320rpx，根据你设计来 */
-  box-sizing: border-box;
-  display: grid;
-}
-.cell-swiper-row {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  flex-wrap: wrap;
-}

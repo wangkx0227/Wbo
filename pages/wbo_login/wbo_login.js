@@ -41,7 +41,7 @@ Page({
       },
       {
         value: 'd',
-        label: '设计师（工厂稿与样品图审查）',
+        label: '设计师（AIT改稿和工厂稿与样品图审查）',
       },
       {
         value: 'fma',

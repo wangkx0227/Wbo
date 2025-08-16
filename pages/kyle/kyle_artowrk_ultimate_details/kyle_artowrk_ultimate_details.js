@@ -1,7 +1,7 @@
 const utils = require('../../../utils/util')
 Page({
   data: {
-    lineplan_id:null, // id 只
+    lineplan_id: null, // id 只
     Data: [], // 存储数据
     tabBar: null, // 记录切换值
     pageSize: 6, // 每次加载几条数据
@@ -141,8 +141,8 @@ Page({
         data_dict["timeline_id"] = timeline_id;
         data_dict["timeline_type"] = timeline_type; // 图稿类型
       }
-      // 初选 kyle 标记如果时2舍弃，就直接过滤掉
-      if (data_dict["confirmed"] === 2) {
+      // 可行性分析，shelley 选3直接跳过
+      if (confirmed2 === 3) {
         continue
       }
       taskTimeLineData[`${task_id}`] = timeLineData; // 时间线数据

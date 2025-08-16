@@ -63,24 +63,13 @@ Page({
     const task_list = dataList.task_list
     for (const index in task_list) {
       const task_id = task_list[index].id;
-      const be_chosen2 = task_list[index].be_chosen2;
-      const whether_to_proof = task_list[index].whether_to_proof;
-      // 说明没被选中，就过滤 需要增加一个关于当前用户的判断，只有当前用户才可以看到自己的图稿并上传
-      if (be_chosen2 !== 1) {
-        continue;
-      }
+      // 需要增加一个关于当前用户的判断，只有当前用户才可以看到自己的图稿并上传
       let data_dict = {
         id: task_id,
         code: task_list[index].code,
         title: task_list[index].title,
         texture: task_list[index].texture,
         name: task_list[index].AIE_designer1,
-        whether_to_proof: whether_to_proof,
-      }
-      if (whether_to_proof === 1) {
-        data_dict["whether_to_proof_text"] = "是"
-      } else {
-        data_dict["whether_to_proof_text"] = "否"
       }
       let timeLineData = []; // 时间线存储数据
       const timeline_list = task_list[index].timeline_list;
@@ -106,9 +95,14 @@ Page({
           })
           continue; // 跳过
         }
+        const confirmed2 = task_list[index].timeline_list[i].confirmed2; // kyle 标记
         data_dict["picture_list"] = picture_list;
         // 第一条时间线的id
         data_dict["timeline_id"] = timeline_id;
+        // 可行性分析，shelley 选3直接跳过
+        if (confirmed2 === 3) {
+          continue
+        }
       }
       taskTimeLineData[`${task_id}`] = timeLineData; // 时间线数据
       arrangeData.push(data_dict);
@@ -278,12 +272,10 @@ Page({
     const {
       files
     } = e.detail;
-    // 方法1：选择完所有图片之后，统一上传，因此选择完就直接展示
+    // 选择完所有图片之后，统一上传，因此选择完就直接展示
     this.setData({
       imageFileList: [...imageFileList, ...files], // 此时设置了 fileList 之后才会展示选择的图片
     });
-    // 方法2：每次选择图片都上传，展示每次上传图片的进度
-    // files.forEach(file => this.uploadFile(file))
   },
   // 图稿删除函数
   onImageRemove(e) {
