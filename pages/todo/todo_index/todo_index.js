@@ -55,7 +55,7 @@ Page({
   // 用户点击右上角分享
   onShareAppMessage() {
     return {
-      title: 'WBO待处理',
+      title: 'WBO待处理页面',
       path: 'pages/todo/todo_index/todo_index',  // 分享后打开的页面路径
       imageUrl: '/assets/images/log.jpg'     // 自定义分享封面
     };
@@ -194,7 +194,7 @@ Page({
     // 对 胶囊悬浮框 进行复制，开启骨架
     const tabBarValue = e.detail.value;
     const userRole = that.data.userRole;
-    let tabBarTabLabel = "最新";
+    let tabBarTabLabel = "最新阶段";
     if (tabBarValue === "todo" && userRole === "shelley") {
       tabBarTabLabel = "可行性分析";
     }else if(tabBarValue === "todo" && userRole === "kyle"){
@@ -208,7 +208,6 @@ Page({
   // 跳转到详情页面
   onJumpArtworkDeatails(e) {
     const that = this;
-    const groupId = e.currentTarget.dataset.groupId;
     const userRole = that.data.userRole;
     const tabBarValue = that.data.tabBarValue;
     const lineplan_id = e.currentTarget.dataset.lineplan_id;
@@ -220,7 +219,7 @@ Page({
         wx.navigateTo({ url: `/pages/shelley/shelley_artwork_detail/shelley_artwork_detail?lineplan_id=${lineplan_id}` });
       }
     } else {
-      wx.navigateTo({ url: `/pages/todo/todo_detail/todo_detail?groupId=${groupId}`, });
+      wx.navigateTo({ url: `/pages/todo/todo_detail/todo_detail?lineplan_id=${lineplan_id}`, });
     }
   },
 
