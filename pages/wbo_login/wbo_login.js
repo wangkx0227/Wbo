@@ -114,22 +114,34 @@ Page({
                 // 保存信息至缓存中，userinfo={type:'fmr',name:'kyle',openid:'xxxx',....}
 
                 // 测试 另外添加数据
-                if(that.data.nickName === "ethan"){
+                if (that.data.nickName === "ethan") {
                   wx.setStorageSync('userRole', 'd'); // 设计师
-                }else{
+                } else {
                   wx.setStorageSync('userRole', 'fmr'); // fmr
                 }
                 wx.setStorageSync('userName', '薛天亮'); // 存储名字
-
-
                 // 存储信息
                 wx.setStorageSync('userInfo', that.data.userInfo); // 全部信息
-                // 提示
-                wx.showToast({ title: '登录成功', icon: 'success' });
-                // 跳转
-                wx.reLaunch({
-                  url: `/pages/wbo_artwork_index/wbo_artwork_index`
-                });
+
+                wx.showToast({ title: '登录成功', icon: 'success' }); // 提示
+                const redirect = this.data.redirect;  // 跳转，如果有参数进行携带
+                if (redirect) { // 需要再这里加上指定的人，shelley和kyle
+                  const decodedPath = decodeURIComponent(redirect); // 解码后的路径
+                  setTimeout(() => {
+                    wx.reLaunch({
+                      url: '/' + decodedPath // 注意要加斜杠开头
+                    });
+                    this.setData({
+                      redirect: '' // 跳转参数赋值为空，防止登录操作出现问题
+                    })
+                  }, 500)
+                } else {
+                  setTimeout(() => {
+                    wx.reLaunch({
+                      url: `/pages/wbo_artwork_index/wbo_artwork_index`
+                    });
+                  })
+                }
               } else if (data.statusCode === 400) {
                 wx.showToast({ title: "登录错误", icon: 'error' });
               } else {
@@ -187,8 +199,8 @@ Page({
       }
     });
   },
-   // 审核员登录-选中
-   onChange(e) {
+  // 审核员登录-选中
+  onChange(e) {
     this.setData({
       'product.value': e.detail.value,
     });
@@ -213,7 +225,7 @@ Page({
         icon: 'success'
       });
       const redirect = this.data.redirect;
-      
+
       if (redirect) {
         const decodedPath = decodeURIComponent(redirect); // 解码后的路径
         setTimeout(() => {
