@@ -144,9 +144,10 @@ Page({
   dataRequest(mode) {
     const that = this;
     const lineplan_id = that.data.lineplan_id;
+    const userName = that.data.userName;
     utils.LoadDataList({
       page: that,
-      data: { type: "getTaskByLinePlan", username: "admin", "lp_id": lineplan_id, },
+      data: { type: "getTaskByLinePlan", username: userName, "lp_id": lineplan_id, },
       mode: mode
     }).then(list => { // list 就是data数据
       const allResults = that.dataStructure(list);
@@ -206,9 +207,13 @@ Page({
   /* 生命周期函数--监听页面加载 */
   onLoad(options) {
     const that = this;
+    const userRole = wx.getStorageSync('userRole');
+    const userName = wx.getStorageSync('userName');
     const lineplan_id = options.lineplan_id || ''; // 首页跳转后的存储的id值
     that.setData({
       lineplan_id: lineplan_id, // 记录全部的id数据
+      userRole: userRole,
+      userName: userName
     })
     this.dataRequest('init');
     this.fmrRequest();
@@ -259,7 +264,7 @@ Page({
       task_id: taskId
     });
   },
-  // 提交 FMR筛选器 - 需要小调整
+  // 提交 FMR筛选器
   onPickerChange(e) {
     /*
       pickerVisible：筛选器显示变量
@@ -267,6 +272,7 @@ Page({
     */
     const that = this;
     const task_id = that.data.task_id;
+    const userName = that.data.userName;
     const {
       value,
       label
@@ -274,7 +280,7 @@ Page({
     const data = {
       "type": "update_task",
       "task_id": task_id,
-      "username": "admin",
+      "username": userName,
       "fmr": value[0],
       "fmr2": 0,
     }
@@ -437,8 +443,8 @@ Page({
       const data = {
         "type": "update_timeline",
         "timeLine_id": timeline_id,
-        "username": "admin",
-        "name": "管理员",
+        "username": userName,
+        "name": userName,
         "confirmed2": 2,
         "comment": dialogValue, // 携带其他人原来的评论
       }

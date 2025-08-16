@@ -106,9 +106,10 @@ Page({
   dataRequest(mode) {
     const that = this;
     const lineplan_id = that.data.lineplan_id;
+    const userName = that.data.userName;
     utils.LoadDataList({
       page: that,
-      data: { type: "getTaskByLinePlan", username: "admin", "lp_id": lineplan_id, },
+      data: { type: "getTaskByLinePlan", username: userName, "lp_id": lineplan_id, },
       mode: mode
     }).then(list => { // list 就是data数据
       const allResults = that.dataStructure(list);
@@ -142,9 +143,13 @@ Page({
   /* 生命周期函数--监听页面加载 */
   onLoad(options) {
     const that = this;
+    const userRole = wx.getStorageSync('userRole');
+    const userName = wx.getStorageSync('userName');
     const lineplan_id = options.lineplan_id || ''; // 首页跳转后的存储的id值
     that.setData({
       lineplan_id: lineplan_id, // 记录全部的id数据
+      userName: userName,
+      userRole: userRole
     })
     that.dataRequest('init');
   },
@@ -287,6 +292,7 @@ Page({
     const that = this;
     const pictureUrl = app.globalData.pictureUrl; // 请求后端接口
     const task_id = that.data.task_id;
+    const userName = that.data.userName;
     const timeline_id = that.data.timeline_id;
     const imageFileList = that.data.imageFileList;
     if (imageFileList.length === 0) {

@@ -36,11 +36,11 @@ Page({
         label: 'fmr（可执行评估和上传样品图）',
       },
       {
-        value: 'ms',
+        value: 'chosen_draft',
         label: '客户选稿(r1/r2)',
       },
       {
-        value: 'd',
+        value: 'designer',
         label: '设计师（AIT改稿和工厂稿与样品图审查）',
       },
       ],
@@ -93,6 +93,7 @@ Page({
     const that = this;
     wx.login({
       success(res) {
+        console.log('前端获取的code:', res.code); // 对比后端收到的code
         if (res.code) {
           wx.request({
             url: that.data.app.globalData.reqUrl + '/wbo/wx_login/',
@@ -103,26 +104,13 @@ Page({
             },
             success(resp) {
               const data = resp.data;
-              if (data.code !== 200) {
-                // 测试管理员
-                // that.data.userInfo.fmr.name = '管理员'
-                // that.data.userInfo.fmr.position = ["管理员"]
-                that.data.userInfo.fmr.name = '薛天亮'
-                that.data.userInfo.fmr.position = ["FMR"]
+              if (data.code === 200) {
                 // 正式版
-                // that.data.userInfo.fmr = data.userinfo
-                // 保存信息至缓存中，userinfo={type:'fmr',name:'kyle',openid:'xxxx',....}
-
-                // 测试 另外添加数据
-                if (that.data.nickName === "ethan") {
-                  wx.setStorageSync('userRole', 'd'); // 设计师
-                } else {
-                  wx.setStorageSync('userRole', 'fmr'); // fmr
-                }
-                wx.setStorageSync('userName', '薛天亮'); // 存储名字
-                // 存储信息
-                wx.setStorageSync('userInfo', that.data.userInfo); // 全部信息
-
+                that.data.userInfo.fmr = data.userinfo
+                // 存储角色名称 ethan
+                wx.setStorageSync('userRole', 'kyle'); // 角色设置 shelley kyle fmr  designer(设计师) chosen_draft（选稿）
+                wx.setStorageSync('userName', data.userinfo.name); // 存储名字
+                wx.setStorageSync('userInfo', that.data.userInfo); // 全部存储信息
                 wx.showToast({ title: '登录成功', icon: 'success' }); // 提示
                 const redirect = that.data.redirect;  // 跳转，如果有参数进行携带
                 if (redirect) { // 需要再这里加上指定的人，shelley和kyle
@@ -145,7 +133,7 @@ Page({
               } else if (data.statusCode === 400) {
                 wx.showToast({ title: "登录错误", icon: 'error' });
               } else {
-                console.log('err!', resp.data)
+                console.log('err!', resp.data,"1111")
                 wx.showToast({ title: "登录失败", icon: 'error' });
               }
             },

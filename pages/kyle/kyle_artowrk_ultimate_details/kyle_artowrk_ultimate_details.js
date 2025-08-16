@@ -142,9 +142,10 @@ Page({
   dataRequest(mode) {
     const that = this;
     const lineplan_id = that.data.lineplan_id;
+    const userName = that.data.userName;
     utils.LoadDataList({
       page: that,
-      data: { type: "getTaskByLinePlan", username: "admin", "lp_id": lineplan_id, },
+      data: { type: "getTaskByLinePlan", username: userName, "lp_id": lineplan_id, },
       mode: mode
     }).then(list => { // list 就是data数据
       const allResults = that.dataStructure(list);
@@ -177,11 +178,15 @@ Page({
   },
   onLoad(options) {
     const that = this;
+    const userRole = wx.getStorageSync('userRole');
+    const userName = wx.getStorageSync('userName');
     const tabBarValue = options.tabBarValue || ''; // 切换时的tab值
     const lineplan_id = options.lineplan_id || ''; // 首页跳转后的存储的id值
     that.setData({
       lineplan_id: lineplan_id,
       tabBar: tabBarValue, // 记录当前tab属性
+      userRole: userRole,
+      userName: userName,
     })
     that.dataRequest('init');
   },
@@ -240,6 +245,7 @@ Page({
   // 修改当前图稿状态-终审
   onModifyArtworkStatus(e) {
     const that = this;
+    const userName = that.data.userName;
     const {
       timelineid,
       contentStatus
@@ -255,8 +261,8 @@ Page({
               data: {
                 "type": "update_timeline",
                 "timeLine_id": timelineid,
-                "username": "admin",
-                "name": "管理员",
+                "username": userName,
+                "name": userName,
                 "confirmed": 3
               },
 
@@ -291,8 +297,8 @@ Page({
               data: {
                 "type": "update_timeline",
                 "timeLine_id": timelineid,
-                "username": "admin",
-                "name": "管理员",
+                "username": userName,
+                "name": userName,
                 "confirmed": 4
               },
               message: "图稿已标记舍弃"
@@ -338,6 +344,7 @@ Page({
   // 弹窗-评论-关闭（包含提交功能）
   onCloseDialog(e) {
     const that = this;
+    const userName = that.data.userName;
     const {
       task_id,
       timeline_id,
@@ -358,8 +365,8 @@ Page({
         data: {
           "type": "update_timeline",
           "timeLine_id": timeline_id,
-          "username": "admin", // 参数需要修改
-          "name": "管理员", // 参数需要修改
+          "username": userName, // 参数需要修改
+          "name": userName, // 参数需要修改
           "comment": dialogValue
         },
         message: "评审记录完成"

@@ -115,9 +115,10 @@ Page({
   dataRequest(mode) {
     const that = this;
     const lineplan_id = that.data.lineplan_id;
+    const userName = that.data.userName;
     utils.LoadDataList({
       page: that,
-      data: { type: "getTaskByLinePlan", username: "admin", "lp_id": lineplan_id, },
+      data: { type: "getTaskByLinePlan", username:userName, "lp_id": lineplan_id, },
       mode: mode
     }).then(list => { // list 就是data数据
       const allResults = that.dataStructure(list);
@@ -151,9 +152,13 @@ Page({
   // 页面初次加载数据
   onLoad(options) {
     const that = this;
+    const userRole = wx.getStorageSync('userRole');
+    const userName = wx.getStorageSync('userName');
     const lineplan_id = options.lineplan_id || ''; // 首页跳转后的存储的id值
     that.setData({
       lineplan_id: lineplan_id, // 记录全部的id数据
+      userRole:userRole,
+      userName:userName
     })
     that.dataRequest('init');
   },
@@ -237,8 +242,8 @@ Page({
         data: {
           "type": "update_timeline",
           "timeLine_id": timeline_id,
-          "username": "admin", // 参数需要修改
-          "name": "管理员", // 参数需要修改
+          "username": userName, // 参数需要修改
+          "name": userName, // 参数需要修改
           "comment": dialogValue
         },
         message: "评审记录完成"
@@ -255,6 +260,7 @@ Page({
   // 修改当前图稿状态
   onModifyArtworkStatus(e) {
     const that = this;
+    const userName = that.data.userName;
     const { timelineid, contentStatus } = e.currentTarget.dataset;
     if (contentStatus === "Y") {
       wx.showModal({
@@ -267,7 +273,7 @@ Page({
               data: {
                 "type": "update_timeline",
                 "timeLine_id": timelineid,
-                "username": "admin",
+                "username": userName,
                 "name": "管理员",
                 "confirmed": 1
               },
@@ -303,7 +309,7 @@ Page({
               data: {
                 "type": "update_timeline",
                 "timeLine_id": timelineid,
-                "username": "admin",
+                "username": userName,
                 "name": "管理员",
                 "confirmed": 2
               },

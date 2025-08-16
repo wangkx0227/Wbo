@@ -175,9 +175,10 @@ Page({
   dataRequest(mode) {
     const that = this;
     const lineplan_id = that.data.lineplan_id;
+    const userName = that.data.userName;
     utils.LoadDataList({
       page: that,
-      data: { type: "getTaskByLinePlan", username: "admin", "lp_id": lineplan_id, },
+      data: { type: "getTaskByLinePlan", username: userName, "lp_id": lineplan_id, },
       mode: mode
     }).then(list => { // list 就是data数据
       const allResults = that.dataStructure(list);
@@ -210,11 +211,15 @@ Page({
   },
   onLoad(options) {
     const that = this;
+    const userRole = wx.getStorageSync('userRole');
+    const userName = wx.getStorageSync('userName');
     const lineplan_id = options.lineplan_id || ''; // 首页跳转后的存储的id值
     const development_id = options.development_id || ''; // 开发案id
     that.setData({
       lineplan_id: lineplan_id, // 记录全部的id数据
-      development_id: development_id
+      development_id: development_id,
+      userRole: userRole,
+      userName: userName
     })
     that.dataRequest('init');
   },
@@ -339,8 +344,8 @@ Page({
         data: {
           "type": "update_timeline",
           "timeLine_id": timeline_id,
-          "username": "admin", // 参数需要修改
-          "name": "管理员", // 参数需要修改
+          "username": userName, // 参数需要修改
+          "name": userName, // 参数需要修改
           "comment": dialogValue
         },
         message: "提交评论完成"
@@ -360,6 +365,7 @@ Page({
   // 修改当前选中图稿状态
   onModifyArtworkStatus(e) {
     const that = this;
+    const userName = that.data.userName;
     const {
       taskId,
       contentStatus
@@ -367,7 +373,8 @@ Page({
     let task_data = {
       "type": "update_task",
       "task_id": taskId,
-      "username": "admin",
+      "order": true,
+      "username": userName,
     }
     if (contentStatus === "Y") {
       wx.showModal({
@@ -435,6 +442,7 @@ Page({
   // 是否画工厂稿
   onFactoryDraftStatus(e) {
     const that = this;
+    const userName = that.data.userName;
     const {
       taskId,
       contentStatus
@@ -442,7 +450,8 @@ Page({
     let task_data = {
       "type": "update_task",
       "task_id": taskId,
-      "username": "admin",
+      "order": true,
+      "username": userName,
     }
     if (contentStatus === "Y") {
       wx.showModal({

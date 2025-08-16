@@ -18,7 +18,6 @@ Page({
     noMoreData: false,    // 数据是否全部加载完毕
     skeletonLoading: true, // 骨架控制变量
     scrollTop: 0, // 回到顶部变量
-
     // 筛选框变量-1
     dropdownTemplate: {
       value: 'all',
@@ -45,7 +44,6 @@ Page({
     },
     // 搜索变量
     searchValue: '',
-
   },
   // 加载用户角色
   loadUserRole() {
@@ -65,7 +63,7 @@ Page({
           { value: 'ultimate', label: '样品上传' }
         ]
       });
-    } else if (userRole === "d") {
+    } else if (userRole === "designer") {
       this.setData({
         tabBarShow: true, userTabs: [
           { value: 'primary', label: "图稿修改" },
@@ -73,7 +71,7 @@ Page({
           { value: 'ultimate', label: '样品图审查' }
         ]
       });
-    } else if (userRole === "ms") {
+    } else if (userRole === "chosen_draft") {
       this.setData({
         tabBarShow: true, userTabs: [
           { value: 'primary', label: '第一轮选稿' },
@@ -151,9 +149,10 @@ Page({
         , filter = "all", field
     */
     const that = this;
+    const userName = that.data.userName;
     utils.LoadDataList({
       page: this,
-      data: { type: "getProjectList", username: "admin" },
+      data: { type: "getProjectList", username: userName },
       mode: mode
     }).then(list => { // list 就是data数据
       const arrangeData = that.dataStructure(list);
@@ -217,7 +216,7 @@ Page({
           url: `/pages/fmr/fmr_artwork_detail/fmr_artwork_detail?lineplan_id=${lineplan_id}`,
         });
       }
-    } else if (userRole === "ms") { // 选稿阶段r1
+    } else if (userRole === "chosen_draft") { // 选稿阶段r1
       if (tabBarValue === "primary") { // fmr 可行性评估与样品图上传
         wx.navigateTo({
           url: `/pages/guest_selection/guest_selection_first_round/guest_selection_first_round?lineplan_id=${lineplan_id}&development_id=${development_id}`,
@@ -228,7 +227,7 @@ Page({
         });
       }
 
-    } else if (userRole === "d") { // 设计师对上传工厂稿
+    } else if (userRole === "designer") { // 设计师对上传工厂稿
       if (tabBarValue === "primary") { // 设计师工厂稿上传，样品图审查
         wx.navigateTo({
           url: `/pages/designer/designer_revision_detail/designer_revision_detail?lineplan_id=${lineplan_id}`
@@ -292,7 +291,7 @@ Page({
     const value = e.detail.value;// 值
     const current = that.data.userTabs.find(item => item.value === value); // 动态显示tab
     // 如果fmr点击的时样品上传，进行跳转
-    if (current.value === "ultimate" && (userRole === "fmr" || userRole === "d")) {
+    if (current.value === "ultimate" && (userRole === "fmr" || userRole === "designer")) {
       wx.navigateTo({
         url: `/pages/factory_login_page/wbo-list/wbo-list` // 样品图上传，使用原来项目
       });
