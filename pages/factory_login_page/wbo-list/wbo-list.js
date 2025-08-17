@@ -16,17 +16,6 @@ Page({
   onLoad(options) {
     // if (!util.checkLogin()) return;
     const userInfo = wx.getStorageSync('userInfo')
-    // const userName = wx.getStorageSync('userName')
-    // const userRole = wx.getStorageSync('userRole')
-    const userRole = 'fmr'
-    const userName = '刘利波'
-    const development_id = options.development_id; // 开发案id
-    this.setData({
-      app,
-      userName: userName,
-      userRole: userRole,
-      development_id: development_id,
-    })
     //   const fmr = userInfo.fmr.position.includes("FMR") ? userInfo.fmr.name : null
     //   const factory = userInfo.factory.name
     //   this.setData({
@@ -34,6 +23,17 @@ Page({
     //     factory,
     //     userInfo
     //   })
+    // const userName = wx.getStorageSync('userName')
+    // const userRole = wx.getStorageSync('userRole')
+    const userRole = 'fmr'
+    const userName = '刘开波'
+    const development_id = options.development_id; // 开发案id
+    this.setData({
+      app,
+      userName: userName,
+      userRole: userRole,
+      development_id: development_id,
+    })
     this.get_wbpData()
   },
   // 数据获取
@@ -42,6 +42,7 @@ Page({
     const url = app.globalData.url;
     const userName = that.data.userName;
     const userRole = that.data.userRole;
+    const montageUrl = app.globalData.montageUrl;
     const development_id = that.data.development_id;
     let requestData = {
       "type": "getProjectProofingTask",
@@ -59,12 +60,12 @@ Page({
       },
       "username": "Jasonyu"
     }
+     // 如果是工厂登录
     requestData["username"] = userName;
+    requestData["project_id"] = development_id;
     if (userRole === "fmr") {
-      requestData["project_id"] = development_id;
       requestData["filter_data"]["fmr"] = userName;
     } else if (userRole === "designer") {
-      requestData["project_id"] = development_id;
       requestData["filter_data"]["AIT_designer"] = userName;
     }
     wx.request({
@@ -92,7 +93,6 @@ Page({
             item.fmr.forEach(item => {
               fmr += `${item.name},`
             });
-            console.log(item.images_0);
             item.images_0.forEach(item => {
               image_path = item.image;
             })
@@ -103,7 +103,7 @@ Page({
               factory: factory,
               material: material,
               image_status: image_path ? true : false,
-              imgSrc: "http://10.8.0.69:8000/" + image_path,
+              imgSrc: montageUrl + '/' + image_path,
             }
           })
           if (that.data.currentPage === 1) {
@@ -160,9 +160,7 @@ Page({
       isLoading: true,
       currentPage: nextPage
     });
-
     this.get_wbpData()
-
     this.setData({
       isLoading: false
     });

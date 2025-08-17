@@ -163,7 +163,6 @@ Page({
     const development_id = e.currentTarget.dataset.development_id;
     // fmr与设计师进行跳转
     if (userName && (userRole === "fmr" || userRole === "designer")) {
-      console.log(1111);
       wx.navigateTo({
         url: `/pages/factory_login_page/wbo-list/wbo-list?development_id=${JSON.stringify(development_id)}`,
         fail: (err) => {
