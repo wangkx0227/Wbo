@@ -208,14 +208,14 @@ Page({
       });
     } else {
       if (productValue === "kyle") {
-        wx.setStorageSync('userName', "kyle"); // 初选与终选
+        wx.setStorageSync('userName', "kyle"); // 第一轮初选与第五轮终选
       } else if (productValue === "shelley") {
         wx.setStorageSync('userName', "shelley"); // 第三轮可行性
       } else if (productValue === "fmr") {
         wx.setStorageSync('userName', "刘开波"); // 样品照片拍照上传 fmr 测试 （fmr系列测试）fmr可行性分析
       } else if (productValue === "designer") {
         wx.setStorageSync('userName', "Ethan"); // 样品照片拍照审核  设计师 测试 上传ait稿与工厂稿和照片审核
-      } else if (productValue === "chosen_draft") {
+      } else if (productValue === "chosen_draft") { // 第7轮与第9轮
         wx.setStorageSync('userName', "kyle");
       }
       wx.setStorageSync('userRole', productValue);
