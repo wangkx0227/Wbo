@@ -57,7 +57,6 @@ Page({
     wx.removeStorageSync('userRole') // 每次重置，清除登录信息
     wx.removeStorageSync('userName') // 每次重置，清除登录信息
     const redirect = options.redirect;
-    console.log(redirect);
     if (redirect) {
       // 赋值跳转url
       this.setData({
