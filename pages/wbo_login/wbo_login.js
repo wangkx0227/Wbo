@@ -207,10 +207,9 @@ Page({
         icon: 'error'
       });
     } else {
-      // 针对 fmr 与 设计师假数据
-      wx.setStorageSync('userName', "ethan"); // 设计师
-      // wx.setStorageSync('userName', "刘开波"); // fmr
-      wx.setStorageSync('userRole', productValue); // 异步存储消息
+      // wx.setStorageSync('userName', "ethan"); // 样品照片拍照审核  设计师 测试
+      wx.setStorageSync('userName', "刘开波"); // 样品照片拍照上传 fmr 测试 （fmr系列测试）
+      wx.setStorageSync('userRole', productValue);
       wx.showToast({
         title: '登录成功',
         icon: 'success'

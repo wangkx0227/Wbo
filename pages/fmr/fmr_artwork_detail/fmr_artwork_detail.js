@@ -84,7 +84,6 @@ Page({
       } else {
         data_dict["fmr2_text"] = "未标记";
       }
-
       let timeLineData = []; // 时间线存储数据
       const timeline_list = task_list[index].timeline_list;
       for (let i = 0; i < timeline_list.length; i++) {
@@ -302,6 +301,7 @@ Page({
     const { taskId, contentStatus } = e.currentTarget.dataset;
     let task_data = {
       "type": "update_task",
+      "order": true,
       "task_id": taskId,
       "username": userName,
     }

@@ -74,7 +74,6 @@ Page({
         const picture_list = image_list.length === 0 ? [] : image_list.map(img => image_url + img.imageURL);
         const timeline_id = task_list[index].timeline_list[i].id;
         const timeline_type = task_list[index].timeline_list[i].timeline_type;
-
         if (i < timeline_list.length - 1) {
           let timeline_type_text = ""
           if (timeline_type === 1) {
