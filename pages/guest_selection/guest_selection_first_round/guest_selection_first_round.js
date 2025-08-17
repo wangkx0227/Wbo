@@ -358,9 +358,14 @@ Page({
       utils.showToast(that, message, theme);
     }
     this.setData({
+      dialogId: null,
       dialogVisible: false,
-      dialogId: null
     });
+    setTimeout(()=>{
+      this.setData({
+        dialogValue:"",
+      })
+    },500)
   },
   // 修改当前选中图稿状态
   onModifyArtworkStatus(e) {

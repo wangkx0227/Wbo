@@ -255,6 +255,11 @@ Page({
       utils.showToast(that, message, theme);
     }
     this.setData({ dialogVisible: false, dialogId: null });
+    setTimeout(()=>{
+      this.setData({
+        dialogValue:"",
+      })
+    },500)
   },
   // 修改当前图稿状态
   onModifyArtworkStatus(e) {

@@ -16,14 +16,14 @@ Page({
   onLoad(options) {
     // if (!util.checkLogin()) return;
     // 工厂登录需要-有问题
-    const userInfo = wx.getStorageSync('userInfo')
-    const fmr = userInfo.fmr.position.includes("FMR") ? userInfo.fmr.name : null
-    const factory = userInfo.factory.name
-    this.setData({
-      fmr,
-      factory,
-      userInfo
-    })
+    // const userInfo = wx.getStorageSync('userInfo')
+    // const fmr = userInfo.fmr.position.includes("FMR") ? userInfo.fmr.name : null
+    // const factory = userInfo.factory.name
+    // this.setData({
+    //   fmr,
+    //   factory,
+    //   userInfo
+    // })
     // 公司内部用户处理
     const userName = wx.getStorageSync('userName')
     const userRole = wx.getStorageSync('userRole')
@@ -178,7 +178,6 @@ Page({
   // 详情页跳转
   viewDetail(e) {
     const projectId = e.currentTarget.dataset.id;
-    console.log(e.currentTarget.dataset);
     wx.navigateTo({
       url: `/pages/factory_login_page/wbo-detail/wbo-detail?project_id=${projectId}`
     });

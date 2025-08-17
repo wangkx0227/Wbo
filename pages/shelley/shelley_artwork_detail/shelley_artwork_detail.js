@@ -470,9 +470,13 @@ Page({
     }
     this.setData({
       dialogVisible: false,
-      dialogValue: "",
       timeline_id: null
     });
+    setTimeout(()=>{
+      this.setData({
+        dialogValue:"",
+      })
+    },500)
   },
 
 
