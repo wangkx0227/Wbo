@@ -6,8 +6,8 @@ App({
     image_url:'http://10.8.0.69:8080',
     url: 'http://10.8.0.69:8000/wbo/api/', // 后端接口路径
     reqUrl: 'https://xcx.1bizmail.com:8153', // 后端接口路径
-    pictureUrl: 'http://10.8.0.69:8000/wbo/upload_task_image/', // 上传工厂稿与修改过的图稿
-    fileUrl: 'http://10.8.10.110:5000/send_wechat_file', // 下载附件发送的地址
+    montageUrl:'http://10.8.0.69:8000', // 拼接路径（上传工厂稿与修改过的图稿）
+    fileUrl: 'http://10.8.10.110:5000/send_wechat_file', //  导出附件地址
   },
   onLaunch(options) {
     wx.removeStorageSync('userRole') // 每次重置，清除登录信息

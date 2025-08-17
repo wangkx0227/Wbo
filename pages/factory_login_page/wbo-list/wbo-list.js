@@ -1,11 +1,5 @@
 const app = getApp();
-const util = require('../../../utils/util.js');
-// pages/wbo-list/wbo-list.js
 Page({
-
-  /**
-   * 页面的初始数据
-   */
   data: {
     userRole: null,
     userRole: null,
@@ -18,19 +12,20 @@ Page({
     hasMore: false, // 是否还有更多数据
     allItem: [] // 所有数据
   },
-
-  /**
-   * 生命周期函数--监听页面加载
-   */
+  // 页面初始化
   onLoad(options) {
     // if (!util.checkLogin()) return;
-    // 正常流程
     const userInfo = wx.getStorageSync('userInfo')
-    const userName = wx.getStorageSync('userName')
-    const userRole = wx.getStorageSync('userRole')
-    const app = getApp()
+    // const userName = wx.getStorageSync('userName')
+    // const userRole = wx.getStorageSync('userRole')
+    const userRole = 'fmr'
+    const userName = '刘利波'
+    const development_id = options.development_id; // 开发案id
     this.setData({
-      app, userName: userName, userRole: userRole
+      app,
+      userName: userName,
+      userRole: userRole,
+      development_id: development_id,
     })
     //   const fmr = userInfo.fmr.position.includes("FMR") ? userInfo.fmr.name : null
     //   const factory = userInfo.factory.name
@@ -41,14 +36,14 @@ Page({
     //   })
     this.get_wbpData()
   },
-
+  // 数据获取
   get_wbpData() {
     const that = this
     const url = app.globalData.url;
-    const image_url = app.globalData.image_url;
     const userName = that.data.userName;
     const userRole = that.data.userRole;
-    let data = {
+    const development_id = that.data.development_id;
+    let requestData = {
       "type": "getProjectProofingTask",
       "project_id": 203,
       "current_page": 1,
@@ -64,18 +59,18 @@ Page({
       },
       "username": "Jasonyu"
     }
-    data["username"] = userName;
+    requestData["username"] = userName;
     if (userRole === "fmr") {
-      data["project_id"] = '204';
-      data["filter_data"]["fmr"] = userName;
+      requestData["project_id"] = development_id;
+      requestData["filter_data"]["fmr"] = userName;
     } else if (userRole === "designer") {
-      data["project_id"] = '204';
-      data["filter_data"]["AIT_designer"] = userName;
+      requestData["project_id"] = development_id;
+      requestData["filter_data"]["AIT_designer"] = userName;
     }
     wx.request({
       url: url,
       method: "POST",
-      data: data,
+      data: requestData,
       success: (res) => {
         if (res.data.code === 200) {
           const data = res.data.data
@@ -134,7 +129,7 @@ Page({
       }
     })
   },
-
+  // 工厂查找
   filterFactory(e) {
     const factory_index = e.detail.value;
     const factory = this.data.factory_list[factory_index]
@@ -157,7 +152,6 @@ Page({
     })
 
   },
-
   // 懒加载方法
   loadMore() {
     if (this.data.isLoading) return;
@@ -173,7 +167,7 @@ Page({
       isLoading: false
     });
   },
-
+  // 图片预览
   previewImage(e) {
     const index = e.currentTarget.dataset.index;
     const url = e.currentTarget.dataset.url;
@@ -183,7 +177,7 @@ Page({
       urls: [urls]
     });
   },
-
+  // 详情页跳转
   viewDetail(e) {
     const projectId = e.currentTarget.dataset.id;
     console.log(e.currentTarget.dataset);

@@ -3,14 +3,14 @@ Page({
   data: {
     Data: [], // 页面展示数据
     allData: [],// 全部的数据
-    pageSize: 6, // 每次加载多少条数据
+    pageSize: 10, // 每次加载多少条数据
     currentIndex: 0, // 加载到数据的第几个索引
     userTabs: [], // 胶囊框的数据
     tabBarShow: false, // 显示胶囊标签和tab
     userRole: null, // 角色
     userName: null, // 名称
     scrollTop: 0, // 回到顶部变量
-
+    tabBarTabLabel: null,// 阶段
     // 筛选框变量-1
     dropdownTemplate: {
       value: 'all',
@@ -58,25 +58,18 @@ Page({
       const development_director = item.director; // 主导人
       const development_start_data = item.start_date; // 开发案开始时间
       // 对内部的line_plan_list变量进行循环
+      let line_plan_id_list = [];
       item.line_plan_list.forEach((line_plan) => {
-        const lp_data = {
-          development_id: development_id, // 开发案id
-          line_plan_id: line_plan.id, // id
-          line_plan_title: `${development_name}-${line_plan.title}`, // 名称
-          line_plan_client: line_plan.client || "未记录", // 客户
-          line_plan_year: line_plan.year || "未记录", // 年
-          line_plan_season: line_plan.season || "未记录", // 风格
-          line_plan_is_new_development: line_plan.is_new_development, // 是否结案
-          development_director: development_director,// 主导人
-          development_start_data: development_start_data, //开发案时间
-        }
-        if (lp_data['line_plan_is_new_development']) {
-          lp_data['is_new_development_text'] = "完结"
-        } else {
-          lp_data['is_new_development_text'] = "未完结"
-        }
-        arrangeData.push(lp_data)
+        line_plan_id_list.push(line_plan.id);
       })
+      const development_data = {
+        development_id: development_id, // 开发案id
+        development_name: development_name, // 开发案的名称
+        development_director: development_director,// 主导人
+        development_start_data: development_start_data, //开发案时间
+        line_plan_id_list: line_plan_id_list, // lp的id
+      }
+      arrangeData.push(development_data)
     })
     return arrangeData
   },
@@ -116,11 +109,18 @@ Page({
   // 生命周期函数--监听页面加载 
   onLoad() {
     const that = this;
-    const userRole = wx.getStorageSync('userRole');
-    const userName = wx.getStorageSync('userName');
+    // const userRole = wx.getStorageSync('userRole');
+    // const userName = wx.getStorageSync('userName');
+    const userRole = 'fmr';
+    const userName = '刘开波';
+    let tabBarTabLabel = "样品图审核"
+    if (userRole === "fmr") {
+      tabBarTabLabel = "上传样品图"
+    }
     that.setData({
       userRole: userRole,
       userName: userName,
+      tabBarTabLabel: tabBarTabLabel
     });
     this.dataRequest("init"); // 分页处理
   },
@@ -156,44 +156,26 @@ Page({
       })
     }
   },
-  // 胶囊悬浮框切换函数
-  onTabBarChange(e) {
-    const that = this;
-    // 对 胶囊悬浮框 进行复制，开启骨架
-    const tabBarValue = e.detail.value;
-    const userRole = that.data.userRole;
-    let tabBarTabLabel = "最新阶段";
-    if (tabBarValue === "todo" && userRole === "shelley") {
-      tabBarTabLabel = "可行性分析";
-    } else if (tabBarValue === "todo" && userRole === "kyle") {
-      tabBarTabLabel = "最终审查";
-    }
-    that.setData({
-      tabBarValue: e.detail.value,
-      tabBarTabLabel: tabBarTabLabel,
-    });
-  },
   // 跳转到详情页面
   onJumpArtworkDeatails(e) {
-    const that = this;
-    const userRole = that.data.userRole;
-    const tabBarValue = that.data.tabBarValue;
-    const lineplan_id = e.currentTarget.dataset.lineplan_id;
-    // 需要3类人进行跳转 Kyle Shelley FMR 进行跳转
-    if (tabBarValue === "todo") {
-      if (userRole === "kyle") {
-        wx.navigateTo({ url: `/pages/kyle/kyle_artowrk_ultimate_details/kyle_artowrk_ultimate_details?lineplan_id=${lineplan_id}` });
-      } else if (userRole === "shelley") {
-        wx.navigateTo({ url: `/pages/shelley/shelley_artwork_detail/shelley_artwork_detail?lineplan_id=${lineplan_id}` });
-      }
-    } else {
-      wx.navigateTo({ url: `/pages/todo/todo_detail/todo_detail?lineplan_id=${lineplan_id}`, });
+    const userName = this.data.userName;
+    const userRole = this.data.userRole;
+    const development_id = e.currentTarget.dataset.development_id;
+    // fmr与设计师进行跳转
+    if (userName && (userRole === "fmr" || userRole === "designer")) {
+      console.log(1111);
+      wx.navigateTo({
+        url: `/pages/factory_login_page/wbo-list/wbo-list?development_id=${JSON.stringify(development_id)}`,
+        fail: (err) => {
+          wx.showToast({
+            title: '跳转失败',
+            icon: 'none'
+          });
+        }
+      });
     }
+
   },
-
-
-
-
   // 搜索
   onSearchConfirm() {
     const keyword = e.detail.value;

@@ -21,37 +21,23 @@
     <view class="wrapper">
       <view class="wrapper">
       <view wx:for="{{Data}}" wx:key="index">
-        <t-cell-group theme="card" class="t-cell-group" bindtap="onJumpArtworkDeatails" data-lineplan_id="{{ item.line_plan_id }}" data-development_id="{{item.development_id}}">
+        <t-cell-group theme="card" class="t-cell-group" bindtap="onJumpArtworkDeatails" data-development_id="{{ item.development_id }}">
           <t-cell hover>
-            <t-badge count="{{item.is_new_development_text}}" slot="note" shape="square" color="{{item.line_plan_is_new_development ?'#1989fa':'red'}}" />
-            <t-tag variant="outline" slot="note" shape="mark" size="medium" style="position: absolute;right: 25rpx;top: 35rpx;" theme="{{tabBarValue === 'todo' ? 'primary' : 'success'}}"> 阶段：{{ tabBarTabLabel }} </t-tag>
+            <t-tag variant="outline" slot="note" shape="mark" size="medium" style="position: absolute;right: 25rpx;top: 35rpx;" theme="primary"> 阶段：{{ tabBarTabLabel }} </t-tag>
             <view slot="title" style="display: grid;gap: 25rpx;">
               <view class="arrange-center" style="text-decoration: underline dashed;">
-                <text class="title-font-main">名称：</text>
-                <text class="title-font-other">{{ item.line_plan_title }}</text>
+                <text class="title-font-main">开发案名称：</text>
+                <text class="title-font-other">{{ item.development_name }}</text>
               </view>
-              <view class="arrange-space-between">
+              <view class="arrange-space-between" style="gap: 20rpx;">
                 <view class="arrange-center">
                   <text class="title-font-main">主导人：</text>
                   <text class="title-font-other">{{ item.development_director }}</text>
                 </view>
                 <view class="arrange-center">
-                  <text class="title-font-main">风格：</text>
-                  <text class="title-font-other">{{ item.line_plan_season }}</text>
-                </view>
-              </view>
-              <view class="arrange-space-between" style="gap: 20rpx;">
-                <view class="arrange-center">
-                  <text class="title-font-main">Year：</text>
-                  <text class="title-font-other">{{item.line_plan_year}}</text>
-                </view>
-                <view class="arrange-center">
                   <text class="title-font-main">创建时间：</text>
                   <text class="title-font-other">{{ item.development_start_data }}</text>
                 </view>
-              </view>
-              <view style="position:absolute;right: 40rpx;bottom: 38rpx;" wx:if="{{userRole==='kyle' && tabBarValue==='todo'}}">
-                <t-link prefixIcon="folder-export" size="small" content="导出附件" underline hover catch:tap="exportAttachments" theme="default" />
               </view>
             </view>
           </t-cell>

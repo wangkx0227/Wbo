@@ -287,7 +287,7 @@ Page({
   // 提交上传的图稿，一次一张
   onSubmitFactoryArtwork(e) {
     const that = this;
-    const pictureUrl = app.globalData.pictureUrl; // 请求后端接口
+    const montageUrl = app.globalData.montageUrl; // 请求后端接口
     const task_id = that.data.task_id;
     const userName = that.data.userName;
     const timeline_id = that.data.timeline_id;
@@ -297,7 +297,7 @@ Page({
       return;
     }
     wx.uploadFile({
-      url: pictureUrl,
+      url: montageUrl + '/wbo/upload_task_image/',
       filePath: imageFileList[0].url, // 临时文件路径
       name: 'file',       // 与接口的 file 字段一致
       formData: {
