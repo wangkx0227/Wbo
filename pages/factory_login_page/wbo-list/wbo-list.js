@@ -15,7 +15,7 @@ Page({
   // 页面初始化
   onLoad(options) {
     // if (!util.checkLogin()) return;
-    // 工厂登录需要
+    // 工厂登录需要-有问题
     const userInfo = wx.getStorageSync('userInfo')
     const fmr = userInfo.fmr.position.includes("FMR") ? userInfo.fmr.name : null
     const factory = userInfo.factory.name
