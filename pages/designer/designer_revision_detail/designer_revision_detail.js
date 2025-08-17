@@ -48,8 +48,8 @@ Page({
     const userName = this.data.userName;
     for (const index in task_list) {
       const task_id = task_list[index].id;
-      const AIE_designer1 = task_list[index].AIE_designer1;
-      if (AIE_designer1 !== userName) {
+      const AIT_designer1 = task_list[index].AIT_designer1;
+      if (AIT_designer1 !== userName) {
         continue;
       }
       // 需要增加一个关于当前用户的判断，只有当前用户才可以看到自己的图稿并上传
@@ -58,7 +58,7 @@ Page({
         code: task_list[index].code,
         title: task_list[index].title,
         texture: task_list[index].texture,
-        name: task_list[index].AIE_designer1,
+        name: task_list[index].AIT_designer1,
       }
       let timeLineData = []; // 时间线存储数据
       const timeline_list = task_list[index].timeline_list;

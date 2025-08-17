@@ -133,7 +133,7 @@ Page({
               } else if (data.statusCode === 400) {
                 wx.showToast({ title: "登录错误", icon: 'error' });
               } else {
-                console.log('err!', resp.data,"1111")
+                console.log('err!', resp.data, "1111")
                 wx.showToast({ title: "登录失败", icon: 'error' });
               }
             },
@@ -207,10 +207,17 @@ Page({
         icon: 'error'
       });
     } else {
-      // wx.setStorageSync('userName', "ethan"); // 样品照片拍照审核  设计师 测试
-      // wx.setStorageSync('userName', "刘开波"); // 样品照片拍照上传 fmr 测试 （fmr系列测试）
-      wx.setStorageSync('userName', "kyle"); // 初选与终选
-      // wx.setStorageSync('userName', "shelley"); // 可行性
+      if (productValue === "kyle") {
+        wx.setStorageSync('userName', "kyle"); // 初选与终选
+      } else if (productValue === "shelley") {
+        wx.setStorageSync('userName', "shelley"); // 第三轮可行性
+      } else if (productValue === "fmr") {
+        wx.setStorageSync('userName', "刘开波"); // 样品照片拍照上传 fmr 测试 （fmr系列测试）fmr可行性分析
+      } else if (productValue === "designer") {
+        wx.setStorageSync('userName', "Ethan"); // 样品照片拍照审核  设计师 测试 上传ait稿与工厂稿和照片审核
+      } else if (productValue === "chosen_draft") {
+        wx.setStorageSync('userName', "kyle");
+      }
       wx.setStorageSync('userRole', productValue);
       wx.showToast({
         title: '登录成功',
