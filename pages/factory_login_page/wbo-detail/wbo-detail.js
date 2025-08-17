@@ -18,7 +18,74 @@ Page({
     fmr: '暂无',
     userRole: null,
   },
+  onLoad(options) {
+    // if (!util.checkLogin()) return;
+    // const userName = wx.getStorageSync('userName')
+    // const userRole = wx.getStorageSync('userRole')
+    const userName = '刘开波'
+    const userRole = 'fmr'
+    // 正常流程
+    // 从缓存中获取数据
+    // const userInfo = wx.getStorageSync('userInfo')
+    // userInfo.name = userInfo.fmr.name ? userInfo.fmr.name : userInfo.factory.name
+    // this.setData({ userInfo,userRole:userRole })
 
+    if (options.scene) {
+      const scene = this.urlParams(options.scene)
+      this.setData({ project_id: scene.project_id })
+    } else {
+      this.setData({ project_id: options.project_id })
+    }
+    this.setData({ app, userName: userName, userRole: userRole })
+    this.getTlData()
+  },
+  // 获取数据
+  getTlData() {
+    const that = this
+    const url = app.globalData.url;
+    const userName = that.data.userName;
+    wx.request({
+      url: url,
+      method: "POST",
+      data: {
+        "type": "getProofingTaskById",
+        "task_id": that.data.project_id,
+        "username": userName
+      },
+      success: (res) => {
+        if (res.data.code === 200) {
+          const data = res.data.data.tasks[0]
+          if (data.blank_images) {
+            data.blank_images = that.sortByCreateTimeDesc(data.blank_images)
+          }
+          if (data.drawings_images) {
+            data.drawings_images = that.sortByCreateTimeDesc(data.drawings_images)
+          }
+          let fmr = '';
+          let factory = '';
+          let material = '';
+          data.material.forEach(item => {
+            material += `${item.name},`
+          });
+          data.factory.forEach(item => {
+            factory += `${item.name},`
+          });
+          data.fmr.forEach(item => {
+            fmr += `${item.name},`
+          });
+          data['fmr'] = fmr;
+          data['factory'] = factory;
+          data['material'] = material;
+          that.setData(data)
+        } else {
+          console.log('加载数据请求失败!', res)
+        }
+      },
+      fail(err) {
+        console.log('加载数据请求失败!', err)
+      }
+    })
+  },
   updateImageList(list, target, newImage) {
     const index = list.findIndex(item => item.id === target.id);
     const userName = this.data.userName;
@@ -36,91 +103,11 @@ Page({
         create_time: target.create_time, // 你可替换为实际时间
         update_time: '',
         // created_by: this.data.userInfo.name
-        created_by:userName
+        created_by: userName
       };
       list = [newItem, ...list];
     }
     return list
-  },
-  // fmr自己标记
-  onStatusTap(e) {
-    const that = this
-    const { index, type, id, state } = e.currentTarget.dataset;
-    const userRole = that.data.userRole; // 可能需要修改-新增
-    const userName = that.data.userName; // 可能需要修改-新增
-
-    console.log(userName); // 有问题
-    // if (!that.data.userInfo.name) {
-    //   return
-    // }
-    if (userRole === "designer") { // 可能需要修改-新增
-      wx.showToast({ title: '只能FMR点击', icon: 'error' });
-      return
-    }
-    wx.request({
-      url: "http://10.8.0.69:8000/wbo/api/",
-      method: "POST",
-      data: {
-        "type": "updateProofingTimeline",
-        "tl_id": id,
-        "state": state,
-        // "state_updated_by": that.data.userInfo.name,
-        "state_updated_by":userName,
-        "username": userName
-      },
-      success(res) {
-        if (res.data.code === 200) {
-          const tasks = that.sortByCreateTimeDesc(res.data.task_data[type])
-          that.setData({ [`${type}`]: tasks })
-        }
-      }
-    })
-  },
-  // 设计师标记-新增
-  onDesignerStatusTap(e) {
-    const that = this
-    const { index, type, id, state } = e.currentTarget.dataset;
-    // const username = that.data.userInfo.name;
-    const userRole = that.data.userRole; // 可能需要修改-新增
-    const userName = 'ethan';
-    // if (!username) {
-    //   return
-    // }
-    if (userRole === "fmr") { // 可能需要修改-新增
-      wx.showToast({ title: '只能设计师点击', icon: 'error' });
-      return
-    }
-    wx.request({
-      url: "http://10.8.0.69:8000/wbo/api/",
-      method: "POST",
-      data: {
-        "type": "updateProofingTimeline",
-        "tl_id": id,
-        "state2": state,
-        "state2_updated_by": userName,
-        "username": userName
-      },
-      success(res) {
-        if (res.data.code === 200) {
-          const tasks = that.sortByCreateTimeDesc(res.data.task_data[type])
-          that.setData({ [`${type}`]: tasks })
-          const update_drawings_images = that.data.drawings_images.map((item) => {
-            if (item.id === id) {
-              return {
-                ...item,
-                state2: Number(state),
-                state2_updated_by: userName,
-                state2_update_time: "暂未获取"
-              }
-            }
-            return item;
-          })
-          that.setData({
-            drawings_images: update_drawings_images
-          })
-        }
-      }
-    })
   },
   onChooseImage(e) {
     const that = this;
@@ -217,84 +204,11 @@ Page({
     })
     return result
   },
-  onLoad(options) {
-    // if (!util.checkLogin()) return;
-    const userName = wx.getStorageSync('userName')
-    const userRole = wx.getStorageSync('userRole')
-    // 正常流程
-    // 从缓存中获取数据
-    // const userInfo = wx.getStorageSync('userInfo')
-    // userInfo.name = userInfo.fmr.name ? userInfo.fmr.name : userInfo.factory.name
-    // this.setData({ userInfo,userRole:userRole })
-
-    if (options.scene) {
-      const scene = this.urlParams(options.scene)
-      this.setData({ project_id: scene.project_id })
-    } else {
-      this.setData({ project_id: options.project_id })
-    }
-    this.setData({ app, userNam: userName, userRole: userRole })
-    this.getTlData()
-  },
   // 降序排序（最新时间排最前）
   sortByCreateTimeDesc(arr) {
     return [...arr].sort((a, b) =>
       new Date(b.create_time) - new Date(a.create_time)
     );
-  },
-  // 获取数据
-  getTlData() {
-    const that = this
-    const url = app.globalData.url;
-    const userName = that.data.userName;
-    wx.request({
-      url: url,
-      method: "POST",
-      data: {
-        "type": "getProofingTaskById",
-        "task_id": that.data.project_id,
-        "username": userName
-      },
-      success: (res) => {
-        if (res.data.code === 200) {
-          const data = res.data.data.tasks[0]
-          if (data.blank_images) {
-            data.blank_images = that.sortByCreateTimeDesc(data.blank_images)
-          }
-          if (data.drawings_images) {
-            data.drawings_images = that.sortByCreateTimeDesc(data.drawings_images)
-          }
-          console.log(data);
-          // let fmr = '';
-          // let factory = '';
-          // let material = '';
-          // data.material.forEach(item => {
-          //   material += `${item.name},`
-          // });
-          // data.factory.forEach(item => {
-          //   factory += `${item.name},`
-          // });
-          // data.fmr.forEach(item => {
-          //   fmr += `${item.name},`
-          // });
-          // that.setData({
-          //   fmr: fmr,
-          //   id: data.id,
-          //   code: data.code,
-          //   factory: factory,
-          //   material: material,
-          //   images_0: data.images_0,
-          //   images_1: data.images_1,
-          // })
-          that.setData(data)
-        } else {
-          console.log('加载数据请求失败!', res)
-        }
-      },
-      fail(err) {
-        console.log('加载数据请求失败!', err)
-      }
-    })
   },
   UpdateStatus() {
     const that = this
@@ -338,5 +252,83 @@ Page({
       })
     }
 
+  },
+  // fmr标记
+  onStatusTap(e) {
+    const that = this
+    const { index, type, id, state } = e.currentTarget.dataset;
+    const userRole = that.data.userRole; // 可能需要修改-新增
+    const userName = that.data.userName; // 可能需要修改-新增
+    // if (!that.data.userInfo.name) {
+    //   return
+    // }
+    if (userRole === "designer") { // 可能需要修改-新增
+      wx.showToast({ title: '只能FMR点击', icon: 'error' });
+      return
+    }
+    wx.request({
+      url: "http://10.8.0.69:8000/wbo/api/",
+      method: "POST",
+      data: {
+        "type": "updateProofingTimeline",
+        "tl_id": id,
+        "state": state,
+        // "state_updated_by": that.data.userInfo.name,
+        "state_updated_by": userName,
+        "username": userName
+      },
+      success(res) {
+        if (res.data.code === 200) {
+          const tasks = that.sortByCreateTimeDesc(res.data.task_data[type])
+          that.setData({ [`${type}`]: tasks })
+        }
+      }
+    })
+  },
+  // 设计师标记
+  onDesignerStatusTap(e) {
+    const that = this
+    const { index, type, id, state } = e.currentTarget.dataset;
+    // const username = that.data.userInfo.name;
+    // if (!username) {
+    //   return
+    // }
+    const userRole = that.data.userRole; // 可能需要修改-新增
+    const userName = that.data.userName;
+    if (userRole === "fmr") { // 可能需要修改-新增
+      wx.showToast({ title: '只能设计师点击', icon: 'error' });
+      return
+    }
+    wx.request({
+      url: "http://10.8.0.69:8000/wbo/api/",
+      method: "POST",
+      data: {
+        "type": "updateProofingTimeline",
+        "tl_id": id,
+        "state2": state,
+        "state2_updated_by": userName,
+        "username": userName
+      },
+      success(res) {
+        if (res.data.code === 200) {
+          const tasks = that.sortByCreateTimeDesc(res.data.task_data[type])
+          that.setData({ [`${type}`]: tasks })
+          const update_drawings_images = that.data.drawings_images.map((item) => {
+            if (item.id === id) {
+              return {
+                ...item,
+                state2: Number(state),
+                state2_updated_by: userName,
+                state2_update_time: "暂未获取"
+              }
+            }
+            return item;
+          })
+          that.setData({
+            drawings_images: update_drawings_images
+          })
+        }
+      }
+    })
   },
 })

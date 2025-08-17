@@ -30,8 +30,8 @@
   </view>
   <view class="status-section">
     <button class="status-btn {{proofing?'active':''}}" bindtap="UpdateStatus">开始打样</button>
-    <view class="status-item  blank_{{blank}}" style="width: 330rpx;margin: 0 auto;">胚体</view>
-    <view class="status-item drawings_{{drawings}}" style="width: 330rpx;margin: 0 auto;">完成样</view>
+    <view class="status-item  blank_{{blank}}" style="width: 290rpx;margin: 0 auto;">胚体</view>
+    <view class="status-item drawings_{{drawings}}" style="width: 290rpx;margin: 0 auto;">完成样</view>
   </view>
   <view class="photo-buttons">
     <button class="photo-btn" bindtap="onChooseImage" data-type="blank_images" data-tp="0">胚体拍照</button>
@@ -53,18 +53,24 @@
         <text>说明：{{item.note}}</text>
       </view>
       <view class="status-row">
-        <view class="status-inline">
-          <view class="status-tag {{item.state === 1 ? 'accept active' : 'unselected'}}" data-index="{{index}}" data-type="blank_images" data-id="{{item.id}}" data-state="1" bindtap="onStatusTap">接受</view>
-          <view class="status-tag {{item.state === 2 ? 'reject active' : 'unselected'}}" data-index="{{index}}" data-type="blank_images" data-id="{{item.id}}" data-state="2" bindtap="onStatusTap">拒绝</view>
-          <view wx:if="{{item.state!==0}}" class="status-date-inline">
-            ({{item.state_updated_by}}--{{item.state_update_time}})
+        <view class="arrange-column">
+          <text style="font-size: 14px;font-weight: bolder;">FMR：</text>
+          <view class="arrange-center" style="gap: 10rpx;">
+            <view class="status-tag {{item.state === 1 ? 'accept active' : 'unselected'}}" data-index="{{index}}" data-type="blank_images" data-id="{{item.id}}" data-state="1" bindtap="onStatusTap">接受</view>
+            <view class="status-tag {{item.state === 2 ? 'reject active' : 'unselected'}}" data-index="{{index}}" data-type="blank_images" data-id="{{item.id}}" data-state="2" bindtap="onStatusTap">拒绝</view>
+            <view wx:if="{{item.state!==0}}" class="status-date-inline">
+              ({{item.state_updated_by}}--{{item.state_update_time}})
+            </view>
           </view>
         </view>
-        <view class="status-inline">
-          <view class="status-tag {{item.state2 === 1 ? 'accept active' : 'unselected'}}" data-index="{{index}}" data-type="blank_images" data-id="{{item.id}}" data-state="1">接受</view>
-          <view class="status-tag {{item.state2 === 2 ? 'reject active' : 'unselected'}}" data-index="{{index}}" data-type="blank_images" data-id="{{item.id}}" data-state="2">拒绝</view>
-          <view wx:if="{{item.state2!==0}}" class="status-date-inline">
-            ({{item.state2_updated_by}}--{{item.state2_update_time}})
+        <view class="arrange-column">
+          <text style="font-size: 14px;font-weight: bolder;">设计师：</text>
+          <view class="arrange-center" style="gap: 10rpx;">
+            <view class="status-tag {{item.state2 === 1 ? 'accept active' : 'unselected'}}" data-index="{{index}}" data-type="blank_images" data-id="{{item.id}}" data-state="1">接受</view>
+            <view class="status-tag {{item.state2 === 2 ? 'reject active' : 'unselected'}}" data-index="{{index}}" data-type="blank_images" data-id="{{item.id}}" data-state="2">拒绝</view>
+            <view wx:if="{{item.state2!==0}}" class="status-date-inline">
+              ({{item.state2_updated_by}}--{{item.state2_update_time}})
+            </view>
           </view>
         </view>
       </view>
@@ -79,7 +85,6 @@
         </swiper-item>
       </block>
     </swiper>
-
     <view class="info">
       <view>上传：{{item.created_by}}--{{item.create_time}}</view>
       <view class="text-box">
