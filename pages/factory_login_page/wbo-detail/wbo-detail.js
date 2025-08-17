@@ -22,16 +22,13 @@ Page({
   // 初始化
   onLoad(options) {
     // if (!util.checkLogin()) return;
-    // const userName = wx.getStorageSync('userName')
-    // const userRole = wx.getStorageSync('userRole')
-    const userName = '刘开波'
-    const userRole = 'fmr'
     // 正常流程
     // 从缓存中获取数据
     // const userInfo = wx.getStorageSync('userInfo')
     // userInfo.name = userInfo.fmr.name ? userInfo.fmr.name : userInfo.factory.name
     // this.setData({ userInfo,userRole:userRole })
-
+    const userName = wx.getStorageSync('userName');
+    const userRole = wx.getStorageSync('userRole');
     if (options.scene) {
       const scene = this.urlParams(options.scene)
       this.setData({ project_id: scene.project_id })
@@ -214,7 +211,7 @@ Page({
   },
   UpdateStatus() {
     const that = this
-    const url = app.globalData.url;
+    const userName = that.data.userName;
     // if (!that.data.userInfo.name) {
     //   return
     // }
@@ -232,7 +229,7 @@ Page({
               data: {
                 "type": "updateProofingTask",
                 "task_id": that.data.id,
-                "username": "admin",
+                "username": userName,
                 "proofing": 1
               },
               success(res) {
@@ -258,24 +255,26 @@ Page({
   // fmr标记
   onStatusTap(e) {
     const that = this
-    const { index, type, id, state } = e.currentTarget.dataset;
-    const userRole = that.data.userRole; // 可能需要修改-新增
-    const userName = that.data.userName; // 可能需要修改-新增
     // if (!that.data.userInfo.name) {
     //   return
     // }
+    const { index, type, id, state } = e.currentTarget.dataset;
+    const userRole = that.data.userRole; // 可能需要修改-新增
+    const userName = that.data.userName; // 可能需要修改-新增
+    if (!userName) {
+      return
+    }
     if (userRole === "designer") { // 可能需要修改-新增
       wx.showToast({ title: '只能FMR点击', icon: 'error' });
       return
     }
     wx.request({
-      url: "http://10.8.0.69:8000/wbo/api/",
+      url: url,
       method: "POST",
       data: {
         "type": "updateProofingTimeline",
         "tl_id": id,
         "state": state,
-        // "state_updated_by": that.data.userInfo.name,
         "state_updated_by": userName,
         "username": userName
       },
@@ -297,12 +296,15 @@ Page({
     // }
     const userRole = that.data.userRole; // 可能需要修改-新增
     const userName = that.data.userName;
+    if (!userName) {
+      return
+    }
     if (userRole === "fmr") { // 可能需要修改-新增
       wx.showToast({ title: '只能设计师点击', icon: 'error' });
       return
     }
     wx.request({
-      url: "http://10.8.0.69:8000/wbo/api/",
+      url: url,
       method: "POST",
       data: {
         "type": "updateProofingTimeline",
@@ -313,22 +315,10 @@ Page({
       },
       success(res) {
         if (res.data.code === 200) {
-          const tasks = that.sortByCreateTimeDesc(res.data.task_data[type])
-          that.setData({ [`${type}`]: tasks })
-          const update_drawings_images = that.data.drawings_images.map((item) => {
-            if (item.id === id) {
-              return {
-                ...item,
-                state2: Number(state),
-                state2_updated_by: userName,
-                state2_update_time: "暂未获取"
-              }
-            }
-            return item;
-          })
-          that.setData({
-            drawings_images: update_drawings_images
-          })
+          if (res.data.code === 200) {
+            const tasks = that.sortByCreateTimeDesc(res.data.task_data[type])
+            that.setData({ [`${type}`]: tasks })
+          }
         }
       }
     })

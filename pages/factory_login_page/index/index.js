@@ -109,10 +109,8 @@ Page({
   // 生命周期函数--监听页面加载 
   onLoad() {
     const that = this;
-    // const userRole = wx.getStorageSync('userRole');
-    // const userName = wx.getStorageSync('userName');
-    const userRole = 'fmr';
-    const userName = '刘开波';
+    const userRole = wx.getStorageSync('userRole');
+    const userName = wx.getStorageSync('userName');
     let tabBarTabLabel = "样品图审核"
     if (userRole === "fmr") {
       tabBarTabLabel = "上传样品图"
@@ -168,12 +166,16 @@ Page({
         fail: (err) => {
           wx.showToast({
             title: '跳转失败',
-            icon: 'none'
+            icon: 'error'
           });
         }
       });
+    } else {
+      wx.showToast({
+        title: '未登录',
+        icon: 'error'
+      });
     }
-
   },
   // 搜索
   onSearchConfirm() {

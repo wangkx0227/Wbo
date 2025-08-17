@@ -23,10 +23,8 @@ Page({
     //     factory,
     //     userInfo
     //   })
-    // const userName = wx.getStorageSync('userName')
-    // const userRole = wx.getStorageSync('userRole')
-    const userRole = 'fmr'
-    const userName = '刘开波'
+    const userName = wx.getStorageSync('userName')
+    const userRole = wx.getStorageSync('userRole')
     const development_id = options.development_id; // 开发案id
     this.setData({
       app,
