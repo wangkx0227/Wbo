@@ -1,10 +1,5 @@
 const utils = require('../../../utils/util')
 
-const swiperImages = [
-  'https://picsum.photos/800/600?random=1',  // 横版
-  // 物品类
-  'https://picsum.photos/700/900?random=5',  // 长竖版
-];
 Page({
   data: {
     lineplan_id: null, // 存储的lp id值
