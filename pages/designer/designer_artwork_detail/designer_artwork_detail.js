@@ -50,9 +50,9 @@ Page({
       const task_id = task_list[index].id;
       const be_chosen2 = task_list[index].be_chosen2;
       const whether_to_proof = task_list[index].whether_to_proof;
-      const AIE_designer1 = task_list[index].AIE_designer1;
+      const AIT_designer1 = task_list[index].AIT_designer1;
       // 说明没被选中，就过滤 需要增加一个关于当前用户的判断，只有当前用户才可以看到自己的图稿并上传
-      if (AIE_designer1 !== userName) {
+      if (AIT_designer1 !== userName) {
         continue;
       }
       if (be_chosen2 !== 1) {
@@ -63,7 +63,7 @@ Page({
         code: task_list[index].code,
         title: task_list[index].title,
         texture: task_list[index].texture,
-        name: AIE_designer1,
+        name: AIT_designer1,
         whether_to_proof: whether_to_proof,
       }
       if (whether_to_proof === 1) {

@@ -69,7 +69,7 @@ Page({
         code: task_list[index].code,
         title: task_list[index].title,
         texture: task_list[index].texture,
-        name: task_list[index].AIE_designer1,
+        name: task_list[index].AIT_designer1,
         fmr: task_list[index].fmr,
         fmr2: fmr2, // 这是fmr选中状态
       }

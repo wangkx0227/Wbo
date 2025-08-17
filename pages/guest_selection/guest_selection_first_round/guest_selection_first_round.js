@@ -112,7 +112,7 @@ Page({
         code: task_list[index].code,
         title: task_list[index].title,
         texture: task_list[index].texture,
-        name: task_list[index].AIE_designer1,
+        name: task_list[index].AIT_designer1,
         be_chosen2: be_chosen2,
         whether_to_proof: whether_to_proof
       }

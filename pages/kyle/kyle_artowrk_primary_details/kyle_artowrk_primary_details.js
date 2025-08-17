@@ -65,7 +65,7 @@ Page({
         code: task_list[index].code,
         title: task_list[index].title,
         texture: task_list[index].texture,
-        name: task_list[index].AIE_designer1,
+        name: task_list[index].AIT_designer1,
       }
       let timeLineData = []; // 时间线存储数据
       const timeline_list = task_list[index].timeline_list;
