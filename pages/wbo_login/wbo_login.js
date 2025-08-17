@@ -208,7 +208,8 @@ Page({
       });
     } else {
       // 针对 fmr 与 设计师假数据
-      wx.setStorageSync('userName', "ethan"); // 异步存储消息
+      wx.setStorageSync('userName', "ethan"); // 设计师
+      // wx.setStorageSync('userName', "刘开波"); // fmr
       wx.setStorageSync('userRole', productValue); // 异步存储消息
       wx.showToast({
         title: '登录成功',
