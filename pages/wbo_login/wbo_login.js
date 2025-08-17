@@ -208,7 +208,9 @@ Page({
       });
     } else {
       // wx.setStorageSync('userName', "ethan"); // 样品照片拍照审核  设计师 测试
-      wx.setStorageSync('userName', "刘开波"); // 样品照片拍照上传 fmr 测试 （fmr系列测试）
+      // wx.setStorageSync('userName', "刘开波"); // 样品照片拍照上传 fmr 测试 （fmr系列测试）
+      wx.setStorageSync('userName', "kyle"); // 初选与终选
+      // wx.setStorageSync('userName', "shelley"); // 可行性
       wx.setStorageSync('userRole', productValue);
       wx.showToast({
         title: '登录成功',
