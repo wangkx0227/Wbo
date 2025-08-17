@@ -1,6 +1,6 @@
-const app = getApp()
-const util = require('../../../utils/util.js');
-
+const app = getApp();
+const url = app.globalData.url;
+const montageUrl = app.globalData.montageUrl;
 Page({
   data: {
     username: '管理员',
@@ -17,7 +17,9 @@ Page({
     material: '暂无',
     fmr: '暂无',
     userRole: null,
+    montageUrl: montageUrl // 拼接路径
   },
+  // 初始化
   onLoad(options) {
     // if (!util.checkLogin()) return;
     // const userName = wx.getStorageSync('userName')
@@ -42,7 +44,6 @@ Page({
   // 获取数据
   getTlData() {
     const that = this
-    const url = app.globalData.url;
     const userName = that.data.userName;
     wx.request({
       url: url,
@@ -109,27 +110,27 @@ Page({
     }
     return list
   },
+  // 胚体拍照与完成样拍照
   onChooseImage(e) {
     const that = this;
-    var type = e.currentTarget.dataset.type;
-    const type_id = e.currentTarget.dataset.tp;
-    const userName = that.data.userName;
-    const url = app.globalData.url;
     // if (!that.data.userInfo.name) {
     //   return
     // }
+    var type = e.currentTarget.dataset.type;
+    const type_id = e.currentTarget.dataset.tp;
+    const userName = that.data.userName;
     wx.chooseMedia({
       count: 9,
       success: (resp) => {
         wx.request({
-          url: "http://10.8.0.69:8000/wbo/api/",
+          url: url,
           method: "POST",
           data: {
             "type": "createProofingTimeline",
             "task_id": that.data.id,
             "tl_type": type_id,
             "created_by": userName,
-            "username": "admin"
+            "username": userName
           },
           success(res) {
             if (res.data.code === 200) {
@@ -137,7 +138,7 @@ Page({
               resp.tempFiles.forEach((file, idx) => {
                 const path = file.tempFilePath;
                 wx.uploadFile({
-                  url: 'http://10.8.0.69:8000/wbo/upload-project-proofing-timeline-image/',
+                  url: montageUrl + '/wbo/upload-project-proofing-timeline-image/',
                   filePath: path,
                   name: 'image',
                   method: 'POST',
@@ -180,6 +181,7 @@ Page({
       }
     });
   },
+  // 图片放大预览
   onPreviewImage(e) {
     const type = e.currentTarget.dataset.type
     const index = e.currentTarget.dataset.index;
