@@ -327,12 +327,14 @@ Page({
   onOpenDialog(e) {
     const {
       timelineId,
-      taskId
+      taskId,
+      confirmed
     } = e.currentTarget.dataset;
     this.setData({
       dialogVisible: true,
       timeline_id: timelineId,
-      task_id: taskId
+      task_id: taskId,
+      confirmed: confirmed
     });
   },
   // 弹窗-评论-双向绑定
@@ -349,8 +351,10 @@ Page({
       task_id,
       timeline_id,
       dialogValue,
-      userName
+      userName,
+      confirmed
     } = that.data; // 输入的评论的数据
+
     if (action === 'confirm') {
       if (!dialogValue) {
         const theme = "warning"
@@ -358,23 +362,26 @@ Page({
         utils.showToast(that, message, theme);
         return;
       }
-      utils.UpdateData({
-        page: that,
-        data: {
-          "type": "update_timeline",
-          "timeLine_id": timeline_id,
-          "username": userName, // 参数需要修改
-          "name": userName, // 参数需要修改
-          "comment": dialogValue
-        },
-        message: "评审记录完成"
-      })
-      // 更新时间线
-      utils.updateTimeLine(that, task_id, timeline_id, dialogValue, userName);
+      if (confirmed !== 4 && confirmed !== 3)      {
+        utils.showToast(that, "请先审核后再评论", "error");
+        return;
+      } else {
+        utils.UpdateData({
+          page: that,
+          data: {
+            "type": "update_timeline",
+            "timeLine_id": timeline_id,
+            "username": userName, // 参数需要修改
+            "name": userName, // 参数需要修改
+            "comment": dialogValue
+          },
+          message: "评审记录完成"
+        })
+        // 更新时间线
+        utils.updateTimeLine(that, task_id, timeline_id, dialogValue, userName);
+      }
     } else if (action === 'cancel') {
-      const theme = "warning"
-      const message = "评审记录取消"
-      utils.showToast(that, message, theme);
+      utils.showToast(that, "评审记录取消", "warning");
     }
     this.setData({
       dialogVisible: false,

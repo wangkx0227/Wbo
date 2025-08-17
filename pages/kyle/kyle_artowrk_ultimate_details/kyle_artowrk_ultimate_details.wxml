@@ -63,7 +63,7 @@
         <view class="arrange-center">
           <view class="arrange-center title-font-other">
             <text class="title-font-main">终审评论：</text>
-            <t-link size="small" content="点击评论" hover underline suffixIcon="chat-message" variant="outline" bind:tap="onOpenDialog" data-timeline-id="{{ item.timeline_id }}" data-task-id="{{ item.id }}" />
+            <t-link size="small" content="点击评论" hover underline suffixIcon="chat-message" variant="outline" bind:tap="onOpenDialog" data-timeline-id="{{ item.timeline_id }}" data-task-id="{{ item.id }}" data-confirmed="{{ item.confirmed }}" />
           </view>
           <t-divider layout="vertical" />
           <view class="arrange-center title-font-other">
