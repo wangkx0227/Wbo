@@ -15,14 +15,16 @@ Page({
   // 页面初始化
   onLoad(options) {
     // if (!util.checkLogin()) return;
+    // 工厂登录需要
     const userInfo = wx.getStorageSync('userInfo')
-    //   const fmr = userInfo.fmr.position.includes("FMR") ? userInfo.fmr.name : null
-    //   const factory = userInfo.factory.name
-    //   this.setData({
-    //     fmr,
-    //     factory,
-    //     userInfo
-    //   })
+    const fmr = userInfo.fmr.position.includes("FMR") ? userInfo.fmr.name : null
+    const factory = userInfo.factory.name
+    this.setData({
+      fmr,
+      factory,
+      userInfo
+    })
+    // 公司内部用户处理
     const userName = wx.getStorageSync('userName')
     const userRole = wx.getStorageSync('userRole')
     const development_id = options.development_id; // 开发案id
@@ -58,7 +60,7 @@ Page({
       },
       "username": "Jasonyu"
     }
-     // 如果是工厂登录
+    // 如果是工厂登录
     requestData["username"] = userName;
     requestData["project_id"] = development_id;
     if (userRole === "fmr") {
