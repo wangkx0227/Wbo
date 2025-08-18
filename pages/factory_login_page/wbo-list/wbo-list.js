@@ -1,4 +1,5 @@
 const app = getApp();
+const url = app.globalData.url;
 Page({
   data: {
     userRole: null,
@@ -10,7 +11,10 @@ Page({
     currentPage: 1, // 当前页码
     isLoading: false, // 是否正在加载
     hasMore: false, // 是否还有更多数据
-    allItem: [] // 所有数据
+    allItem: [], // 所有数据
+    popupVisible: false, // 弹窗控制变量
+    factoryOptions: [],
+    factoryCheckAllValues: [],
   },
   // 页面初始化
   onLoad(options) {
@@ -100,7 +104,7 @@ Page({
               fmr: fmr,
               id: item.id,
               code: item.code,
-              factory: factory,
+              factory: factory || "请点击后选择工厂",
               material: material,
               image_status: image_path ? true : false,
               imgSrc: montageUrl + '/' + image_path,
@@ -118,7 +122,14 @@ Page({
             selectedItem: that.data.selectedItem,
             allItem: that.data.allItem,
             isLoading: false,
-            hasMore: tasks.length === that.data.pageSize
+            hasMore: tasks.length === that.data.pageSize,
+          })
+          // 工厂
+          const factoryOptions = factory_list.map(item => {
+            return { "label": item, "value": item }
+          });
+          that.setData({
+            factoryOptions: factoryOptions
           })
         } else {
           console.log('加载数据请求失败!', res)
@@ -181,5 +192,84 @@ Page({
     wx.navigateTo({
       url: `/pages/factory_login_page/wbo-detail/wbo-detail?project_id=${projectId}`
     });
+  },
+  // 多选操作
+  onOpnePopup(e) {
+    const that = this;
+    const projectId = e.currentTarget.dataset.id;
+    const factory = e.currentTarget.dataset.factory;
+    let factoryCheckAllValues = [];
+    if (factory) {
+      factoryCheckAllValues = factory.split(",").filter(Boolean);
+    }
+    that.setData({
+      projectId: projectId,
+      factoryCheckAllValues: factoryCheckAllValues // 后设置数据
+    }, () => {
+      that.setData({
+        popupVisible: true // 先显示弹窗
+      });
+    });
+  },
+  onClosePopup(e) {
+    this.setData({
+      popupVisible: false,
+    });
+  },
+  onClosePopupChange(e) {
+    this.setData({
+      popupVisible: e.detail.visible,
+    });
+  },
+  // 多选-选中
+  onCheckAllChange(event) {
+    this.setData({
+      factoryCheckAllValues: event.detail.value,
+    });
+  },
+  // 提交工厂
+  onSubmitFactory(e) {
+    const that = this;
+    const userName = that.data.userName;
+    const task_id = that.data.projectId;
+    const selectedItem = that.data.selectedItem;
+    const factoryCheckAllValues = that.data.factoryCheckAllValues;
+    if(factoryCheckAllValues.length === 0){
+      wx.showToast({ title: '请选择在提交', icon: 'error' });
+      return;
+    }
+    let data = {
+      "task_id": task_id,
+      "username": userName,
+      "type": "updateProofingTask",
+      "factory": factoryCheckAllValues,
+    }
+    wx.request({
+      url: url,
+      method: "POST",
+      data: data,
+      success(res) {
+        if (res.data.code === 200) {
+          const updataData = selectedItem.map(item => {
+            if (item.id === task_id) {
+              item["factory"] = factoryCheckAllValues.join(",");
+            }
+            return item;
+          })
+          that.setData({
+            popupVisible:false,
+            selectedItem: updataData,
+          });
+          wx.showToast({ title: '提交工厂成功'});
+          setTimeout(()=>{
+            that.setData({
+              factoryCheckAllValues:[],
+            })
+          },500)
+        }else{
+          wx.showToast({ title: '提交工厂失败', icon: 'error' });
+        }
+      }
+    })
   }
 })

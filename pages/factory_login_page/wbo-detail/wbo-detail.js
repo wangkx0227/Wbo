@@ -315,10 +315,8 @@ Page({
       },
       success(res) {
         if (res.data.code === 200) {
-          if (res.data.code === 200) {
-            const tasks = that.sortByCreateTimeDesc(res.data.task_data[type])
-            that.setData({ [`${type}`]: tasks })
-          }
+          const tasks = that.sortByCreateTimeDesc(res.data.task_data[type])
+          that.setData({ [`${type}`]: tasks })
         }
       }
     })
