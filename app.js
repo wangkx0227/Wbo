@@ -14,7 +14,6 @@ App({
       "AIE": "designer",
       "设计经理": "designer",
       "OMR": "chosen_draft",
-      "投票人": "chosen_draft"
     }
   },
   onLaunch(options) {
