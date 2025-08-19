@@ -4,7 +4,7 @@ Page({
     lineplan_id: null, // 存储的lp id值
     Data: [], // 页面渲染数据存储列表
     allData: [], // 全部的数据
-    filteredData:[],
+    filteredData: [],
     pageSize: 6, // 每次加载几个
     currentIndex: 0, // 当前加载到第几个
     skeletonLoading: true, // 骨架屏控制变量
@@ -23,15 +23,17 @@ Page({
     popupTimeLineVisible: false,
     taskTimeLineData: {}, // 存储时间线的数据
     timeLineValue: [], // 具体查看的时间线
-    // 筛选框变量-模板
-    dropdownArtwork: {
+    // 筛选框变量-材质
+    dropdownMaterial: {
       value: 'all',
-      options: [{
-        value: 'all',
-        label: '全部图稿',
-      },
+      options: [
+        {
+          value: 'all',
+          label: '全部材质',
+        },
       ],
     },
+    filterMaterialValue: "all", // 筛选存储变量
     // 筛选框变量-评估
     dropdownAssess: {
       value: 'all',
@@ -40,23 +42,21 @@ Page({
         label: '全部评估',
       },
       {
-        value: 'discard',
+        value: 1,
         label: '可生产',
       },
       {
-        value: 'reserve',
-        label: '小幅度修改',
-      },
-      {
-        value: 'reserve',
-        label: '不具备可行性',
+        value: 2,
+        label: '不可生产',
       },
       ],
     },
+    filterStatusValue: 'all',  // 筛选存储变量
   },
   // 数据结构处理
   dataStructure(dataList) {
     let arrangeData = [];
+    let material_list = [];
     const userName = this.data.userName;
     const taskTimeLineData = {}; // 时间线数据
     const image_url = dataList.WBO_URL
@@ -121,7 +121,17 @@ Page({
         continue
       }
       taskTimeLineData[`${task_id}`] = timeLineData; // 时间线数据
+      material_list.push(data_dict["texture"].trim());
       arrangeData.push(data_dict);
+    }
+    // 筛选条件加入
+    const material = utils.filterDataProcess(material_list);
+    const options = this.data.dropdownMaterial.options;
+    // 只有 筛选框的列表为1（内部默认有一条数据）才会添加
+    if (options.length === 1) {
+      this.setData({
+        "dropdownMaterial.options": options.concat(material)
+      })
     }
     return { arrangeData, taskTimeLineData }; // 返回整理的结构体
   },
@@ -140,7 +150,7 @@ Page({
       const taskTimeLineData = allResults.taskTimeLineData; // 时间线
       that.setData({
         allData: arrangeData,
-        filteredData:arrangeData,
+        filteredData: arrangeData,
         taskTimeLineData: taskTimeLineData,
       })
       // 数据逻辑构建
@@ -172,8 +182,8 @@ Page({
     const lineplan_id = options.lineplan_id || ''; // 首页跳转后的存储的id值
     that.setData({
       lineplan_id: lineplan_id, // 记录全部的id数据
-      userRole:userRole,
-      userName:userName
+      userRole: userRole,
+      userName: userName
     })
     that.dataRequest('init');
   },
@@ -386,20 +396,52 @@ Page({
   },
   // 空方法，避免抽屉的滚动
   onDummyTouchMove() { },
-
-
-  // 下拉菜单-图稿
-  onArtworkChange(e) {
-    this.setData({
-      'dropdownArtwork.value': e.detail.value,
+  // 下拉菜单-材质
+  onMaterialChange(e) {
+    const that = this;
+    const value = e.detail.value; // 筛选框内容
+    const filterStatusValue = that.data.filterStatusValue;
+    const filtered = that.data.allData.filter(item => {
+      const matchMaterial = (value === 'all') ? true : item.texture === value;
+      const matchStatus = (filterStatusValue === 'all') ? true : item.fmr2 === filterStatusValue;
+      return matchMaterial && matchStatus;
+    });
+    that.setData({
+      filteredData: filtered, // 记录筛选数据
+      Data: [],
+      currentIndex: 0,
+      noMoreData: false,
+      filterMaterialValue: value
+    });
+    const firstPage = utils.readPageStructure(that);
+    that.setData({
+      Data: firstPage, // 显示
+      currentIndex: firstPage.length,
+      'dropdownMaterial.value': value,
     });
   },
   // 下拉菜单-评估
   onAssessChange(e) {
-    this.setData({
-      'dropdownAssess.value': e.detail.value,
+    const that = this;
+    const value = e.detail.value; // 筛选框内容
+    const filterMaterialValue = that.data.filterMaterialValue;
+    const filtered = that.data.allData.filter(item => {
+      const matchStatus = (value === 'all') ? true : item.fmr2 === value;
+      const matchMaterial = (filterMaterialValue === 'all') ? true : item.texture === filterMaterialValue;
+      return matchMaterial && matchStatus;
+    });
+    that.setData({
+      filteredData: filtered, // 记录筛选数据
+      Data: [],
+      currentIndex: 0,
+      noMoreData: false,
+      filterStatusValue: value
+    });
+    const firstPage = utils.readPageStructure(that);
+    that.setData({
+      Data: firstPage, // 显示
+      currentIndex: firstPage.length,
+      'dropdownAssess.value': value,
     });
   },
-
-
 })
