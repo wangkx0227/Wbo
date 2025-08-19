@@ -62,6 +62,10 @@ Page({
   },
   // 首页数据结构处理
   dataStructure(dataList) {
+    const that = this;
+    const mode = 'init';
+    const userName = that.data.userName;
+    const userRole = that.data.userRole;
     let arrangeData = [];
     dataList.forEach(item => {
       const development_id = item.id; // 开发案id
@@ -70,6 +74,7 @@ Page({
       const development_start_data = item.start_date; // 开发案开始时间
       // 对内部的line_plan_list变量进行循环
       item.line_plan_list.forEach((line_plan) => {
+        const development_status = line_plan.status; // 阶段
         const lp_data = {
           development_id: development_id, // 开发案id
           line_plan_id: line_plan.id, // id
@@ -80,23 +85,61 @@ Page({
           line_plan_is_new_development: line_plan.is_new_development, // 是否结案
           development_director: development_director,// 主导人
           development_start_data: development_start_data, //开发案时间
+          development_status: development_status
         }
         if (lp_data['line_plan_is_new_development']) {
           lp_data['is_new_development_text'] = "完结"
         } else {
           lp_data['is_new_development_text'] = "未完结"
         }
-        arrangeData.push(lp_data)
-      })
+
+        if (development_status === 1) {
+          lp_data['development_status_text'] = "概念创建打包"
+        } else if (development_status === 2) {
+          lp_data['development_status_text'] = "初级审查"
+        } else if (development_status === 3) {
+          lp_data['development_status_text'] = "可行性分析"
+        } else if (development_status === 4) {
+          lp_data['development_status_text'] = "AIT制图"
+        } else if (development_status === 5) {
+          lp_data['development_status_text'] = "最终审查"
+        } else if (development_status === 6) {
+          lp_data['development_status_text'] = "MIRO阶段"
+        } else if (development_status === 7) {
+          lp_data['development_status_text'] = "客户选样"
+        } else if (development_status === 8) {
+          lp_data['development_status_text'] = "工厂打样"
+        } else if (development_status === 9) {
+          lp_data['development_status_text'] = "客户中单"
+        }
+
+        if (userRole === 'kyle' && (development_status === 2 || development_status === 5)) {
+          // kyle的初审与终审
+          arrangeData.push(lp_data)
+        }
+        if ((userRole === 'shelley' || userRole === 'fmr') && development_status === 3) {
+          // fmr与shelley可行性分析
+          arrangeData.push(lp_data)
+        }
+        if (userRole === 'designer' && (development_status === 4 || development_status === 7)) {
+          // ait制图与工厂稿上传
+          arrangeData.push(lp_data)
+        }
+        if (userRole === 'chosen_draft' && (development_status === 7 || development_status === 9)) {
+          // 第一轮选稿与第二轮选稿
+          arrangeData.push(lp_data)
+        }
+      });
     })
     return arrangeData
   },
   // 数据分页显示处理
   dataRequest(mode) {
     const that = this;
+    const userName = that.data.userName;
     utils.LoadDataList({
       page: this,
-      data: { type: "getProjectList", username: "admin" },
+      data: { type: "getProjectList", username: userName },
       mode: mode
     }).then(list => { // list 就是data数据
       const arrangeData = that.dataStructure(list);
@@ -128,13 +171,15 @@ Page({
   onLoad() {
     const that = this;
     const userRole = wx.getStorageSync('userRole');
-    let tabBarTabLabel = "最终审查"
-    if (userRole === "shelley") {
-      tabBarTabLabel = "可行性分析"
-    }
+    const userName = wx.getStorageSync('userName');
+    // let tabBarTabLabel = "最终审查"
+    // if (userRole === "shelley") {
+    //   tabBarTabLabel = "可行性分析"
+    // }
     that.setData({
       userRole: userRole,
-      tabBarTabLabel: tabBarTabLabel
+      userName: userName,
+      // tabBarTabLabel: tabBarTabLabel,
     });
     if (!userRole) {
       const theme = 'error'
@@ -195,11 +240,11 @@ Page({
     const tabBarValue = e.detail.value;
     const userRole = that.data.userRole;
     let tabBarTabLabel = "最新阶段";
-    if (tabBarValue === "todo" && userRole === "shelley") {
-      tabBarTabLabel = "可行性分析";
-    }else if(tabBarValue === "todo" && userRole === "kyle"){
-      tabBarTabLabel = "最终审查";
-    }
+    // if (tabBarValue === "todo" && userRole === "shelley") {
+    //   tabBarTabLabel = "可行性分析";
+    // } else if (tabBarValue === "todo" && userRole === "kyle") {
+    //   tabBarTabLabel = "最终审查";
+    // }
     that.setData({
       tabBarValue: e.detail.value,
       tabBarTabLabel: tabBarTabLabel,

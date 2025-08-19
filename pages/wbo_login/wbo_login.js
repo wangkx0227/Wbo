@@ -136,7 +136,8 @@ Page({
                 wx.setStorageSync('userInfo', that.data.userInfo); // 全部存储信息
                 wx.showToast({ title: '登录成功', icon: 'success' }); // 提示
                 const redirect = that.data.redirect;  // 跳转，如果有参数进行携带
-                if (redirect && (role === "shelley" || role === "kyle")) { // 需要再这里加上指定的人，shelley和kyle
+                // if (redirect && (role === "shelley" || role === "kyle")) { // 需要再这里加上指定的人，shelley和kyle
+                if (redirect) {
                   const decodedPath = decodeURIComponent(redirect); // 解码后的路径
                   setTimeout(() => {
                     wx.reLaunch({
