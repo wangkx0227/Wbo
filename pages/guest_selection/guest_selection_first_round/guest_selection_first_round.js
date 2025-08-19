@@ -5,7 +5,7 @@ Page({
     development_id: null, // 开发案id
     Data: [], // 页面渲染数据存储列表
     allData: [], // 全部的数据
-    filteredData:[],
+    filteredData: [],
     pageSize: 6, // 每次加载几个
     currentIndex: 0, // 当前加载到
     skeletonLoading: true, // 骨架屏控制变量
@@ -33,37 +33,35 @@ Page({
       is_new_development: 1,
       username: "管理员",
     }, // 新增lp
-    // 筛选框变量-模板
-    dropdownArtwork: {
+    // 筛选框变量-材质
+    dropdownMaterial: {
       value: 'all',
-      options: [{
-        value: 'all',
-        label: '全部图稿',
-      },
+      options: [
+        {
+          value: 'all',
+          label: '全部材质',
+        },
       ],
     },
-    // 筛选框变量-客户选中
+    filterMaterialValue: "all", // 筛选存储变量
+    // 筛选框变量-评估
     dropdownSelected: {
       value: 'all',
       options: [{
         value: 'all',
-        label: '全部状态',
+        label: '全部选中',
       },
       {
-        value: 'bot_selected',
-        label: '未选',
-      },
-      {
-        value: 'selected',
+        value: 1,
         label: '已选中',
       },
       {
-        value: 'eliminate',
-        label: '已淘汰',
+        value: 2,
+        label: '未选中',
       },
-
       ],
     },
+    filterStatusValue: 'all',  // 筛选存储变量
     // 增加图稿
     popupAddVisible: false,
     // 指派设计师
@@ -101,6 +99,7 @@ Page({
   // 数据结构处理
   dataStructure(dataList) {
     let arrangeData = [];
+    let material_list = [];
     const taskTimeLineData = {}; // 时间线数据
     const image_url = dataList.WBO_URL
     const task_list = dataList.task_list
@@ -165,7 +164,17 @@ Page({
         continue
       }
       taskTimeLineData[`${task_id}`] = timeLineData; // 时间线数据
+      material_list.push(data_dict["texture"].trim());
       arrangeData.push(data_dict);
+    }
+    // 筛选条件加入
+    const material = utils.filterDataProcess(material_list);
+    const options = this.data.dropdownMaterial.options;
+    // 只有 筛选框的列表为1（内部默认有一条数据）才会添加
+    if (options.length === 1) {
+      this.setData({
+        "dropdownMaterial.options": options.concat(material)
+      })
     }
     return {
       arrangeData,
@@ -187,7 +196,7 @@ Page({
       const taskTimeLineData = allResults.taskTimeLineData; // 时间线
       that.setData({
         allData: arrangeData,
-        filteredData:arrangeData,
+        filteredData: arrangeData,
         taskTimeLineData: taskTimeLineData,
       })
       // 数据逻辑构建
@@ -363,11 +372,11 @@ Page({
       dialogId: null,
       dialogVisible: false,
     });
-    setTimeout(()=>{
+    setTimeout(() => {
       this.setData({
-        dialogValue:"",
+        dialogValue: "",
       })
-    },500)
+    }, 500)
   },
   // 修改当前选中图稿状态
   onModifyArtworkStatus(e) {
@@ -566,13 +575,60 @@ Page({
     }
 
   },
+  // 下拉菜单-材质
+  onMaterialChange(e) {
+    const that = this;
+    const value = e.detail.value; // 筛选框内容
+    const filterStatusValue = that.data.filterStatusValue;
+    const filtered = that.data.allData.filter(item => {
+      const matchMaterial = (value === 'all') ? true : item.texture === value;
+      const matchStatus = (filterStatusValue === 'all') ? true : item.be_chosen2 === filterStatusValue;
+      return matchMaterial && matchStatus;
+    });
+    that.setData({
+      filteredData: filtered, // 记录筛选数据
+      Data: [],
+      currentIndex: 0,
+      noMoreData: false,
+      filterMaterialValue: value
+    });
+    const firstPage = utils.readPageStructure(that);
+    that.setData({
+      Data: firstPage, // 显示
+      currentIndex: firstPage.length,
+      'dropdownMaterial.value': value,
+    });
+  },
+  // 下拉菜单-选中
+  onSelectedChange(e) {
+    const that = this;
+    const value = e.detail.value; // 筛选框内容
+    const filterMaterialValue = that.data.filterMaterialValue;
+    const filtered = that.data.allData.filter(item => {
+      const matchStatus = (value === 'all') ? true : item.be_chosen2 === value;
+      const matchMaterial = (filterMaterialValue === 'all') ? true : item.texture === filterMaterialValue;
+      return matchMaterial && matchStatus;
+    });
+    that.setData({
+      filteredData: filtered, // 记录筛选数据
+      Data: [],
+      currentIndex: 0,
+      noMoreData: false,
+      filterStatusValue: value
+    });
+    const firstPage = utils.readPageStructure(that);
+    that.setData({
+      Data: firstPage, // 显示
+      currentIndex: firstPage.length,
+      'dropdownSelected.value': value,
+    });
+  },
 
 
 
 
 
-
-  /* 未完成 */
+  /* 未使用 */
   // 新增内部的下拉框
   onDesignerPicker(e) {
     this.setData({
@@ -635,19 +691,6 @@ Page({
     imageFileList.splice(index, 1);
     this.setData({
       imageFileList,
-    });
-  },
-
-  // 下拉菜单-图稿
-  onArtworkChange(e) {
-    this.setData({
-      'dropdownArtwork.value': e.detail.value,
-    });
-  },
-  // 下拉菜单-评估
-  onAssessChange(e) {
-    this.setData({
-      'dropdownAssess.value': e.detail.value,
     });
   },
 })
