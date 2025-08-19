@@ -106,7 +106,12 @@ Page({
         } else if (development_status === 6) {
           lp_data['development_status_text'] = "MIRO阶段"
         } else if (development_status === 7) {
-          lp_data['development_status_text'] = "客户选样"
+          if(userRole === 'designer'){
+            lp_data['development_status_text'] = "上传工厂稿"
+          }else{
+            lp_data['development_status_text'] = "客户选样"
+          }
+          
         } else if (development_status === 8) {
           lp_data['development_status_text'] = "工厂打样"
         } else if (development_status === 9) {
@@ -256,12 +261,35 @@ Page({
     const userRole = that.data.userRole;
     const tabBarValue = that.data.tabBarValue;
     const lineplan_id = e.currentTarget.dataset.lineplan_id;
+    const development_status = e.currentTarget.dataset.development_status;
+    console.log(development_status);
     // 需要3类人进行跳转 Kyle Shelley FMR 进行跳转
     if (tabBarValue === "todo") {
       if (userRole === "kyle") {
-        wx.navigateTo({ url: `/pages/kyle/kyle_artowrk_ultimate_details/kyle_artowrk_ultimate_details?lineplan_id=${lineplan_id}` });
+        if (development_status === 2) {
+          wx.navigateTo({ url: `/pages/kyle/kyle_artowrk_primary_details/kyle_artowrk_primary_details?lineplan_id=${lineplan_id}` });
+        }
+        if (development_status === 5) {
+          wx.navigateTo({ url: `/pages/kyle/kyle_artowrk_ultimate_details/kyle_artowrk_ultimate_details?lineplan_id=${lineplan_id}` });
+        }
       } else if (userRole === "shelley") {
         wx.navigateTo({ url: `/pages/shelley/shelley_artwork_detail/shelley_artwork_detail?lineplan_id=${lineplan_id}` });
+      } else if (userRole === "fmr") {
+        wx.navigateTo({ url: `/pages/fmr/fmr_artwork_detail/fmr_artwork_detail?lineplan_id=${lineplan_id}` });
+      }else if (userRole === "designer") {
+        if (development_status === 4) {
+          wx.navigateTo({ url: `/pages/designer/designer_revision_detail/designer_revision_detai?lineplan_id=${lineplan_id}` });
+        }
+        if (development_status === 7) {
+          wx.navigateTo({ url: `/pages/designer/designer_artwork_detail/designer_artwork_detail?lineplan_id=${lineplan_id}` });
+        }
+      }else if (userRole === "chosen_draft") {
+        if (development_status === 7) {
+          wx.navigateTo({ url: `/pages/guest_selection/guest_selection_first_round/guest_selection_first_round?lineplan_id=${lineplan_id}` });
+        }
+        if (development_status === 9) {
+          wx.navigateTo({ url: `/pages/guest_selection/guest_selection_final_round/guest_selection_final_round?lineplan_id=${lineplan_id}` });
+        }
       }
     } else {
       wx.navigateTo({ url: `/pages/todo/todo_detail/todo_detail?lineplan_id=${lineplan_id}`, });
