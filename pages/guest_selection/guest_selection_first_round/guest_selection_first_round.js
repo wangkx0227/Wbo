@@ -5,6 +5,7 @@ Page({
     development_id: null, // 开发案id
     Data: [], // 页面渲染数据存储列表
     allData: [], // 全部的数据
+    filteredData:[],
     pageSize: 6, // 每次加载几个
     currentIndex: 0, // 当前加载到
     skeletonLoading: true, // 骨架屏控制变量
@@ -186,6 +187,7 @@ Page({
       const taskTimeLineData = allResults.taskTimeLineData; // 时间线
       that.setData({
         allData: arrangeData,
+        filteredData:arrangeData,
         taskTimeLineData: taskTimeLineData,
       })
       // 数据逻辑构建

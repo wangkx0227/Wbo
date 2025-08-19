@@ -1,8 +1,10 @@
 const utils = require('../../../utils/util')
 Page({
   data: {
-    lineplan_id: null, // id 只
+    lineplan_id: null, // id 值
     Data: [], // 存储数据
+    allData: [], // 全部的值
+    filteredData: [], // 筛选后的数据
     tabBar: null, // 记录切换值
     pageSize: 6, // 每次加载几条数据
     currentIndex: 0, // 当前加载到第几个ID
@@ -153,6 +155,7 @@ Page({
       const taskTimeLineData = allResults.taskTimeLineData; // 时间线
       that.setData({
         allData: arrangeData,
+        filteredData: arrangeData,
         taskTimeLineData: taskTimeLineData,
       })
       // 数据逻辑构建
@@ -362,7 +365,7 @@ Page({
         utils.showToast(that, message, theme);
         return;
       }
-      if (confirmed !== 4 && confirmed !== 3)      {
+      if (confirmed !== 4 && confirmed !== 3) {
         utils.showToast(that, "请先审核后再评论", "error");
         return;
       } else {

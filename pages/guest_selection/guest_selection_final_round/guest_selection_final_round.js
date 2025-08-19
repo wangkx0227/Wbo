@@ -4,6 +4,7 @@ Page({
     lineplan_id: null, // 存储的lp id值
     Data: [], // 页面渲染数据存储列表
     allData: [], // 全部的数据
+    filteredData: [], // 筛选后的数据
     pageSize: 6, // 每次加载几个ID
     currentIndex: 0, // 当前加载到第几个ID
     skeletonLoading: true, // 骨架屏控制变量
@@ -132,6 +133,7 @@ Page({
       const taskTimeLineData = allResults.taskTimeLineData; // 时间线
       that.setData({
         allData: arrangeData,
+        filteredData:arrangeData,
         taskTimeLineData: taskTimeLineData,
       })
       // 数据逻辑构建
@@ -162,8 +164,8 @@ Page({
     const lineplan_id = options.lineplan_id || ''; // 首页跳转后的存储的id值
     that.setData({
       lineplan_id: lineplan_id, // 记录全部的id数据
-      userRole:userRole,
-      userName:userName
+      userRole: userRole,
+      userName: userName
     })
     that.dataRequest('init');
   },

@@ -176,16 +176,28 @@ function UpdateData({
   });
 }
 // 读取访问数据-分页处理
+// function readPageStructure(page) {
+//   const { allData, pageSize, currentIndex } = page.data;
+//   if (allData.length === 0) {
+//     showToast(page, "无数据", "warning");
+//     page.setData({
+//       skeletonLoading: false
+//     })
+//     return [];
+//   }
+//   const pageData = allData.slice(currentIndex, currentIndex + pageSize); // 取读数据范围
+//   return pageData; // 返回需要读取的id列表
+// }
 function readPageStructure(page) {
-  const { allData, pageSize, currentIndex } = page.data;
-  if (allData.length === 0) {
+  const { filteredData, pageSize, currentIndex } = page.data;
+  if (filteredData.length === 0) {
     showToast(page, "无数据", "warning");
     page.setData({
       skeletonLoading: false
     })
     return [];
   }
-  const pageData = allData.slice(currentIndex, currentIndex + pageSize); // 取读数据范围
+  const pageData = filteredData.slice(currentIndex, currentIndex + pageSize); // 取读数据范围
   return pageData; // 返回需要读取的id列表
 }
 // 无刷新更新时间线

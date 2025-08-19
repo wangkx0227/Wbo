@@ -3,6 +3,8 @@ Page({
   data: {
     lineplan_id: null, // 存储的lp id值
     Data: [], // 页面渲染数据存储列表
+    allData: [], // 全部的数据
+    filteredData: [], // 筛选后的数据
     pageSize: 6, // 每次加载
     currentIndex: 0, // 当前加载到
     skeletonLoading: true, // 骨架屏控制变量
@@ -155,6 +157,7 @@ Page({
       const taskTimeLineData = allResults.taskTimeLineData; // 时间线
       that.setData({
         allData: arrangeData,
+        filteredData: arrangeData, // 筛选后的数据
         taskTimeLineData: taskTimeLineData,
       })
       // 数据逻辑构建
@@ -472,11 +475,11 @@ Page({
       dialogVisible: false,
       timeline_id: null
     });
-    setTimeout(()=>{
+    setTimeout(() => {
       this.setData({
-        dialogValue:"",
+        dialogValue: "",
       })
-    },500)
+    }, 500)
   },
 
 

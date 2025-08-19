@@ -2,8 +2,9 @@ const app = getApp();
 const utils = require('../../utils/util')
 Page({
   data: {
-    Data: [], // 页面展示数据
+    Data: [], // 页面展示数据变量
     allData: [],// 全部的数据
+    filteredData: [], // 筛选后的数据
     pageSize: 6, // 每次加载多少条数据
     currentIndex: 0, // 加载到数据的第几个索引
     tabBarTabLabel: "", // 胶囊的label
@@ -42,6 +43,7 @@ Page({
         },
       ],
     },
+    filterSorter: false, // 排序筛选条件
     // 搜索变量
     searchValue: '',
   },
@@ -117,7 +119,7 @@ Page({
         } else {
           lp_data['is_new_development_text'] = "未完结"
         }
-        client_list.push(lp_data["line_plan_client"]); // 客户列表加入
+        client_list.push(lp_data["line_plan_client"].trim()); // 客户列表加入
         arrangeData.push(lp_data)
       })
     })
@@ -156,11 +158,11 @@ Page({
       mode: mode
     }).then(list => { // list 就是data数据
       const arrangeData = that.dataStructure(list);
-      // const allData = utils.filterData(arrangeData, filter, field) // 先不做
       that.setData({
-        allData: arrangeData
+        allData: arrangeData, // 初始数据保持不变
+        filteredData: arrangeData
       })
-      // 数据逻辑构建
+      // 分页基于 filteredData
       const pageData = utils.readPageStructure(that); // 分页数据
       let totalRequests = that.data.pageSize;
       if (pageData.length !== totalRequests) {
@@ -169,7 +171,7 @@ Page({
       // 针对刷线和第一次加载使用
       if (mode === 'refresh') {
         that.setData({
-          Data: pageData,
+          Data: pageData
         })
       } else {
         that.setData({
@@ -284,7 +286,7 @@ Page({
       Data: that.data.Data.concat(pageData),
       currentIndex: that.data.currentIndex + pageData.length // 记录下标索引
     });
-    if (that.data.currentIndex === that.data.allData.length) {
+    if (that.data.currentIndex === that.data.filteredData.length) {
       that.setData({
         noMoreData: true
       })
@@ -293,9 +295,14 @@ Page({
   // 胶囊悬浮框切换函数
   onTabBarChange(e) {
     const that = this;
-    const userRole = that.data.userRole; // 角色
     const value = e.detail.value;// 值
+    const userRole = that.data.userRole; // 角色
     const current = that.data.userTabs.find(item => item.value === value); // 动态显示tab
+    // 重置数据，与筛选条件
+    that.setData({
+      'dropdownTemplate.value': 'all',
+      'dropdownSorter.value': 'default',
+    })
     // 如果fmr点击的时样品上传，进行跳转
     if (current.value === "ultimate" && (userRole === "fmr" || userRole === "designer")) {
       // wx.navigateTo({
@@ -313,21 +320,7 @@ Page({
           tabBarTabLabel: current.label
         });
       }
-      wx.showLoading({ title: '正在加载...' });
-      that.setData({
-        skeletonLoading: true,
-      })
-      // 需要根据不同角色加载数据
-      utils.LoadDataList({
-        page: this,
-        data: { type: "getProjectList", username: "admin" },
-        mode: 'init'
-      }).then(list => { // list 就是data数据
-        const arrangeData = this.dataStructure(list);
-        this.setData({
-          Data: arrangeData
-        })
-      });
+      this.dataRequest("refresh"); // 分页处理
     }
   },
   // 导出附件
@@ -388,25 +381,53 @@ Page({
       }
     });
   },
-  /* 先不做 */
   // 下拉菜单-模板
   onTemplateChange(e) {
     const that = this;
-    const value = e.detail.value;
-    const field = 'line_plan_client';
-    // that.dataRequest("refresh", value, field);
+    const value = e.detail.value; // 筛选框内容
+    const filterSorter = that.data.filterSorter; // 排序
+    const filtered = that.data.allData.filter(item => {
+      if (value === 'all') {
+        return item;
+      }
+      return !value || item.line_plan_client === value;
+    });
     that.setData({
+      filteredData: filterSorter ? filtered.reverse() : filtered, // 记录筛选数据
+      Data: [],
+      currentIndex: 0,
+      noMoreData: false
+    });
+    const firstPage = utils.readPageStructure(that);
+    that.setData({
+      Data: firstPage, // 显示
+      currentIndex: firstPage.length,
       'dropdownTemplate.value': value,
     });
   },
   // 下拉菜单-排序
   onSorterChange(e) {
+    const that = this;
+    let sorted = [...that.data.filteredData]; // 拷贝一份，避免直接改动原数组
+    sorted = sorted.reverse(); // 生成一个新的
     this.setData({
+      Data: [],
+      currentIndex: 0,
+      filterSorter: true,
+      filteredData: sorted, // 存储筛选记录数据
       'dropdownSorter.value': e.detail.value,
     });
+    const firstPage = utils.readPageStructure(that);
+    that.setData({
+      Data: firstPage, // 显示
+      currentIndex: firstPage.length,
+    });
   },
+
+
+
   // 搜索
-  onSearchConfirm() {
+  onSearchConfirm(e) {
     const keyword = e.detail.value;
     console.log("用户点击搜索，输入内容为：", keyword);
     console.log(this.data.searchValue);
