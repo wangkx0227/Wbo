@@ -24,17 +24,17 @@ Page({
     popupTimeLineVisible: false,
     taskTimeLineData: {}, // 存储时间线的数据
     timeLineValue: [], // 具体查看的时间线
-    // 筛选框变量-1
-    dropdownDesigner: {
+    // 筛选框变量-材质
+    dropdownMaterial: {
       value: 'all',
       options: [
         {
           value: 'all',
-          label: '全部',
+          label: '全部材质',
         },
       ],
     },
-    // 筛选框变量-2
+    // 筛选框变量-状态
     dropdownStatus: {
       value: 'all',
       options: [
@@ -43,19 +43,22 @@ Page({
           label: '全部状态',
         },
         {
-          value: 'discard',
+          value: 2,
           label: '舍弃',
         },
         {
-          value: 'reserve',
+          value: 1,
           label: '保留',
         },
       ],
     },
+    filterStatusValue: "all", // 筛选存储变量
+    filterMaterialValue: "all", // 筛选存储变量
   },
   // 数据结构处理
   dataStructure(dataList) {
     let arrangeData = []; // 显示数据
+    let material_list = [];
     const taskTimeLineData = {}; // 时间线数据
     const image_url = dataList.WBO_URL
     const task_list = dataList.task_list
@@ -107,7 +110,17 @@ Page({
       }
       // 时间线数据
       taskTimeLineData[`${task_id}`] = timeLineData;
+      material_list.push(data_dict["texture"].trim());
       arrangeData.push(data_dict);
+    }
+    // 筛选条件加入
+    const material = utils.filterDataProcess(material_list);
+    const options = this.data.dropdownMaterial.options;
+    // 只有 筛选框的列表为1（内部默认有一条数据）才会添加
+    if (options.length === 1) {
+      this.setData({
+        "dropdownMaterial.options": options.concat(material)
+      })
     }
     return { arrangeData, taskTimeLineData }; // 返回整理的结构体
   },
@@ -118,7 +131,7 @@ Page({
     const userName = that.data.userName;
     utils.LoadDataList({
       page: that,
-      data: { type: "getTaskByLinePlan", username:userName, "lp_id": lineplan_id, },
+      data: { type: "getTaskByLinePlan", username: userName, "lp_id": lineplan_id, },
       mode: mode
     }).then(list => { // list 就是data数据
       const allResults = that.dataStructure(list);
@@ -126,7 +139,7 @@ Page({
       const taskTimeLineData = allResults.taskTimeLineData; // 时间线
       that.setData({
         allData: arrangeData,
-        filteredData:arrangeData,
+        filteredData: arrangeData,
         taskTimeLineData: taskTimeLineData,
       })
       // 数据逻辑构建
@@ -158,8 +171,8 @@ Page({
     const lineplan_id = options.lineplan_id || ''; // 首页跳转后的存储的id值
     that.setData({
       lineplan_id: lineplan_id, // 记录全部的id数据
-      userRole:userRole,
-      userName:userName
+      userRole: userRole,
+      userName: userName
     })
     that.dataRequest('init');
   },
@@ -189,7 +202,7 @@ Page({
       Data: that.data.Data.concat(pageData),
       currentIndex: that.data.currentIndex + pageData.length // 记录下标索引
     });
-    if (that.data.currentIndex === that.data.allData.length) {
+    if (that.data.currentIndex === that.data.filteredData.length) {
       that.setData({
         noMoreData: true
       })
@@ -257,11 +270,11 @@ Page({
       utils.showToast(that, message, theme);
     }
     this.setData({ dialogVisible: false, dialogId: null });
-    setTimeout(()=>{
+    setTimeout(() => {
       this.setData({
-        dialogValue:"",
+        dialogValue: "",
       })
-    },500)
+    }, 500)
   },
   // 修改当前图稿状态
   onModifyArtworkStatus(e) {
@@ -359,18 +372,52 @@ Page({
   },
   // 空方法，避免抽屉的滚动
   onDummyTouchMove() { },
-
-
-  // 下拉菜单-设计师
-  onDesignerChange(e) {
-    this.setData({
-      'dropdownDesigner.value': e.detail.value,
+  // 下拉菜单-材质
+  onMaterialChange(e) {
+    const that = this;
+    const value = e.detail.value; // 筛选框内容
+    const filterStatusValue = that.data.filterStatusValue;
+    const filtered = that.data.allData.filter(item => {
+      const matchMaterial = (value === 'all') ? true : item.texture === value;
+      const matchStatus = (filterStatusValue === 'all') ? true : item.confirmed === filterStatusValue;
+      return matchMaterial && matchStatus;
+    });
+    that.setData({
+      filteredData: filtered, // 记录筛选数据
+      Data: [],
+      currentIndex: 0,
+      noMoreData: false,
+      filterMaterialValue: value
+    });
+    const firstPage = utils.readPageStructure(that);
+    that.setData({
+      Data: firstPage, // 显示
+      currentIndex: firstPage.length,
+      'dropdownMaterial.value': value,
     });
   },
   // 下拉菜单-状态
   onStatusChange(e) {
-    this.setData({
-      'dropdownStatus.value': e.detail.value,
+    const that = this;
+    const value = e.detail.value; // 筛选框内容
+    const filterMaterialValue = that.data.filterMaterialValue;
+    const filtered = that.data.allData.filter(item => {
+      const matchStatus = (value === 'all') ? true : item.confirmed === value;
+      const matchMaterial = (filterMaterialValue === 'all') ? true : item.texture === filterMaterialValue;
+      return matchMaterial && matchStatus;
+    });
+    that.setData({
+      filteredData: filtered, // 记录筛选数据
+      Data: [],
+      currentIndex: 0,
+      noMoreData: false,
+      filterStatusValue: value
+    });
+    const firstPage = utils.readPageStructure(that);
+    that.setData({
+      Data: firstPage, // 显示
+      currentIndex: firstPage.length,
+      'dropdownStatus.value': value,
     });
   },
 })

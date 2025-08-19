@@ -124,19 +124,12 @@ Page({
       })
     })
     // 筛选条件加入
-    const uniqueClients = [...new Set(client_list)]; // 去重
+    const client = utils.filterDataProcess(client_list);
     const options = this.data.dropdownTemplate.options;
-    let clientsData = []; // 客户列表
-    uniqueClients.flatMap(item => {
-      clientsData.push({
-        value: item,
-        label: item
-      })
-    })
     // 只有 筛选框的列表为1（内部默认有一条数据）才会添加
     if (options.length === 1) {
       this.setData({
-        "dropdownTemplate.options": this.data.dropdownTemplate.options.concat(clientsData)
+        "dropdownTemplate.options": options.concat(client)
       })
     }
 

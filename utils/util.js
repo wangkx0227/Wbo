@@ -224,17 +224,17 @@ function updateTimeLine(page, task_id, timeline_id, comment, username) {
     [`taskTimeLineData.${task_id}`]: newArray
   })
 }
-// 条件筛选
-function filterData(data, filter, field) {
-  /*
-    data：全部数据
-    filter：筛选条件
-    value：筛选字段
-  */
-  const filteredData = data.filter(item =>
-    filter === 'all' ? true : item[field] === filter
-  );
-  return filteredData;
+// 筛选数据整合
+function filterDataProcess(data) {
+  const uniqueData = [...new Set(data)]; // 去重
+  let processData = [];
+  uniqueData.flatMap(item => {
+    processData.push({
+      value: item,
+      label: item
+    })
+  })
+  return processData;
 }
 // 登录
 function checkLogin() {
@@ -258,5 +258,5 @@ module.exports = {
   updateTimeLine,
   onSwiperImagesTap,
   readPageStructure,
-  filterData
+  filterDataProcess,
 }
