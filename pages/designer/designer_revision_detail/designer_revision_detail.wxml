@@ -7,8 +7,7 @@
     <t-row>
       <t-col span="24">
         <t-dropdown-menu>
-          <t-dropdown-item options="{{dropdownArtwork.options}}" placement="right" value="{{dropdownArtwork.value}}" bindchange="onArtworkChange" />
-          <t-dropdown-item options="{{dropdownAssess.options}}" placement="right" value="{{dropdownAssess.value}}" bindchange="onAssessChange" />
+          <t-dropdown-item options="{{dropdownMaterial.options}}" placement="right" value="{{dropdownMaterial.value}}" bindchange="onMaterialChange" />
         </t-dropdown-menu>
       </t-col>
     </t-row>

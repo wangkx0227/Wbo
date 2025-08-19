@@ -5,7 +5,7 @@ Page({
     lineplan_id: null, // 存储的lp id值
     Data: [], // 页面渲染数据存储列表
     allData: [], // 全部的数据
-    filteredData:[],
+    filteredData: [],
     pageSize: 6, // 每次加载几个ID
     currentIndex: 0, // 当前加载到第几个ID
     skeletonLoading: true, // 骨架屏控制变量
@@ -18,31 +18,23 @@ Page({
     scrollTop: 0, // 回到顶部变量
     popupFactoryArtworkVisible: false, // 上传工厂稿弹窗
     imageFileList: [], // 存储图片列表
-
-    // 筛选框变量-模板
-    dropdownArtwork: {
+    // 筛选框变量-材质
+    dropdownMaterial: {
       value: 'all',
-      options: [{
-        value: 'all',
-        label: '全部图稿',
-      },
+      options: [
+        {
+          value: 'all',
+          label: '全部材质',
+        },
       ],
     },
-    // 筛选框变量建议
-    dropdownAssess: {
-      value: 'all',
-      options: [{
-        value: 'all',
-        label: '全部反馈建议',
-      },
-      ],
-    },
-
+    filterMaterialValue: "all", // 筛选存储变量
   },
 
   // 数据结构处理
   dataStructure(dataList) {
     let arrangeData = [];
+    let material_list = [];
     const taskTimeLineData = {}; // 时间线数据
     const image_url = dataList.WBO_URL
     const task_list = dataList.task_list
@@ -95,7 +87,17 @@ Page({
         }
       }
       taskTimeLineData[`${task_id}`] = timeLineData; // 时间线数据
+      material_list.push(data_dict["texture"].trim());
       arrangeData.push(data_dict);
+    }
+    // 筛选条件加入
+    const material = utils.filterDataProcess(material_list);
+    const options = this.data.dropdownMaterial.options;
+    // 只有 筛选框的列表为1（内部默认有一条数据）才会添加
+    if (options.length === 1) {
+      this.setData({
+        "dropdownMaterial.options": options.concat(material)
+      })
     }
     return {
       arrangeData,
@@ -117,7 +119,7 @@ Page({
       const taskTimeLineData = allResults.taskTimeLineData; // 时间线
       that.setData({
         allData: arrangeData,
-        filteredData:arrangeData,
+        filteredData: arrangeData,
         taskTimeLineData: taskTimeLineData,
       })
       // 数据逻辑构建
@@ -343,17 +345,26 @@ Page({
       })
     }, 500)
   },
-
-  // 下拉菜单-图稿
-  onArtworkChange(e) {
-    this.setData({
-      'dropdownArtwork.value': e.detail.value,
+  // 下拉菜单-材质
+  onMaterialChange(e) {
+    const that = this;
+    const value = e.detail.value; // 筛选框内容
+    const filtered = that.data.allData.filter(item => {
+      const matchMaterial = (value === 'all') ? true : item.texture === value;
+      return matchMaterial;
     });
-  },
-  // 下拉菜单-评估
-  onAssessChange(e) {
-    this.setData({
-      'dropdownAssess.value': e.detail.value,
+    that.setData({
+      filteredData: filtered, // 记录筛选数据
+      Data: [],
+      currentIndex: 0,
+      noMoreData: false,
+      filterMaterialValue: value
+    });
+    const firstPage = utils.readPageStructure(that);
+    that.setData({
+      Data: firstPage, // 显示
+      currentIndex: firstPage.length,
+      'dropdownMaterial.value': value,
     });
   },
 })
