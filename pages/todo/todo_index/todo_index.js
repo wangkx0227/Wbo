@@ -6,6 +6,7 @@ Page({
     tabBarTabLabel: '最终审查',
     Data: [], // 页面展示数据
     allData: [],// 全部的数据
+    filteredData: [], // 筛选后的数据
     pageSize: 6, // 每次加载多少条数据
     currentIndex: 0, // 加载到数据的第几个索引
     userTabs: [], // 胶囊框的数据
@@ -13,7 +14,7 @@ Page({
     userRole: null, // 角色
     userName: null, // 名称
     scrollTop: 0, // 回到顶部变量
-
+    searchValue: "",
     // 筛选框变量-1
     dropdownTemplate: {
       value: 'all',
@@ -34,7 +35,7 @@ Page({
         },
         {
           value: 'time',
-          label: '时间从高到低',
+          label: '从低到高排序',
         },
       ],
     },
@@ -67,6 +68,7 @@ Page({
     const userName = that.data.userName;
     const userRole = that.data.userRole;
     let arrangeData = [];
+    let client_list = [];
     dataList.forEach(item => {
       const development_id = item.id; // 开发案id
       const development_name = item.name; // 开发案名称
@@ -92,7 +94,6 @@ Page({
         } else {
           lp_data['is_new_development_text'] = "未完结"
         }
-
         if (development_status === 1) {
           lp_data['development_status_text'] = "概念创建打包"
         } else if (development_status === 2) {
@@ -106,18 +107,17 @@ Page({
         } else if (development_status === 6) {
           lp_data['development_status_text'] = "MIRO阶段"
         } else if (development_status === 7) {
-          if(userRole === 'designer'){
+          if (userRole === 'designer') {
             lp_data['development_status_text'] = "上传工厂稿"
-          }else{
+          } else {
             lp_data['development_status_text'] = "客户选样"
           }
-          
+
         } else if (development_status === 8) {
           lp_data['development_status_text'] = "工厂打样"
         } else if (development_status === 9) {
           lp_data['development_status_text'] = "客户中单"
         }
-
         if (userRole === 'kyle' && (development_status === 2 || development_status === 5)) {
           // kyle的初审与终审
           arrangeData.push(lp_data)
@@ -134,8 +134,18 @@ Page({
           // 第一轮选稿与第二轮选稿
           arrangeData.push(lp_data)
         }
+        client_list.push(lp_data["line_plan_client"].trim()); // 客户列表加入
       });
     })
+    // 筛选条件加入
+    const client = utils.filterDataProcess(client_list);
+    const options = this.data.dropdownTemplate.options;
+    // 只有 筛选框的列表为1（内部默认有一条数据）才会添加
+    if (options.length === 1) {
+      this.setData({
+        "dropdownTemplate.options": options.concat(client)
+      })
+    }
     return arrangeData
   },
   // 数据分页显示处理
@@ -149,7 +159,8 @@ Page({
     }).then(list => { // list 就是data数据
       const arrangeData = that.dataStructure(list);
       that.setData({
-        allData: arrangeData
+        allData: arrangeData,
+        filteredData: arrangeData
       })
       // 数据逻辑构建
       const pageData = utils.readPageStructure(that); // 分页数据
@@ -211,6 +222,7 @@ Page({
     if (this.data.isLoadingReachMore) return; // 如果正在加载更多，则禁止下拉刷新
     // 重置 currentIndex 让它从头开始访问
     this.setData({
+      searchValue: "",
       currentIndex: 0,
       noMoreData: false,
       isLoadingReachMore: false
@@ -276,14 +288,14 @@ Page({
         wx.navigateTo({ url: `/pages/shelley/shelley_artwork_detail/shelley_artwork_detail?lineplan_id=${lineplan_id}` });
       } else if (userRole === "fmr") {
         wx.navigateTo({ url: `/pages/fmr/fmr_artwork_detail/fmr_artwork_detail?lineplan_id=${lineplan_id}` });
-      }else if (userRole === "designer") {
+      } else if (userRole === "designer") {
         if (development_status === 4) {
           wx.navigateTo({ url: `/pages/designer/designer_revision_detail/designer_revision_detai?lineplan_id=${lineplan_id}` });
         }
         if (development_status === 7) {
           wx.navigateTo({ url: `/pages/designer/designer_artwork_detail/designer_artwork_detail?lineplan_id=${lineplan_id}` });
         }
-      }else if (userRole === "chosen_draft") {
+      } else if (userRole === "chosen_draft") {
         if (development_status === 7) {
           wx.navigateTo({ url: `/pages/guest_selection/guest_selection_first_round/guest_selection_first_round?lineplan_id=${lineplan_id}` });
         }
@@ -295,26 +307,67 @@ Page({
       wx.navigateTo({ url: `/pages/todo/todo_detail/todo_detail?lineplan_id=${lineplan_id}`, });
     }
   },
-
-
-
-
-  // 搜索
-  onSearchConfirm() {
-    const keyword = e.detail.value;
-    console.log("用户点击搜索，输入内容为：", keyword);
-    console.log(this.data.searchValue);
-  },
   // 下拉菜单-模板
   onTemplateChange(e) {
-    this.setData({
-      'dropdownTemplate.value': e.detail.value,
+    const that = this;
+    const value = e.detail.value; // 筛选框内容
+    const filterSorter = that.data.filterSorter; // 排序
+    const filtered = that.data.allData.filter(item => {
+      if (value === 'all') {
+        return item;
+      }
+      return !value || item.line_plan_client === value;
+    });
+    that.setData({
+      filteredData: filterSorter ? filtered.reverse() : filtered, // 记录筛选数据
+      Data: [],
+      currentIndex: 0,
+      noMoreData: false
+    });
+    const firstPage = utils.readPageStructure(that);
+    that.setData({
+      Data: firstPage, // 显示
+      currentIndex: firstPage.length,
+      'dropdownTemplate.value': value,
     });
   },
   // 下拉菜单-排序
   onSorterChange(e) {
-    this.setData({
+    const that = this;
+    let sorted = [...that.data.filteredData]; // 拷贝一份，避免直接改动原数组
+    sorted = sorted.reverse(); // 生成一个新的
+    that.setData({
+      Data: [],
+      currentIndex: 0,
+      filterSorter: true,
+      filteredData: sorted, // 存储筛选记录数据
       'dropdownSorter.value': e.detail.value,
+    });
+    const firstPage = utils.readPageStructure(that);
+    that.setData({
+      Data: firstPage, // 显示
+      currentIndex: firstPage.length,
+    });
+  },
+  // 搜索
+  onSearchConfirm(e) {
+    const that = this;
+    const keyword = e.detail.value;
+    const filtered = that.data.allData.filter(item => {
+      const matchName = (keyword === '') ? true : new RegExp(keyword.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i')
+        .test(item.line_plan_title);
+      return matchName;
+    });
+    that.setData({
+      filteredData: filtered, // 记录筛选数据
+      Data: [],
+      currentIndex: 0,
+      noMoreData: false
+    });
+    const firstPage = utils.readPageStructure(that);
+    that.setData({
+      Data: firstPage, // 显示
+      currentIndex: firstPage.length,
     });
   },
 })

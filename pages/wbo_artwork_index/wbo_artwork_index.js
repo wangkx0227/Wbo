@@ -39,7 +39,7 @@ Page({
         },
         {
           value: 'reverse',
-          label: '倒序',
+          label: '从低到高排序',
         },
       ],
     },
@@ -258,6 +258,7 @@ Page({
     if (this.data.isLoadingReachMore) return; // 如果正在加载更多，则禁止下拉刷新
     // 重置 currentIndex 让它从头开始访问
     this.setData({
+      searchValue:"",
       currentIndex: 0,
       noMoreData: false,
       isLoadingReachMore: false
@@ -403,7 +404,7 @@ Page({
     const that = this;
     let sorted = [...that.data.filteredData]; // 拷贝一份，避免直接改动原数组
     sorted = sorted.reverse(); // 生成一个新的
-    this.setData({
+    that.setData({
       Data: [],
       currentIndex: 0,
       filterSorter: true,
