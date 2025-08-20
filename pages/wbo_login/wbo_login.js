@@ -43,6 +43,10 @@ Page({
         value: 'designer',
         label: '设计师（AIT改稿和工厂稿与样品图审查）',
       },
+      {
+        value: 'desc_upload',
+        label: '图稿描述信息',
+      },
       ],
     },
     redirect: "", // 跳转参数，如果携带，那么需要在登陆后跳转指定路径
@@ -240,6 +244,8 @@ Page({
       } else if (productValue === "designer") {
         wx.setStorageSync('userName', "Ethan"); // 样品照片拍照审核  设计师 测试 上传ait稿与工厂稿和照片审核
       } else if (productValue === "chosen_draft") { // 第7轮与第9轮
+        wx.setStorageSync('userName', "kyle");
+      }else if(productValue === "desc_upload"){
         wx.setStorageSync('userName', "kyle");
       }
       wx.setStorageSync('userRole', productValue);
