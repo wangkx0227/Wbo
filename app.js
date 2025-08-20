@@ -14,6 +14,7 @@ App({
       "AIE": "designer",
       "设计经理": "designer",
       "OMR": "chosen_draft",
+      "desc_upload":"desc_upload" // 上传图片表格描述
     }
   },
   onLaunch(options) {

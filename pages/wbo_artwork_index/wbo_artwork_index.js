@@ -444,4 +444,9 @@ Page({
       currentIndex: firstPage.length,
     });
   },
+
+  // 上传表格文档
+  descUpload(){
+    console.log(11);
+  }
 })
