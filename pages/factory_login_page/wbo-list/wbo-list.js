@@ -199,8 +199,8 @@ Page({
       url: `/pages/factory_login_page/wbo-detail/wbo-detail?project_id=${projectId}`
     });
   },
-  // 多选操作
-  onOpnePopup(e) {
+  // 多选操作-工厂
+  onOpneFactoryPopup(e) {
     const that = this;
     const projectId = e.currentTarget.dataset.id;
     const factory = e.currentTarget.dataset.factory;
@@ -217,18 +217,20 @@ Page({
       });
     });
   },
-  onClosePopup(e) {
+   // 多选操作-工厂
+  onCloseFactoryPopup(e) {
     this.setData({
       popupVisible: false,
     });
   },
-  onClosePopupChange(e) {
+   // 多选操作-工厂
+  onCloseFactoryPopupChange(e) {
     this.setData({
       popupVisible: e.detail.visible,
     });
   },
-  // 多选-选中
-  onCheckAllChange(event) {
+  // 多选操作-工厂
+  onCheckFactoryAllChange(event) {
     this.setData({
       factoryCheckAllValues: event.detail.value,
     });

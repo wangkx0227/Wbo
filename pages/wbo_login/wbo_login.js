@@ -245,7 +245,7 @@ Page({
         wx.setStorageSync('userName', "Ethan"); // 样品照片拍照审核  设计师 测试 上传ait稿与工厂稿和照片审核
       } else if (productValue === "chosen_draft") { // 第7轮与第9轮
         wx.setStorageSync('userName', "kyle");
-      }else if(productValue === "desc_upload"){
+      }else if(productValue === "chosen_draft"){
         wx.setStorageSync('userName', "kyle");
       }
       wx.setStorageSync('userRole', productValue);
