@@ -33,7 +33,7 @@ Page({
         },
         {
           value: 'time',
-          label: '倒叙',
+          label: '从低到高排序',
         },
       ],
     },
