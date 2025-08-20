@@ -5,6 +5,7 @@ Page({
     lineplan_id: null, // 存储的lp id值
     Data: [], // 页面渲染数据存储列表
     allData: [], // 全部的数据
+    filteredData: [], // 筛选后的数据
     pageSize: 6, // 每次加载几条数据
     currentIndex: 0, // 当前加载到第几个ID
     skeletonLoading: true, // 骨架屏控制变量
@@ -17,7 +18,7 @@ Page({
     // 回到顶部变量
     scrollTop: 0,
     // 筛选框变量-1
-    dropdownDesigner: {
+    dropdownMaterial: {
       value: 'all',
       options: [
         {
@@ -26,8 +27,9 @@ Page({
         },
       ],
     },
+    filterMaterialValue: null,
     // 筛选框变量-2
-    dropdownStatus: {
+    dropdownSorter: {
       value: 'default',
       options: [
         {
@@ -36,14 +38,11 @@ Page({
         },
         {
           value: 'time',
-          label: '时间从高到低',
+          label: '从低到高排序',
         },
       ],
     },
-    // 设计师自评弹窗控制变量
-    popupVisible: false,
-    popupValue: "", // 评论的内容
-    popupTitle: "", // 评论的标题
+    filterSorter: null,
   },
   // 回到顶部
   onToTop(e) {
@@ -100,6 +99,7 @@ Page({
   // 数据结构处理
   dataStructure(dataList) {
     let arrangeData = []; // 显示数据
+    let material_list = [];
     const taskTimeLineData = {}; // 时间线数据
     const image_url = dataList.WBO_URL
     const task_list = dataList.task_list
@@ -119,7 +119,7 @@ Page({
         fmr2: task_list[index].fmr2,
         be_chosen2: be_chosen2,
         whether_to_proof: whether_to_proof,
-        be_ordered2:be_ordered2
+        be_ordered2: be_ordered2
       }
       if (fmr2 === 1) {
         data_dict["fmr2_text"] = "可生产";
@@ -203,7 +203,17 @@ Page({
       }
       // 时间线数据
       taskTimeLineData[`${task_id}`] = timeLineData;
+      material_list.push(data_dict["texture"].trim());
       arrangeData.push(data_dict);
+    }
+    // 筛选条件加入
+    const material = utils.filterDataProcess(material_list);
+    const options = this.data.dropdownMaterial.options;
+    // 只有 筛选框的列表为1（内部默认有一条数据）才会添加
+    if (options.length === 1) {
+      this.setData({
+        "dropdownMaterial.options": options.concat(material)
+      })
     }
     return { arrangeData, taskTimeLineData }; // 返回整理的结构体
   },
@@ -221,6 +231,7 @@ Page({
       const taskTimeLineData = allResults.taskTimeLineData; // 时间线
       that.setData({
         allData: arrangeData,
+        filteredData: arrangeData,
         taskTimeLineData: taskTimeLineData,
       })
       // 数据逻辑构建
@@ -246,6 +257,10 @@ Page({
   },
   onLoad(options) {
     const that = this;
+    if (!utils.LoginStatusAuthentication(that)) {
+      // 未登录状态，函数已处理跳转逻辑
+      return;
+    }
     const lineplan_id = options.lineplan_id || ''; // 首页跳转后的存储的id值
     that.setData({
       lineplan_id: lineplan_id, // 记录全部的id数据
@@ -269,81 +284,50 @@ Page({
   },
   // 空方法，避免抽屉的滚动
   onDummyTouchMove() { },
-
-
-
-
-
-
-  // 下拉菜单-设计师
-  onDesignerChange(e) {
-    this.setData({
-      'dropdownDesigner.value': e.detail.value,
-    });
-  },
-  // 下拉菜单-状态
-  onStatusChange(e) {
-    this.setData({
-      'dropdownStatus.value': e.detail.value,
-    });
-  },
-
-
-  // 查看评论弹窗函数 - 关闭
-  onClosePopup(e) {
-    this.setData({
-      popupVisible: e.detail.visible,
-    });
-    // 延迟清空内容，确保动画完成后执行
-    setTimeout(() => {
-      this.setData({
-        popupValue: "",
-        popupTitle: ""
-      });
-    }, 300);
-  },
-  // 查看评论弹窗函数 - 唤起
-  onOpenPopup(e) {
-    /*
-      id: 当条记录的id
-      designer_comments: 当前按钮的属性,用来确定点击内容
-      commentator: 评论的内容
-      assessStatus: 状态(只针对 可行性评估 shelley与fmr) 1(可生产) 2(小幅度修改 有评论内容) 3(不具备生产条件)
-    */
+  // 下拉菜单-材质
+  onMaterialChange(e) {
     const that = this;
-    const { id, designer_comments, commentator, assessStatus } = e.currentTarget.dataset; // 点击按钮的存储的数据 id 点击id designer_comments 点击的自评文字
-    if (commentator === "odc") {
-      this.setData({ popupValue: "无内容", popupTitle: "OriginalDesignerComments" });
-    } else if (commentator === "rc") {
-      this.setData({ popupValue: "无内容", popupTitle: "ReviewComments" });
-    } else if (commentator === "sc") {
-      if (assessStatus === "1" || assessStatus === "3") {
-        const theme = "warning"
-        const message = "当前评估没有建议"
-        utils.showToast(that, message, theme);
-        return
-      } else {
-        this.setData({ popupValue: "无内容", popupTitle: "Shelley 评估" });
-      }
-    } else if (commentator === "fc") {
-      if (assessStatus === "1" || assessStatus === "3") {
-        const theme = "warning"
-        const message = "当前评估没有建议"
-        utils.showToast(that, message, theme);
-        return
-      } else {
-        this.setData({ popupValue: "无内容", popupTitle: "FMR 评估" });
-      }
-    } else if (commentator === "fj") {
-      if (assessStatus === "1" || assessStatus === "3") {
-        const theme = "warning"
-        const message = "当前评估没有建议"
-        utils.showToast(that, message, theme);
-        return
-      } else {
-        this.setData({ popupValue: "无内容", popupTitle: "FMR 评估" });
-      }
-    }
-    this.setData({ popupVisible: true, popupValue: "无内容" }); /// 触发弹窗
+    const value = e.detail.value; // 筛选框内容
+    const filterSorter = that.data.filterSorter; // 排序
+    const filtered = that.data.allData.filter(item => {
+      const matchMaterial = (value === 'all') ? true : item.texture === value;
+      return matchMaterial;
+    });
+    that.setData({
+      filteredData: filterSorter ? filtered.reverse() : filtered, // 记录筛选数据
+      Data: [],
+      currentIndex: 0,
+      noMoreData: false,
+      filterMaterialValue: value
+    });
+    const firstPage = utils.readPageStructure(that);
+    that.setData({
+      Data: firstPage, // 显示
+      currentIndex: firstPage.length,
+      'dropdownMaterial.value': value,
+    });
+  },
+  // 下拉菜单-排序
+  onSorterChange(e) {
+    const that = this;
+    let sorted = [...that.data.filteredData]; // 拷贝一份，避免直接改动原数组
+    const filterMaterialValue = that.data.filterMaterialValue; // 排序
+    const filtered = sorted.filter(item => {
+      const matchMaterial = (value === 'all') ? true : item.texture === filterMaterialValue;
+      return matchMaterial;
+    });
+    const data = filtered.reverse(); // 生成一个新的
+    that.setData({
+      Data: [],
+      currentIndex: 0,
+      filterSorter: true,
+      filteredData: data, // 存储筛选记录数据
+      'dropdownSorter.value': e.detail.value,
+    });
+    const firstPage = utils.readPageStructure(that);
+    that.setData({
+      Data: firstPage, // 显示
+      currentIndex: firstPage.length,
+    });
   },
 })
