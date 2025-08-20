@@ -416,13 +416,25 @@ Page({
       currentIndex: firstPage.length,
     });
   },
-
-
-
   // 搜索
   onSearchConfirm(e) {
+    const that = this;
     const keyword = e.detail.value;
-    console.log("用户点击搜索，输入内容为：", keyword);
-    console.log(this.data.searchValue);
+    const filtered = that.data.allData.filter(item => {
+      const matchName = (keyword === '') ? true : new RegExp(keyword.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i')
+      .test(item.line_plan_title);
+      return matchName;
+    });
+    that.setData({
+      filteredData: filtered, // 记录筛选数据
+      Data: [],
+      currentIndex: 0,
+      noMoreData: false
+    });
+    const firstPage = utils.readPageStructure(that);
+    that.setData({
+      Data: firstPage, // 显示
+      currentIndex: firstPage.length,
+    });
   },
 })

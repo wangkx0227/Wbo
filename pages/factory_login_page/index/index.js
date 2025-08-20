@@ -3,6 +3,7 @@ Page({
   data: {
     Data: [], // 页面展示数据
     allData: [],// 全部的数据
+    filteredData: [], // 筛选后的数据
     pageSize: 10, // 每次加载多少条数据
     currentIndex: 0, // 加载到数据的第几个索引
     userTabs: [], // 胶囊框的数据
@@ -17,10 +18,11 @@ Page({
       options: [
         {
           value: 'all',
-          label: '全部',
+          label: '全部主导人',
         },
       ],
     },
+    filterName: null,
     // 筛选框变量-2
     dropdownSorter: {
       value: 'default',
@@ -31,10 +33,11 @@ Page({
         },
         {
           value: 'time',
-          label: '时间从高到低',
+          label: '倒叙',
         },
       ],
     },
+    filterSorter: false, // 排序筛选条件
   },
   // 滚动-回到顶部
   onToTop(e) {
@@ -52,6 +55,7 @@ Page({
   // 首页数据结构处理
   dataStructure(dataList) {
     let arrangeData = [];
+    let name_list = [];
     dataList.forEach(item => {
       const development_id = item.id; // 开发案id
       const development_name = item.name; // 开发案名称
@@ -70,7 +74,16 @@ Page({
         line_plan_id_list: line_plan_id_list, // lp的id
       }
       arrangeData.push(development_data)
+      name_list.push(development_data["development_director"].trim());
     })
+    const director_name = utils.filterDataProcess(name_list);
+    const options = this.data.dropdownTemplate.options;
+    // 只有 筛选框的列表为1（内部默认有一条数据）才会添加
+    if (options.length === 1) {
+      this.setData({
+        "dropdownTemplate.options": options.concat(director_name)
+      })
+    }
     return arrangeData
   },
   // 数据分页显示处理
@@ -83,7 +96,8 @@ Page({
     }).then(list => { // list 就是data数据
       const arrangeData = that.dataStructure(list);
       that.setData({
-        allData: arrangeData
+        allData: arrangeData,
+        filteredData: arrangeData
       })
       // 数据逻辑构建
       const pageData = utils.readPageStructure(that); // 分页数据
@@ -178,21 +192,70 @@ Page({
     }
   },
   // 搜索
-  onSearchConfirm() {
+  onSearchConfirm(e) {
+    const that = this;
     const keyword = e.detail.value;
-    console.log("用户点击搜索，输入内容为：", keyword);
-    console.log(this.data.searchValue);
+    const filtered = that.data.allData.filter(item => {
+      const matchName = (keyword === '') ? true : new RegExp(keyword.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i')
+        .test(item.development_name);
+      return matchName;
+    });
+    that.setData({
+      filteredData: filtered, // 记录筛选数据
+      Data: [],
+      currentIndex: 0,
+      noMoreData: false
+    });
+    const firstPage = utils.readPageStructure(that);
+    that.setData({
+      Data: firstPage, // 显示
+      currentIndex: firstPage.length,
+    });
   },
   // 下拉菜单-模板
   onTemplateChange(e) {
-    this.setData({
-      'dropdownTemplate.value': e.detail.value,
+    const that = this;
+    const value = e.detail.value; // 筛选框内容
+    const filterSorter = that.data.filterSorter;
+    const filtered = that.data.allData.filter(item => {
+      const matchName = (value === 'all') ? true : item.development_director === value;
+      return matchName;
+    });
+    that.setData({
+      filteredData: filterSorter ? filtered.reverse() : filtered, // 记录筛选数据
+      Data: [],
+      currentIndex: 0,
+      noMoreData: false,
+      filterName: value
+    });
+    const firstPage = utils.readPageStructure(that);
+    that.setData({
+      Data: firstPage, // 显示
+      currentIndex: firstPage.length,
+      'dropdownTemplate.value': value,
     });
   },
   // 下拉菜单-排序
   onSorterChange(e) {
+    const that = this;
+    const filterName = that.data.filterName;
+    let sorted = [...that.data.filteredData]; // 拷贝一份，避免直接改动原数组
+    const filtered = sorted.filter(item => {
+      const matchName = (filterName === 'all') ? true : item.development_director === filterName;
+      return matchName;
+    });
+    const data = filtered.reverse(); // 生成一个新的
     this.setData({
+      Data: [],
+      currentIndex: 0,
+      filterSorter: true,
+      filteredData: data, // 存储筛选记录数据
       'dropdownSorter.value': e.detail.value,
+    });
+    const firstPage = utils.readPageStructure(that);
+    that.setData({
+      Data: firstPage, // 显示
+      currentIndex: firstPage.length,
     });
   },
 })
