@@ -180,7 +180,7 @@ Page({
   onLoad() {
     const that = this;
     if (!utils.LoginStatusAuthentication(that)) {
-      
+
       // 未登录状态，函数已处理跳转逻辑
       return;
     }
@@ -444,9 +444,47 @@ Page({
       currentIndex: firstPage.length,
     });
   },
-
   // 上传表格文档
-  descUpload(){
-    console.log(11);
+  descUpload() {
+    const that = this;
+    // 1. 让用户选择文件
+    wx.chooseMessageFile({
+      count: 1,
+      type: 'file',
+      extension: ['xls', 'xlsx'],
+      success: (res) => {
+        // 2. 用户选择成功
+        const tempFile = res.tempFiles[0];
+        const parts = tempFile.name.split('.');
+        const suffix = parts[parts.length - 1]; // 正确：获取最后一个元素
+        // 健壮性检查
+        if (!suffix || (suffix !== 'xls' && suffix !== 'xlsx')) {
+          utils.showToast(that, "文件格式错误，请选择Excel文件", "error");
+          return;
+        }
+        // 3. 上传文件到服务器
+        wx.uploadFile({
+          url: 'https://your-api-domain.com/upload', // 你的服务器上传接口地址
+          filePath: tempFile.path, // 临时文件路径
+          name: 'file', // 文件对应的参数名，后端根据这个字段获取文件
+          formData: {
+            // 可以附带其他参数，如用户ID
+            'userId': '12345'
+          },
+          success: (uploadRes) => {
+            // 4. 上传成功
+            console.log('上传成功', uploadRes.data);
+            utils.showToast(that, "上传成功");
+          },
+          fail: (err) => {
+            utils.showToast(that, "上传失败", "error");
+          }
+        });
+      },
+      fail: (err) => {
+        console.error('选择文件失败', err);
+        utils.showToast(that, "选择文件失败", "error");
+      }
+    });
   }
 })
