@@ -209,7 +209,7 @@ Page({
       let fullPath = route + (query ? '?' + query : ''); // 完整的路径
       // 跳转到登录界面
       setTimeout(() => {
-        wx.navigateTo({
+        wx.reLaunch({
           url: `/pages/wbo_login/wbo_login?redirect=${encodeURIComponent(fullPath)}`,
         });
       }, 500)
