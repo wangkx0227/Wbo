@@ -1,5 +1,6 @@
 const app = getApp();
 const url = app.globalData.url;
+const utils = require('../../../utils/util')
 const montageUrl = app.globalData.montageUrl;
 Page({
   data: {
@@ -21,6 +22,11 @@ Page({
   },
   // 初始化
   onLoad(options) {
+    const tath = this;
+    if (!utils.LoginStatusAuthentication(that)) {
+      // 未登录状态，函数已处理跳转逻辑
+      return;
+    }
     // if (!util.checkLogin()) return;
     // 正常流程
     // 从缓存中获取数据

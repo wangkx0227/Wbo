@@ -247,7 +247,21 @@ function checkLogin() {
   }
   return true
 }
-
+// 登录认证
+function LoginStatusAuthentication(page) {
+  const userName = wx.getStorageSync('userName');
+  const userRole = wx.getStorageSync('userRole');
+  if (!userName || !userRole) {
+    showToast(page, "当前未登录状态", "error");
+    setTimeout(() => {
+      wx.reLaunch({
+        url: '/pages/wbo_login/wbo_login'
+      });
+    }, 2000); // 2秒后执行跳转
+    return false;
+  }
+  return true;
+}
 
 module.exports = {
   showToast,
@@ -259,4 +273,5 @@ module.exports = {
   onSwiperImagesTap,
   readPageStructure,
   filterDataProcess,
+  LoginStatusAuthentication
 }

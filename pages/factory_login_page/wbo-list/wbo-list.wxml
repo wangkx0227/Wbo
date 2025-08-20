@@ -53,3 +53,5 @@
 
   </view>
 </t-popup>
+<!-- 提示 -->
+<t-toast id="t-toast" />

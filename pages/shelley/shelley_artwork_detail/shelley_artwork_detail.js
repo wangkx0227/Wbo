@@ -207,6 +207,10 @@ Page({
   /* 生命周期函数--监听页面加载 */
   onLoad(options) {
     const that = this;
+    if (!utils.LoginStatusAuthentication(that)) {
+      // 未登录状态，函数已处理跳转逻辑
+      return;
+    }
     const userRole = wx.getStorageSync('userRole');
     const userName = wx.getStorageSync('userName');
     const lineplan_id = options.lineplan_id || ''; // 首页跳转后的存储的id值

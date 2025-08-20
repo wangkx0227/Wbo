@@ -123,6 +123,10 @@ Page({
   // 生命周期函数--监听页面加载 
   onLoad() {
     const that = this;
+    if (!utils.LoginStatusAuthentication(that)) {
+      // 未登录状态，函数已处理跳转逻辑
+      return;
+    }
     const userRole = wx.getStorageSync('userRole');
     const userName = wx.getStorageSync('userName');
     let tabBarTabLabel = "样品图审核"

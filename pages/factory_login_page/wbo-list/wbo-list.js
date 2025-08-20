@@ -1,5 +1,6 @@
 const app = getApp();
 const url = app.globalData.url;
+const utils = require('../../../utils/util')
 Page({
   data: {
     userRole: null,
@@ -18,6 +19,11 @@ Page({
   },
   // 页面初始化
   onLoad(options) {
+    const that = this;
+    if (!utils.LoginStatusAuthentication(that)) {
+      // 未登录状态，函数已处理跳转逻辑
+      return;
+    }
     // if (!util.checkLogin()) return;
     // 工厂登录需要-有问题
     // const userInfo = wx.getStorageSync('userInfo')
@@ -234,7 +240,7 @@ Page({
     const task_id = that.data.projectId;
     const selectedItem = that.data.selectedItem;
     const factoryCheckAllValues = that.data.factoryCheckAllValues;
-    if(factoryCheckAllValues.length === 0){
+    if (factoryCheckAllValues.length === 0) {
       wx.showToast({ title: '请选择在提交', icon: 'error' });
       return;
     }
@@ -257,16 +263,16 @@ Page({
             return item;
           })
           that.setData({
-            popupVisible:false,
+            popupVisible: false,
             selectedItem: updataData,
           });
-          wx.showToast({ title: '提交工厂成功'});
-          setTimeout(()=>{
+          wx.showToast({ title: '提交工厂成功' });
+          setTimeout(() => {
             that.setData({
-              factoryCheckAllValues:[],
+              factoryCheckAllValues: [],
             })
-          },500)
-        }else{
+          }, 500)
+        } else {
           wx.showToast({ title: '提交工厂失败', icon: 'error' });
         }
       }

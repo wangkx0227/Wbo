@@ -178,11 +178,17 @@ Page({
   },
   // 生命周期函数
   onLoad() {
+    const that = this;
+    if (!utils.LoginStatusAuthentication(that)) {
+      
+      // 未登录状态，函数已处理跳转逻辑
+      return;
+    }
     const userRole = wx.getStorageSync('userRole');
     const userName = wx.getStorageSync('userName');
-    this.loadUserRole(); // 需要根据不同角色加载数据
-    this.dataRequest("init"); // 分页处理
-    this.setData({
+    that.loadUserRole(); // 需要根据不同角色加载数据
+    that.dataRequest("init"); // 分页处理
+    that.setData({
       userRole: userRole,
       userName: userName
     })
@@ -258,7 +264,7 @@ Page({
     if (this.data.isLoadingReachMore) return; // 如果正在加载更多，则禁止下拉刷新
     // 重置 currentIndex 让它从头开始访问
     this.setData({
-      searchValue:"",
+      searchValue: "",
       currentIndex: 0,
       noMoreData: false,
       isLoadingReachMore: false
@@ -423,7 +429,7 @@ Page({
     const keyword = e.detail.value;
     const filtered = that.data.allData.filter(item => {
       const matchName = (keyword === '') ? true : new RegExp(keyword.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i')
-      .test(item.line_plan_title);
+        .test(item.line_plan_title);
       return matchName;
     });
     that.setData({

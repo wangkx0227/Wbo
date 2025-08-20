@@ -131,6 +131,10 @@ Page({
   // 后端请求
   dataRequest(mode) {
     const that = this;
+    if (!utils.LoginStatusAuthentication(that)) {
+      // 未登录状态，函数已处理跳转逻辑
+      return;
+    }
     const lineplan_id = that.data.lineplan_id;
     const userName = that.data.userName;
     utils.LoadDataList({

@@ -197,7 +197,7 @@ Page({
       userName: userName,
       // tabBarTabLabel: tabBarTabLabel,
     });
-    if (!userRole) {
+    if (!userRole || !userName) {
       const theme = 'error'
       const message = "当前未登录状态"
       utils.showToast(that, message, theme);
