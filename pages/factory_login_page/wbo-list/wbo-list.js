@@ -5,6 +5,7 @@ Page({
   data: {
     userRole: null,
     userRole: null,
+    original_factory_list: [], // 原始工厂数据
     factory_list: ['全部'],
     factory_index: 0,
     selectedItem: [],
@@ -132,13 +133,14 @@ Page({
             that.data.allItem = [...that.data.allItem, ...tasks]
           }
           that.setData({
+            original_factory_list: data.factory_list, // 原始工厂数据
             factory_list: that.data.factory_list,
             selectedItem: that.data.selectedItem,
             allItem: that.data.allItem,
             isLoading: false,
             hasMore: tasks.length === that.data.pageSize,
           })
-          // 工厂
+          // 工厂与fmr处理
           const factoryOptions = factory_list.map(item => {
             return { "label": item, "value": item }
           });
@@ -262,7 +264,7 @@ Page({
       checkAllValues: event.detail.value,
     });
   },
-  // 提交工厂或者fmr
+  // 提交工厂或者插入一条fmr变更记录
   onSubmit(e) {
     const that = this;
     const type = that.data.type;
@@ -275,6 +277,7 @@ Page({
       return;
     }
     let data = {};
+    let fmr_list = []; // fmr列表
     if (type === 'fmr') { // 只单纯插入一条fmr指派fmr记录 
       if (checkAllValues.length > 1) {
         wx.showToast({ title: '只能选择一个', icon: 'error' });
@@ -291,11 +294,23 @@ Page({
         "transfer_to_fmr": checkAllValues[0], // 新fmr
       }
     } else if (type === "factory") { // 直接进行修改工厂
+      
+      const original_factory_list = that.data.original_factory_list;
+      original_factory_list.forEach(item => {
+        // 如果当前项的name在checkAllValues中
+        if (checkAllValues.includes(item.name)) {
+          // 使用展开运算符将当前项的fmr数组合并到fmr_list中
+          fmr_list = [...fmr_list, ...item.fmr];
+        }
+      });
       data = {
         "task_id": task_id,
         "username": userName,
         "type": "updateProofingTask",
         "factory": checkAllValues,
+      }
+      if (fmr_list.length !== 0) {
+        data["fmr"] = fmr_list;
       }
     }
     // 提交请求
@@ -309,6 +324,9 @@ Page({
             const updataData = selectedItem.map(item => {
               if (item.id === task_id) {
                 item["factory"] = checkAllValues.join(",");
+                if (fmr_list.length !== 0) {
+                  item["fmr"] = fmr_list.join(",");
+                }
               }
               return item;
             })
@@ -316,7 +334,7 @@ Page({
               selectedItem: updataData,
             });
             wx.showToast({ title: '提交成功' });
-          }else{
+          } else {
             wx.showToast({ title: '请等待对方同意' });
           }
           setTimeout(() => {
