@@ -25,9 +25,9 @@
           <t-cell hover>
             <t-tag variant="outline" slot="note" shape="mark" size="medium" style="position: absolute;right: 25rpx;top: 35rpx;" theme="primary"> 阶段：{{ tabBarTabLabel }} </t-tag>
             <view slot="title" style="display: grid;gap: 25rpx;">
-              <view class="arrange-center" style="text-decoration: underline dashed;">
+              <view class="arrange-center">
                 <text class="title-font-main">开发案名称：</text>
-                <text class="title-font-other">{{ item.development_name }}</text>
+                <text class="title-font-other name-cell">{{ item.development_name }}</text>
               </view>
               <view class="arrange-space-between" style="gap: 20rpx;">
                 <view class="arrange-center">

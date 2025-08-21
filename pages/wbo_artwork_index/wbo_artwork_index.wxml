@@ -26,7 +26,7 @@
             <t-tag variant="outline" slot="note" shape="mark" size="medium" wx:if="{{tabBarShow}}" style="position: absolute;right: 25rpx;top: 35rpx;" theme="{{tabBarValue === 'primary' ? 'primary' : 'success'}}"> 阶段：{{ tabBarTabLabel }} </t-tag>
             <t-tag variant="outline" slot="note" shape="mark" size="medium" wx:if="{{userRole==='shelley'}}" style="position: absolute;right: 25rpx;top: 35rpx;" theme="primary"> 阶段：可行性分析 </t-tag>
             <view slot="title" style="display: grid;gap: 15rpx;">
-              <view class="arrange-center" style="text-decoration: underline dashed;">
+              <view class="arrange-center">
                 <text class="title-font-main">名称：</text>
                 <text class="title-font-other name-cell">{{ item.line_plan_title }}</text>
               </view>
