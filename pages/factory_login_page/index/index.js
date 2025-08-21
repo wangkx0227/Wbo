@@ -89,9 +89,10 @@ Page({
   // 数据分页显示处理
   dataRequest(mode) {
     const that = this;
+    const userName = that.data.userName;
     utils.LoadDataList({
       page: this,
-      data: { type: "getProjectList", username: "admin" },
+      data: { type: "getProjectList", username: userName },
       mode: mode
     }).then(list => { // list 就是data数据
       const arrangeData = that.dataStructure(list);
