@@ -445,8 +445,11 @@ Page({
     });
   },
   // 上传表格文档
-  descUpload() {
+  descUpload(e) {
     const that = this;
+    const lineplan_id = e.currentTarget.dataset.lineplan_id;
+    const montageUrl = app.globalData.montageUrl;
+    console.log(montageUrl);
     // 1. 让用户选择文件
     wx.chooseMessageFile({
       count: 1,
@@ -464,12 +467,12 @@ Page({
         }
         // 3. 上传文件到服务器
         wx.uploadFile({
-          url: 'https://your-api-domain.com/upload', // 你的服务器上传接口地址
+          url: montageUrl + '/wbo/upload_file/', // 你的服务器上传接口地址
           filePath: tempFile.path, // 临时文件路径
           name: 'file', // 文件对应的参数名，后端根据这个字段获取文件
           formData: {
             // 可以附带其他参数，如用户ID
-            'userId': '12345'
+            'lp_id': lineplan_id
           },
           success: (uploadRes) => {
             // 4. 上传成功

@@ -88,7 +88,13 @@ page {
   color: #606266;
   font-weight: normal;
 }
-
+/* 单行显示 */
+.name-cell {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 350rpx; 
+}
 /* 字体截断 */
 .title-other {
   display: inline-block;

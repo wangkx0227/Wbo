@@ -3,9 +3,11 @@ App({
     token: null,       // token
     userRole: null,     // 用户角色，比如 'kyle'
     userInfo: null,   // 当前登录用户信息
-    url: 'http://10.8.0.69:8000/wbo/api/', // 接口
-    reqUrl: 'https://xcx.1bizmail.com:8153', // 后端接口路径
-    montageUrl: 'http://10.8.0.69:8000', // 拼接路径（上传工厂稿与修改过的图稿，其他附件拼接使用）
+    // url: 'http://10.8.0.69:8000/wbo/api/', // 测试接口
+    // montageUrl: 'http://10.8.0.69:8000', // 测试拼接路径（上传工厂稿与修改过的图稿，其他附件拼接使用）
+    url: 'https://xcx.1bizmail.com:8153/wbo/api/', // 真实接口
+    montageUrl: 'https://xcx.1bizmail.com:8153', // 真实接口
+    reqUrl: 'https://xcx.1bizmail.com:8153', // 后端接口登录路径
     fileUrl: 'http://10.8.10.110:5000/send_wechat_file', //  导出附件地址
     roleDict: { // 特定角色
       "kyle": "kyle",

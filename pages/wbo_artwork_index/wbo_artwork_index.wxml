@@ -28,38 +28,38 @@
             <view slot="title" style="display: grid;gap: 15rpx;">
               <view class="arrange-center" style="text-decoration: underline dashed;">
                 <text class="title-font-main">名称：</text>
-                <text class="title-font-other">{{ item.line_plan_title }}</text>
-              </view>
-              <view class="arrange-center">
-                <text class="title-font-main">主导人：</text>
-                <text class="title-font-other">{{ item.development_director }}</text>
+                <text class="title-font-other name-cell">{{ item.line_plan_title }}</text>
               </view>
               <view class="arrange-space-between">
+                <view class="arrange-center">
+                  <text class="title-font-main">主导人：</text>
+                  <text class="title-font-other">{{ item.development_director }}</text>
+                </view>
                 <view class="arrange-center">
                   <text class="title-font-main">客人：</text>
                   <text class="title-font-other">{{ item.line_plan_client }}</text>
                 </view>
+              </view>
+              <view class="arrange-space-between">
                 <view class="arrange-center">
                   <text class="title-font-main">风格：</text>
                   <text class="title-font-other">{{ item.line_plan_season }}</text>
                 </view>
-              </view>
-              <view class="arrange-space-between" style="gap: 20rpx;">
                 <view class="arrange-center">
                   <text class="title-font-main">Year：</text>
                   <text class="title-font-other">{{item.line_plan_year}}</text>
                 </view>
-                <view class="arrange-center">
-                  <text class="title-font-main">创建时间：</text>
-                  <text class="title-font-other">{{ item.development_start_data }}</text>
-                </view>
+              </view>
+              <view class="arrange-center">
+                <text class="title-font-main">创建时间：</text>
+                <text class="title-font-other">{{ item.development_start_data }}</text>
               </view>
               <!-- 只有kyle导出ppt或者第二轮标记导出附件 -->
               <view style="position:absolute;right: 40rpx;bottom: 38rpx;" wx:if="{{userRole === 'kyle' || (userRole === 'chosen_draft' && tabBarValue === 'ultimate')}}">
-                <t-link prefixIcon="folder-export" size="small" content="导出附件" underline hover catch:tap="exportAttachments" theme="default" data-lineplan_id="{{ item.line_plan_id }}"/>
+                <t-link prefixIcon="folder-export" size="small" content="导出附件" underline hover catch:tap="exportAttachments" theme="default" data-lineplan_id="{{ item.line_plan_id }}" />
               </view>
               <view style="position:absolute;right: 40rpx;bottom: 38rpx;" wx:if="{{userRole === 'desc_upload'}}">
-                <t-link prefixIcon="upload" size="small" content="上传附件" underline hover bindtap="descUpload" theme="default" data-lineplan_id="{{ item.line_plan_id }}"/>
+                <t-link prefixIcon="upload" size="small" content="上传附件" underline hover bindtap="descUpload" theme="default" data-lineplan_id="{{ item.line_plan_id }}" />
               </view>
             </view>
           </t-cell>
