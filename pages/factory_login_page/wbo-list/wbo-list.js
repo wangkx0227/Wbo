@@ -18,6 +18,9 @@ Page({
     fmrOptions: [],
     factoryOptions: [],
     checkAllValues: [],
+    // 变更通知变量
+    popupNotificationVisible: false,
+    popupNotificationValue: "",
   },
   // 页面初始化
   onLoad(options) {
@@ -76,7 +79,8 @@ Page({
     requestData["username"] = userName;
     requestData["project_id"] = development_id;
     if (userRole === "fmr") {
-      requestData["filter_data"]["fmr"] = userName;
+      // requestData["filter_data"]["fmr"] = userName; // 只看当前用户
+      requestData["filter_data"]["fmr"] = 'FMR选择';
     } else if (userRole === "designer") {
       requestData["filter_data"]["AIT_designer"] = userName;
     }
@@ -108,14 +112,16 @@ Page({
             item.images_0.forEach(item => {
               image_path = item.image;
             })
+            const change_fmr = item.change_fmr_list[item.change_fmr_list.length - 1];
             return {
-              fmr: fmr,
+              fmr: fmr || "请选择FMR",
               id: item.id,
               code: item.code,
               factory: factory || "请点击后选择工厂",
               material: material,
               image_status: image_path ? true : false,
               imgSrc: montageUrl + '/' + image_path,
+              change_fmr: change_fmr ? change_fmr : false,
             }
           })
           if (that.data.currentPage === 1) {
@@ -237,12 +243,16 @@ Page({
   // 关闭弹窗
   closePopup(e) {
     this.setData({
+      type: null,
+      projectId: null,
       popupVisible: false,
     });
   },
   // 关闭弹窗
   onClosePopupChange(e) {
     this.setData({
+      type: null,
+      projectId: null,
       popupVisible: e.detail.visible,
     });
   },
@@ -280,7 +290,6 @@ Page({
         "transfer_fmr": userName, // 原fmr
         "transfer_to_fmr": checkAllValues[0], // 新fmr
       }
-      console.log(data);
     } else if (type === "factory") { // 直接进行修改工厂
       data = {
         "task_id": task_id,
@@ -304,13 +313,15 @@ Page({
               return item;
             })
             that.setData({
-              popupVisible: false,
               selectedItem: updataData,
             });
+            wx.showToast({ title: '提交成功' });
+          }else{
+            wx.showToast({ title: '请等待对方同意' });
           }
-          wx.showToast({ title: '提交成功' });
           setTimeout(() => {
             that.setData({
+              popupVisible: false,
               checkAllValues: [],
             })
           }, 500)
@@ -320,7 +331,7 @@ Page({
       }
     })
   },
-  // 当被指派的fmr确定是，需要修改fmr，将记录状态修改
+  // 当被指派的fmr确定是，需要修改fmr，将记录状态修改 change_fmr_list字段存储变化
   onSubmitFMR(e) {
     const that = this;
     const userName = that.data.userName; // 当前用户
@@ -332,5 +343,92 @@ Page({
     //   "fmr": checkAllValues,
     // }
 
+  },
+  // 打开弹窗
+  onOpneNotificationPopup(e) {
+    const that = this;
+    const fmr = e.currentTarget.dataset.fmr;
+    const projectId = e.currentTarget.dataset.id;
+    const changeId = e.currentTarget.dataset.changeId;
+    const content = e.currentTarget.dataset.content;
+    that.setData({
+      fmr: fmr,
+      changeId: changeId,
+      projectId: projectId,
+      popupNotificationVisible: true, // 先显示弹窗
+      popupNotificationValue: content, // 显示的内容
+    });
+  },
+  // 关闭弹窗
+  closeNotificationPopup() {
+    this.setData({
+      fmr: null,
+      changeId: null,
+      projectId: null,
+      popupNotificationVisible: false,
+    });
+    setTimeout(() => {
+      this.setData({
+        popupNotificationValue: "",
+      });
+    }, 500)
+  },
+  // 提交
+  onSubmitNotification() {
+    // 提交转换记录，提交通知记录状态
+    const that = this;
+    const fmr = that.data.fmr;
+    const projectId = that.data.projectId;
+    const changeId = that.data.changeId;
+    const userName = that.data.userName;
+    const selectedItem = that.data.selectedItem;
+    // 修改状态
+    const changeData = {
+      "type": "updateProofingChangeFmr",
+      "change_id": changeId,
+      "is_agree": 1,
+      "username": userName
+    }
+    // 提交请求
+    wx.request({
+      url: url,
+      method: "POST",
+      data: changeData,
+      success(res) {
+        if (res.data.code === 200) {
+          const fmrData = {
+            "task_id": projectId,
+            "username": userName,
+            "type": "updateProofingTask",
+            "fmr": [fmr,],
+          }
+          // 修改fmr
+          wx.request({
+            url: url,
+            method: "POST",
+            data: fmrData,
+            success(res) {
+              if (res.data.code === 200) {
+                const updataData = selectedItem.map(item => {
+                  if (item.id === projectId) {
+                    item["fmr"] = [fmr].join(",");
+                    item["change_fmr"].is_agree = 1;
+                  }
+                  return item;
+                })
+                that.setData({
+                  selectedItem: updataData,
+                });
+                that.closeNotificationPopup();
+              } else {
+                wx.showToast({ title: '提交失败', icon: 'error' });
+              }
+            }
+          })
+        } else {
+          wx.showToast({ title: '提交失败', icon: 'error' });
+        }
+      }
+    })
   }
 })

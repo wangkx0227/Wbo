@@ -136,14 +136,15 @@
 }
 
 .detail-box {
-  margin-top: 20px;
-  padding: 15px;
-  border-top: 1px solid #ccc;
+  margin-top: 20rpx;
+  padding: 15rpx;
+  background-color: #ffffff;
+  border-radius: 4%;
 }
 
 .image-box {
   width: 100%;
-  max-width: 300px;
+  max-width: 280px;
   height: 200px;
   background-color: #e0e0e0;
   display: flex;
