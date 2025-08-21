@@ -19,14 +19,14 @@
   <view class="arrange-center" wx:if="{{userRole === 'fmr'}}">
     <text class='dataTXT'>FMR：</text>
     <t-link content="{{item.fmr}}" hover class="truncate-text" theme='primary' bindtap='onOpnePopup' 
-    data-id="{{item.id}}" data-factory="{{item.fmr}}" />
+    data-id="{{item.id}}" data-list="{{item.fmr}}" data-type="fmr" />
   </view>
   <text wx:else class='dataTXT'>FMR: {{item.fmr}}</text>
   <text class='dataTXT'>材质: {{item.material}}</text>
   <view class="arrange-center" wx:if="{{userRole === 'fmr'}}">
     <text class='dataTXT'>工厂：</text>
-    <t-link content="{{item.factory}}" hover class="truncate-text" theme='primary' bindtap='onOpneFactoryPopup' 
-    data-id="{{item.id}}" data-factory="{{item.factory}}" />
+    <t-link content="{{item.factory}}" hover class="truncate-text" theme='primary' bindtap='onOpnePopup' 
+    data-id="{{item.id}}" data-list="{{item.factory}}" data-type="factory"/>
   </view>
   <text wx:else class='dataTXT'>工厂：{{item.factory}}</text>
   <button bindtap="viewDetail" data-id="{{item.id}}">查看详情</button>
@@ -43,16 +43,16 @@
   <button wx:else disabled>暂无更多</button>
 </view>
 <!-- 弹窗 -->
-<t-popup visible="{{popupVisible}}" bind:visible-change="onCloseFactoryPopupChange" placement="top" style="height: 600rpx;">
+<t-popup visible="{{popupVisible}}" bind:visible-change="onClosePopupChange" placement="top" style="height: 600rpx;">
   <view class="block">
     <view class="header">
-      <view class="btn btn--cancel" aria-role="button" bindtap='onCloseFactoryPopup'>取消</view>
+      <view class="btn btn--cancel" aria-role="button" bindtap='closePopup'>取消</view>
       <view class="title">请选择工厂</view>
-      <view class="btn btn--confirm" aria-role="button" bindtap='onSubmitFactory'>确定</view>
+      <view class="btn btn--confirm" aria-role="button" bindtap='onSubmit'>确定</view>
     </view>
     <view style="padding: 0 20rpx;">
       <scroll-view scroll-y class="checkbox-scroll-container" enhanced show-scrollbar="{{false}}">
-        <t-checkbox-group options="{{factoryOptions}}" value="{{factoryCheckAllValues}}" bind:change="onCheckFactoryAllChange" ></t-checkbox-group>
+        <t-checkbox-group options="{{options}}" value="{{checkAllValues}}" bind:change="onCheckAllChange" ></t-checkbox-group>
       </scroll-view>
     </view>
 

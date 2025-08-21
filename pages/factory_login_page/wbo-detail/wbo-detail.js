@@ -22,7 +22,7 @@ Page({
   },
   // 初始化
   onLoad(options) {
-    const tath = this;
+    const that = this;
     if (!utils.LoginStatusAuthentication(that)) {
       // 未登录状态，函数已处理跳转逻辑
       return;

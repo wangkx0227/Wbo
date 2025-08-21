@@ -14,8 +14,10 @@ Page({
     hasMore: false, // 是否还有更多数据
     allItem: [], // 所有数据
     popupVisible: false, // 弹窗控制变量
+    options: [],
+    fmrOptions: [],
     factoryOptions: [],
-    factoryCheckAllValues: [],
+    checkAllValues: [],
   },
   // 页面初始化
   onLoad(options) {
@@ -134,7 +136,11 @@ Page({
           const factoryOptions = factory_list.map(item => {
             return { "label": item, "value": item }
           });
+          const fmrOptions = data.fmr_list.map(item => {
+            return { "label": item, "value": item }
+          });
           that.setData({
+            fmrOptions: fmrOptions,
             factoryOptions: factoryOptions
           })
         } else {
@@ -199,85 +205,132 @@ Page({
       url: `/pages/factory_login_page/wbo-detail/wbo-detail?project_id=${projectId}`
     });
   },
-  // 多选操作-工厂
-  onOpneFactoryPopup(e) {
+  // 打开弹窗
+  onOpnePopup(e) {
     const that = this;
     const projectId = e.currentTarget.dataset.id;
-    const factory = e.currentTarget.dataset.factory;
-    let factoryCheckAllValues = [];
-    if (factory) {
-      factoryCheckAllValues = factory.split(",").filter(Boolean);
+    const list = e.currentTarget.dataset.list;
+    const type = e.currentTarget.dataset.type;
+    let checkAllValues = [];
+    if (list) {
+      checkAllValues = list.split(",").filter(Boolean);
+    }
+    if (type === 'fmr') {
+      that.setData({
+        options: that.data.fmrOptions,
+      })
+    } else if (type === "factory") {
+      that.setData({
+        options: that.data.factoryOptions,
+      })
     }
     that.setData({
+      type: type,
       projectId: projectId,
-      factoryCheckAllValues: factoryCheckAllValues // 后设置数据
+      checkAllValues: checkAllValues // 后设置数据
     }, () => {
       that.setData({
         popupVisible: true // 先显示弹窗
       });
     });
   },
-   // 多选操作-工厂
-  onCloseFactoryPopup(e) {
+  // 关闭弹窗
+  closePopup(e) {
     this.setData({
       popupVisible: false,
     });
   },
-   // 多选操作-工厂
-  onCloseFactoryPopupChange(e) {
+  // 关闭弹窗
+  onClosePopupChange(e) {
     this.setData({
       popupVisible: e.detail.visible,
     });
   },
-  // 多选操作-工厂
-  onCheckFactoryAllChange(event) {
+  // 多选工厂与fmr
+  onCheckAllChange(event) {
     this.setData({
-      factoryCheckAllValues: event.detail.value,
+      checkAllValues: event.detail.value,
     });
   },
-  // 提交工厂
-  onSubmitFactory(e) {
+  // 提交工厂或者fmr
+  onSubmit(e) {
     const that = this;
+    const type = that.data.type;
     const userName = that.data.userName;
     const task_id = that.data.projectId;
     const selectedItem = that.data.selectedItem;
-    const factoryCheckAllValues = that.data.factoryCheckAllValues;
-    if (factoryCheckAllValues.length === 0) {
+    const checkAllValues = that.data.checkAllValues;
+    if (checkAllValues.length === 0) {
       wx.showToast({ title: '请选择在提交', icon: 'error' });
       return;
     }
-    let data = {
-      "task_id": task_id,
-      "username": userName,
-      "type": "updateProofingTask",
-      "factory": factoryCheckAllValues,
+    let data = {};
+    if (type === 'fmr') { // 只单纯插入一条fmr指派fmr记录 
+      if (checkAllValues.length > 1) {
+        wx.showToast({ title: '只能选择一个', icon: 'error' });
+        return;
+      } else if (checkAllValues[0] === userName) {
+        wx.showToast({ title: '不能选择自己', icon: 'error' });
+        return;
+      }
+      data = {
+        "task_id": task_id,
+        "username": userName,
+        "type": "createProofingChangeFmr",
+        "transfer_fmr": userName, // 原fmr
+        "transfer_to_fmr": checkAllValues[0], // 新fmr
+      }
+      console.log(data);
+    } else if (type === "factory") { // 直接进行修改工厂
+      data = {
+        "task_id": task_id,
+        "username": userName,
+        "type": "updateProofingTask",
+        "factory": checkAllValues,
+      }
     }
+    // 提交请求
     wx.request({
       url: url,
       method: "POST",
       data: data,
       success(res) {
         if (res.data.code === 200) {
-          const updataData = selectedItem.map(item => {
-            if (item.id === task_id) {
-              item["factory"] = factoryCheckAllValues.join(",");
-            }
-            return item;
-          })
-          that.setData({
-            popupVisible: false,
-            selectedItem: updataData,
-          });
-          wx.showToast({ title: '提交工厂成功' });
+          if (type === "factory") {
+            const updataData = selectedItem.map(item => {
+              if (item.id === task_id) {
+                item["factory"] = checkAllValues.join(",");
+              }
+              return item;
+            })
+            that.setData({
+              popupVisible: false,
+              selectedItem: updataData,
+            });
+          }
+          wx.showToast({ title: '提交成功' });
           setTimeout(() => {
             that.setData({
-              factoryCheckAllValues: [],
+              checkAllValues: [],
             })
           }, 500)
         } else {
-          wx.showToast({ title: '提交工厂失败', icon: 'error' });
+          wx.showToast({ title: '提交失败', icon: 'error' });
         }
       }
     })
+  },
+  // 当被指派的fmr确定是，需要修改fmr，将记录状态修改
+  onSubmitFMR(e) {
+    const that = this;
+    const userName = that.data.userName; // 当前用户
+    const projectId = e.currentTarget.dataset.id; // 当前的task id
+    // data = {
+    //   "task_id": task_id,
+    //   "username": userName,
+    //   "type": "updateProofingTask",
+    //   "fmr": checkAllValues,
+    // }
+
   }
 })
