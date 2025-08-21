@@ -7,7 +7,7 @@ App({
     // montageUrl: 'http://10.8.0.69:8000', // 测试拼接路径（上传工厂稿与修改过的图稿，其他附件拼接使用）
     url: 'https://xcx.1bizmail.com:8153/wbo/api/', // 真实接口 8000
     montageUrl: 'https://xcx.1bizmail.com:8153', // 真实接口 8000
-    imagesUrl:'https://xcx.1bizmail.com:8154/', // 图片路径 8080
+    imagesUrl:'https://xcx.1bizmail.com:8154/', //  图片路径 8080
     fileUrl: 'http://10.8.10.110:5000/send_wechat_file', //  导出附件地址
     roleDict: { // 特定角色
       "kyle": "kyle",
