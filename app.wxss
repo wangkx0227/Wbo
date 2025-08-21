@@ -93,7 +93,7 @@ page {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 350rpx; 
+  max-width: 330rpx; 
 }
 /* 字体截断 */
 .title-other {

@@ -143,6 +143,7 @@ Page({
         field: 筛选数据内的key也就是字段
         , filter = "all", field
     */
+   
     const that = this;
     const userName = that.data.userName;
     utils.LoadDataList({
@@ -180,18 +181,20 @@ Page({
   onLoad() {
     const that = this;
     if (!utils.LoginStatusAuthentication(that)) {
-
       // 未登录状态，函数已处理跳转逻辑
       return;
     }
     const userRole = wx.getStorageSync('userRole');
     const userName = wx.getStorageSync('userName');
-    that.loadUserRole(); // 需要根据不同角色加载数据
-    that.dataRequest("init"); // 分页处理
+    // 先设置数据，再执行其他操作
     that.setData({
       userRole: userRole,
       userName: userName
-    })
+    }, () => {
+      // 在setData回调中执行后续操作
+      that.loadUserRole();
+      that.dataRequest("init");
+    });
   },
   // 跳转到详情页面
   onJumpArtworkDeatails(e) {
