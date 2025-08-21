@@ -30,7 +30,7 @@
       <text>图片加载失败</text>
     </view>
   </view>
-  <view wx:if="{{item.change_fmr && userName === item.change_fmr.transfer_to_fmr && item.change_fmr.is_agree === 0}}">
+  <view wx:if="{{item.change_fmr && userName !== item.change_fmr.transfer_to_fmr && item.change_fmr.is_agree === 0}}">
     <t-link prefixIcon="notification" slot="operation" content="FMR变更通知（点击查看）！！！" theme="warning" bindtap='onOpneNotificationPopup' data-id="{{item.id}}" data-change-id="{{item.change_fmr.id}}" 
     data-content="该图稿「{{item.code}}」FMR将由「{{item.change_fmr.transfer_fmr}}」变更为「{{item.change_fmr.transfer_to_fmr}}」，是否同意。" data-fmr="{{item.change_fmr.transfer_to_fmr}}" />
   </view>
