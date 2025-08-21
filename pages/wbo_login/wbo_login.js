@@ -101,7 +101,7 @@ Page({
       success(res) {
         if (res.code) {
           wx.request({
-            url: that.data.app.globalData.reqUrl + '/wbo/wx_login/',
+            url: that.data.app.globalData.montageUrl + '/wbo/wx_login/',
             method: 'POST',
             data: {
               code: res.code,
@@ -179,7 +179,7 @@ Page({
   onAccountLogin(e) {
     const that = this
     wx.request({
-      url: that.data.app.globalData.reqUrl + '/wbo/wpb-api/',
+      url: that.data.app.globalData.montageUrl + '/wbo/wpb-api/',
       method: 'POST',
       data: {
         "type": "getFactory",

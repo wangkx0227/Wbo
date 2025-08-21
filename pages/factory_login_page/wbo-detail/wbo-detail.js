@@ -190,7 +190,7 @@ Page({
     const index = e.currentTarget.dataset.index;
     const bar = parseInt(e.currentTarget.dataset.bar);
     const imageList = !isNaN(bar) ? this.data[type][bar].images : this.data[type];
-    const urls = imageList.map(item => this.data.app.globalData.reqUrl + item.image);
+    const urls = imageList.map(item => this.data.app.globalData.montageUrl + item.image);
     wx.previewImage({
       current: urls[index], // 当前显示图片的链接
       urls: urls // 图片数组
