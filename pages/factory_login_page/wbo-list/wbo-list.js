@@ -294,7 +294,6 @@ Page({
         "transfer_to_fmr": checkAllValues[0], // 新fmr
       }
     } else if (type === "factory") { // 直接进行修改工厂
-      
       const original_factory_list = that.data.original_factory_list;
       original_factory_list.forEach(item => {
         // 如果当前项的name在checkAllValues中
