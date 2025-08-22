@@ -61,8 +61,8 @@ Page({
     let arrangeData = []; // 显示数据
     let material_list = [];
     const taskTimeLineData = {}; // 时间线数据
-    // const image_url = dataList.WBO_URL
-    const image_url = app.globalData.imagesUrl; // 修改当前路径 
+    const image_url = dataList.WBO_URL
+    // const image_url = app.globalData.imagesUrl; // 修改当前路径 
     const task_list = dataList.task_list
     for (const index in task_list) {
       const task_id = task_list[index].id;
