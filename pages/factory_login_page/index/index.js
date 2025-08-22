@@ -22,7 +22,7 @@ Page({
         },
       ],
     },
-    filterName: null,
+    filterName: 'all',
     // 筛选框变量-2
     dropdownSorter: {
       value: 'default',
@@ -250,7 +250,7 @@ Page({
       return matchName;
     });
     const data = filtered.reverse(); // 生成一个新的
-    this.setData({
+    that.setData({
       Data: [],
       currentIndex: 0,
       filterSorter: true,

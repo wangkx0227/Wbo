@@ -29,6 +29,7 @@ Page({
         },
       ],
     },
+    filterTemplate:'all',
     // 筛选框变量-2
     dropdownSorter: {
       value: 'default',
@@ -396,6 +397,7 @@ Page({
       return !value || item.line_plan_client === value;
     });
     that.setData({
+      filterTemplate:value,
       filteredData: filterSorter ? filtered.reverse() : filtered, // 记录筛选数据
       Data: [],
       currentIndex: 0,
@@ -411,8 +413,13 @@ Page({
   // 下拉菜单-排序
   onSorterChange(e) {
     const that = this;
+    const filterTemplate = that.data.filterTemplate;
     let sorted = [...that.data.filteredData]; // 拷贝一份，避免直接改动原数组
-    sorted = sorted.reverse(); // 生成一个新的
+    const filtered = sorted.filter(item => {
+      const matchName = (filterTemplate === 'all') ? true : item.line_plan_client === filterTemplate;
+      return matchName;
+    });
+    sorted = filtered.reverse(); // 生成一个新的
     that.setData({
       Data: [],
       currentIndex: 0,
