@@ -30,7 +30,7 @@
                 <text class="title-font-main">名称：</text>
                 <text class="title-font-other name-cell">{{ item.line_plan_title }}</text>
               </view>
-              <view class="arrange-space-between">
+              <view class="arrange-space-between" style="gap: 120rpx;">
                 <view class="arrange-center">
                   <text class="title-font-main">主导人：</text>
                   <text class="title-font-other">{{ item.development_director }}</text>
@@ -40,7 +40,7 @@
                   <text class="title-font-other">{{ item.line_plan_client }}</text>
                 </view>
               </view>
-              <view class="arrange-space-between">
+              <view class="arrange-space-between" style="gap: 120rpx;">
                 <view class="arrange-center">
                   <text class="title-font-main">风格：</text>
                   <text class="title-font-other">{{ item.line_plan_season }}</text>
