@@ -21,6 +21,8 @@ App({
   },
   onLaunch(options) {
     // 小程序初始化（只执行一次）
+    wx.removeStorageSync('userRole') // 每次重置，清除登录信息
+    wx.removeStorageSync('userName') // 每次重置，清除登录信息
     if (!wx.getStorageSync('firstLaunchTime')) {
       wx.setStorageSync('firstLaunchTime', Date.now())
     }

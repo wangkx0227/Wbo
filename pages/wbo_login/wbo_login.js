@@ -254,7 +254,6 @@ Page({
         icon: 'success'
       });
       const redirect = this.data.redirect;
-
       if (redirect) {
         const decodedPath = decodeURIComponent(redirect); // 解码后的路径
         setTimeout(() => {
