@@ -121,7 +121,7 @@ Page({
                   for (let i = 0; position_list.length > i; i++) {
                     const position = position_list[i];
                     role = roleDict[position];
-                    if (i > 0) {
+                    if (i === 0) {
                       break
                     };
                   }
