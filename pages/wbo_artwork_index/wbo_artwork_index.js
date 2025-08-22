@@ -459,8 +459,8 @@ Page({
     const that = this;
     const lineplan_id = e.currentTarget.dataset.lineplan_id;
     const montageUrl = app.globalData.montageUrl;
-    console.log(montageUrl);
     // 1. 让用户选择文件
+  
     wx.chooseMessageFile({
       count: 1,
       type: 'file',
@@ -475,6 +475,7 @@ Page({
           utils.showToast(that, "文件格式错误，请选择Excel文件", "error");
           return;
         }
+        wx.showLoading({ title: '上传中，请稍后' });
         // 3. 上传文件到服务器
         wx.uploadFile({
           url: montageUrl + '/wbo/upload_file/', // 你的服务器上传接口地址
@@ -486,16 +487,17 @@ Page({
           },
           success: (uploadRes) => {
             // 4. 上传成功
-            console.log('上传成功', uploadRes.data);
             utils.showToast(that, "上传成功");
           },
           fail: (err) => {
             utils.showToast(that, "上传失败", "error");
+          },
+          complete(res) {
+            wx.hideLoading();
           }
         });
       },
       fail: (err) => {
-        console.error('选择文件失败', err);
         utils.showToast(that, "选择文件失败", "error");
       }
     });
