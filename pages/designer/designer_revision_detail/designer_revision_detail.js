@@ -342,7 +342,24 @@ Page({
           const data = JSON.parse(res.data);
           if (data.code === 200) {
             // 修改设计师标记状态，默认标记
+            const data = {
+              "type": "update_task",
+              "task_id": task_id,
+              "username": userName,
+              "AIT_designer2": true,
+            }
+            // 数据提交
+            utils.UpdateData({
+              page: that,
+              data: data,
+              toastShow: false
+            });
+            // 更新数据
             const updatedData = that.data.Data.map(item => {
+              if (item.id === task_id) {
+                item["AIT_designer2"] = true;
+                item["AIT_designer2_text"] = "已上传图稿";
+              }
               if (item.timeline_id === timeline_id) {
                 return {
                   ...item,
