@@ -264,6 +264,7 @@ Page({
           "timeLine_id": timeline_id,
           "username": userName, // 参数需要修改
           "name": userName, // 参数需要修改
+          "name_str": userName,
           "comment": dialogValue
         },
         message: "评审记录完成"
@@ -299,7 +300,7 @@ Page({
                 "type": "update_timeline",
                 "timeLine_id": timelineid,
                 "username": userName,
-                "name": "管理员",
+                "name": userName,
                 "confirmed": 1
               },
 
@@ -335,7 +336,7 @@ Page({
                 "type": "update_timeline",
                 "timeLine_id": timelineid,
                 "username": userName,
-                "name": "管理员",
+                "name": userName,
                 "confirmed": 2
               },
               message: "图稿已标记舍弃"

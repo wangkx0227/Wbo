@@ -115,9 +115,11 @@ Page({
         data_dict["timeline_type"] = timeline_type; // 图稿类型
         // kyle标记 3 舍弃 1 保留
         data_dict["confirmed"] = task_list[index].timeline_list[i].confirmed;
+        // shelley 评测后
+        data_dict["confirmed2"] = task_list[index].timeline_list[i].confirmed2;
       }
       // kyle 标记如果时2舍弃，就直接过滤掉
-      if (data_dict["confirmed"] === 2) {
+      if (data_dict["confirmed"] === 2 || data_dict["confirmed2"] === 3) {
         continue
       }
       taskTimeLineData[`${task_id}`] = timeLineData; // 时间线数据
@@ -239,26 +241,50 @@ Page({
       task_id,
       timeline_id,
       dialogValue,
-      userName
+      userName,
+      submit_data_task // 修改fmr标记状态
     } = this.data; // 输入的评论的数据
-
     const action = e.type; // "confirm" 或 "cancel"
     if (action === 'confirm') {
+      // 添加修改建议
+      let submit_data_timeline = {
+        "type": "update_timeline",
+        "timeLine_id": timeline_id,
+        "username": userName, // 参数需要修改
+        "name": userName, // 参数需要修改
+        "name_str": userName, // 参数需要修改
+        "comment": dialogValue
+      }
+      // 如果没有评论内容
       if (!dialogValue) {
         const theme = "warning"
         const message = "无评论无法提交"
         utils.showToast(that, message, theme);
         return;
-      }
+      };
+      // 判断是否是标记不可生产状态
+      if (submit_data_task) {
+        utils.UpdateData({
+          page: that,
+          data: submit_data_task,
+          toastShow: false
+        })
+        // 更新状态
+        const updatedData = that.data.Data.map(item => {
+          if (item.id === task_id) {
+            item["fmr2"] = 2;
+            item["fmr2_text"] = "不可生产";
+          }
+          return item;
+        })
+        that.setData({
+          Data: updatedData
+        });
+      };
+      // 提交评估建议
       utils.UpdateData({
         page: that,
-        data: {
-          "type": "update_timeline",
-          "timeLine_id": timeline_id,
-          "username": userName, // 参数需要修改
-          "name": userName, // 参数需要修改
-          "comment": dialogValue
-        },
+        data: submit_data_timeline,
         message: "评估建议完成"
       })
       // 更新时间线数据
@@ -270,7 +296,8 @@ Page({
     }
     this.setData({
       dialogVisible: false,
-      dialogId: null
+      dialogId: null,
+      submit_data_task: null,
     });
     setTimeout(() => {
       this.setData({
@@ -314,8 +341,8 @@ Page({
   onModifyArtworkStatus(e) {
     const that = this;
     const userName = that.data.userName;
-    const { taskId, contentStatus } = e.currentTarget.dataset;
-    let task_data = {
+    const { taskId, contentStatus, timelineId } = e.currentTarget.dataset;
+    let submit_data_task = {
       "type": "update_task",
       "order": true,
       "task_id": taskId,
@@ -327,10 +354,10 @@ Page({
         content: '是否标记"可生产"当前图稿',
         success(res) {
           if (res.confirm) {
-            task_data["fmr2"] = 1
+            submit_data_task["fmr2"] = 1
             utils.UpdateData({
               page: that,
-              data: task_data,
+              data: submit_data_task,
               message: "标记保留"
             })
             const updatedData = that.data.Data.map(item => {
@@ -352,35 +379,14 @@ Page({
         }
       })
     } else {
-      wx.showModal({
-        title: '提示',
-        content: '是否"不可生产"当前图稿',
-        success(res) {
-          if (res.confirm) {
-            task_data["fmr2"] = 2
-            utils.UpdateData({
-              page: that,
-              data: task_data,
-              message: "标记保留"
-            })
-            const updatedData = that.data.Data.map(item => {
-              if (item.id === taskId) {
-                item["fmr2"] = 2;
-                item["fmr2_text"] = "不可生产";
-              }
-              return item;
-            })
-            that.setData({
-              Data: updatedData
-            });
-          } else if (res.cancel) {
-            // 取消
-            const theme = "warning"
-            const message = "用户已取消操作"
-            utils.showToast(that, message, theme);
-          }
-        }
-      })
+      // 需要打开评论框
+      submit_data_task["fmr2"] = 2; // 修改不可生产状态
+      this.setData({
+        dialogVisible: true,
+        timeline_id: timelineId,
+        task_id: taskId,
+        submit_data_task: submit_data_task,
+      });
     }
   },
   // 打开抽屉，查看历史时间线

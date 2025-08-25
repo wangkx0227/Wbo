@@ -163,8 +163,8 @@ Page({
       if (pageData.length !== totalRequests) {
         totalRequests = pageData.length;
       }
-      // 针对刷线和第一次加载使用
-      if (mode === 'refresh') {
+      // 针对刷新和第一次加载使用，tab切换使用
+      if (mode === 'refresh' || mode === 'switch') {
         that.setData({
           Data: pageData
         })
@@ -324,7 +324,7 @@ Page({
           tabBarTabLabel: current.label
         });
       }
-      this.dataRequest("refresh"); // 分页处理
+      this.dataRequest("switch"); // 分页处理
     }
   },
   // 导出附件
@@ -354,28 +354,6 @@ Page({
             utils.showToast(that, "无附件", "error");
           } else {
             utils.showToast(that, "请查看微信通知");
-            // wx.request({
-            //   url: fileUrl, // 请求地址
-            //   method: 'POST',
-            //   data: {
-            //     username: userName,
-            //     url: full_url_list
-            //     // url:["http://10.8.0.69:8080/board-assets/lps-203/TG%20D51_C6_XmasModernCasual%20&%20Playful_2025_TPE_HSW_285.jpg","http://10.8.0.69:8080/board-assets/lps-203/TG51_C6_XmasModernCasual%20Playful_2025%20CCM_361.jpg"],
-            //   },
-            //   header: {
-            //     'content-type': 'application/json' // 根据后端要求设置
-            //   },
-            //   success(res) {
-            //     if (res.statusCode === 200) {
-            //       utils.showToast(that, "请查看微信通知");
-            //     } else {
-            //       utils.showToast(that, "导出失败", "error");
-            //     }
-            //   },
-            //   fail(err) {
-            //     utils.showToast(that, "网络错误", "error");
-            //   }
-            // });
           }
         } else {
           utils.showToast(that, "导出失败", "error");

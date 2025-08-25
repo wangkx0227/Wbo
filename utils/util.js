@@ -70,6 +70,7 @@ function LoadDataList({
   const isInit = mode === 'init';
   const isRefresh = mode === 'refresh';
   const isMore = mode === 'more';
+  const isSwitch = mode === 'switch';
   // 第一访问页面加载状态
   if (showLoading && isInit) {
     wx.showLoading({ title: '加载中...' });
@@ -81,6 +82,13 @@ function LoadDataList({
   // 加载更多
   if (isMore) {
     page.setData({ isLoadingReachMore: true });
+  }
+  // 切换加载
+  if (isSwitch) {
+    wx.showLoading({ title: '加载中...' });
+    page.setData({
+      skeletonLoading: true
+    });
   }
   const url = app.globalData.url; // 请求后端接口
   return new Promise((resolve, reject) => {
@@ -111,6 +119,11 @@ function LoadDataList({
         }
         // 关闭骨架显示-init模式
         if (showSkeleton && isInit) {
+          page.setData({ skeletonLoading: false });
+        }
+        // 切换tab调用
+        if (isSwitch) {
+          wx.hideLoading();
           page.setData({ skeletonLoading: false });
         }
         // 如果模式是下拉刷新，进行关闭
@@ -175,19 +188,6 @@ function UpdateData({
     });
   });
 }
-// 读取访问数据-分页处理
-// function readPageStructure(page) {
-//   const { allData, pageSize, currentIndex } = page.data;
-//   if (allData.length === 0) {
-//     showToast(page, "无数据", "warning");
-//     page.setData({
-//       skeletonLoading: false
-//     })
-//     return [];
-//   }
-//   const pageData = allData.slice(currentIndex, currentIndex + pageSize); // 取读数据范围
-//   return pageData; // 返回需要读取的id列表
-// }
 function readPageStructure(page) {
   const { filteredData, pageSize, currentIndex } = page.data;
   if (filteredData.length === 0) {

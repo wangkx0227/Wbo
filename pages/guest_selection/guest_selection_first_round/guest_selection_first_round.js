@@ -361,6 +361,7 @@ Page({
           "timeLine_id": timeline_id,
           "username": userName, // 参数需要修改
           "name": userName, // 参数需要修改
+          "name_str": userName, // 参数需要修改
           "comment": dialogValue
         },
         message: "提交评论完成"
@@ -627,12 +628,6 @@ Page({
       'dropdownSelected.value': value,
     });
   },
-
-
-
-
-
-  /* 未使用 */
   // 新增内部的下拉框
   onDesignerPicker(e) {
     this.setData({

@@ -389,6 +389,7 @@ Page({
             "timeLine_id": timeline_id,
             "username": userName, // 参数需要修改
             "name": userName, // 参数需要修改
+            "name_str":userName, // 评论人
             "comment": dialogValue
           },
           message: "评审记录完成"

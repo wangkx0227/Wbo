@@ -362,6 +362,7 @@ Page({
   // 评估建议单选框
   onRadioChange(e) {
     const that = this;
+    const userName = that.data.userName;  // 当前登录用户
     // 点击的选中的
     const selectedValue = e.detail.value;
     // 修改前的数据
@@ -371,8 +372,8 @@ Page({
     let data = {
       "type": "update_timeline",
       "timeLine_id": timeline_id,
-      "username": "admin",
-      "name": "管理员",
+      "username": userName,
+      "name": userName,
       "confirmed2": selectedValue,
     }
     const isConfirmedEqual = selectedValue.toString() === confirmed2.toString();
@@ -387,11 +388,12 @@ Page({
       });
     } else {
       // 如果选择小幅度修改，需要输入评估建议
-      if (selectedValue === "2") {
+      if (selectedValue === "2" || selectedValue === "3") {
         this.setData({
           dialogVisible: true,
           timeline_id: timeline_id,
-          task_id: task_id
+          task_id: task_id,
+          submit_data: data, // 提交的数据
         });
       } else {
         if (confirmed2 !== 0) {
@@ -409,7 +411,7 @@ Page({
         }
       }
     }
-    if (selectedValue !== "2" || isConfirmedEqual) {
+    if (selectedValue === "1" || isConfirmedEqual) {
       const updatedData = that.data.Data.map(item => {
         if (item.timeline_id === timeline_id) {
           item["confirmed2"] = data["confirmed2"];
@@ -434,8 +436,12 @@ Page({
       dialogValue,
       timeline_id,
       task_id,
-      userName
+      userName,
+      submit_data
     } = that.data; // 输入的评论的数据
+    submit_data["comment"] = dialogValue;
+    submit_data["name_str"] = userName;
+    console.log(submit_data);
     const action = e.type;
     if (action === 'confirm') {
       if (!dialogValue) {
@@ -444,17 +450,9 @@ Page({
         utils.showToast(that, message, theme);
         return;
       }
-      const data = {
-        "type": "update_timeline",
-        "timeLine_id": timeline_id,
-        "username": userName,
-        "name": userName,
-        "confirmed2": 2,
-        "comment": dialogValue, // 携带其他人原来的评论
-      }
       utils.UpdateData({
         page: that,
-        data: data,
+        data: submit_data,
         message: "提交评估建议"
       });
       // 更新时间线
@@ -462,7 +460,7 @@ Page({
       // 刷新数据
       const updatedData = that.data.Data.map(item => {
         if (item.timeline_id === timeline_id) {
-          item["confirmed2"] = 2;
+          item["confirmed2"] = submit_data["confirmed2"];
         }
         return item;
       })

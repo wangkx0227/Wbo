@@ -57,7 +57,7 @@
         </view>
         <view class="arrange-center title-font-other">
           <text class="title-font-main">评估操作：</text>
-          <t-link size="small" content="不可生产" data-content-status="N" hover underline theme="danger" bindtap="onModifyArtworkStatus" data-task-id="{{ item.id }}" />
+          <t-link size="small" content="不可生产" data-content-status="N" hover underline theme="danger" bindtap="onModifyArtworkStatus" data-task-id="{{ item.id }}" data-timeline-id="{{ item.timeline_id }}"  />
           <t-divider layout="vertical" />
           <t-link size="small" content="可生产" data-content-status="Y" hover underline bindtap="onModifyArtworkStatus" data-task-id="{{ item.id }}" />
         </view>
