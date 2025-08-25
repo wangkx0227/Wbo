@@ -49,8 +49,14 @@ Page({
     },
     filterArtworkStatusValue: "all", // 筛选存储变量
     // 设计师分配人与设计师列表
+    pickerTitle: "",
+    pickerVisible: false,
+    pickerItemList: [], // 全部的用户列表的数据
     AITDesignerList: [],
     AITManagerList: [],
+    // 设计师分配人对图稿的修改意见填写
+    dialogVisible: false, // 评论弹出层变量
+    dialogValue: "",
   },
 
   // 数据结构处理
@@ -65,14 +71,16 @@ Page({
       const task_id = task_list[index].id;
       const AIT_designer1 = task_list[index].AIT_designer1; // 设计师
       const AIT_designer2 = task_list[index].AIT_designer2; // 设计师标记
+      const designer_manager1 = task_list[index].designer_manager1; // 设计师分配人
       let data_dict = {
         id: task_id,
         code: task_list[index].code,
         title: task_list[index].title,
         texture: task_list[index].texture,
         name: task_list[index].AIT_designer1,
-        AIT_designer2: AIT_designer2,
-        AIT_designer2_text: AIT_designer2 ? "已上传图稿" : "未上传图稿"
+        AIT_designer2: AIT_designer2 || "未指定请点击选择",
+        AIT_designer2_text: AIT_designer2 ? "已上传图稿" : "未上传图稿",
+        designer_manager1: designer_manager1 || "未指定请点击选择"
       }
       let timeLineData = []; // 时间线存储数据
       const timeline_list = task_list[index].timeline_list;
@@ -135,7 +143,6 @@ Page({
   // 后端设计师分配人与设计师图稿请求
   dataDesignerRequest(mode) {
     const that = this;
-    const userName = that.data.userName;
     const development_id = that.data.development_id;
     utils.LoadDataList({
       page: that,
@@ -144,14 +151,40 @@ Page({
         "project_id": development_id,
         "username": "Jasonyu" // 访问人必须是管理员
       },
-      mode: mode
+      mode: mode,
+      showLoading: false,
+      showSkeleton: false,
     }).then(list => { // list 就是data数据
       if (list.lps.length !== 0) {
+        let AITDesignerList = [];
+        let AITManagerList = [];
         const lp_members = list.lps[0].lp_members;
         for (let i = 0; i < lp_members.length; i++) {
-          console.log(lp_members[i]);
-
+          const name = lp_members[i][0];
+          const role = lp_members[i][1];
+          if (role === 'AIT') {
+            AITDesignerList.push({
+              label: name,
+              value: name
+            })
+          }
+          if (role === 'AIT分配人') {
+            AITManagerList.push({
+              label: name,
+              value: name
+            })
+          }
+          if (role === '设计经理') {
+            AITManagerList.push({
+              label: name,
+              value: name
+            })
+          }
         }
+        that.setData({
+          AITDesignerList: AITDesignerList,
+          AITManagerList: AITManagerList
+        })
       }
     });
   },
@@ -205,14 +238,13 @@ Page({
     const userName = wx.getStorageSync('userName');
     const lineplan_id = options.lineplan_id || ''; // 首页跳转后的存储的id值
     const development_id = options.development_id || ''; // 整个开发案的id
-    console.log(development_id);
     that.setData({
       lineplan_id: lineplan_id, // 记录全部的id数据
       development_id: development_id, // 开发案id，通过它获取设计师
       userRole: userRole,
       userName: userName
     })
-    // that.dataRequest('init');
+    that.dataRequest('init');
     that.dataDesignerRequest('init');
   },
   // 轮播图函数 - 点击轮播图 - 图片预览
@@ -467,13 +499,162 @@ Page({
       currentIndex: firstPage.length,
       'dropdownArtworkStatus.value': value,
     });
-  }
+  },
+  // 关闭 选择器
+  onClosePicker(e) {
+    /*
+      pickerVisible：筛选器显示变量
+    */
+    this.setData({
+      task_id: null,
+      pickerVisible: false,
+    });
+    setTimeout(() => {
+      this.setData({
+        pickerTitle: "",
+        pickerItemList: [],
+      });
+    }, 500)
+  },
+  // 打开 选择器
+  onOpenPicker(e) {
+    const {
+      type,
+      taskId
+    } = e.currentTarget.dataset; // task id值
+    if (type === "manager") {
+      this.setData({
+        pickerTitle: "请选择图稿分配人",
+        pickerItemList: this.data.AITManagerList,
+      });
+    } else {
+      this.setData({
+        pickerTitle: "请选择图稿设计师",
+        pickerItemList: this.data.AITDesignerList,
+      });
+    }
+    this.setData({
+      type: type, // 选中类型
+      task_id: taskId,
+      pickerVisible: true,
+    });
+  },
+  // 提交 FMR筛选器
+  onPickerChange(e) {
+    /*
+      pickerVisible：筛选器显示变量
+      pickerValue： 选中的值
+    */
+    const that = this;
+    const type = that.data.type;
+    const task_id = that.data.task_id;
+    const userName = that.data.userName;
+    const {
+      value,
+      label
+    } = e.detail;
+    let data = {
+      "type": "update_task",
+      "task_id": task_id,
+      "username": userName
+    }
+    if (type === "designer") {
+      data["AIT_designer1"] = value[0]
+    } else {
+      data["AIT_manager1"] = value[0]
+    }
+    this.setData({
+      task_id: null,
+      pickerVisible: false,
+    });
+    utils.UpdateData({
+      page: that,
+      data: data,
+      message: `已指派${label}`
+    });
+    // 修改新的fmr时，重置之前的选中
+    const updatedData = that.data.Data.map(item => {
+      if (item.id === task_id) {
+        if (type === "designer") {
+          item["name"] = value[0];
+        } else {
+          item["designer_manager1"] = value[0];
+        }
+      }
+      return item;
+    })
+    that.setData({
+      Data: updatedData
+    });
+  },
 
+  // 修改建议-评论-打开
+  onOpenDialog(e) {
+    const {
+      taskId,
+      timelineId,
+      designerName
+    } = e.currentTarget.dataset;
+    this.setData({
+      dialogVisible: true,
+      timeline_id: timelineId,
+      task_id: taskId,
+      designer_name:designerName
+    });
+  },
+  // 弹窗-评论-双向绑定
+  onDialogInput(e) {
+    this.setData({
+      dialogValue: e.detail.value
+    });
+  },
+  // 弹窗-评论-关闭（包含提交功能）
+  onCloseDialog(e) {
+    const that = this;
+    const action = e.type; // "confirm" 或 "cancel"
+    const {
+      task_id,
+      timeline_id,
+      dialogValue,
+      userName,
+      designer_name
+    } = that.data; // 输入的评论的数据
 
-  /*
-  分配设计师
-  {type: 'update_task', task_id: 40889, username: 'Jasonyu', AIT_designer1: '陈巧娜'}
-  分配分配人
-  {type: 'update_task', task_id: 40889, username: 'Jasonyu', AIT_manager1: 'Ming'}
-  */
+    if (action === 'confirm') {
+      if (!dialogValue) {
+        utils.showToast(that, "无建议无法提交", "warning");
+        return;
+      }
+      if (!designer_name) {
+        utils.showToast(that, "请选择设计师", "error");
+        return;
+      } else {
+        utils.UpdateData({
+          page: that,
+          data: {
+            "type": "update_timeline",
+            "timeLine_id": timeline_id,
+            "username": userName, // 参数需要修改
+            "name": userName, // 参数需要修改
+            "name_str": userName, // 评论人
+            "comment": dialogValue // 内容
+          },
+          message: "修改建议填写完成"
+        })
+        // 更新时间线
+        utils.updateTimeLine(that, task_id, timeline_id, dialogValue, userName);
+      }
+    } else if (action === 'cancel') {
+      utils.showToast(that, "修改建议取消", "warning");
+    }
+    this.setData({
+      dialogId: null,
+      dialogVisible: false,
+    });
+    setTimeout(() => {
+      this.setData({
+        dialogValue: "",
+      })
+    }, 500)
+  },
 })

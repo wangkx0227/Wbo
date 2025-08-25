@@ -45,11 +45,18 @@
         </view>
         <view class="arrange-center">
           <text class="title-font-main">指定图稿分配人：</text>
-          <t-link size="small" content="未指定" hover underline variant="outline" bind:tap="onOpenHistoryTimeLine" data-task-id="{{ item.id }}" />
+          <t-link size="small" content="{{item.designer_manager1}}" hover underline variant="outline" bind:tap="onOpenPicker" data-task-id="{{ item.id }}" data-type="manager" />
         </view>
         <view class="arrange-center ">
-          <text class="title-font-main">指定图稿设计师：</text>
-          <t-link size="small" content="未指定" hover underline catchtap="onOpenUploadFactoryArtwork"  data-task-id="{{ item.id }}" data-timeline-id="{{ item.timeline_id }}" />
+          <view class="arrange-center ">
+            <text class="title-font-main">指定图稿设计师：</text>
+            <t-link size="small" content="{{item.name}}" hover underline catchtap="onOpenPicker" data-task-id="{{ item.id }}" data-timeline-id="{{ item.timeline_id }}" data-type="designer" />
+          </view>
+          <t-divider layout="vertical" />
+          <view class="arrange-center ">
+            <text class="title-font-main">图稿修改意见：</text>
+            <t-link size="small" content="点击填写" hover underline catchtap="onOpenDialog"  data-task-id="{{ item.id }}" data-timeline-id="{{ item.timeline_id }}" data-designer-name="{{item.name}}"/>
+          </view>
         </view>
         <view class="arrange-center">
           <view class="arrange-center">
@@ -151,3 +158,15 @@
     </view>
   </view>
 </t-popup>
+<!-- 下拉框 -->
+<t-picker visible="{{pickerVisible}}" value="{{pickerValue}}" title="{{pickerTitle}}" cancelBtn="取消" confirmBtn="确认" bindchange="onPickerChange" bindcancel="onClosePicker" catchtouchmove>
+  <t-picker-item options="{{pickerItemList}}"></t-picker-item>
+</t-picker>
+<!-- 图稿修改意见 -->
+<t-dialog visible="{{dialogVisible}}" title="修改建议：" confirm-btn="确定" cancel-btn="取消" bind:confirm="onCloseDialog" bind:cancel="onCloseDialog">
+  <view slot="content">
+    <view class="dialog-textarea">
+      <t-textarea value="{{ dialogValue }}" placeholder="请输入修改建议" bordered maxlength="200" disableDefaultPadding="true" indicator bind:change="onDialogInput" />
+    </view>
+  </view>
+</t-dialog>
