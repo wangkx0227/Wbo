@@ -8,6 +8,7 @@
       <t-col span="24">
         <t-dropdown-menu>
           <t-dropdown-item options="{{dropdownMaterial.options}}" placement="right" value="{{dropdownMaterial.value}}" bindchange="onMaterialChange" />
+          <t-dropdown-item options="{{dropdownArtworkStatus.options}}" placement="right" value="{{dropdownArtworkStatus.value}}" bindchange="onStatusChange" />
         </t-dropdown-menu>
       </t-col>
     </t-row>
@@ -20,6 +21,7 @@
         </view>
         <view class="arrange-space-between title-font-other">
           <text style="border-bottom: 1px solid currentColor;">材质：{{ item.texture }}</text>
+          <text style="color: {{ item.AIT_designer2 ? 'black' : 'red' }};;">图稿状态：{{ item.AIT_designer2_text }}</text>
         </view>
         <view class="title-font-other arrange-space-between">
           <text>Name：{{ item.name }}</text>

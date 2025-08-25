@@ -29,6 +29,25 @@ Page({
       ],
     },
     filterMaterialValue: "all", // 筛选存储变量
+    // 图稿状态
+    dropdownArtworkStatus: {
+      value: 'all',
+      options: [
+        {
+          value: 'all',
+          label: '全部状态',
+        },
+        {
+          value: true,
+          label: '已上传图稿',
+        },
+        {
+          value: false,
+          label: '未上传图稿',
+        },
+      ],
+    },
+    filterArtworkStatusValue: "all", // 筛选存储变量
   },
 
   // 数据结构处理
@@ -41,13 +60,16 @@ Page({
     const userName = this.data.userName;
     for (const index in task_list) {
       const task_id = task_list[index].id;
-      const AIT_designer1 = task_list[index].AIT_designer1;
+      const AIT_designer1 = task_list[index].AIT_designer1; // 设计师
+      const AIT_designer2 = task_list[index].AIT_designer2; // 设计师标记
       let data_dict = {
         id: task_id,
         code: task_list[index].code,
         title: task_list[index].title,
         texture: task_list[index].texture,
         name: task_list[index].AIT_designer1,
+        AIT_designer2: AIT_designer2,
+        AIT_designer2_text: AIT_designer2 ? "已上传图稿" : "未上传图稿"
       }
       let timeLineData = []; // 时间线存储数据
       const timeline_list = task_list[index].timeline_list;
@@ -56,6 +78,7 @@ Page({
         const picture_list = image_list.length === 0 ? [] : image_list.map(img => image_url + img.imageURL);
         const timeline_id = task_list[index].timeline_list[i].id;
         const timeline_type = task_list[index].timeline_list[i].timeline_type;
+
         if (i > 0) {
           let timeline_type_text = ""
           if (timeline_type === 1) {
@@ -80,7 +103,7 @@ Page({
         // 第一条时间线的id
         data_dict["timeline_id"] = timeline_id;
       }
-       // 只有当前用户才可以看到自己的图稿并上传 -- 只针对设计师
+      // 只有当前用户才可以看到自己的图稿并上传 -- 只针对设计师
       if (AIT_designer1 !== userName) {
         continue;
       }
@@ -88,7 +111,6 @@ Page({
       if (data_dict["confirmed2"] === 3) {
         continue
       }
-      
       taskTimeLineData[`${task_id}`] = timeLineData; // 时间线数据
       material_list.push(data_dict["texture"].trim());
       arrangeData.push(data_dict);
@@ -312,12 +334,14 @@ Page({
       filePath: imageFileList[0].url, // 临时文件路径
       name: 'file',       // 与接口的 file 字段一致
       formData: {
-        task_id: task_id   // 整数 ID
+        task_id: task_id,   // task ID
+        AIT_designer2: true, // 默认设计师选中
       },
       success(res) {
         try {
           const data = JSON.parse(res.data);
           if (data.code === 200) {
+            // 修改设计师标记状态，默认标记
             const updatedData = that.data.Data.map(item => {
               if (item.timeline_id === timeline_id) {
                 return {
@@ -328,9 +352,7 @@ Page({
               return item;
             })
             that.setData({
-              Data: updatedData
-            });
-            that.setData({
+              Data: updatedData,
               popupFactoryArtworkVisible: false,
             });
             utils.showToast(that, "上传成功");
@@ -338,7 +360,6 @@ Page({
             utils.showToast(that, "上传失败", "error");
           }
         } catch (e) {
-          console.log(e);
           utils.showToast(that, "返回数据解析失败", "error");
         }
       },
@@ -356,9 +377,11 @@ Page({
   onMaterialChange(e) {
     const that = this;
     const value = e.detail.value; // 筛选框内容
+    const filterArtworkStatusValue = that.data.filterArtworkStatusValue;
     const filtered = that.data.allData.filter(item => {
       const matchMaterial = (value === 'all') ? true : item.texture === value;
-      return matchMaterial;
+      const matchArtworkStatus = (filterArtworkStatusValue === 'all') ? true : item.AIT_designer2 === filterArtworkStatusValue;
+      return matchMaterial && matchArtworkStatus;
     });
     that.setData({
       filteredData: filtered, // 记录筛选数据
@@ -374,4 +397,28 @@ Page({
       'dropdownMaterial.value': value,
     });
   },
+  // 图稿上传状态
+  onStatusChange(e) {
+    const that = this;
+    const value = e.detail.value; // 筛选框内容
+    const filterMaterialValue = that.data.filterMaterialValue;
+    const filtered = that.data.allData.filter(item => {
+      const matchArtworkStatus = (value === 'all') ? true : item.AIT_designer2 === value;
+      const matchMaterial = (filterMaterialValue === 'all') ? true : item.texture === filterMaterialValue;
+      return matchMaterial && matchArtworkStatus;
+    });
+    that.setData({
+      filteredData: filtered, // 记录筛选数据
+      Data: [],
+      currentIndex: 0,
+      noMoreData: false,
+      filterArtworkStatusValue: value
+    });
+    const firstPage = utils.readPageStructure(that);
+    that.setData({
+      Data: firstPage, // 显示
+      currentIndex: firstPage.length,
+      'dropdownArtworkStatus.value': value,
+    });
+  }
 })
