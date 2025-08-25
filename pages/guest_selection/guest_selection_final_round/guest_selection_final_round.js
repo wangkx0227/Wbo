@@ -97,7 +97,7 @@ Page({
           timeLineData.push({
             "id": timeline_id, // id 
             "time": task_list[index].timeline_list[i].time, // 提交时间
-            "name": task_list[index].timeline_list[i].name, // 提交人
+            "name": task_list[index].timeline_list[i].name || "无提交人", // 提交人
             "comment": task_list[index].timeline_list[i].comment, // 评论内容
             "picture_list": picture_list, // 图片
             "timeline_type_text": timeline_type_text // 图稿类型

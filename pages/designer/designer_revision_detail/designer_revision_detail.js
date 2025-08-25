@@ -42,10 +42,6 @@ Page({
     for (const index in task_list) {
       const task_id = task_list[index].id;
       const AIT_designer1 = task_list[index].AIT_designer1;
-      if (AIT_designer1 !== userName) {
-        continue;
-      }
-      // 需要增加一个关于当前用户的判断，只有当前用户才可以看到自己的图稿并上传
       let data_dict = {
         id: task_id,
         code: task_list[index].code,
@@ -78,14 +74,21 @@ Page({
           continue; // 跳过
         }
         const confirmed2 = task_list[index].timeline_list[i].confirmed2; // kyle 标记
+        // shelley 标记
+        data_dict["confirmed2"] = confirmed2;
         data_dict["picture_list"] = picture_list;
         // 第一条时间线的id
         data_dict["timeline_id"] = timeline_id;
-        // 可行性分析，shelley 选3直接跳过
-        if (confirmed2 === 3) {
-          continue
-        }
       }
+       // 只有当前用户才可以看到自己的图稿并上传 -- 只针对设计师
+      if (AIT_designer1 !== userName) {
+        continue;
+      }
+      // 可行性分析，shelley 选3直接跳过 -- 只针对设计师
+      if (data_dict["confirmed2"] === 3) {
+        continue
+      }
+      
       taskTimeLineData[`${task_id}`] = timeLineData; // 时间线数据
       material_list.push(data_dict["texture"].trim());
       arrangeData.push(data_dict);

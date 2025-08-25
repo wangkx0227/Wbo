@@ -88,7 +88,7 @@
   </view>
 </t-popup>
 <!-- 抽屉/展示时间线 -->
-<t-popup visible="{{popupTimeLineVisible}}" placement="left">
+<t-popup visible="{{popupTimeLineVisible}}" placement="left" >
   <view class="popup-block" style="padding: 10rpx;height: 100%;">
     <view class="popup-header arrange-column">
       <view class="popup-title">时间线历史：</view>
@@ -96,18 +96,14 @@
     <view class="popup-comments">
       <scroll-view scroll-y style="height: calc(100% - 120rpx);padding: 0 20rpx;" class="popup-comments" bindtouchmove="onDummyTouchMove" catchtouchmove>
         <view wx:for="{{timeLineValue}}" wx:key="index" style="width: 93%;">
-          <view class="arrange-space-between ">
-            <view>
+          <view class="arrange-space-between">
+            <view class="arrange-center">
               <text class="title-font-main">类型：</text>
               <text class="title-font-other">{{item.timeline_type_text}}</text>
             </view>
-            <view>
+            <view class="arrange-center">
               <text class="title-font-main">评论人：</text>
               <text class="title-font-other">{{item.name}}</text>
-            </view>
-            <view>
-              <text class="title-font-main">评论时间：</text>
-              <text class="title-font-other">{{item.time}}</text>
             </view>
           </view>
           <view class="cell-swiper" style="margin-top: 20rpx;">
@@ -115,7 +111,6 @@
             </t-swiper> -->
             <swiper wx:if="{{item.picture_list.length}}" autoplay="{{false}}" interval="3000" duration="500" circular="{{false}}" indicator-dots="{{true}}" indicator-color="#ccc" indicator-active-color="#fff" style="width: 690rpx;height:384rpx ;">
               <block wx:for="{{item.picture_list}}" wx:key="index">
-                <view>{{item.url}}</view>
                 <swiper-item>
                   <image src="{{item}}" mode="widthFix" style="width:55%;display: block; margin: 0 auto; " />
                 </swiper-item>
@@ -127,13 +122,20 @@
             </t-image>
           </view>
           <view class="arrange-column" style="margin-top: 20rpx;">
-            <text class="title-font-main">评论内容：</text>
+            <view class="arrange-space-between">
+              <text class="title-font-main">评论内容：</text>
+              <view class="arrange-center">
+                <text class="title-font-main">评论时间：</text>
+                <text class="title-font-other">{{item.time}}</text>
+              </view>
+            </view>
             <text class="title-font-other" style="margin-left: 20rpx;font-size:14px">{{item.comment}}</text>
           </view>
+
           <t-divider content="时间线-{{index+1}}" />
         </view>
       </scroll-view>
-      <view style="padding: 10rpx 0;">
+      <view class="button-example" style="padding: 10rpx 0;">
         <t-button theme="light" block t-class="group-btn" bindtap="onCloseHistoryTimeLine">关闭</t-button>
       </view>
     </view>
