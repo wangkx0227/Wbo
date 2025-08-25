@@ -48,6 +48,9 @@ Page({
       ],
     },
     filterArtworkStatusValue: "all", // 筛选存储变量
+    // 设计师分配人与设计师列表
+    AITDesignerList: [],
+    AITManagerList: [],
   },
 
   // 数据结构处理
@@ -129,7 +132,30 @@ Page({
       taskTimeLineData
     }; // 返回整理的结构体
   },
-  // 后端请求
+  // 后端设计师分配人与设计师图稿请求
+  dataDesignerRequest(mode) {
+    const that = this;
+    const userName = that.data.userName;
+    const development_id = that.data.development_id;
+    utils.LoadDataList({
+      page: that,
+      data: {
+        "type": "get_lps_data",
+        "project_id": development_id,
+        "username": "Jasonyu" // 访问人必须是管理员
+      },
+      mode: mode
+    }).then(list => { // list 就是data数据
+      if (list.lps.length !== 0) {
+        const lp_members = list.lps[0].lp_members;
+        for (let i = 0; i < lp_members.length; i++) {
+          console.log(lp_members[i]);
+
+        }
+      }
+    });
+  },
+  // 后端数据请求
   dataRequest(mode) {
     const that = this;
     const userName = that.data.userName;
@@ -178,12 +204,16 @@ Page({
     const userRole = wx.getStorageSync('userRole');
     const userName = wx.getStorageSync('userName');
     const lineplan_id = options.lineplan_id || ''; // 首页跳转后的存储的id值
+    const development_id = options.development_id || ''; // 整个开发案的id
+    console.log(development_id);
     that.setData({
       lineplan_id: lineplan_id, // 记录全部的id数据
+      development_id: development_id, // 开发案id，通过它获取设计师
       userRole: userRole,
       userName: userName
     })
-    that.dataRequest('init');
+    // that.dataRequest('init');
+    that.dataDesignerRequest('init');
   },
   // 轮播图函数 - 点击轮播图 - 图片预览
   onSwiperImagesTap(e) {
@@ -438,4 +468,12 @@ Page({
       'dropdownArtworkStatus.value': value,
     });
   }
+
+
+  /*
+  分配设计师
+  {type: 'update_task', task_id: 40889, username: 'Jasonyu', AIT_designer1: '陈巧娜'}
+  分配分配人
+  {type: 'update_task', task_id: 40889, username: 'Jasonyu', AIT_manager1: 'Ming'}
+  */
 })

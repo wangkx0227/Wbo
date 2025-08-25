@@ -10,14 +10,15 @@ App({
     imagesUrl: 'https://xcx.1bizmail.com:8154', //  图片路径 8080
     // fileUrl: 'http://10.8.0.68:5000/send_wechat_file', //  导出附件地址
     roleDict: { // 特定角色
-      "kyle": "kyle",
-      "shelley": "shelley",
-      "FMR": "fmr",
       "AIE": "designer",
       "设计经理": "designer",
+      "AIT分配人": "designer",
+      "FMR": "fmr",
+      "kyle": "kyle",
+      "shelley": "shelley",
       "OMR": "chosen_draft",
-      "desc_upload": "desc_upload", // 上传图片表格描述
       "管理员角色": "kyle", // 管理员角色
+      "表格上传": "desc_upload", // 上传图片表格描述-添加一个角色权限
     }
   },
   onLaunch(options) {

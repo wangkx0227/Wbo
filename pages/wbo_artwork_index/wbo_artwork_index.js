@@ -241,7 +241,7 @@ Page({
     } else if (userRole === "designer") { // 设计师对上传工厂稿
       if (tabBarValue === "primary") { // 设计师工厂稿上传，样品图审查
         wx.navigateTo({
-          url: `/pages/designer/designer_revision_detail/designer_revision_detail?lineplan_id=${lineplan_id}`
+          url: `/pages/designer/designer_revision_detail/designer_revision_detail?lineplan_id=${lineplan_id}&development_id=${development_id}`
         });
       } else if (tabBarValue === "factory") {
         wx.navigateTo({
