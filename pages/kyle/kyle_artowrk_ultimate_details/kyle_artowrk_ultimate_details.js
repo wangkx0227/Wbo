@@ -118,9 +118,9 @@ Page({
         }
         if (confirmed2 === 1) {
           data_dict["confirmed2_text"] = "可生产";
-        } else if (confirmed === 2) {
+        } else if (confirmed2 === 2) {
           data_dict["confirmed2_text"] = "需要小幅度修改";
-        } else if (confirmed === 3) {
+        } else if (confirmed2 === 3) {
           data_dict["confirmed2_text"] = "不具备可行性";
         } else {
           data_dict["confirmed2_text"] = "未标记";
