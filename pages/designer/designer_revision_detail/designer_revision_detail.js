@@ -587,7 +587,6 @@ Page({
       Data: updatedData
     });
   },
-
   // 修改建议-评论-打开
   onOpenDialog(e) {
     const {
