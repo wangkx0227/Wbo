@@ -441,7 +441,6 @@ Page({
     } = that.data; // 输入的评论的数据
     submit_data["comment"] = dialogValue;
     submit_data["name_str"] = userName;
-    console.log(submit_data);
     const action = e.type;
     if (action === 'confirm') {
       if (!dialogValue) {
