@@ -58,8 +58,7 @@ Page({
     dialogVisible: false, // 评论弹出层变量
     dialogValue: "",
   },
-
-  // 数据结构处理
+  // 数据结构处理 - 未处理完成
   dataStructure(dataList) {
     let arrangeData = [];
     let material_list = [];
@@ -67,20 +66,42 @@ Page({
     const image_url = dataList.WBO_URL
     const task_list = dataList.task_list
     const userName = this.data.userName;
+    const position_type = this.data.position_type;
     for (const index in task_list) {
       const task_id = task_list[index].id;
       const AIT_designer1 = task_list[index].AIT_designer1; // 设计师
       const AIT_designer2 = task_list[index].AIT_designer2; // 设计师标记
-      const designer_manager1 = task_list[index].designer_manager1; // 设计师分配人
+      const AIT_manager1 = task_list[index].AIT_manager1; // 设计师分配人
       let data_dict = {
         id: task_id,
         code: task_list[index].code,
         title: task_list[index].title,
         texture: task_list[index].texture,
-        name: task_list[index].AIT_designer1,
-        AIT_designer2: AIT_designer2 || "未指定请点击选择",
+        name: task_list[index].AIT_designer1 || "未指定请选择",
+        AIT_designer2: AIT_designer2,
         AIT_designer2_text: AIT_designer2 ? "已上传图稿" : "未上传图稿",
-        designer_manager1: designer_manager1 || "未指定请点击选择"
+        AIT_manager1: AIT_manager1 || "未指定请选择"
+      }
+      // 可行性分析，shelley 选3直接跳过，不在显示
+      if (data_dict["confirmed2"] === 3) {
+        continue
+      }
+      /*
+      只有当前用户才可以看到自己的图稿并上传
+      设计师：只显示自己的
+      设计部经理：只显示被分配的
+      AIT分配人：显示全部的
+    */
+      if (position_type === "设计经理") {
+        if (AIT_manager1 === userName) {
+          arrangeData.push(data_dict);
+        }
+      } else if (position_type === "AIT") {
+        if (AIT_designer1 === userName) {
+          arrangeData.push(data_dict);
+        }
+      } else if (position_type === "AIT分配人") {
+        arrangeData.push(data_dict);
       }
       let timeLineData = []; // 时间线存储数据
       const timeline_list = task_list[index].timeline_list;
@@ -114,19 +135,12 @@ Page({
         // 第一条时间线的id
         data_dict["timeline_id"] = timeline_id;
       }
-      // 只有当前用户才可以看到自己的图稿并上传 -- 只针对设计师
-      if (AIT_designer1 !== userName) {
-        continue;
-      }
-      // 可行性分析，shelley 选3直接跳过 -- 只针对设计师
-      if (data_dict["confirmed2"] === 3) {
-        continue
-      }
-      taskTimeLineData[`${task_id}`] = timeLineData; // 时间线数据
+      // 时间线数据
+      taskTimeLineData[`${task_id}`] = timeLineData;
+      // 材质
       material_list.push(data_dict["texture"].trim());
-      arrangeData.push(data_dict);
     }
-    // 筛选条件加入
+    // 筛选条件加入过滤整合
     const material = utils.filterDataProcess(material_list);
     const options = this.data.dropdownMaterial.options;
     // 只有 筛选框的列表为1（内部默认有一条数据）才会添加
@@ -237,6 +251,9 @@ Page({
     const userRole = wx.getStorageSync('userRole');
     const userName = wx.getStorageSync('userName');
     const position_list = wx.getStorageSync('position_list'); // 实际的权限列表
+    const position_type = position_list.find(item =>
+      ["设计经理", "AIT", "AIT分配人"].includes(item)
+    ) || "";
     const lineplan_id = options.lineplan_id || ''; // 首页跳转后的存储的id值
     const development_id = options.development_id || ''; // 整个开发案的id
     that.setData({
@@ -244,10 +261,11 @@ Page({
       development_id: development_id, // 开发案id，通过它获取设计师
       userRole: userRole,
       userName: userName,
-      position_list:position_list
+      position_list: position_list,
+      position_type: position_type
     })
     that.dataRequest('init');
-    that.dataDesignerRequest('init');
+    // that.dataDesignerRequest('init');
   },
   // 轮播图函数 - 点击轮播图 - 图片预览
   onSwiperImagesTap(e) {
@@ -600,7 +618,7 @@ Page({
       dialogVisible: true,
       timeline_id: timelineId,
       task_id: taskId,
-      designer_name:designerName
+      designer_name: designerName
     });
   },
   // 弹窗-评论-双向绑定

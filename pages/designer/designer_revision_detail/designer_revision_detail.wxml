@@ -43,11 +43,11 @@
             <text class="error-text" slot="error">轮播图加载失败</text>
           </t-image>
         </view>
-        <view class="arrange-center">
+        <view class="arrange-center" wx:if="{{position_type === 'AIT分配人'}}">
           <text class="title-font-main">指定图稿分配人：</text>
-          <t-link size="small" content="{{item.designer_manager1}}" hover underline variant="outline" bind:tap="onOpenPicker" data-task-id="{{ item.id }}" data-type="manager" />
+          <t-link size="small" content="{{item.AIT_manager1}}" hover underline variant="outline" bind:tap="{{ position_type=== 'AIT分配人'? onOpenPicker:'' }}" data-task-id="{{ item.id }}" data-type="manager" />
         </view>
-        <view class="arrange-center ">
+        <view class="arrange-center"  wx:if="{{position_type === '设计经理'}}">
           <view class="arrange-center ">
             <text class="title-font-main">指定图稿设计师：</text>
             <t-link size="small" content="{{item.name}}" hover underline catchtap="onOpenPicker" data-task-id="{{ item.id }}" data-timeline-id="{{ item.timeline_id }}" data-type="designer" />
@@ -55,7 +55,7 @@
           <t-divider layout="vertical" />
           <view class="arrange-center ">
             <text class="title-font-main">图稿修改意见：</text>
-            <t-link size="small" content="点击填写" hover underline catchtap="onOpenDialog"  data-task-id="{{ item.id }}" data-timeline-id="{{ item.timeline_id }}" data-designer-name="{{item.name}}"/>
+            <t-link size="small" content="点击填写" hover underline catchtap="onOpenDialog" data-task-id="{{ item.id }}" data-timeline-id="{{ item.timeline_id }}" data-designer-name="{{item.name}}" />
           </view>
         </view>
         <view class="arrange-center">
