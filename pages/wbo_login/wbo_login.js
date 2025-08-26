@@ -60,6 +60,7 @@ Page({
     wx.removeStorageSync('userInfo')
     wx.removeStorageSync('userRole') // 每次重置，清除登录信息
     wx.removeStorageSync('userName') // 每次重置，清除登录信息
+    wx.removeStorageSync('position_list') // 每次重置，清除登录信息
     const redirect = options.redirect;
     if (redirect) {
       // 赋值跳转url
@@ -137,6 +138,7 @@ Page({
                 }
                 wx.setStorageSync('userRole', role); // 存储的角色
                 wx.setStorageSync('userName', name); // 存储名字
+                wx.setStorageSync('position_list', position_list); // 存储名字
                 wx.setStorageSync('userInfo', that.data.userInfo); // 全部存储信息
                 wx.showToast({ title: '登录成功', icon: 'success' }); // 提示
                 const redirect = that.data.redirect;  // 跳转，如果有参数进行携带
@@ -245,7 +247,7 @@ Page({
         wx.setStorageSync('userName', "黄思杰"); // 样品照片拍照审核  设计师 测试 上传ait稿与工厂稿和照片审核
       } else if (productValue === "chosen_draft") { // 第7轮与第9轮
         wx.setStorageSync('userName', "kyle");
-      }else if(productValue === "desc_upload"){
+      } else if (productValue === "desc_upload") {
         wx.setStorageSync('userName', "kyle");
       }
       wx.setStorageSync('userRole', productValue);

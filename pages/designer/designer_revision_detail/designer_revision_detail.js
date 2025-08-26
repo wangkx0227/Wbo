@@ -236,13 +236,15 @@ Page({
     }
     const userRole = wx.getStorageSync('userRole');
     const userName = wx.getStorageSync('userName');
+    const position_list = wx.getStorageSync('position_list'); // 实际的权限列表
     const lineplan_id = options.lineplan_id || ''; // 首页跳转后的存储的id值
     const development_id = options.development_id || ''; // 整个开发案的id
     that.setData({
       lineplan_id: lineplan_id, // 记录全部的id数据
       development_id: development_id, // 开发案id，通过它获取设计师
       userRole: userRole,
-      userName: userName
+      userName: userName,
+      position_list:position_list
     })
     that.dataRequest('init');
     that.dataDesignerRequest('init');
