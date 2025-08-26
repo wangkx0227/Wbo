@@ -71,7 +71,7 @@ Page({
       const task_id = task_list[index].id;
       const AIT_designer1 = task_list[index].AIT_designer1; // 设计师
       const AIT_designer2 = task_list[index].AIT_designer2; // 设计师标记
-      const AIT_manager1 = task_list[index].AIT_manager1; // 设计师分配人
+      const AIT_manager1 = task_list[index].AIT_manager1; // 设计师manager分配人
       const AIT_manager2 = task_list[index].AIT_manager2; // 设计师manager确认
       let data_dict = {
         id: task_id,
@@ -82,6 +82,7 @@ Page({
         AIT_designer2: AIT_designer2,
         AIT_designer2_text: AIT_designer2 ? "已上传图稿" : "未上传图稿",
         AIT_manager1: AIT_manager1 || "未指定请选择",
+        AIT_manager2: AIT_manager2,
         AIT_manager2_text: AIT_manager2 ? "已确认" : "未确认",
       }
       // 可行性分析，shelley 选3直接跳过，不在显示
@@ -702,7 +703,51 @@ Page({
     }, 500)
   },
   // 主管提交确认
-  managerConfirmStatus() {
-
+  managerConfirmStatus(e) {
+    const that = this;
+    const userName = that.data.userName;
+    const {
+      taskId,
+      confirmType,
+      ait_designer2,
+    } = e.currentTarget.dataset; // task id值
+    if (!ait_designer2) {
+      utils.showToast(that, "设计师未确认", "warning");
+      return;
+    }
+    wx.showModal({
+      title: '提示',
+      content: '是否"确认"当前图稿',
+      success(res) {
+        if (res.confirm) {
+          // 改变原来设计师确认状态
+          utils.UpdateData({
+            page: that,
+            data: {
+              "type": "update_task",
+              "task_id": taskId,
+              "username": userName,
+              "AIT_manager2": confirmType ? true : false, // 重置设计师确认状态
+            },
+            message: "提交成功"
+          });
+          // 重置设计师图稿上传状态
+          const updatedData = that.data.Data.map(item => {
+            if (item.id === taskId) {
+              item["AIT_manager2"] = confirmType ? true : false;
+              item["AIT_manager2_text"] = "已确认";
+            }
+            return item;
+          })
+          // 保存状态
+          that.setData({
+            Data: updatedData,
+          });
+        } else if (res.cancel) {
+          // 取消
+          utils.showToast(that, "用户已取消操作", "warning");
+        }
+      }
+    })
   }
 })

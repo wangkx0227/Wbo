@@ -18,7 +18,7 @@
       <view class="cell" wx:for="{{Data}}" wx:key="index" wx:for-index="outerIndex">
         <view class="title-font-main arrange-space-between">
           <text>Title：{{ item.title }}</text>
-          <text class="title-font-other" style="color: {{ item.AIT_manager2 ? 'black' : 'red' }};;">图稿确认：{{ item.AIT_manager2_text }}</text>
+          <text class="title-font-other" style="color: {{ item.AIT_manager2 ?  'black' : 'red' }};">图稿确认：{{ item.AIT_manager2_text }}</text>
         </view>
         <view class="arrange-space-between title-font-other">
           <text style="border-bottom: 1px solid currentColor;">材质：{{ item.texture }}</text>
@@ -27,6 +27,7 @@
         <view class="title-font-other arrange-space-between">
           <text>Name：{{ item.name }}</text>
           <text>Code：{{ item.code }}</text>
+          <text>{{item.AIT_manager1_status}}</text>
         </view>
         <view class="cell-swiper">
           <!-- <t-swiper wx:if="{{item.picture_list.length}}" autoplay="{{false}}" duration="{{500}}" navigation="{{ { type: 'dots' } }}" list="{{item.picture_list}}" bind:click="onSwiperImagesTap" data-images="{{item.picture_list}}">
@@ -70,9 +71,7 @@
           <view class="arrange-center " wx:if="{{ item.AIT_manager1 === userName }}">
             <t-divider layout="vertical" />
             <text class="title-font-main">图稿确认：</text>
-            <t-link size="small" content="确认" hover underline catchtap="managerConfirmStatus" data-task-id="{{ item.id }}" data-timeline-id="{{ item.timeline_id }}" data-confirm-type="true"/>
-            <t-divider layout="vertical" />
-            <t-link size="small" content="取消" hover underline catchtap="managerConfirmStatus" data-task-id="{{ item.id }}" data-timeline-id="{{ item.timeline_id }}" theme="danger" data-confirm-type="false"/>
+            <t-link size="small" content="确认" hover underline catchtap="managerConfirmStatus" data-task-id="{{ item.id }}" data-timeline-id="{{ item.timeline_id }}" data-confirm-type="1" data-AIT_designer2="{{item.AIT_designer2}}" />
           </view>
         </view>
         <!-- 设计师上传 -->
