@@ -15,6 +15,7 @@ Page({
     userName: null, // 名称
     scrollTop: 0, // 回到顶部变量
     searchValue: "",
+    coint_total: 0, // 待处理总数
     // 筛选框变量-1
     dropdownTemplate: {
       value: 'all',
@@ -65,6 +66,7 @@ Page({
   dataStructure(dataList) {
     const that = this;
     const userRole = that.data.userRole;
+    let coint_total = 0;
     let arrangeData = [];
     let client_list = [];
     dataList.forEach(item => {
@@ -75,6 +77,8 @@ Page({
       // 对内部的line_plan_list变量进行循环
       item.line_plan_list.forEach((line_plan) => {
         const development_status = line_plan.status; // 阶段
+        const quantity_to_be_completed = line_plan.quantity_to_be_completed; // 待处理数量
+        coint_total += quantity_to_be_completed;
         const lp_data = {
           development_id: development_id, // 开发案id
           line_plan_id: line_plan.id, // id
@@ -85,7 +89,8 @@ Page({
           line_plan_is_new_development: line_plan.is_new_development, // 是否结案
           development_director: development_director,// 主导人
           development_start_data: development_start_data, //开发案时间
-          development_status: development_status
+          development_status: development_status,
+          count: quantity_to_be_completed
         }
         if (lp_data['line_plan_is_new_development']) {
           lp_data['is_new_development_text'] = "完结"
@@ -115,32 +120,34 @@ Page({
         } else if (development_status === 9) {
           lp_data['development_status_text'] = "客户中单"
         }
-
-        if (userRole === 'kyle' && (development_status === 2 || development_status === 5)) {
-          // kyle的初审与终审
-          arrangeData.push(lp_data)
-          client_list.push(lp_data["line_plan_client"].trim()); // 客户列表加入
-        }
-        if ((userRole === 'shelley' || userRole === 'fmr') && development_status === 3) {
-          // fmr与shelley可行性分析
-          arrangeData.push(lp_data)
-          client_list.push(lp_data["line_plan_client"].trim()); // 客户列表加入
-        }
-        if (userRole === 'fmr' && development_status === 8) {
-          // fmr与shelley可行性分析
-          arrangeData.push(lp_data)
-          client_list.push(lp_data["line_plan_client"].trim()); // 客户列表加入
-        }
-        if (userRole === 'designer' && (development_status === 4 || development_status === 7 ||development_status === 8)) {
-          // ait制图与工厂稿上传  
-          arrangeData.push(lp_data)
-          client_list.push(lp_data["line_plan_client"].trim()); // 客户列表加入
-        }
-        if (userRole === 'chosen_draft' && (development_status === 7 || development_status === 9)) {
-          // 第一轮选稿与第二轮选稿
-          arrangeData.push(lp_data)
-          client_list.push(lp_data["line_plan_client"].trim()); // 客户列表加入
-        }
+        
+        // if (userRole === 'kyle' && (development_status === 2 || development_status === 5)) {
+        //   // kyle的初审与终审
+        //   arrangeData.push(lp_data)
+        //   client_list.push(lp_data["line_plan_client"].trim()); // 客户列表加入
+        // }
+        // if ((userRole === 'shelley' || userRole === 'fmr') && development_status === 3) {
+        //   // fmr与shelley可行性分析
+        //   arrangeData.push(lp_data)
+        //   client_list.push(lp_data["line_plan_client"].trim()); // 客户列表加入
+        // }
+        // if (userRole === 'fmr' && development_status === 8) {
+        //   // fmr与shelley可行性分析
+        //   arrangeData.push(lp_data)
+        //   client_list.push(lp_data["line_plan_client"].trim()); // 客户列表加入
+        // }
+        // if (userRole === 'designer' && (development_status === 4 || development_status === 7 ||development_status === 8)) {
+        //   // ait制图与工厂稿上传  
+        //   arrangeData.push(lp_data)
+        //   client_list.push(lp_data["line_plan_client"].trim()); // 客户列表加入
+        // }
+        // if (userRole === 'chosen_draft' && (development_status === 7 || development_status === 9)) {
+        //   // 第一轮选稿与第二轮选稿
+        //   arrangeData.push(lp_data)
+        //   client_list.push(lp_data["line_plan_client"].trim()); // 客户列表加入
+        // }
+        arrangeData.push(lp_data)
+        client_list.push(lp_data["line_plan_client"].trim()); // 客户列表加入
       });
     })
     // 筛选条件加入
@@ -152,6 +159,10 @@ Page({
         "dropdownTemplate.options": options.concat(client)
       })
     }
+    // 记录总数
+    this.setData({
+      coint_total: coint_total
+    })
     return arrangeData
   },
   // 数据分页显示处理

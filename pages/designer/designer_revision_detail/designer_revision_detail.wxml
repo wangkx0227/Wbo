@@ -47,13 +47,13 @@
         </view>
         <!-- 指定分配人 -->
         <view class="arrange-center" wx:if="{{position_type === 'AIT分配人'}}">
-          <text class="title-font-main">分配图稿分配人：</text>
+          <text class="title-font-main">分配AIT分配人：</text>
           <t-link size="small" content="{{item.AIT_manager1}}" hover underline variant="outline" bind:tap="onOpenPicker" data-task-id="{{ item.id }}" data-type="manager" />
         </view>
         <!-- 设计师主管分配 -->
         <view class="arrange-center" wx:if="{{(position_type === '设计经理' || position_type === 'AIT分配人') && item.AIT_manager1 === userName}}">
           <view class="arrange-center ">
-            <text class="title-font-main">分配图稿设计师：</text>
+            <text class="title-font-main">分配AIT设计师：</text>
             <t-link size="small" content="{{item.name}}" hover underline catchtap="onOpenPicker" data-task-id="{{ item.id }}" data-timeline-id="{{ item.timeline_id }}" data-type="designer" />
           </view>
           <t-divider layout="vertical" />
