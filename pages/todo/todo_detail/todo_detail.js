@@ -104,7 +104,6 @@ Page({
     const image_url = dataList.WBO_URL
     const task_list = dataList.task_list
     for (const index in task_list) {
-      console.log(task_list[index]);
       const task_id = task_list[index].id;
       const fmr2 = task_list[index].fmr2;
       const be_chosen2 = task_list[index].be_chosen2;
@@ -128,7 +127,7 @@ Page({
         AIT_designer1: AIT_designer1,
         AIT_designer2: AIT_designer2 ? "已提交图稿" : "未提交图稿",
         AIT_manager1:AIT_manager1,
-        AIT_manager2: AIT_designer2 ? "已确认" : "未确认",
+        AIT_manager2: AIT_manager2 ? "已确认" : "未确认",
       }
       if (fmr2 === 1) {
         data_dict["fmr2_text"] = "可生产";
@@ -184,10 +183,12 @@ Page({
         const confirmed2 = task_list[index].timeline_list[i].confirmed2; // 标记舍弃(3)还是保留(1)
         data_dict["confirmed"] = confirmed;
         // 初选与终选
-        if (confirmed >= 3) {
+        if (confirmed === 1) {
           data_dict["confirmed_text_1"] = "保留";
-        } else {
+        } else if (confirmed === 2) {
           data_dict["confirmed_text_1"] = "舍弃";
+        }else{
+          data_dict["confirmed_text_1"] = "未标记";
         }
         if (confirmed === 3) {
           data_dict["confirmed_text_2"] = "保留";
@@ -199,9 +200,9 @@ Page({
         // shelley可行性分析
         if (confirmed2 === 1) {
           data_dict["confirmed2_text"] = "可生产";
-        } else if (confirmed === 2) {
+        } else if (confirmed2 === 2) {
           data_dict["confirmed2_text"] = "需要小幅度修改";
-        } else if (confirmed === 3) {
+        } else if (confirmed2 === 3) {
           data_dict["confirmed2_text"] = "不具备可行性";
         } else {
           data_dict["confirmed2_text"] = "未标记";

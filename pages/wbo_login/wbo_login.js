@@ -100,6 +100,10 @@ Page({
     const that = this;
     wx.login({
       success(res) {
+        if(!that.data.nickName){
+          wx.showToast({ title: '请输入用户名', icon: 'error' });
+          return;
+        }
         if (res.code) {
           wx.request({
             url: that.data.app.globalData.montageUrl + '/wbo/wx_login/',
@@ -134,6 +138,10 @@ Page({
                 // 如果没有，就提示不进行登录
                 if (!role) {
                   wx.showToast({ title: "没有角色信息", icon: 'error' });
+                  return;
+                }
+                if(that.data.nickName !== name){
+                  wx.showToast({ title: "登录信息不匹配", icon: 'error' });
                   return;
                 }
                 wx.setStorageSync('userRole', role); // 存储的角色
@@ -172,7 +180,7 @@ Page({
             }
           });
         } else {
-          wx.showToast({ title: '登录失败：没有 code', icon: 'none' });
+          wx.showToast({ title: '登录失败：没有 code', icon: 'error' });
         }
       }
     });

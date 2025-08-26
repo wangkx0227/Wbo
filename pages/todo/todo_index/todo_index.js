@@ -110,12 +110,12 @@ Page({
           } else {
             lp_data['development_status_text'] = "客户选样"
           }
-
         } else if (development_status === 8) {
           lp_data['development_status_text'] = "工厂打样"
         } else if (development_status === 9) {
           lp_data['development_status_text'] = "客户中单"
         }
+
         if (userRole === 'kyle' && (development_status === 2 || development_status === 5)) {
           // kyle的初审与终审
           arrangeData.push(lp_data)
@@ -126,8 +126,13 @@ Page({
           arrangeData.push(lp_data)
           client_list.push(lp_data["line_plan_client"].trim()); // 客户列表加入
         }
-        if (userRole === 'designer' && (development_status === 4 || development_status === 7)) {
-          // ait制图与工厂稿上传
+        if (userRole === 'fmr' && development_status === 8) {
+          // fmr与shelley可行性分析
+          arrangeData.push(lp_data)
+          client_list.push(lp_data["line_plan_client"].trim()); // 客户列表加入
+        }
+        if (userRole === 'designer' && (development_status === 4 || development_status === 7 ||development_status === 8)) {
+          // ait制图与工厂稿上传  
           arrangeData.push(lp_data)
           client_list.push(lp_data["line_plan_client"].trim()); // 客户列表加入
         }
@@ -286,14 +291,21 @@ Page({
         if (development_status === 3) {
           wx.navigateTo({ url: `/pages/fmr/fmr_artwork_detail/fmr_artwork_detail?lineplan_id=${lineplan_id}` });
         }
-        if (development_status === 7) {
+        // 样品图审核
+        if (development_status === 8) {
           wx.navigateTo({ url: `/pages/factory_login_page/wbo-list/wbo-list?development_id=${JSON.stringify(development_id)}`, });
         }
       } else if (userRole === "designer") {
+        // 修改图稿
         if (development_status === 4) {
           wx.navigateTo({ url: `/pages/designer/designer_revision_detail/designer_revision_detail?lineplan_id=${lineplan_id}&development_id=${development_id}` });
         }
+        // 上传工厂稿
         if (development_status === 7) {
+          wx.navigateTo({ url: `/pages/designer/designer_artwork_detail/designer_artwork_detail?lineplan_id=${lineplan_id}`, });
+        }
+        // 样品图审核
+        if (development_status === 8) {
           wx.navigateTo({ url: `/pages/factory_login_page/wbo-list/wbo-list?development_id=${JSON.stringify(development_id)}`, });
         }
       } else if (userRole === "chosen_draft") {

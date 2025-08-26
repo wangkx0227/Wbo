@@ -62,6 +62,15 @@
                       <text class="status-font">图稿状态：{{ item.confirmed_text_1 }}</text>
                     </view>
                   </t-step-item>
+                  <!-- 可行性分析 shelley -->
+                  <t-step-item>
+                    <view class="steps-title" slot="title">
+                      <text class="title-font-main">Shelley可行性分析</text>
+                    </view>
+                    <view class="steps-content arrange-center" slot="content">
+                      <text class="status-font">评估建议：{{ item.confirmed2_text }}</text>
+                    </view>
+                  </t-step-item>
                   <!-- 可行性分析 fmr -->
                   <t-step-item>
                     <view class="steps-title" slot="title">
@@ -71,15 +80,6 @@
                       <text class="status-font">评估建议：{{ item.fmr2_text }}</text>
                       <t-divider layout="vertical" />
                       <text class="status-font">指派FMR：{{ item.fmr }}</text>
-                    </view>
-                  </t-step-item>
-                  <!-- 可行性分析 shelley -->
-                  <t-step-item>
-                    <view class="steps-title" slot="title">
-                      <text class="title-font-main">Shelley可行性分析</text>
-                    </view>
-                    <view class="steps-content arrange-center" slot="content">
-                      <text class="status-font">评估建议：{{ item.confirmed2_text }}</text>
                     </view>
                   </t-step-item>
                   <!-- AIT改稿 -->
@@ -93,8 +93,8 @@
                       <text class="status-font">状态：{{ item.AIT_designer2 }}</text>
                     </view>
                   </t-step-item>
-                   <!-- AIT改稿确认 -->
-                   <t-step-item>
+                  <!-- AIT改稿确认 -->
+                  <t-step-item>
                     <view class="steps-title" slot="title">
                       <text class="title-font-main">AIT改稿确认</text>
                     </view>
