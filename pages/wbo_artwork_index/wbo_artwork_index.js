@@ -146,10 +146,10 @@ Page({
     */
    
     const that = this;
-    const userName = that.data.userName;
+    const apiUserName = that.data.apiUserName;
     utils.LoadDataList({
       page: this,
-      data: { type: "getProjectList", username: userName },
+      data: { type: "getProjectList", username: apiUserName },
       mode: mode
     }).then(list => { // list 就是data数据
       const arrangeData = that.dataStructure(list);
@@ -187,10 +187,12 @@ Page({
     }
     const userRole = wx.getStorageSync('userRole');
     const userName = wx.getStorageSync('userName');
+    const apiUserName = wx.getStorageSync('apiUserName');
     // 先设置数据，再执行其他操作
     that.setData({
       userRole: userRole,
-      userName: userName
+      userName: userName,
+      apiUserName:apiUserName
     }, () => {
       // 在setData回调中执行后续操作
       that.loadUserRole();

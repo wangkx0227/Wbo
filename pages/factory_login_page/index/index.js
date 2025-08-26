@@ -89,10 +89,10 @@ Page({
   // 数据分页显示处理
   dataRequest(mode) {
     const that = this;
-    const userName = that.data.userName;
+    const apiUserName = that.data.apiUserName;
     utils.LoadDataList({
       page: this,
-      data: { type: "getProjectList", username: userName },
+      data: { type: "getProjectList", username: apiUserName },
       mode: mode
     }).then(list => { // list 就是data数据
       const arrangeData = that.dataStructure(list);
@@ -130,6 +130,7 @@ Page({
     }
     const userRole = wx.getStorageSync('userRole');
     const userName = wx.getStorageSync('userName');
+    const apiUserName = wx.getStorageSync('apiUserName');
     let tabBarTabLabel = "样品图审核"
     if (userRole === "fmr") {
       tabBarTabLabel = "上传样品图"
@@ -137,6 +138,7 @@ Page({
     that.setData({
       userRole: userRole,
       userName: userName,
+      apiUserName:apiUserName,
       tabBarTabLabel: tabBarTabLabel
     });
     this.dataRequest("init"); // 分页处理

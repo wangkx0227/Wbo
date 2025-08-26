@@ -120,6 +120,7 @@ Page({
                 that.data.userInfo.fmr = data.userinfo
                 const roleDict = app.globalData.roleDict; // 角色信息 死
                 const name = data.userinfo.name;
+                const username = data.userinfo.username;
                 const position_list = data.userinfo.position;
                 // 只取角色的第一个
                 if (position_list.length !== 0) {
@@ -146,6 +147,7 @@ Page({
                 }
                 wx.setStorageSync('userRole', role); // 存储的角色
                 wx.setStorageSync('userName', name); // 存储名字
+                wx.setStorageSync('apiUserName', username); // 访问接口携带名字
                 wx.setStorageSync('position_list', position_list); // 存储名字
                 wx.setStorageSync('userInfo', that.data.userInfo); // 全部存储信息
                 wx.showToast({ title: '登录成功', icon: 'success' }); // 提示
