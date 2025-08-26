@@ -94,7 +94,6 @@ Page({
           } else {
             timeline_type_text = "生产稿"
           }
-          console.log(task_list[index].timeline_list[i].name);
           timeLineData.push({
             "id": timeline_id, // id 
             "time": task_list[index].timeline_list[i].time, // 提交时间

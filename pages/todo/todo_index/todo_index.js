@@ -301,13 +301,13 @@ Page({
           wx.navigateTo({ url: `/pages/designer/designer_revision_detail/designer_revision_detail?lineplan_id=${lineplan_id}&development_id=${development_id}` });
         }
         // 上传工厂稿
-        if (development_status === 7) {
+        if (development_status === 8) {
           wx.navigateTo({ url: `/pages/designer/designer_artwork_detail/designer_artwork_detail?lineplan_id=${lineplan_id}`, });
         }
         // 样品图审核
-        if (development_status === 8) {
-          wx.navigateTo({ url: `/pages/factory_login_page/wbo-list/wbo-list?development_id=${JSON.stringify(development_id)}`, });
-        }
+        // if (development_status === 8) {
+        //   wx.navigateTo({ url: `/pages/factory_login_page/wbo-list/wbo-list?development_id=${JSON.stringify(development_id)}`, });
+        // }
       } else if (userRole === "chosen_draft") {
         if (development_status === 7) {
           wx.navigateTo({ url: `/pages/guest_selection/guest_selection_first_round/guest_selection_first_round?lineplan_id=${lineplan_id}` });

@@ -20,30 +20,30 @@
   <view class="page-main">
     <view class="wrapper">
       <view class="wrapper">
-      <view wx:for="{{Data}}" wx:key="index">
-        <t-cell-group theme="card" class="t-cell-group" bindtap="onJumpArtworkDeatails" data-development_id="{{ item.development_id }}">
-          <t-cell hover>
-            <t-tag variant="outline" slot="note" shape="mark" size="medium" style="position: absolute;right: 25rpx;top: 35rpx;" theme="primary"> 阶段：{{ tabBarTabLabel }} </t-tag>
-            <view slot="title" style="display: grid;gap: 25rpx;">
-              <view class="arrange-center">
-                <text class="title-font-main">开发案名称：</text>
-                <text class="title-font-other name-cell">{{ item.development_name }}</text>
-              </view>
-              <view class="arrange-space-between" style="gap: 20rpx;">
+        <view wx:for="{{Data}}" wx:key="index">
+          <t-cell-group theme="card" class="t-cell-group" bindtap="onJumpArtworkDeatails" data-development_id="{{ item.development_id }}">
+            <t-cell hover>
+              <t-tag variant="outline" slot="note" shape="mark" size="medium" style="position: absolute;right: 25rpx;top: 35rpx;" theme="primary"> 阶段：{{ tabBarTabLabel }} </t-tag>
+              <view slot="title" style="display: grid;gap: 25rpx;">
                 <view class="arrange-center">
-                  <text class="title-font-main">主导人：</text>
-                  <text class="title-font-other">{{ item.development_director }}</text>
+                  <text class="title-font-main">开发案名称：</text>
+                  <text class="title-font-other name-cell">{{ item.development_name }}</text>
                 </view>
-                <view class="arrange-center">
-                  <text class="title-font-main">创建时间：</text>
-                  <text class="title-font-other">{{ item.development_start_data }}</text>
+                <view class="arrange-space-between" style="gap: 20rpx;">
+                  <view class="arrange-center">
+                    <text class="title-font-main">主导人：</text>
+                    <text class="title-font-other">{{ item.development_director }}</text>
+                  </view>
+                  <view class="arrange-center">
+                    <text class="title-font-main">创建时间：</text>
+                    <text class="title-font-other">{{ item.development_start_data }}</text>
+                  </view>
                 </view>
               </view>
-            </view>
-          </t-cell>
-        </t-cell-group>
+            </t-cell>
+          </t-cell-group>
+        </view>
       </view>
-    </view>
     </view>
   </view>
   <!-- 当下拉时,进行显示的内容  -->
