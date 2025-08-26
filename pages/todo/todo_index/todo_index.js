@@ -146,7 +146,11 @@ Page({
         //   arrangeData.push(lp_data)
         //   client_list.push(lp_data["line_plan_client"].trim()); // 客户列表加入
         // }
-        arrangeData.push(lp_data)
+        if (quantity_to_be_completed >= 1) {
+          arrangeData.unshift(lp_data); // 插入到第一个元素位置
+        } else {
+          arrangeData.push(lp_data); // 否则追加到最后
+        }
         client_list.push(lp_data["line_plan_client"].trim()); // 客户列表加入
       });
     })
