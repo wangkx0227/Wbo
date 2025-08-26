@@ -58,7 +58,7 @@ Page({
     dialogVisible: false, // 评论弹出层变量
     dialogValue: "",
   },
-  // 数据结构处理 - 未处理完成
+  // 数据结构处理
   dataStructure(dataList) {
     let arrangeData = [];
     let material_list = [];
@@ -72,6 +72,8 @@ Page({
       const AIT_designer1 = task_list[index].AIT_designer1; // 设计师
       const AIT_designer2 = task_list[index].AIT_designer2; // 设计师标记
       const AIT_manager1 = task_list[index].AIT_manager1; // 设计师分配人
+      const AIT_manager2 = task_list[index].AIT_manager2; // 设计师manager确认
+      console.log(AIT_manager1);
       let data_dict = {
         id: task_id,
         code: task_list[index].code,
@@ -80,7 +82,8 @@ Page({
         name: task_list[index].AIT_designer1 || "未指定请选择",
         AIT_designer2: AIT_designer2,
         AIT_designer2_text: AIT_designer2 ? "已上传图稿" : "未上传图稿",
-        AIT_manager1: AIT_manager1 || "未指定请选择"
+        AIT_manager1: AIT_manager1 || "未指定请选择",
+        AIT_manager2_text: AIT_manager2 ? "已确认" : "未确认",
       }
       // 可行性分析，shelley 选3直接跳过，不在显示
       if (data_dict["confirmed2"] === 3) {
