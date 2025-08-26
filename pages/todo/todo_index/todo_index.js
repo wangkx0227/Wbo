@@ -64,8 +64,6 @@ Page({
   // 首页数据结构处理
   dataStructure(dataList) {
     const that = this;
-    const mode = 'init';
-    const userName = that.data.userName;
     const userRole = that.data.userRole;
     let arrangeData = [];
     let client_list = [];
@@ -121,20 +119,23 @@ Page({
         if (userRole === 'kyle' && (development_status === 2 || development_status === 5)) {
           // kyle的初审与终审
           arrangeData.push(lp_data)
+          client_list.push(lp_data["line_plan_client"].trim()); // 客户列表加入
         }
         if ((userRole === 'shelley' || userRole === 'fmr') && development_status === 3) {
           // fmr与shelley可行性分析
           arrangeData.push(lp_data)
+          client_list.push(lp_data["line_plan_client"].trim()); // 客户列表加入
         }
         if (userRole === 'designer' && (development_status === 4 || development_status === 7)) {
           // ait制图与工厂稿上传
           arrangeData.push(lp_data)
+          client_list.push(lp_data["line_plan_client"].trim()); // 客户列表加入
         }
         if (userRole === 'chosen_draft' && (development_status === 7 || development_status === 9)) {
           // 第一轮选稿与第二轮选稿
           arrangeData.push(lp_data)
+          client_list.push(lp_data["line_plan_client"].trim()); // 客户列表加入
         }
-        client_list.push(lp_data["line_plan_client"].trim()); // 客户列表加入
       });
     })
     // 筛选条件加入
