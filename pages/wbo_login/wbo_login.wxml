@@ -6,10 +6,9 @@
   </view>
   <!-- 微信登录 -->
   <view wx:if="{{loginMode === 'wechat'}}" class="login-method">
-    <input placeholder="请输入您的姓名以验证账号" bindinput="inputNickName" value="{{wechatName}}" />
-    <button type="primary" bindtap="onLogin">微信一键登录</button>
+    <input placeholder="请输入姓名验证账号（仅限特定人群登录）" bindinput="inputNickName" value="{{wechatName}}" />
+    <button type="primary" bindtap="onLogin">登录</button>
   </view>
-
   <!-- 账号密码登录 -->
   <view wx:if="{{loginMode === 'account'}}" class="login-method">
     <input placeholder="请输入账号" bindinput="onAccountInput" value="{{account}}" />
