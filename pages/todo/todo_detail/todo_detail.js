@@ -104,11 +104,16 @@ Page({
     const image_url = dataList.WBO_URL
     const task_list = dataList.task_list
     for (const index in task_list) {
+      console.log(task_list[index]);
       const task_id = task_list[index].id;
       const fmr2 = task_list[index].fmr2;
       const be_chosen2 = task_list[index].be_chosen2;
       const whether_to_proof = task_list[index].whether_to_proof;
       const be_ordered2 = task_list[index].be_ordered2;
+      const AIT_designer1 = task_list[index].AIT_designer1;
+      const AIT_designer2 = task_list[index].AIT_designer2;
+      const AIT_manager1 = task_list[index].AIT_manager1;
+      const AIT_manager2 = task_list[index].AIT_manager2;
       let data_dict = {
         id: task_id,
         code: task_list[index].code,
@@ -119,7 +124,11 @@ Page({
         fmr2: task_list[index].fmr2,
         be_chosen2: be_chosen2,
         whether_to_proof: whether_to_proof,
-        be_ordered2: be_ordered2
+        be_ordered2: be_ordered2,
+        AIT_designer1: AIT_designer1,
+        AIT_designer2: AIT_designer2 ? "已提交图稿" : "未提交图稿",
+        AIT_manager1:AIT_manager1,
+        AIT_manager2: AIT_designer2 ? "已确认" : "未确认",
       }
       if (fmr2 === 1) {
         data_dict["fmr2_text"] = "可生产";

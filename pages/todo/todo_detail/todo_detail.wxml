@@ -82,6 +82,28 @@
                       <text class="status-font">评估建议：{{ item.confirmed2_text }}</text>
                     </view>
                   </t-step-item>
+                  <!-- AIT改稿 -->
+                  <t-step-item>
+                    <view class="steps-title" slot="title">
+                      <text class="title-font-main">AIT改稿</text>
+                    </view>
+                    <view class="steps-content arrange-center" slot="content">
+                      <text class="status-font">设计师：{{ item.AIT_designer1 }}</text>
+                      <t-divider layout="vertical" />
+                      <text class="status-font">状态：{{ item.AIT_designer2 }}</text>
+                    </view>
+                  </t-step-item>
+                   <!-- AIT改稿确认 -->
+                   <t-step-item>
+                    <view class="steps-title" slot="title">
+                      <text class="title-font-main">AIT改稿确认</text>
+                    </view>
+                    <view class="steps-content arrange-center" slot="content">
+                      <text class="status-font">审核人：{{ item.AIT_manager1 }}</text>
+                      <t-divider layout="vertical" />
+                      <text class="status-font">状态：{{ item.AIT_manager2 }}</text>
+                    </view>
+                  </t-step-item>
                   <!-- 最终创意审查 -->
                   <t-step-item>
                     <view class="steps-title" slot="title">

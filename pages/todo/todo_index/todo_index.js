@@ -257,11 +257,6 @@ Page({
     const tabBarValue = e.detail.value;
     const userRole = that.data.userRole;
     let tabBarTabLabel = "最新阶段";
-    // if (tabBarValue === "todo" && userRole === "shelley") {
-    //   tabBarTabLabel = "可行性分析";
-    // } else if (tabBarValue === "todo" && userRole === "kyle") {
-    //   tabBarTabLabel = "最终审查";
-    // }
     that.setData({
       tabBarValue: e.detail.value,
       tabBarTabLabel: tabBarTabLabel,
@@ -274,7 +269,7 @@ Page({
     const tabBarValue = that.data.tabBarValue;
     const lineplan_id = e.currentTarget.dataset.lineplan_id;
     const development_status = e.currentTarget.dataset.development_status;
-    console.log(development_status);
+    const development_id = e.currentTarget.dataset.development_id;
     // 需要3类人进行跳转 Kyle Shelley FMR 进行跳转
     if (tabBarValue === "todo") {
       if (userRole === "kyle") {
@@ -290,7 +285,7 @@ Page({
         wx.navigateTo({ url: `/pages/fmr/fmr_artwork_detail/fmr_artwork_detail?lineplan_id=${lineplan_id}` });
       } else if (userRole === "designer") {
         if (development_status === 4) {
-          wx.navigateTo({ url: `/pages/designer/designer_revision_detail/designer_revision_detai?lineplan_id=${lineplan_id}` });
+          wx.navigateTo({ url: `/pages/designer/designer_revision_detail/designer_revision_detail?lineplan_id=${lineplan_id}&development_id=${development_id}` });
         }
         if (development_status === 7) {
           wx.navigateTo({ url: `/pages/designer/designer_artwork_detail/designer_artwork_detail?lineplan_id=${lineplan_id}` });
