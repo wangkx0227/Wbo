@@ -10,7 +10,7 @@ App({
     imagesUrl: 'https://xcx.1bizmail.com:8154', //  图片路径 8080
     // fileUrl: 'http://10.8.0.68:5000/send_wechat_file', //  导出附件地址
     roleDict: { // 特定角色
-      "AIE": "designer",
+      "AIT": "designer",
       "设计经理": "designer",
       "AIT分配人": "designer",
       "FMR": "fmr",

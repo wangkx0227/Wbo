@@ -73,7 +73,6 @@ Page({
       const AIT_designer2 = task_list[index].AIT_designer2; // 设计师标记
       const AIT_manager1 = task_list[index].AIT_manager1; // 设计师分配人
       const AIT_manager2 = task_list[index].AIT_manager2; // 设计师manager确认
-      console.log(AIT_manager1);
       let data_dict = {
         id: task_id,
         code: task_list[index].code,
@@ -268,7 +267,7 @@ Page({
       position_type: position_type
     })
     that.dataRequest('init');
-    // that.dataDesignerRequest('init');
+    that.dataDesignerRequest('init');
   },
   // 轮播图函数 - 点击轮播图 - 图片预览
   onSwiperImagesTap(e) {
@@ -499,7 +498,7 @@ Page({
       'dropdownMaterial.value': value,
     });
   },
-  // 图稿上传状态
+  // 下拉菜单-图稿上传状态
   onStatusChange(e) {
     const that = this;
     const value = e.detail.value; // 筛选框内容
@@ -562,7 +561,7 @@ Page({
       pickerVisible: true,
     });
   },
-  // 提交 FMR筛选器
+  // 提交 选择器
   onPickerChange(e) {
     /*
       pickerVisible：筛选器显示变量
@@ -601,7 +600,7 @@ Page({
         if (type === "designer") {
           item["name"] = value[0];
         } else {
-          item["designer_manager1"] = value[0];
+          item["AIT_manager1"] = value[0];
         }
       }
       return item;
@@ -659,10 +658,33 @@ Page({
             "username": userName, // 参数需要修改
             "name": userName, // 参数需要修改
             "name_str": userName, // 评论人
-            "comment": dialogValue // 内容
+            "comment": dialogValue, // 内容
           },
           message: "修改建议填写完成"
         })
+        // 改变原来设计师确认状态
+        utils.UpdateData({
+          page: that,
+          data: {
+            "type": "update_task",
+            "task_id": task_id,
+            "username": userName,
+            "AIT_designer2": false, // 重置设计师确认状态
+          },
+          toastShow: false
+        });
+        // 重置设计师图稿上传状态
+        const updatedData = that.data.Data.map(item => {
+          if (item.id === task_id) {
+            item["AIT_designer2"] = false;
+            item["AIT_designer2_text"] = "未上传图稿";
+          }
+          return item;
+        })
+        // 保存状态
+        that.setData({
+          Data: updatedData,
+        });
         // 更新时间线
         utils.updateTimeLine(that, task_id, timeline_id, dialogValue, userName);
       }
@@ -679,4 +701,8 @@ Page({
       })
     }, 500)
   },
+  // 主管提交确认
+  managerConfirmStatus() {
+
+  }
 })
