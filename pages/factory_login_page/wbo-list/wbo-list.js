@@ -282,7 +282,7 @@ Page({
       if (checkAllValues.length > 1) {
         wx.showToast({ title: '只能选择一个', icon: 'error' });
         return;
-      } else if (checkAllValues[0] === userName) {
+      } else if ( checkAllValues[0] === userName) {
         wx.showToast({ title: '不能选择自己', icon: 'error' });
         return;
       }
