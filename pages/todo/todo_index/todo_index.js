@@ -283,13 +283,18 @@ Page({
       } else if (userRole === "shelley") {
         wx.navigateTo({ url: `/pages/shelley/shelley_artwork_detail/shelley_artwork_detail?lineplan_id=${lineplan_id}` });
       } else if (userRole === "fmr") {
-        wx.navigateTo({ url: `/pages/fmr/fmr_artwork_detail/fmr_artwork_detail?lineplan_id=${lineplan_id}` });
+        if (development_status === 3) {
+          wx.navigateTo({ url: `/pages/fmr/fmr_artwork_detail/fmr_artwork_detail?lineplan_id=${lineplan_id}` });
+        }
+        if (development_status === 7) {
+          wx.navigateTo({ url: `/pages/factory_login_page/wbo-list/wbo-list?development_id=${JSON.stringify(development_id)}`, });
+        }
       } else if (userRole === "designer") {
         if (development_status === 4) {
           wx.navigateTo({ url: `/pages/designer/designer_revision_detail/designer_revision_detail?lineplan_id=${lineplan_id}&development_id=${development_id}` });
         }
         if (development_status === 7) {
-          wx.navigateTo({ url: `/pages/designer/designer_artwork_detail/designer_artwork_detail?lineplan_id=${lineplan_id}` });
+          wx.navigateTo({ url: `/pages/factory_login_page/wbo-list/wbo-list?development_id=${JSON.stringify(development_id)}`, });
         }
       } else if (userRole === "chosen_draft") {
         if (development_status === 7) {
