@@ -116,6 +116,7 @@ Page({
             const change_fmr = item.change_fmr_list[item.change_fmr_list.length - 1];
             return {
               fmr: fmr || "请选择FMR",
+              fmr_status: fmr ? true : false, // 代表并没有关联fmr
               id: item.id,
               code: item.code,
               factory: factory || "请点击后选择工厂",
@@ -219,6 +220,7 @@ Page({
     const projectId = e.currentTarget.dataset.id;
     const list = e.currentTarget.dataset.list;
     const type = e.currentTarget.dataset.type;
+    const fmrStatus = e.currentTarget.dataset.fmrStatus;
     let checkAllValues = [];
     if (list) {
       checkAllValues = list.split(",").filter(Boolean);
@@ -234,8 +236,10 @@ Page({
     }
     that.setData({
       type: type,
+      fmrName: list,
       projectId: projectId,
-      checkAllValues: checkAllValues // 后设置数据
+      fmrStatus: fmrStatus, // 当前fmr存储的数据行
+      checkAllValues: checkAllValues // 设置数据
     }, () => {
       that.setData({
         popupVisible: true // 先显示弹窗
@@ -246,7 +250,10 @@ Page({
   closePopup(e) {
     this.setData({
       type: null,
+      fmrName: null,
       projectId: null,
+      fmrStatus: null,
+      checkAllValues: [],
       popupVisible: false,
     });
   },
@@ -254,7 +261,10 @@ Page({
   onClosePopupChange(e) {
     this.setData({
       type: null,
+      fmrName: null,
       projectId: null,
+      fmrStatus: null,
+      checkAllValues: [],
       popupVisible: e.detail.visible,
     });
   },
@@ -268,30 +278,76 @@ Page({
   onSubmit(e) {
     const that = this;
     const type = that.data.type;
+    const fmrName = that.data.fmrName; // 原被标记的fmr
     const userName = that.data.userName;
     const task_id = that.data.projectId;
+    const fmrStatus = that.data.fmrStatus;
     const selectedItem = that.data.selectedItem;
     const checkAllValues = that.data.checkAllValues;
     if (checkAllValues.length === 0) {
-      wx.showToast({ title: '请选择在提交', icon: 'error' });
+      utils.showToast(that, '请选择后再提交', 'warning');
       return;
     }
     let data = {};
     let fmr_list = []; // fmr列表
     if (type === 'fmr') { // 只单纯插入一条fmr指派fmr记录 
       if (checkAllValues.length > 1) {
-        wx.showToast({ title: '只能选择一个', icon: 'error' });
-        return;
-      } else if ( checkAllValues[0] === userName) {
-        wx.showToast({ title: '不能选择自己', icon: 'error' });
+        utils.showToast(that, '只能选择一个', 'warning');
         return;
       }
+      // 构建数据结构
       data = {
         "task_id": task_id,
         "username": userName,
         "type": "createProofingChangeFmr",
         "transfer_fmr": userName, // 原fmr
         "transfer_to_fmr": checkAllValues[0], // 新fmr
+      }
+      // 如果有fmr的情况下，进行判断能不能选择自己，没有可以直接提交fmr并且立马生效
+      if (fmrStatus) {
+        if (checkAllValues[0] === userName) {
+          utils.showToast(that, '不能选择自己', 'warning');
+          return;
+        }
+        const fmrNameList = fmrName.split(",").filter(Boolean); // 解析原fmr名称列表
+        const hasInvalidName = fmrNameList.some(item => item !== userName);
+        if (hasInvalidName) {
+          utils.showToast(that, '无权操作用户条件不符', 'warning');
+          return; // 阻止后续逻辑
+        }
+      } else { // 如果没有fmr就直接提交并立即生效，但是只能选择自己
+        if (checkAllValues[0] !== userName) {
+          utils.showToast(that, '只能选择自己', 'warning');
+          return;
+        }
+        const fmrData = {
+          "task_id": task_id,
+          "username": userName,
+          "type": "updateProofingTask",
+          "fmr": [checkAllValues[0],],
+        }
+        wx.request({
+          url: url,
+          method: "POST",
+          data: fmrData,
+          success(res) {
+            if (res.data.code === 200) {
+              const updataData = selectedItem.map(item => {
+                if (item.id === task_id) {
+                  item["fmr"] = checkAllValues[0];
+                }
+                return item;
+              })
+              that.setData({
+                selectedItem: updataData,
+              });
+              that.closePopup();
+            } else {
+              wx.showToast({ title: '提交失败', icon: 'error' });
+            }
+          }
+        })
+        return;
       }
     } else if (type === "factory") { // 直接进行修改工厂
       const original_factory_list = that.data.original_factory_list;
@@ -312,7 +368,7 @@ Page({
         data["fmr"] = fmr_list;
       }
     }
-    // 提交请求
+    //提交请求
     wx.request({
       url: url,
       method: "POST",

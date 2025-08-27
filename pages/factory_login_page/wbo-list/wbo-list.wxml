@@ -37,7 +37,7 @@
   <view class="arrange-center">
     <view class="arrange-center" wx:if="{{userRole === 'fmr'}}">
       <text class='title-font-main'>FMR：</text>
-      <t-link content="{{item.fmr}}" hover class="truncate-text" theme='primary' bindtap='onOpnePopup' data-id="{{item.id}}" data-list="{{item.fmr}}" data-type="fmr"/>
+      <t-link content="{{item.fmr}}" hover class="truncate-text" theme='primary' bindtap='onOpnePopup' data-id="{{item.id}}" data-list="{{item.fmr}}" data-fmr-name="{{item.fmr}}" data-type="fmr" data-fmr-status="{{item.fmr_status}}"/>
     </view>
     <view wx:else class="arrange-center">
       <text class='title-font-main'>FMR：</text>
