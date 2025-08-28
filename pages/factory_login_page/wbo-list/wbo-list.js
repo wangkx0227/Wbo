@@ -22,6 +22,7 @@ Page({
     // 变更通知变量
     popupNotificationVisible: false,
     popupNotificationValue: "",
+    popupTitle:"",
   },
   // 页面初始化
   onLoad(options) {
@@ -227,10 +228,12 @@ Page({
     }
     if (type === 'fmr') {
       that.setData({
+        popupTitle:"请选择FMR",
         options: that.data.fmrOptions,
       })
     } else if (type === "factory") {
       that.setData({
+        popupTitle:"请选择工厂",
         options: that.data.factoryOptions,
       })
     }

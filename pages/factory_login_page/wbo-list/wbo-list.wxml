@@ -74,7 +74,7 @@
   <view class="block">
     <view class="header">
       <view class="btn btn--cancel" aria-role="button" bindtap='closePopup'>取消</view>
-      <view class="title">请选择工厂</view>
+      <view class="title">{{popupTitle}}</view>
       <view class="btn btn--confirm" aria-role="button" bindtap='onSubmit'>确定</view>
     </view>
     <view style="padding: 0 20rpx;">
