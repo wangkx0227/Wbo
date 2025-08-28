@@ -11,6 +11,7 @@ App({
     // fileUrl: 'http://10.8.0.68:5000/send_wechat_file', //  导出附件地址
     roleDict: { // 特定角色
       "AIT": "designer",
+      "AIE": "designer",
       "设计经理": "designer",
       "AIT分配人": "designer",
       "FMR": "fmr",
