@@ -97,13 +97,17 @@
 <!-- 批量操作 -->
 <t-fab wx:if="{{!batchSelectValue}}" bind:click="batchSelect" text="批量操作" aria-label="增加" usingCustomNavbar draggable y-bounds="{{[0, 170]}}" style="z-index: 900;"></t-fab>
 <!-- 批量操作按钮 -->
-<view wx:if="{{batchSelectValue}}">
-  <t-tab-bar t-class="t-tab-bar" shape="round" theme="tag" split="false" bindchange="onBatchSelectTabBarChange">
-    <t-tab-bar-item>
-      <t-link content="取消操作"  size="small" prefixIcon="close"  bindtap="onBatchSelectClose"/>
+<view wx:if="{{batchSelectValue && userRole==='designer'}} ">
+  <t-tab-bar t-class="t-tab-bar" shape="round" theme="tag" split="false">
+    <t-tab-bar-item bindtap="onBatchSelectClose">
+      <t-link content="取消操作" size="small" prefixIcon="close" />
     </t-tab-bar-item>
-    <t-tab-bar-item>
-      <t-link theme="primary" content="AIT分配人"  size="small" prefixIcon="check" bindtap="onBatchSelectCheck"/>
+    <t-tab-bar-item bindtap="onBatchSelectCheck">
+      <t-link theme="primary" content="AIT分配人" size="small" prefixIcon="check" />
     </t-tab-bar-item>
   </t-tab-bar>
 </view>
+<!-- AIT下拉框 -->
+<t-picker visible="{{pickerVisible}}" value="{{pickerValue}}" title="请选择AIT分配人" cancelBtn="取消" confirmBtn="确认" bindchange="onPickerChange" bindcancel="onClosePicker" catchtouchmove>
+  <t-picker-item options="{{pickerItemList}}"></t-picker-item>
+</t-picker>

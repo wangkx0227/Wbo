@@ -50,6 +50,8 @@ Page({
     // 批量操作触发变量
     batchSelectValue: false,
     selectLpIdList: [],
+    pickerVisible: false, // ait分配人选择
+    pickerValue: "",
   },
   // 加载用户角色
   loadUserRole() {
@@ -95,6 +97,39 @@ Page({
     this.setData({
       userRole: userRole
     })
+  },
+  // 后端设计师分配人与设计师图稿请求
+  dataDesignerRequest(mode) {
+    const that = this;
+    utils.LoadDataList({
+      page: that,
+      data: {
+        "type": "get_lps_data",
+        "project_id": 20115,
+        "username": "Jasonyu" // 访问人必须是管理员
+      },
+      mode: mode,
+      showLoading: false,
+      showSkeleton: false,
+    }).then(list => { // list 就是data数据
+      if (list.lps.length !== 0) {
+        let AITManagerList = [];
+        const lp_members = list.lps[0].lp_members;
+        for (let i = 0; i < lp_members.length; i++) {
+          const name = lp_members[i][0];
+          const role = lp_members[i][1];
+          if (role === 'AIT分配人' || role === '设计经理') {
+            AITManagerList.push({
+              label: name,
+              value: name
+            })
+          }
+        }
+        that.setData({
+          pickerItemList: AITManagerList
+        })
+      }
+    });
   },
   // 首页数据结构处理
   dataStructure(dataList) {
@@ -154,7 +189,7 @@ Page({
     const that = this;
     const apiUserName = that.data.apiUserName;
     utils.LoadDataList({
-      page: this,
+      page: that,
       data: { type: "getProjectList", username: apiUserName },
       mode: mode
     }).then(list => { // list 就是data数据
@@ -203,7 +238,11 @@ Page({
       // 在setData回调中执行后续操作
       that.loadUserRole();
       that.dataRequest("init");
+      if (userRole === "designer") {
+        that.dataDesignerRequest("init");
+      };
     });
+
   },
   // 跳转到详情页面
   onJumpArtworkDeatails(e) {
@@ -558,20 +597,41 @@ Page({
   // 批量操作胶囊按钮-提交
   onBatchSelectCheck() {
     const that = this;
-    console.log(11111);
-    const updatedData = that.data.Data.map(item => {
-      const select_status = item["select_status"]
-      if (select_status) {
-        item["select_status"] = false;
-      }
-      return item;
-    });
     that.setData({
-      Data: updatedData,
-      selectLpIdList: [],
-      tabBarShow: true,  // 触发按钮 
-      batchSelectValue: false, // 隐藏胶囊按钮
-    })
-    console.log("提交成功");
+      pickerVisible: true,
+    });
+  },
+  // 关闭 AIT筛选器
+  onClosePicker(e) {
+    this.setData({
+      pickerVisible: false,
+    });
+  },
+  // 提交 AIT筛选器
+  onPickerChange(e) {
+    const that = this;
+    const userName = that.data.userName;
+    const selectLpIdList = that.data.selectLpIdList;
+    if (selectLpIdList.length === 0) {
+      utils.showToast(that, "请选择LP后提交", "warning");
+      return;
+    } else {
+      const { value, label } = e.detail;
+      const updatedData = that.data.Data.map(item => {
+        const select_status = item["select_status"]
+        if (select_status) {
+          item["select_status"] = false;
+        }
+        return item;
+      });
+      that.setData({
+        pickerVisible: false,
+        Data: updatedData,
+        selectLpIdList: [],
+        tabBarShow: true,  // 触发按钮 
+        batchSelectValue: false, // 隐藏胶囊按钮
+      })
+      utils.showToast(that, `分配人已指派${label}`);
+    }
   },
 })
