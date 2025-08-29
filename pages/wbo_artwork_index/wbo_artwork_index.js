@@ -47,6 +47,9 @@ Page({
     filterSorter: false, // 排序筛选条件
     // 搜索变量
     searchValue: '',
+    // 批量操作触发变量
+    batchSelectValue: false,
+    selectLpIdList: [],
   },
   // 加载用户角色
   loadUserRole() {
@@ -123,6 +126,7 @@ Page({
           lp_data['is_new_development_text'] = "未完结"
         }
         client_list.push(lp_data["line_plan_client"].trim()); // 客户列表加入
+        lp_data["select_status"] = false; // 批量选中状态
         arrangeData.push(lp_data)
       })
     })
@@ -241,7 +245,6 @@ Page({
           url: `/pages/guest_selection/guest_selection_final_round/guest_selection_final_round?lineplan_id=${lineplan_id}`
         });
       }
-
     } else if (userRole === "designer") { // 设计师对上传工厂稿
       if (tabBarValue === "primary") { // 设计师工厂稿上传，样品图审查
         wx.navigateTo({
@@ -422,7 +425,7 @@ Page({
     const keyword = e.detail.value;
     const filtered = that.data.allData.filter(item => {
       const matchName = (keyword === '') ? true : new RegExp(keyword.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i')
-        .test(item.line_plan_title);
+        .test(item.lp_title);
       return matchName;
     });
     that.setData({
@@ -484,5 +487,91 @@ Page({
         utils.showToast(that, "选择文件失败", "error");
       }
     });
-  }
+  },
+  // 批量操作选择触发按钮
+  batchSelect() {
+    const that = this;
+    that.setData({
+      tabBarShow: false, // 隐藏胶囊按钮
+      batchSelectValue: true, // 触发按钮
+    })
+  },
+  // 批量选择选中列表页(LP)按钮
+  selectTtrigger(e) {
+    const that = this;
+    let status_type = "add"; // add 增加 delete删除
+    const lineplan_id = e.currentTarget.dataset.lineplan_id;
+    // 选中边框效果
+    const updatedData = that.data.Data.map(item => {
+      if (item.line_plan_id === lineplan_id) {
+        const select_status = item["select_status"];
+        if (select_status) {
+          item["select_status"] = false;
+          status_type = "delete";
+        } else {
+          item["select_status"] = true;
+        }
+      }
+      return item;
+    });
+    // 添加到选中的列表中
+    const selectLpIdList = [...that.data.selectLpIdList]; // 先复制一份数组
+    if (status_type === 'add') {
+      selectLpIdList.push(lineplan_id);
+    } else {
+      const index = selectLpIdList.indexOf(lineplan_id);
+      if (index > -1) {
+        selectLpIdList.splice(index, 1);
+      }
+    };
+    // 修改状态,并且处理选中的lp id 列表
+    that.setData({
+      Data: updatedData,
+      selectLpIdList: selectLpIdList
+    });
+  },
+  // 根据变量控制列表页的跳转功能
+  handleClick(e) {
+    if (this.data.batchSelectValue) {
+      this.selectTtrigger(e);
+    } else {
+      this.onJumpArtworkDeatails(e);
+    }
+  },
+  // 批量操作胶囊按钮-取消
+  onBatchSelectClose() {
+    const that = this;
+    const updatedData = that.data.Data.map(item => {
+      const select_status = item["select_status"]
+      if (select_status) {
+        item["select_status"] = false;
+      }
+      return item;
+    });
+    that.setData({
+      Data: updatedData,
+      selectLpIdList: [],
+      tabBarShow: true,  // 触发按钮 
+      batchSelectValue: false, // 隐藏胶囊按钮
+    })
+  },
+  // 批量操作胶囊按钮-提交
+  onBatchSelectCheck() {
+    const that = this;
+    console.log(11111);
+    const updatedData = that.data.Data.map(item => {
+      const select_status = item["select_status"]
+      if (select_status) {
+        item["select_status"] = false;
+      }
+      return item;
+    });
+    that.setData({
+      Data: updatedData,
+      selectLpIdList: [],
+      tabBarShow: true,  // 触发按钮 
+      batchSelectValue: false, // 隐藏胶囊按钮
+    })
+    console.log("提交成功");
+  },
 })

@@ -20,10 +20,10 @@
   <view class="page-main">
     <view class="wrapper">
       <view wx:for="{{Data}}" wx:key="index">
-        <t-cell-group theme="card" class="t-cell-group" bindtap="onJumpArtworkDeatails" data-lineplan_id="{{ item.line_plan_id }}" data-development_id="{{item.development_id}}">
+        <t-cell-group theme="card" class="t-cell-group {{ item.select_status ? 'select-border' : ''}}" bindtap="handleClick" data-lineplan_id="{{ item.line_plan_id }}" data-development_id="{{item.development_id}}">
           <t-cell hover>
             <t-badge count="{{item.is_new_development_text}}" slot="note" shape="square" color="{{item.line_plan_is_new_development ?'#1989fa':'red'}}" />
-            <t-tag variant="outline" slot="note" shape="mark" size="medium" wx:if="{{tabBarShow}}" style="position: absolute;right: 25rpx;top: 35rpx;" theme="{{tabBarValue === 'primary' ? 'primary' : 'success'}}"> 阶段：{{ tabBarTabLabel }} </t-tag>
+            <t-tag variant="outline" slot="note" shape="mark" size="medium" wx:if="{{tabBarShow || batchSelectValue}}" style="position: absolute;right: 25rpx;top: 35rpx;" theme="{{tabBarValue === 'primary' ? 'primary' : 'success'}}"> 阶段：{{ tabBarTabLabel }} </t-tag>
             <t-tag variant="outline" slot="note" shape="mark" size="medium" wx:if="{{userRole==='shelley'}}" style="position: absolute;right: 25rpx;top: 35rpx;" theme="primary"> 阶段：可行性分析 </t-tag>
             <view slot="title" style="display: grid;gap: 15rpx;">
               <view class="arrange-center">
@@ -95,4 +95,15 @@
 <!-- 回到顶部 -->
 <t-back-top theme="half-round" text="" scroll-top="{{scrollTop}}" bind:to-top="onToTop" style="z-index: 999;" />
 <!-- 批量操作 -->
-<t-fab bind:click="onOpenAddLP" text="批量操作" aria-label="增加" usingCustomNavbar draggable y-bounds="{{[0, 170]}}" style="z-index: 900;"></t-fab>
+<t-fab wx:if="{{!batchSelectValue}}" bind:click="batchSelect" text="批量操作" aria-label="增加" usingCustomNavbar draggable y-bounds="{{[0, 170]}}" style="z-index: 900;"></t-fab>
+<!-- 批量操作按钮 -->
+<view wx:if="{{batchSelectValue}}">
+  <t-tab-bar t-class="t-tab-bar" shape="round" theme="tag" split="false" bindchange="onBatchSelectTabBarChange">
+    <t-tab-bar-item>
+      <t-link content="取消操作"  size="small" prefixIcon="close"  bindtap="onBatchSelectClose"/>
+    </t-tab-bar-item>
+    <t-tab-bar-item>
+      <t-link theme="primary" content="AIT分配人"  size="small" prefixIcon="check" bindtap="onBatchSelectCheck"/>
+    </t-tab-bar-item>
+  </t-tab-bar>
+</view>

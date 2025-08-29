@@ -260,3 +260,10 @@ t-popup {
   overflow: hidden !important;
   /* 禁止外部滚动 */
 }
+/* 批量操作时,点击选中时的边框 */
+.select-border {
+  border-width: 1px;        /* 边框宽度 */
+  border-style: solid;      /* 边框样式，可选 solid/dashed/dotted */
+  border-color: #FF9800;    /* 边框颜色 */
+  border-radius: 4rpx;      /* 可选：圆角 */
+}
