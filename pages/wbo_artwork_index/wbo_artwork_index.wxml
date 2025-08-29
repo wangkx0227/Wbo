@@ -22,9 +22,6 @@
       <view wx:for="{{Data}}" wx:key="index">
         <t-cell-group theme="card" class="t-cell-group" bindtap="onJumpArtworkDeatails" data-lineplan_id="{{ item.line_plan_id }}" data-development_id="{{item.development_id}}">
           <t-cell hover>
-            <!-- <view slot="left-icon" style="position: absolute;">
-              11
-            </view> -->
             <t-badge count="{{item.is_new_development_text}}" slot="note" shape="square" color="{{item.line_plan_is_new_development ?'#1989fa':'red'}}" />
             <t-tag variant="outline" slot="note" shape="mark" size="medium" wx:if="{{tabBarShow}}" style="position: absolute;right: 25rpx;top: 35rpx;" theme="{{tabBarValue === 'primary' ? 'primary' : 'success'}}"> 阶段：{{ tabBarTabLabel }} </t-tag>
             <t-tag variant="outline" slot="note" shape="mark" size="medium" wx:if="{{userRole==='shelley'}}" style="position: absolute;right: 25rpx;top: 35rpx;" theme="primary"> 阶段：可行性分析 </t-tag>
@@ -98,4 +95,4 @@
 <!-- 回到顶部 -->
 <t-back-top theme="half-round" text="" scroll-top="{{scrollTop}}" bind:to-top="onToTop" style="z-index: 999;" />
 <!-- 批量操作 -->
-<t-fab bind:click="onOpenAddLP" text="批量操作" aria-label="增加" usingCustomNavbar draggable y-bounds="{{[0, 200]}}" style="z-index: 900;"></t-fab>
+<t-fab bind:click="onOpenAddLP" text="批量操作" aria-label="增加" usingCustomNavbar draggable y-bounds="{{[0, 170]}}" style="z-index: 900;"></t-fab>
