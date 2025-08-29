@@ -60,6 +60,7 @@ Page({
     wx.removeStorageSync('userInfo')
     wx.removeStorageSync('userRole') // 每次重置，清除登录信息
     wx.removeStorageSync('userName') // 每次重置，清除登录信息
+    wx.removeStorageSync('apiUserName') // 每次重置，清除登录信息
     wx.removeStorageSync('position_list') // 每次重置，清除登录信息
     const redirect = options.redirect;
     if (redirect) {
@@ -173,7 +174,6 @@ Page({
               } else if (data.statusCode === 400) {
                 wx.showToast({ title: "登录错误", icon: 'error' });
               } else {
-                console.log('err!', resp.data, "1111")
                 wx.showToast({ title: "登录失败", icon: 'error' });
               }
             },
@@ -249,16 +249,23 @@ Page({
     } else {
       if (productValue === "kyle") {
         wx.setStorageSync('userName', "kyle"); // 第一轮初选与第五轮终选
+        wx.setStorageSync('apiUserName', "kyle"); // 访问接口携带名字
       } else if (productValue === "shelley") {
         wx.setStorageSync('userName', "shelley"); // 第三轮可行性
+        wx.setStorageSync('apiUserName', "shelley"); // 访问接口携带名字
       } else if (productValue === "fmr") {
         wx.setStorageSync('userName', "刘开波"); // 样品照片拍照上传 fmr 测试 （fmr系列测试）fmr可行性分析
+        wx.setStorageSync('apiUserName', "lkb"); // 访问接口携带名字
       } else if (productValue === "designer") {
-        wx.setStorageSync('userName', "黄思杰"); // 样品照片拍照审核  设计师 测试 上传ait稿与工厂稿和照片审核
+        wx.setStorageSync('userName', "Alan"); // 样品照片拍照审核  设计师 测试 上传ait稿与工厂稿和照片审核
+        wx.setStorageSync('apiUserName', "Alan"); // 访问接口携带名字
+        wx.setStorageSync('position_list', ["AIT分配人"]); // 访问接口携带名字
       } else if (productValue === "chosen_draft") { // 第7轮与第9轮
         wx.setStorageSync('userName', "kyle");
+        wx.setStorageSync('apiUserName', "kyle"); // 访问接口携带名字
       } else if (productValue === "desc_upload") {
         wx.setStorageSync('userName', "kyle");
+        wx.setStorageSync('apiUserName', "kyle"); // 访问接口携带名字
       }
       wx.setStorageSync('userRole', productValue);
       wx.showToast({

@@ -93,7 +93,7 @@
 <!-- 回到顶部 -->
 <t-back-top theme="half-round" text="顶部" scroll-top="{{scrollTop}}" bind:to-top="onToTop" />
 <!-- 添加个新的图稿按钮 -->
-<t-fab icon="add" bind:click="onOpenAddLP" aria-label="增加" usingCustomNavbar draggable y-bounds="{{[0, 32]}}"></t-fab>
+<t-fab icon="add" bind:click="onOpenAddLP" aria-label="增加" usingCustomNavbar draggable y-bounds="{{[0, 110]}}"></t-fab>
 <!-- 评论弹窗 -->
 <t-dialog visible="{{dialogVisible}}" title="客户反馈评论：" confirm-btn="确定" cancel-btn="取消" bind:confirm="onCloseDialog" bind:cancel="onCloseDialog">
   <view slot="content">

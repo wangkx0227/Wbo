@@ -78,10 +78,10 @@ Page({
         code: task_list[index].code,
         title: task_list[index].title,
         texture: task_list[index].texture,
-        name: task_list[index].AIT_designer1 || "未指定请选择",
+        name: task_list[index].AIT_designer1 || "请选择",
         AIT_designer2: AIT_designer2,
-        AIT_designer2_text: AIT_designer2 ? "已上传图稿" : "未上传图稿",
-        AIT_manager1: AIT_manager1 || "未指定请选择",
+        AIT_designer2_text: AIT_designer2 ? "已上传" : "未上传",
+        AIT_manager1: AIT_manager1 || "请选择",
         AIT_manager2: AIT_manager2,
         AIT_manager2_text: AIT_manager2 ? "已确认" : "未确认",
       }

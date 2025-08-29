@@ -29,7 +29,7 @@ Page({
         },
       ],
     },
-    filterTemplate:'all',
+    filterTemplate: 'all',
     // 筛选框变量-2
     dropdownSorter: {
       value: 'default',
@@ -108,6 +108,8 @@ Page({
           development_id: development_id, // 开发案id
           line_plan_id: line_plan.id, // id
           line_plan_title: `${development_name}-${line_plan.title}`, // 名称
+          lp_title: line_plan.title,
+          development_name: development_name,
           line_plan_client: line_plan.client || "未记录", // 客户
           line_plan_year: line_plan.year || "未记录", // 年
           line_plan_season: line_plan.season || "未记录", // 风格
@@ -144,7 +146,7 @@ Page({
         field: 筛选数据内的key也就是字段
         , filter = "all", field
     */
-   
+
     const that = this;
     const apiUserName = that.data.apiUserName;
     utils.LoadDataList({
@@ -192,7 +194,7 @@ Page({
     that.setData({
       userRole: userRole,
       userName: userName,
-      apiUserName:apiUserName
+      apiUserName: apiUserName
     }, () => {
       // 在setData回调中执行后续操作
       that.loadUserRole();
@@ -378,7 +380,7 @@ Page({
       return !value || item.line_plan_client === value;
     });
     that.setData({
-      filterTemplate:value,
+      filterTemplate: value,
       filteredData: filterSorter ? filtered.reverse() : filtered, // 记录筛选数据
       Data: [],
       currentIndex: 0,
@@ -441,7 +443,7 @@ Page({
     const lineplan_id = e.currentTarget.dataset.lineplan_id;
     const montageUrl = app.globalData.montageUrl;
     // 1. 让用户选择文件
-  
+
     wx.chooseMessageFile({
       count: 1,
       type: 'file',

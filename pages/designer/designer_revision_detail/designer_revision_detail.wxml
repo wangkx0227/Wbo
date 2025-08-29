@@ -59,7 +59,7 @@
           <t-divider layout="vertical" />
           <view class="arrange-center ">
             <text class="title-font-main">图稿修改意见：</text>
-            <t-link size="small" content="点击填写" hover underline catchtap="onOpenDialog" data-task-id="{{ item.id }}" data-timeline-id="{{ item.timeline_id }}" data-designer-name="{{item.name}}" />
+            <t-link size="small" content="填写" hover underline catchtap="onOpenDialog" data-task-id="{{ item.id }}" data-timeline-id="{{ item.timeline_id }}" data-designer-name="{{item.name}}" />
           </view>
         </view>
         <!-- 设计师主管确认 -->
