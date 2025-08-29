@@ -631,7 +631,7 @@ Page({
         tabBarShow: true,  // 触发按钮 
         batchSelectValue: false, // 隐藏胶囊按钮
       })
-      utils.showToast(that, `分配人已指派${label}`);
+      utils.showToast(that, `指定分配人${label}`);
     }
   },
 })
