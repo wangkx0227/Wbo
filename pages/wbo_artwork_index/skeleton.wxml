@@ -35,6 +35,10 @@
                   <view class="arrange-center" style="gap: 10rpx;">
                     <t-skeleton theme="text" loading animation="gradient" rowCol="{{ [{ width: '240rpx', height: '32rpx'}]}}"></t-skeleton>
                   </view>
+                  <!-- 修改 -->
+                  <view class="arrange-center" style="gap: 10rpx;">
+                    <t-skeleton theme="text" loading animation="gradient" rowCol="{{ [{ width: '240rpx', height: '32rpx'}]}}"></t-skeleton>
+                  </view>
                   <view class="arrange-center" style="gap: 10rpx;">
                     <t-skeleton theme="text" loading animation="gradient" rowCol="{{ [{ width: '160rpx', height: '32rpx'}]}}"></t-skeleton>
                   </view>
@@ -57,7 +61,7 @@
                   <view style="position:absolute;right: 40rpx;bottom: 38rpx;">
                     <t-skeleton theme="text" loading animation="gradient" rowCol="{{ [{ width: '150rpx', height: '32rpx'}]}}"></t-skeleton>
                   </view>
-                  
+
                 </view>
               </t-cell>
             </t-cell-group>
