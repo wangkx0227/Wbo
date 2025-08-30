@@ -238,7 +238,7 @@ Page({
       userRole: userRole,
       userName: userName,
       apiUserName: apiUserName,
-      position_type:position_type
+      position_type: position_type
     }, () => {
       // 在setData回调中执行后续操作
       that.loadUserRole();
@@ -622,6 +622,23 @@ Page({
       return;
     } else {
       const { value, label } = e.detail;
+      utils.UpdateData({
+        page: that,
+        data: {
+          "type": "update_task",
+          "AIT_manager1": value[0],
+          "lp_ids": selectLpIdList,
+          "username": userName
+        },
+        message: `指定分配人${label}`
+      })
+      const updatedAllData = that.data.allData.map(item => {
+        const select_status = item["select_status"]
+        if (select_status) {
+          item["select_status"] = false;
+        }
+        return item;
+      });
       const updatedData = that.data.Data.map(item => {
         const select_status = item["select_status"]
         if (select_status) {
@@ -630,13 +647,13 @@ Page({
         return item;
       });
       that.setData({
+        allData: updatedAllData, // 修改全部数据状态
         pickerVisible: false,
-        Data: updatedData,
+        Data: updatedData, // 修改显示的状态
         selectLpIdList: [],
         tabBarShow: true,  // 触发按钮 
         batchSelectValue: false, // 隐藏胶囊按钮
       })
-      utils.showToast(that, `指定分配人${label}`);
     }
   },
 })

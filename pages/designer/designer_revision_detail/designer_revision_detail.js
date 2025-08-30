@@ -187,9 +187,9 @@ Page({
         for (let i = 0; i < lp_members.length; i++) {
           const name = lp_members[i][0];
           const role = lp_members[i][1];
-          if (role === 'AIT') {
+          if (role === 'AIT' || role === 'AIE') {
             AITDesignerList.push({
-              label: name,
+              label: `${name}-${role}`,
               value: name
             })
           }
