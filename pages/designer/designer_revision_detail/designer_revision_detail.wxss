@@ -31,3 +31,17 @@ wx-button:not([size=mini]) {
   writing-mode: vertical-rl; /* 文字竖排，从右到左 */
   text-orientation: upright; /* 保持字形直立 */
 }
+/* 重写标签栏组件样式*/
+.t-tab-bar {
+  z-index: 1999 !important;
+}
+.t-tab-bar--round{
+  margin-left: 90rpx !important;
+  margin-right: 90rpx !important;
+}
+.t-tab-bar-item--text-only {
+    font-size: 24rpx !important;
+}
+.t-tab-bar--fixed {
+  margin-bottom: 34px !important;
+}
