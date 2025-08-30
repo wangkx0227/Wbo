@@ -177,6 +177,7 @@ function UpdateData({
           if (toastShow) showToast(page, "数据请求失败", "error");
           reject(res);
         }
+        resolve(res);
       },
       fail: (err) => { // 错误
         if (toastShow) showToast(page, "数据请求失败", "error");

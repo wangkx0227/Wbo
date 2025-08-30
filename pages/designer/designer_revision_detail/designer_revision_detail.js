@@ -58,6 +58,7 @@ Page({
     dialogVisible: false, // 评论弹出层变量
     dialogValue: "",
     // 批量选中
+    position_type: null,
     selectLpIdList: [],
     batchSelectValue: false,
     batchSelectPickerVisible: false,
@@ -168,12 +169,12 @@ Page({
   // 后端设计师分配人与设计师图稿请求
   dataDesignerRequest(mode) {
     const that = this;
-    const development_id = that.data.development_id;
+    const development_id = that.data.development_id; // 部分没有数据
     utils.LoadDataList({
       page: that,
       data: {
         "type": "get_lps_data",
-        "project_id": development_id,
+        "project_id": 20115,
         "username": "Jasonyu" // 访问人必须是管理员
       },
       mode: mode,
@@ -764,15 +765,16 @@ Page({
     const that = this;
     const position_type = that.data.position_type;
     const batchSelectPickerItemList = that.data.batchSelectPickerItemList;
+    console.log(that.data.AITDesignerList);
     if (batchSelectPickerItemList.length === 0) {
       if (position_type === "AIT分配人") {
         that.setData({
-          batchSelectPickerTitle:"请选择AIT分配人",
+          batchSelectPickerTitle: "请选择AIT分配人",
           batchSelectPickerItemList: that.data.AITManagerList,
         })
       } else {
         that.setData({
-          batchSelectPickerTitle:"请选择图稿设计师",
+          batchSelectPickerTitle: "请选择图稿设计师",
           batchSelectPickerItemList: that.data.AITDesignerList,
         })
       }
@@ -856,21 +858,60 @@ Page({
       utils.showToast(that, "请选择图稿后提交", "warning");
       return;
     } else {
+      let data = {
+        "type": "update_task",
+        "task_ids": selectLpIdList,
+        "username": userName
+      }
+      let message = '';
       const { value, label } = e.detail;
-      const updatedData = that.data.Data.map(item => {
-        const select_status = item["select_status"]
-        if (select_status) {
-          item["select_status"] = false;
+      const position_type = that.data.position_type;
+      if (position_type === "AIT分配人") {
+        data["AIT_manager1"] = value[0];
+        message = `指定分配人${label}`;
+      } else {
+        data["AIT_designer1"] = value[0];
+        message = `指定${label}`;
+      }
+      utils.UpdateData({
+        page: that,
+        data: data,
+        message: message
+      }).then(res => {
+        if (res.statusCode === 200) {
+          const updatedAllData = that.data.allData.map(item => {
+            const select_status = item["select_status"]
+            if (select_status) {
+              item["select_status"] = false;
+              if (position_type === "AIT分配人") {
+                item["AIT_manager1"] = value[0];
+              } else {
+                item["name"] = value[0];
+              }
+            }
+            return item;
+          });
+          const updatedData = that.data.Data.map(item => {
+            const select_status = item["select_status"]
+            if (select_status) {
+              item["select_status"] = false;
+              if (position_type === "AIT分配人") {
+                item["AIT_manager1"] = value[0];
+              } else {
+                item["name"] = value[0];
+              }
+            }
+            return item;
+          });
+          that.setData({
+            batchSelectPickerVisible: false,
+            Data: updatedData, // 重置当前显示的数据
+            allData: updatedAllData, // 重置全部的数据
+            selectLpIdList: [],
+            batchSelectValue: false, // 隐藏胶囊按钮
+          })
         }
-        return item;
-      });
-      that.setData({
-        batchSelectPickerVisible: false,
-        Data: updatedData,
-        selectLpIdList: [],
-        batchSelectValue: false, // 隐藏胶囊按钮
       })
-      utils.showToast(that, `指定分配人${label}`);
     }
   },
 })
