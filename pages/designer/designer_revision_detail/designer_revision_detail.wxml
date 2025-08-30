@@ -191,7 +191,7 @@
       <t-link content="取消操作" size="small" prefixIcon="close" />
     </t-tab-bar-item>
     <t-tab-bar-item bindtap="onBatchSelectCheck">
-      <t-link theme="primary" content="AIT分配人" size="small" prefixIcon="check" />
+      <t-link theme="primary" content="{{tabTitle}}" size="small" prefixIcon="check" />
     </t-tab-bar-item>
   </t-tab-bar>
 </view>

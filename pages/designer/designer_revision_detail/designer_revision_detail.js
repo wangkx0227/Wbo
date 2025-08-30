@@ -58,6 +58,7 @@ Page({
     dialogVisible: false, // 评论弹出层变量
     dialogValue: "",
     // 批量选中
+    tabTitle: "AIT分配人",
     position_type: null,
     selectLpIdList: [],
     batchSelectValue: false,
@@ -266,6 +267,12 @@ Page({
     const position_type = position_list.find(item =>
       ["设计经理", "AIT", "AIT分配人"].includes(item)
     ) || "";
+    // 修改批量操作的tab名称
+    if (position_type === "设计经理") {
+      that.setData({
+        tabTitle: "设计师分配"
+      })
+    }
     const lineplan_id = options.lineplan_id || ''; // 首页跳转后的存储的id值
     const development_id = options.development_id || ''; // 整个开发案的id
     that.setData({
