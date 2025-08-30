@@ -15,9 +15,11 @@
   </view>
   <view class="page-main">
     <view class="wrapper">
-      <view class="cell" wx:for="{{Data}}" wx:key="index" wx:for-index="outerIndex">
+      <view wx:for="{{Data}}" wx:key="index" wx:for-index="outerIndex" 
+      class="cell {{ item.select_status ? 'select-border' : ''}}"  bindtap="selectTtrigger" 
+      data-task-id="{{ item.id }}">
         <view class="title-font-main arrange-space-between">
-          <text>Title：{{ item.title }}</text>
+          <text>Title：{{ item.title }}{{batchSelectValue}}</text>
           <text class="title-font-other" style="color: {{ item.AIT_manager2 ?  'black' : 'red' }};">图稿确认：{{ item.AIT_manager2_text }}</text>
         </view>
         <view class="arrange-space-between title-font-other">
@@ -180,3 +182,20 @@
     </view>
   </view>
 </t-dialog>
+<!-- 批量操作 -->
+<t-fab wx:if="{{!batchSelectValue && userRole === 'designer'}}" bind:click="batchSelect" text="批量操作" aria-label="增加" usingCustomNavbar draggable y-bounds="{{[0, 170]}}" style="z-index: 900;"></t-fab>
+<!-- 批量操作按钮 -->
+<view wx:if="{{batchSelectValue}}">
+  <t-tab-bar t-class="t-tab-bar" shape="round" theme="tag" split="false">
+    <t-tab-bar-item bindtap="onBatchSelectClose">
+      <t-link content="取消操作" size="small" prefixIcon="close" />
+    </t-tab-bar-item>
+    <t-tab-bar-item bindtap="onBatchSelectCheck">
+      <t-link theme="primary" content="AIT分配人" size="small" prefixIcon="check" />
+    </t-tab-bar-item>
+  </t-tab-bar>
+</view>
+<!-- AIT下拉框 -->
+<t-picker visible="{{batchSelectPickerVisible}}" value="{{batchSelectPickerValue}}" title="请选择AIT分配人" cancelBtn="取消" confirmBtn="确认" bindchange="onBatchSelectPickerChange" bindcancel="onBatchSelectClosePicker" catchtouchmove>
+  <t-picker-item options="{{pickerItemList}}"></t-picker-item>
+</t-picker>

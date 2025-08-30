@@ -57,6 +57,11 @@ Page({
     // 设计师分配人对图稿的修改意见填写
     dialogVisible: false, // 评论弹出层变量
     dialogValue: "",
+    // 批量选中
+    selectLpIdList:[],
+    batchSelectValue:false,
+    batchSelectPickerVisible:false,
+    batchSelectPickerValue:"",
   },
   // 数据结构处理
   dataStructure(dataList) {
@@ -84,6 +89,7 @@ Page({
         AIT_manager1: AIT_manager1 || "请选择",
         AIT_manager2: AIT_manager2,
         AIT_manager2_text: AIT_manager2 ? "已确认" : "未确认",
+        select_status: false,
       }
       // 可行性分析，shelley 选3直接跳过，不在显示
       if (data_dict["confirmed2"] === 3) {
@@ -749,5 +755,109 @@ Page({
         }
       }
     })
-  }
+  },
+
+
+
+
+
+  // 批量操作选择触发按钮
+  batchSelect() {
+    const that = this;
+    that.setData({
+      batchSelectValue: true, // 触发按钮
+    })
+  },
+  // 批量选择选中列表页按钮
+  selectTtrigger(e) {
+    if (!this.data.batchSelectValue) {
+      return;
+    }
+    const that = this;
+    let status_type = "add"; // add 增加 delete删除
+    const taskId = e.currentTarget.dataset.taskId;
+    // 选中边框效果
+    const updatedData = that.data.Data.map(item => {
+      if (item.id === taskId) {
+        const select_status = item["select_status"];
+        if (select_status) {
+          item["select_status"] = false;
+          status_type = "delete";
+        } else {
+          item["select_status"] = true;
+        }
+      }
+      return item;
+    });
+    // 添加到选中的列表中
+    const selectLpIdList = [...that.data.selectLpIdList]; // 先复制一份数组
+    if (status_type === 'add') {
+      selectLpIdList.push(taskId);
+    } else {
+      const index = selectLpIdList.indexOf(taskId);
+      if (index > -1) {
+        selectLpIdList.splice(index, 1);
+      }
+    };
+    // 修改状态,并且处理选中的lp id 列表
+    that.setData({
+      Data: updatedData,
+      selectLpIdList: selectLpIdList
+    });
+  },
+  // 批量操作胶囊按钮-取消
+  onBatchSelectClose() {
+    const that = this;
+    const updatedData = that.data.Data.map(item => {
+      const select_status = item["select_status"]
+      if (select_status) {
+        item["select_status"] = false;
+      }
+      return item;
+    });
+    that.setData({
+      Data: updatedData,
+      selectLpIdList: [],
+      batchSelectValue: false, // 隐藏胶囊按钮
+    })
+  },
+  // 批量操作胶囊按钮-提交
+  onBatchSelectCheck() {
+    const that = this;
+    that.setData({
+      batchSelectPickerVisible: true,
+    });
+  },
+  // 关闭 AIT筛选器
+  onBatchSelectClosePicker(e) {
+    this.setData({
+      batchSelectPickerVisible: false,
+    });
+  },
+  // 提交 AIT筛选器
+  onBatchSelectPickerChange(e) {
+    const that = this;
+    const userName = that.data.userName;
+    const selectLpIdList = that.data.selectLpIdList;
+    if (selectLpIdList.length === 0) {
+      utils.showToast(that, "请选择LP后提交", "warning");
+      return;
+    } else {
+      const { value, label } = e.detail;
+      const updatedData = that.data.Data.map(item => {
+        const select_status = item["select_status"]
+        if (select_status) {
+          item["select_status"] = false;
+        }
+        return item;
+      });
+      that.setData({
+        batchSelectPickerVisible: false,
+        Data: updatedData,
+        selectLpIdList: [],
+        batchSelectValue: false, // 隐藏胶囊按钮
+      })
+      utils.showToast(that, `指定分配人${label}`);
+    }
+  },
 })
