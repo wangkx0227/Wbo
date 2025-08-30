@@ -58,10 +58,11 @@ Page({
     dialogVisible: false, // 评论弹出层变量
     dialogValue: "",
     // 批量选中
-    selectLpIdList:[],
-    batchSelectValue:false,
-    batchSelectPickerVisible:false,
-    batchSelectPickerValue:"",
+    selectLpIdList: [],
+    batchSelectValue: false,
+    batchSelectPickerVisible: false,
+    batchSelectPickerValue: "",
+    batchSelectPickerItemList: []
   },
   // 数据结构处理
   dataStructure(dataList) {
@@ -757,13 +758,22 @@ Page({
     })
   },
 
-
-
-
-
   // 批量操作选择触发按钮
   batchSelect() {
     const that = this;
+    const position_type = that.data.position_type;
+    const batchSelectPickerItemList = that.data.batchSelectPickerItemList;
+    if (batchSelectPickerItemList.length === 0) {
+      if (position_type === "AIT分配人") {
+        that.setData({
+          batchSelectPickerItemList: that.data.AITManagerList,
+        })
+      } else {
+        that.setData({
+          batchSelectPickerItemList: that.data.AITDesignerList,
+        })
+      }
+    }
     that.setData({
       batchSelectValue: true, // 触发按钮
     })
@@ -840,7 +850,7 @@ Page({
     const userName = that.data.userName;
     const selectLpIdList = that.data.selectLpIdList;
     if (selectLpIdList.length === 0) {
-      utils.showToast(that, "请选择LP后提交", "warning");
+      utils.showToast(that, "请选择图稿后提交", "warning");
       return;
     } else {
       const { value, label } = e.detail;

@@ -197,5 +197,5 @@
 </view>
 <!-- AIT下拉框 -->
 <t-picker visible="{{batchSelectPickerVisible}}" value="{{batchSelectPickerValue}}" title="请选择AIT分配人" cancelBtn="取消" confirmBtn="确认" bindchange="onBatchSelectPickerChange" bindcancel="onBatchSelectClosePicker" catchtouchmove>
-  <t-picker-item options="{{pickerItemList}}"></t-picker-item>
+  <t-picker-item options="{{batchSelectPickerItemList}}"></t-picker-item>
 </t-picker>
