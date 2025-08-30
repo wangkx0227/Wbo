@@ -62,7 +62,8 @@ Page({
     batchSelectValue: false,
     batchSelectPickerVisible: false,
     batchSelectPickerValue: "",
-    batchSelectPickerItemList: []
+    batchSelectPickerItemList: [],
+    batchSelectPickerTitle: "",
   },
   // 数据结构处理
   dataStructure(dataList) {
@@ -763,13 +764,16 @@ Page({
     const that = this;
     const position_type = that.data.position_type;
     const batchSelectPickerItemList = that.data.batchSelectPickerItemList;
+    console.log(that.data.AITDesignerList);
     if (batchSelectPickerItemList.length === 0) {
       if (position_type === "AIT分配人") {
         that.setData({
+          batchSelectPickerTitle:"请选择AIT分配人",
           batchSelectPickerItemList: that.data.AITManagerList,
         })
       } else {
         that.setData({
+          batchSelectPickerTitle:"请选择图稿设计师",
           batchSelectPickerItemList: that.data.AITDesignerList,
         })
       }
