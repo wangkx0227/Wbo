@@ -770,21 +770,6 @@ Page({
   // 批量操作选择触发按钮
   batchSelect() {
     const that = this;
-    const position_type = that.data.position_type;
-    const batchSelectPickerItemList = that.data.batchSelectPickerItemList;
-    if (batchSelectPickerItemList.length === 0) {
-      if (position_type === "AIT分配人") {
-        that.setData({
-          batchSelectPickerTitle: "请选择AIT分配人",
-          batchSelectPickerItemList: that.data.AITManagerList,
-        })
-      } else {
-        that.setData({
-          batchSelectPickerTitle: "请选择图稿设计师",
-          batchSelectPickerItemList: that.data.AITDesignerList,
-        })
-      }
-    }
     that.setData({
       batchSelectValue: true, // 触发按钮
     })
@@ -845,6 +830,18 @@ Page({
   // 批量操作胶囊按钮-提交
   onBatchSelectCheck() {
     const that = this;
+    const position_type = that.data.position_type;
+    if (position_type === "AIT分配人") {
+      that.setData({
+        batchSelectPickerTitle: "请选择AIT分配人",
+        batchSelectPickerItemList: that.data.AITManagerList,
+      })
+    } else {
+      that.setData({
+        batchSelectPickerTitle: "请选择图稿设计师",
+        batchSelectPickerItemList: that.data.AITDesignerList,
+      })
+    }
     that.setData({
       batchSelectPickerVisible: true,
     });
