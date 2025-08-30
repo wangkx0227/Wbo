@@ -95,7 +95,7 @@
 <!-- 回到顶部 -->
 <t-back-top theme="half-round" text="" scroll-top="{{scrollTop}}" bind:to-top="onToTop" style="z-index: 999;" />
 <!-- 批量操作 -->
-<t-fab wx:if="{{!batchSelectValue && userRole === 'designer'}}" bind:click="batchSelect" text="批量操作" aria-label="增加" usingCustomNavbar draggable y-bounds="{{[0, 170]}}" style="z-index: 900;"></t-fab>
+<t-fab wx:if="{{!batchSelectValue && userRole === 'designer' && tabBarValue === 'primary'}}" bind:click="batchSelect" text="批量操作" aria-label="增加" usingCustomNavbar draggable y-bounds="{{[0, 170]}}" style="z-index: 900;"></t-fab>
 <!-- 批量操作按钮 -->
 <view wx:if="{{batchSelectValue}}">
   <t-tab-bar t-class="t-tab-bar" shape="round" theme="tag" split="false">
