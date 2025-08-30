@@ -257,8 +257,8 @@ Page({
         wx.setStorageSync('userName', "刘开波"); // 样品照片拍照上传 fmr 测试 （fmr系列测试）fmr可行性分析
         wx.setStorageSync('apiUserName', "lkb"); // 访问接口携带名字
       } else if (productValue === "designer") {
-        wx.setStorageSync('userName', "Alan"); // 样品照片拍照审核  设计师 测试 上传ait稿与工厂稿和照片审核
-        wx.setStorageSync('apiUserName', "Alan"); // 访问接口携带名字
+        wx.setStorageSync('userName', "Neil"); // 样品照片拍照审核  设计师 测试 上传ait稿与工厂稿和照片审核
+        wx.setStorageSync('apiUserName', "Neil"); // 访问接口携带名字
         wx.setStorageSync('position_list', ["AIT分配人"]); // 访问接口携带名字
       } else if (productValue === "chosen_draft") { // 第7轮与第9轮
         wx.setStorageSync('userName', "kyle");

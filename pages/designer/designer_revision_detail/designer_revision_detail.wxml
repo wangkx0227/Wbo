@@ -19,7 +19,7 @@
       class="cell {{ item.select_status ? 'select-border' : ''}}"  bindtap="selectTtrigger" 
       data-task-id="{{ item.id }}">
         <view class="title-font-main arrange-space-between">
-          <text>Title：{{ item.title }}{{batchSelectValue}}</text>
+          <text>Title：{{ item.title }}</text>
           <text class="title-font-other" style="color: {{ item.AIT_manager2 ?  'black' : 'red' }};">图稿确认：{{ item.AIT_manager2_text }}</text>
         </view>
         <view class="arrange-space-between title-font-other">
@@ -183,7 +183,7 @@
   </view>
 </t-dialog>
 <!-- 批量操作 -->
-<t-fab wx:if="{{!batchSelectValue && userRole === 'designer'}}" bind:click="batchSelect" text="批量操作" aria-label="增加" usingCustomNavbar draggable y-bounds="{{[0, 170]}}" style="z-index: 900;"></t-fab>
+<t-fab wx:if="{{!batchSelectValue && (position_type === '设计经理' || position_type === 'AIT分配人')}}" bind:click="batchSelect" text="批量操作" aria-label="增加" usingCustomNavbar draggable y-bounds="{{[0, 170]}}" style="z-index: 900;"></t-fab>
 <!-- 批量操作按钮 -->
 <view wx:if="{{batchSelectValue}}">
   <t-tab-bar t-class="t-tab-bar" shape="round" theme="tag" split="false">

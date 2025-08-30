@@ -226,6 +226,10 @@ Page({
       // 未登录状态，函数已处理跳转逻辑
       return;
     }
+    const position_list = wx.getStorageSync('position_list'); // 实际的权限列表
+    const position_type = position_list.find(item =>
+      ["设计经理", "AIT", "AIT分配人"].includes(item)
+    ) || "";
     const userRole = wx.getStorageSync('userRole');
     const userName = wx.getStorageSync('userName');
     const apiUserName = wx.getStorageSync('apiUserName');
@@ -233,7 +237,8 @@ Page({
     that.setData({
       userRole: userRole,
       userName: userName,
-      apiUserName: apiUserName
+      apiUserName: apiUserName,
+      position_type:position_type
     }, () => {
       // 在setData回调中执行后续操作
       that.loadUserRole();
