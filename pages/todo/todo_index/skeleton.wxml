@@ -32,10 +32,15 @@
                 </view>
                 <t-skeleton slot="note" theme="text" loading animation="gradient" rowCol="{{ [{ width: '140rpx', height: '40rpx'}]}}" style="position: absolute;right: 25rpx;top: 35rpx;"></t-skeleton>
                 <view slot="title" style="display: grid;gap: 15rpx;">
-                  <view class="arrange-center" style="gap: 10rpx;">
-                    <t-skeleton theme="text" loading animation="gradient" rowCol="{{ [{ width: '240rpx', height: '32rpx'}]}}"></t-skeleton>
+                  <view class="arrange-center">
+                    <t-skeleton theme="text" loading animation="gradient" rowCol="{{ [{ width: '350rpx', height: '32rpx'}]}}"></t-skeleton>
                   </view>
-                  <view class="arrange-center" style="gap: 10rpx;">
+                  <!-- 修改 -->
+                  <view class="arrange-center">
+                    <t-skeleton theme="text" loading animation="gradient" rowCol="{{ [{ width: '350rpx', height: '32rpx'}]}}"></t-skeleton>
+                  </view>
+                  <view class="arrange-center" style="gap: 155rpx;">
+                    <t-skeleton theme="text" loading animation="gradient" rowCol="{{ [{ width: '160rpx', height: '32rpx'}]}}"></t-skeleton>
                     <t-skeleton theme="text" loading animation="gradient" rowCol="{{ [{ width: '160rpx', height: '32rpx'}]}}"></t-skeleton>
                   </view>
                   <view class="arrange-space-between">
@@ -48,16 +53,12 @@
                   </view>
                   <view class="arrange-space-between" style="gap: 20rpx;">
                     <view class="arrange-center">
-                      <t-skeleton theme="text" loading animation="gradient" rowCol="{{ [{ width: '125rpx', height: '32rpx'}]}}"></t-skeleton>
-                    </view>
-                    <view class="arrange-center">
-                      <t-skeleton theme="text" loading animation="gradient" rowCol="{{ [{ width: '250rpx', height: '32rpx'}]}}"></t-skeleton>
+                      <t-skeleton theme="text" loading animation="gradient" rowCol="{{ [{ width: '160rpx', height: '32rpx'}]}}"></t-skeleton>
                     </view>
                   </view>
                   <view style="position:absolute;right: 40rpx;bottom: 38rpx;">
                     <t-skeleton theme="text" loading animation="gradient" rowCol="{{ [{ width: '150rpx', height: '32rpx'}]}}"></t-skeleton>
                   </view>
-                  
                 </view>
               </t-cell>
             </t-cell-group>

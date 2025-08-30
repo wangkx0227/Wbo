@@ -7,7 +7,7 @@
   margin-top: 8px;
 }
 .page-main .wrapper .t-cell-group {
-  margin-bottom: 20rpx !important;
+  margin: 0 0 20rpx 10rpx !important;
 }
 
 /* 最后一个元素不需要间距 */

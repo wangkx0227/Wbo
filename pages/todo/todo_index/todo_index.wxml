@@ -31,23 +31,27 @@
               <t-tag wx:if="{{ tabBarValue=== 'new'}}" slot="note" variant="outline" shape="mark" size="medium" theme="{{tabBarValue === 'todo' ? 'primary' : 'success'}}" style="position: absolute;right: 25rpx;top: 35rpx;"> 阶段：{{ tabBarValue === "todo" ?item.development_status_text : tabBarTabLabel }} </t-tag>
               <view slot="title" style="display: grid;gap: 25rpx;">
                 <view class="arrange-center">
-                  <text class="title-font-main">名称：</text>
-                  <text class="title-font-other name-cell">{{ item.line_plan_title }}</text>
+                  <text class="title-font-main">LP名称：</text>
+                  <text class="title-font-other name-cell">{{ item.lp_title }}</text>
                 </view>
-                <view class="arrange-space-between">
-                  <view class="arrange-center">
-                    <text class="title-font-main">主导人：</text>
-                    <text class="title-font-other">{{ item.development_director }}</text>
-                  </view>
-                  <view class="arrange-center">
-                    <text class="title-font-main">客人：</text>
-                    <text class="title-font-other">{{item.line_plan_client}}</text>
-                  </view>
+                <view class="arrange-center">
+                  <text class="title-font-main">开发案：</text>
+                  <text class="title-font-other name-cell">{{ item.development_name }}</text>
                 </view>
-                <view class="arrange-space-between" style="gap: 20rpx;">
+                <view class="arrange-space-between" style="gap: 155rpx;">
                   <view class="arrange-center">
                     <text class="title-font-main">风格：</text>
                     <text class="title-font-other">{{ item.line_plan_season }}</text>
+                  </view>
+                  <view class="arrange-center">
+                    <text class="title-font-main">客人：</text>
+                    <text class="title-font-other">{{ item.line_plan_client }}</text>
+                  </view>
+                </view>
+                <view class="arrange-space-between" style="gap: 155rpx;">
+                  <view class="arrange-center">
+                    <text class="title-font-main">主导人：</text>
+                    <text class="title-font-other">{{ item.development_director }}</text>
                   </view>
                   <view class="arrange-center">
                     <text class="title-font-main">Year：</text>

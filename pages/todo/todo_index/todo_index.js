@@ -3,7 +3,8 @@ Page({
   data: {
     // 悬浮胶囊标签栏变量
     tabBarValue: 'todo',
-    tabBarTabLabel: '最终审查',
+    tabBarTabLabel: '',
+    skeletonLoading: true, // 骨架控制变量
     Data: [], // 页面展示数据
     allData: [],// 全部的数据
     filteredData: [], // 筛选后的数据
@@ -16,6 +17,9 @@ Page({
     scrollTop: 0, // 回到顶部变量
     searchValue: "",
     coint_total: 0, // 待处理总数
+    isDownRefreshing: false, // 下拉刷新状态
+    isLoadingReachMore: false, // 滚动底部加载数据
+    noMoreData: false,    // 数据是否全部加载完毕
     // 筛选框变量-1
     dropdownTemplate: {
       value: 'all',
@@ -82,6 +86,8 @@ Page({
         const lp_data = {
           development_id: development_id, // 开发案id
           line_plan_id: line_plan.id, // id
+          lp_title: line_plan.title,
+          development_name: development_name,
           line_plan_title: `${development_name}-${line_plan.title}`, // 名称
           line_plan_client: line_plan.client || "未记录", // 客户
           line_plan_year: line_plan.year || "未记录", // 年
@@ -120,7 +126,7 @@ Page({
         } else if (development_status === 9) {
           lp_data['development_status_text'] = "客户中单"
         }
-        
+
         // if (userRole === 'kyle' && (development_status === 2 || development_status === 5)) {
         //   // kyle的初审与终审
         //   arrangeData.push(lp_data)
