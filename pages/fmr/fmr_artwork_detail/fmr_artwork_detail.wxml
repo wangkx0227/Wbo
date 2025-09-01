@@ -82,7 +82,10 @@
 <t-dialog visible="{{dialogVisible}}" title="评估建议：" confirm-btn="确定" cancel-btn="取消" bind:confirm="onCloseDialog" bind:cancel="onCloseDialog">
   <view slot="content">
     <view class="dialog-textarea">
-      <t-textarea value="{{ dialogValue }}" placeholder="请输入评审意见" bordered maxlength="200" disableDefaultPadding="true" indicator bind:change="onDialogInput" />
+      <!-- <t-textarea value="{{ dialogValue }}" placeholder="请输入评审意见" bordered maxlength="200" disableDefaultPadding="true" indicator bind:change="onDialogInput" /> -->
+
+      <!-- 修改验证，方式ios系统无法进行复制，左右光标使用 -->
+      <textarea placeholder="请输入评审意见" maxlength="200" show-confirm-bar="true" adjust-position="true" placeholder-style="color: rgba(0,0,0,0.4)" style="border: 1px solid  var(--td-textarea-border-color,var(--td-component-border,var(--td-gray-color-4,#dcdcdc)));;width: 485rpx;height: 300rpx;font-weight: 400;font-size: 16px;color: rgba(0, 0, 0, 0.9);line-height: 24px; text-align: left;padding: 20rpx;border-radius: 4px;" bindinput="onDialogInput" value="{{ dialogValue }}"/>
     </view>
   </view>
 </t-dialog>
