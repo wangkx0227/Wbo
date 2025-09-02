@@ -23,7 +23,8 @@
           <text style="border-bottom: 1px solid currentColor;">Material：{{ item.texture }}</text>
           <text style="color: {{ item.be_chosen2 == 2 ? 'red' : 'black' }};;">R1选中状态：{{ item.be_chosen2_text }}</text>
         </view>
-        <view class="arrange-center-flex-end title-font-other">
+        <view class="arrange-space-between title-font-other">
+          <text>图稿类型：{{ item.timeline_type_text }}</text>
           <text style="color: {{ item.whether_to_proof == 0 ? 'red' : 'black' }};;">是否需要画工厂稿：{{ item.whether_to_proof_text }}</text>
         </view>
         <view class="title-font-other arrange-space-between">
@@ -61,9 +62,9 @@
         <view class="arrange-center">
           <view class="arrange-center title-font-other">
             <text class="title-font-main">操作：</text>
-            <t-link size="small" content="未选中" data-content-status="N" hover underline theme="danger" bindtap="onModifyArtworkStatus" data-task-id="{{ item.id }}" />
+            <t-link size="small" content="未选中" data-content-status="N" hover underline theme="danger" bindtap="onModifyArtworkStatus" data-task-id="{{ item.id }}" data-timeline-type="{{item.timeline_type}}"/>
             <t-divider layout="vertical" />
-            <t-link size="small" content="已选中" data-content-status="Y" hover underline bindtap="onModifyArtworkStatus" data-task-id="{{ item.id }}" />
+            <t-link size="small" content="已选中" data-content-status="Y" hover underline bindtap="onModifyArtworkStatus" data-task-id="{{ item.id }}" data-timeline-type="{{item.timeline_type}}"/>
           </view>
           <t-divider layout="vertical" />
           <view class="arrange-center title-font-other">
@@ -125,19 +126,6 @@
         <view class="input-example-label"> 风格类型 <text style=" color: red;">*</text></view>
         <t-input placeholder="请输入风格类型" borderless="{{true}}" class="input-example-input" value="{{addLPData.season}}" data-field="season" bindchange="handleInput"/>
       </view>
-      <!-- <view class="input-example">
-        <view class="input-example-label"> 指派设计师 <text style=" color: red;">*</text></view>
-        <t-cell title="{{pickerDesignerTitile}}" arrow hover bind:click="onDesignerPicker" />
-      </view>
-      <view class="input-example">
-        <view class="input-example-label"> 图稿编号 <text style=" color: red;">*</text></view>
-        <t-input placeholder="请输入编号" borderless="{{true}}" class="input-example-input" />
-      </view>
-      <view class="input-example">
-        <view class="input-example-label"> 上传图稿 <text style=" color: red;">*</text></view>
-        <t-upload mediaType="{{['image']}}" max="{{5}}" files="{{imageFileList}}" bind:add="imageAdd" bind:remove="imageRemove">
-        </t-upload>
-      </view> -->
       <view class="button-example">
         <t-button theme="light" block t-class="group-btn" bindtap="onCloseAddDialog">关闭</t-button>
         <t-divider layout="vertical" style="height:64rpx" />

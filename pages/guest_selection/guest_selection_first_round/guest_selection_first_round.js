@@ -64,37 +64,6 @@ Page({
     filterStatusValue: 'all',  // 筛选存储变量
     // 增加图稿
     popupAddVisible: false,
-    // 指派设计师
-    pickerDesignerVisible: false,
-    pickerDesignerValue: [],
-    pickerDesignerTitile: "指派设计师",
-    pickerDesignerItemList: [{
-      label: '王五',
-      value: 'A'
-    },
-    {
-      label: '李四',
-      value: 'B'
-    },
-    {
-      label: '张明',
-      value: 'B'
-    },
-    {
-      label: '赵玉',
-      value: 'B'
-    },
-    {
-      label: '张三',
-      value: 'B'
-    },
-    {
-      label: '李明博',
-      value: 'B'
-    },
-    ],
-    // 上传图稿变量
-    imageFileList: [],
   },
   // 数据结构处理
   dataStructure(dataList) {
@@ -136,13 +105,13 @@ Page({
         const picture_list = image_list.length === 0 ? [] : image_list.map(img => image_url + img.imageURL);
         const timeline_id = task_list[index].timeline_list[i].id;
         const timeline_type = task_list[index].timeline_list[i].timeline_type;
+        let timeline_type_text = ""
+        if (timeline_type === 1) {
+          timeline_type_text = "设计稿"
+        } else {
+          timeline_type_text = "生产稿"
+        }
         if (i > 0) {
-          let timeline_type_text = ""
-          if (timeline_type === 1) {
-            timeline_type_text = "设计稿"
-          } else {
-            timeline_type_text = "生产稿"
-          }
           timeLineData.push({
             "id": timeline_id, // id 
             "time": task_list[index].timeline_list[i].time, // 提交时间
@@ -153,6 +122,7 @@ Page({
           })
           continue; // 跳过
         }
+        data_dict["timeline_type_text"] = timeline_type_text; // 图稿类型
         data_dict["picture_list"] = picture_list;
         // kyle最终标记
         data_dict["confirmed"] = task_list[index].timeline_list[i].confirmed;
@@ -389,8 +359,13 @@ Page({
     const userName = that.data.userName;
     const {
       taskId,
-      contentStatus
+      contentStatus,
+      timelineType
     } = e.currentTarget.dataset;
+    if(timelineType === 1){
+      utils.showToast(that, "请联系设计师上传生产稿", "warning");
+      return;
+    };
     let task_data = {
       "type": "update_task",
       "task_id": taskId,
@@ -458,7 +433,6 @@ Page({
         }
       })
     }
-
   },
   // 是否画工厂稿
   onFactoryDraftStatus(e) {
@@ -628,68 +602,5 @@ Page({
       'dropdownSelected.value': value,
     });
   },
-  // 新增内部的下拉框
-  onDesignerPicker(e) {
-    this.setData({
-      pickerDesignerVisible: true
-    });
-  },
-  // 新增设计师筛选器-确定 
-  onPickerDesignerChange(e) {
-    /*
-      pickerDesignerVisible：筛选器显示变量
-      pickerDesignerValue： 选中的值
-    */
-    const that = this;
-    const {
-      value,
-      label
-    } = e.detail;
-    console.log(value, label);
-    this.setData({
-      pickerDesignerVisible: false,
-      pickerDesignerValue: value,
-      pickerDesignerTitile: label
-    });
-    const message = `设计师已指派${label}`
-    utils.showToast(that, message);
-  },
-  // 新增设计师筛选器-关闭 
-  onCloseDesignerPicker(e) {
-    /*
-      pickerDesignerVisible：筛选器显示变量
-    */
-    this.setData({
-      pickerDesignerVisible: false,
-    });
-  },
-  // 上传图稿函数
-  imageAdd(e) {
-    const {
-      imageFileList
-    } = this.data;
-    const {
-      files
-    } = e.detail;
-    console.log();
-    // 方法1：选择完所有图片之后，统一上传，因此选择完就直接展示
-    this.setData({
-      imageFileList: [...imageFileList, ...files], // 此时设置了 fileList 之后才会展示选择的图片
-    });
-    // 方法2：每次选择图片都上传，展示每次上传图片的进度
-    // files.forEach(file => this.uploadFile(file))
-  },
-  // 图稿删除函数
-  imageRemove(e) {
-    const {
-      index
-    } = e.detail;
-    const {
-      imageFileList
-    } = this.data;
-    imageFileList.splice(index, 1);
-    this.setData({
-      imageFileList,
-    });
-  },
+
 })

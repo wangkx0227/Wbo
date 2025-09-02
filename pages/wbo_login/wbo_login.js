@@ -264,8 +264,9 @@ Page({
         wx.setStorageSync('apiUserName', "hsj"); // 访问接口携带名字
         wx.setStorageSync('position_list', ["AIT"]); // 访问接口携带名字
       } else if (productValue === "chosen_draft") { // 第7轮与第9轮
-        wx.setStorageSync('userName', "kyle");
-        wx.setStorageSync('apiUserName', "kyle"); // 访问接口携带名字
+        wx.setStorageSync('userName', "Vivi");
+        wx.setStorageSync('apiUserName', "Vivi"); // 访问接口携带名字
+        wx.setStorageSync('position_list', ["OMR"]); // 访问接口携带名字
       } else if (productValue === "desc_upload") {
         wx.setStorageSync('userName', "kyle");
         wx.setStorageSync('apiUserName', "kyle"); // 访问接口携带名字

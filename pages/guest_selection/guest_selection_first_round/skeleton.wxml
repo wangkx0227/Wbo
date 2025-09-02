@@ -28,6 +28,7 @@
               </view>
               <view class="arrange-space-between">
                 <t-skeleton theme="text" loading animation="gradient" rowCol="{{ [{ width: '180rpx', height: '32rpx'}]}}"></t-skeleton>
+                <t-skeleton theme="text" loading animation="gradient" rowCol="{{ [{ width: '180rpx', height: '32rpx'}]}}"></t-skeleton>
               </view>
               <view class="arrange-space-between">
                 <t-skeleton theme="text" loading animation="gradient" rowCol="{{ [{ width: '135rpx', height: '32rpx'}]}}"></t-skeleton>
