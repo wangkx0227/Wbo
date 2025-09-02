@@ -144,11 +144,10 @@
             </view>
             <text class="title-font-other" style="margin-left: 20rpx;font-size:14px">{{item.comment}}</text>
           </view>
-
           <t-divider content="时间线-{{index+1}}" />
         </view>
       </scroll-view>
-      <view class="button-example" style="padding: 10rpx 0;">
+      <view  style="padding: 10rpx 0;">
         <t-button theme="light" block t-class="group-btn" bindtap="onCloseHistoryTimeLine">关闭</t-button>
       </view>
     </view>
