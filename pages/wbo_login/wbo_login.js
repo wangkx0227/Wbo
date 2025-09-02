@@ -250,9 +250,11 @@ Page({
       if (productValue === "kyle") {
         wx.setStorageSync('userName', "kyle"); // 第一轮初选与第五轮终选
         wx.setStorageSync('apiUserName', "kyle"); // 访问接口携带名字
+        wx.setStorageSync('position_list', ["AIT"]); // 访问接口携带名字
       } else if (productValue === "shelley") {
         wx.setStorageSync('userName', "shelley"); // 第三轮可行性
         wx.setStorageSync('apiUserName', "shelley"); // 访问接口携带名字
+        wx.setStorageSync('position_list', ["AIT"]); // 访问接口携带名字
       } else if (productValue === "fmr") {
         wx.setStorageSync('userName', "刘开波"); // 样品照片拍照上传 fmr 测试 （fmr系列测试）fmr可行性分析
         wx.setStorageSync('apiUserName', "lkb"); // 访问接口携带名字

@@ -98,6 +98,10 @@ Page({
           continue; // 跳过倒序的第2个及以后
         }
         const confirmed = task_list[index].timeline_list[i].confirmed; // 标记舍弃(3)还是保留(1)
+        const confirmed2 = task_list[index].timeline_list[i].confirmed2; // 标记舍弃(3)还是保留(1) shelley
+        if (confirmed2 === 3) {
+          continue
+        }
         data_dict["confirmed"] = confirmed;
         if (confirmed === 1) {
           data_dict["confirmed_text"] = "保留";

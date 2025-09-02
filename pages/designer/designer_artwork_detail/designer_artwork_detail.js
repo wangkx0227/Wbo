@@ -64,9 +64,10 @@ Page({
       if (AIT_designer1 !== userName) {
         continue;
       }
-      if (be_chosen2 !== 1) {
-        continue;
-      }
+      // 先上传工厂稿在进行第一次选中图稿
+      // if (be_chosen2 !== 1) {
+      //   continue;
+      // }
       let data_dict = {
         id: task_id,
         code: task_list[index].code,
