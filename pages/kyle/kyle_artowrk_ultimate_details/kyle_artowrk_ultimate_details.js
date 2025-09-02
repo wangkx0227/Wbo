@@ -128,10 +128,10 @@ Page({
         data_dict["picture_list"] = picture_list;
         data_dict["timeline_id"] = timeline_id;
         data_dict["timeline_type"] = timeline_type; // 图稿类型
-        // 可行性分析，shelley 选3直接跳过
-        if (confirmed2 === 3) {
-          continue
-        }
+      }
+      // 可行性分析，shelley 选3直接跳过
+      if (data_dict["confirmed2"] === 3) {
+        continue
       }
       taskTimeLineData[`${task_id}`] = timeLineData; // 时间线数据
       material_list.push(data_dict["texture"].trim());
@@ -146,7 +146,7 @@ Page({
         "dropdownMaterial.options": options.concat(material)
       })
     }
-    
+
     return { arrangeData, taskTimeLineData }; // 返回整理的结构体
   },
   // 后端请求
@@ -389,7 +389,7 @@ Page({
             "timeLine_id": timeline_id,
             "username": userName, // 参数需要修改
             "name": userName, // 参数需要修改
-            "name_str":userName, // 评论人
+            "name_str": userName, // 评论人
             "comment": dialogValue
           },
           message: "评审记录完成"

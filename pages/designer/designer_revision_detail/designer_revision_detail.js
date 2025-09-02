@@ -95,7 +95,39 @@ Page({
         AIT_manager2_text: AIT_manager2 ? "已确认" : "未确认",
         select_status: false,
       }
-      // 可行性分析，shelley 选3直接跳过，不在显示
+      let timeLineData = []; // 时间线存储数据
+      const timeline_list = task_list[index].timeline_list;
+      for (let i = 0; i < timeline_list.length; i++) {
+        const image_list = task_list[index].timeline_list[i].image_list;
+        const picture_list = image_list.length === 0 ? [] : image_list.map(img => image_url + img.imageURL);
+        const timeline_id = task_list[index].timeline_list[i].id;
+        const timeline_type = task_list[index].timeline_list[i].timeline_type;
+        if (i > 0) {
+          let timeline_type_text = ""
+          if (timeline_type === 1) {
+            timeline_type_text = "设计稿"
+          } else {
+            timeline_type_text = "生产稿"
+          }
+          timeLineData.push({
+            "id": timeline_id, // id 
+            "time": task_list[index].timeline_list[i].time, // 提交时间
+            "name": task_list[index].timeline_list[i].name, // 提交人
+            "comment": task_list[index].timeline_list[i].comment, // 评论内容
+            "picture_list": picture_list, // 图片
+            "timeline_type_text": timeline_type_text // 图稿类型
+          })
+          continue; // 跳过
+        }
+        // 可行性分析，shelley 选3直接跳过，不在显示
+        const confirmed2 = task_list[index].timeline_list[i].confirmed2; // shelley 标记
+        // shelley 标记
+        data_dict["confirmed2"] = confirmed2;
+        data_dict["picture_list"] = picture_list;
+        // 第一条时间线的id
+        data_dict["timeline_id"] = timeline_id;
+      }
+      // 过了shelley标记不具备可行性的图稿
       if (data_dict["confirmed2"] === 3) {
         continue
       }
@@ -116,38 +148,7 @@ Page({
       } else if (position_type === "AIT分配人") {
         arrangeData.push(data_dict);
       }
-      let timeLineData = []; // 时间线存储数据
-      const timeline_list = task_list[index].timeline_list;
-      for (let i = 0; i < timeline_list.length; i++) {
-        const image_list = task_list[index].timeline_list[i].image_list;
-        const picture_list = image_list.length === 0 ? [] : image_list.map(img => image_url + img.imageURL);
-        const timeline_id = task_list[index].timeline_list[i].id;
-        const timeline_type = task_list[index].timeline_list[i].timeline_type;
 
-        if (i > 0) {
-          let timeline_type_text = ""
-          if (timeline_type === 1) {
-            timeline_type_text = "设计稿"
-          } else {
-            timeline_type_text = "生产稿"
-          }
-          timeLineData.push({
-            "id": timeline_id, // id 
-            "time": task_list[index].timeline_list[i].time, // 提交时间
-            "name": task_list[index].timeline_list[i].name, // 提交人
-            "comment": task_list[index].timeline_list[i].comment, // 评论内容
-            "picture_list": picture_list, // 图片
-            "timeline_type_text": timeline_type_text // 图稿类型
-          })
-          continue; // 跳过
-        }
-        const confirmed2 = task_list[index].timeline_list[i].confirmed2; // kyle 标记
-        // shelley 标记
-        data_dict["confirmed2"] = confirmed2;
-        data_dict["picture_list"] = picture_list;
-        // 第一条时间线的id
-        data_dict["timeline_id"] = timeline_id;
-      }
       // 时间线数据
       taskTimeLineData[`${task_id}`] = timeLineData;
       // 材质

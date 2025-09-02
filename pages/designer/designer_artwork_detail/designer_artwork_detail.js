@@ -356,6 +356,19 @@ Page({
               popupFactoryArtworkVisible: false,
             });
             utils.showToast(that, "上传成功");
+            // 更新当前图稿的属性
+            utils.UpdateData({
+              page: that,
+              data: {
+                "type": "update_timeline",
+                "timeLine_id": timeline_id,
+                "username": userName,
+                "name": userName,
+                "timeline_type": 2,
+                "image_uploader": userName
+              },
+              toastShow: false,
+            })
           } else {
             utils.showToast(that, "上传失败", "error");
           }
