@@ -176,7 +176,7 @@ Page({
   },
   // 排序-1
   onYearChange(e) {
-    
+
   },
   // 排序-2
   onSorterChange(e) {
@@ -200,5 +200,44 @@ Page({
       Data: firstPage, // 显示
       currentIndex: firstPage.length,
     });
-  }
+  },
+  // 导出附件
+  exportAttachments(e) {
+    const that = this;
+    const url = app.globalData.url;
+    // const fileUrl = app.globalData.fileUrl;
+    const userName = that.data.userName;
+    const fileUrl = e.currentTarget.dataset;
+    console.log(fileUrl);
+    // const lineplan_id = e.currentTarget.dataset.lineplan_id; // 注意属性名会自动转驼峰
+    // wx.request({
+    //   url: url, // 请求地址
+    //   method: 'POST',
+    //   data: {
+    //     "type": "exportPPT",
+    //     "lp_ids": [
+    //       lineplan_id,
+    //     ],
+    //     "username": userName
+    //   },
+    //   header: {
+    //     'content-type': 'application/json' // 根据后端要求设置
+    //   },
+    //   success(res) {
+    //     if (res.statusCode === 200) {
+    //       const full_url_list = res.data.full_url_list || [];
+    //       if (full_url_list.length === 0) {
+    //         utils.showToast(that, "无附件", "error");
+    //       } else {
+    //         utils.showToast(that, "请查看微信通知");
+    //       }
+    //     } else {
+    //       utils.showToast(that, "导出失败", "error");
+    //     }
+    //   },
+    //   fail(err) {
+    //     utils.showToast(that, "网络错误", "error");
+    //   }
+    // });
+  },
 })

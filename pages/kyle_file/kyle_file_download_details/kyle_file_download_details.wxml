@@ -32,7 +32,7 @@
                 </view>
               </view>
               <view class="arrange-center-flex-end">
-                <t-link size="small" content="导出" hover underline variant="outline" prefixIcon="link" theme="primary" />
+                <t-link size="small" content="导出" hover underline variant="outline" prefixIcon="link" theme="primary" data-file-url="{{file_item.file_url}}" bindtap="exportAttachments"/>
               </view>
             </view>
 
