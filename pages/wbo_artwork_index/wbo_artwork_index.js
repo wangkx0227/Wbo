@@ -61,7 +61,8 @@ Page({
       this.setData({
         tabBarShow: true, userTabs: [
           { value: 'primary', label: '初步评审' },
-          { value: 'ultimate', label: '最终审查' }
+          { value: 'ultimate', label: '最终审查' },
+          { value: 'file', label: '文档下载' },
         ]
       });
     } else if (userRole === "fmr") {
@@ -262,9 +263,12 @@ Page({
         wx.navigateTo({
           url: `/pages/kyle/kyle_artowrk_primary_details/kyle_artowrk_primary_details?lineplan_id=${lineplan_id}`
         });
+      } else if (tabBarValue === "file") {
+        wx.navigateTo({
+          url: `/pages/kyle/kyle_file_download_details/kyle_file_download_details?lineplan_id=${lineplan_id}`
+        });
       } else {
         // 多携带一个参数tabBarValue，表明当前切换的时用户负责的阶段
-
         wx.navigateTo({
           url: `/pages/kyle/kyle_artowrk_ultimate_details/kyle_artowrk_ultimate_details?lineplan_id=${lineplan_id}&tabBarValue=${tabBarValue}`
         });

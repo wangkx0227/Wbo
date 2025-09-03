@@ -15,7 +15,8 @@
     "pages/designer/designer_revision_detail/designer_revision_detail",
     "pages/guest_selection/guest_selection_first_round/guest_selection_first_round",
     "pages/guest_selection/guest_selection_final_round/guest_selection_final_round",
-    "pages/factory_login_page/index/index"
+    "pages/factory_login_page/index/index",
+    "pages/kyle/kyle_file_download_details/kyle_file_download_details"
   ],
   "window": {
     "navigationBarTextStyle": "black",
