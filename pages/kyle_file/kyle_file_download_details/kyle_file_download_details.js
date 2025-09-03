@@ -174,10 +174,31 @@ Page({
       scrollTop: e.scrollTop
     });
   },
-  // 排序
-  onYearChange() {
+  // 排序-1
+  onYearChange(e) {
+    
   },
-  onStatusChange() {
-
+  // 排序-2
+  onSorterChange(e) {
+    const that = this;
+    const filterTemplate = that.data.filterTemplate;
+    let sorted = [...that.data.filteredData]; // 拷贝一份，避免直接改动原数组
+    // const filtered = sorted.filter(item => {
+    //   const matchName = (filterTemplate === 'all') ? true : item.line_plan_client === filterTemplate;
+    //   return matchName;
+    // });
+    // sorted = filtered.reverse(); // 生成一个新的
+    that.setData({
+      Data: [],
+      currentIndex: 0,
+      filterSorter: true,
+      filteredData: sorted.reverse(), // 存储筛选记录数据
+      'dropdownSorter.value': e.detail.value,
+    });
+    const firstPage = utils.readPageStructure(that);
+    that.setData({
+      Data: firstPage, // 显示
+      currentIndex: firstPage.length,
+    });
   }
 })

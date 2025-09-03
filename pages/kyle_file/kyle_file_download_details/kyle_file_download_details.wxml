@@ -7,7 +7,7 @@
       <t-col span="24">
         <t-dropdown-menu>
           <t-dropdown-item options="{{dropdownYear.options}}" placement="right" value="{{dropdownYear.value}}" bindchange="onYearChange" />
-          <t-dropdown-item options="{{dropdownSorter.options}}" placement="right" value="{{dropdownSorter.value}}" bindchange="onStatusChange" />
+          <t-dropdown-item options="{{dropdownSorter.options}}" placement="right" value="{{dropdownSorter.value}}" bindchange="onSorterChange" />
         </t-dropdown-menu>
       </t-col>
     </t-row>
