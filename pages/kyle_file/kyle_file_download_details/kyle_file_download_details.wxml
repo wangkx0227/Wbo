@@ -18,7 +18,7 @@
         <t-collapse theme="card" expandIcon>
           <t-collapse-panel value="{{0}}">
             <view slot="header-left-icon">
-              <t-icon name="calendar-1" size="30rpx" style="margin-top: 10rpx;"/>
+              <t-icon name="calendar-1" size="30rpx" style="margin-top: 10rpx;" />
             </view>
             <view slot="header">
               <text class="title-font-main"> 2025-09-0{{item}} 文件</text>
@@ -27,9 +27,12 @@
               <t-link size="small" content="全部导出" hover underline variant="outline" prefixIcon="link" theme="primary" />
             </view>
             <view class="arrange-column">
-              <view class="title-font-other arrange-center" style="gap: 10rpx;">
-                <t-icon name="file-1" size="30rpx"/>
-                <text>pom工厂与POM绑定关系表 ——周顺战.xlsx</text>
+              <view class="title-font-other arrange-column">
+                <view class="arrange-center" style="gap: 10rpx;">
+                  <t-icon name="file-1" size="30rpx" />
+                  <text>pom工厂与POM绑定关系表 ——周顺战.xlsx</text>
+                </view>
+                <text>LP：123131313132</text>
               </view>
               <view class="arrange-center-flex-end">
                 <t-link size="small" content="导出" hover underline variant="outline" prefixIcon="link" theme="primary" />
@@ -38,7 +41,7 @@
             <t-divider />
             <view class="arrange-column">
               <view class="title-font-other arrange-center" style="gap: 10rpx;">
-                <t-icon name="file-1" size="30rpx"/>
+                <t-icon name="file-1" size="30rpx" />
                 <text>20231030 POM需要改善的问题.doc</text>
               </view>
               <view class="arrange-center-flex-end">
@@ -48,7 +51,7 @@
             <t-divider />
             <view class="arrange-column">
               <view class="title-font-other arrange-center" style="gap: 10rpx;">
-                <t-icon name="file-1" size="30rpx"/>
+                <t-icon name="file-1" size="30rpx" />
                 <text>NNE-10.22-miro问题整理.pptx</text>
               </view>
               <view class="arrange-center-flex-end">
@@ -58,7 +61,7 @@
             <t-divider />
             <view class="arrange-column">
               <view class="title-font-other arrange-center" style="gap: 10rpx;">
-                <t-icon name="file-1" size="30rpx"/>
+                <t-icon name="file-1" size="30rpx" />
                 <text>Hold 3% 扣款通知单-高圣.xlsx</text>
               </view>
               <view class="arrange-center-flex-end">

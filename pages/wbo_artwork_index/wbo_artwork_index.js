@@ -263,10 +263,6 @@ Page({
         wx.navigateTo({
           url: `/pages/kyle/kyle_artowrk_primary_details/kyle_artowrk_primary_details?lineplan_id=${lineplan_id}`
         });
-      } else if (tabBarValue === "file") {
-        wx.navigateTo({
-          url: `/pages/kyle/kyle_file_download_details/kyle_file_download_details?lineplan_id=${lineplan_id}`
-        });
       } else {
         // 多携带一个参数tabBarValue，表明当前切换的时用户负责的阶段
         wx.navigateTo({
@@ -363,13 +359,18 @@ Page({
       'dropdownSorter.value': 'default',
     })
     // 如果fmr点击的时样品上传，进行跳转
-    if (current.value === "ultimate" && (userRole === "fmr" || userRole === "designer")) {
-      // wx.navigateTo({
-      //   url: `/pages/factory_login_page/wbo-list/wbo-list` // 样品图上传，使用原来项目
-      // });
-      wx.navigateTo({
-        url: `/pages/factory_login_page/index/index` // 样品图上传，使用原来项目
-      });
+    if ((current.value === "ultimate" && (userRole === "fmr" || userRole === "designer")) || (current.value === "file" && userRole === "kyle")) {
+      if (current.value === "ultimate") {
+        wx.navigateTo({
+          url: `/pages/factory_login_page/index/index` // 样品图上传，使用原来项目
+        });
+      }
+      if (current.value === "file") {
+        wx.navigateTo({
+          url: `/pages/kyle_file/index/index` // 文件列表按照开发案进行区分
+        });
+      }
+
     } else {
       that.setData({ // 设置切换值
         tabBarValue: e.detail.value,
