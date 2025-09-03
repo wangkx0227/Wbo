@@ -24,23 +24,11 @@
               <text class="title-font-main"> {{item.date}} 文件</text>
             </view>
             <view class="arrange-column" wx:for="{{item.data_list}}" wx:key="file_index" wx:for-item="file_item">
-              <view class="title-font-other arrange-column">
-                <text class="title-font-other" style="font-weight: 600;">LPName：{{file_item.lp_name}}</text>
-                <view class="arrange-center" style="gap: 10rpx;">
-                  <t-icon name="file-1" size="30rpx" />
-                  <text>{{file_item.filename}}</text>
-                </view>
-              </view>
-              <view class="arrange-center-flex-end">
-                <t-link size="small" content="导出" hover underline variant="outline" prefixIcon="link" theme="primary" data-file-url="{{file_item.file_url}}" bindtap="exportAttachments"/>
+              <view style="width: 100%; white-space: normal; word-break: break-all;font-size: 12px;">开发案-{{file_item.lp_name}}</view>
+              <view style="margin-left: 10rpx;">
+                <t-link size="small" content="|__{{file_item.filename}}" hover variant="outline" theme="primary" data-file-url="{{file_item.file_url}}" bindtap="exportAttachments" style="width: 100%; white-space: normal; word-break: break-all;"/>
               </view>
             </view>
-
-
-
-
-
-
           </t-collapse-panel>
         </t-collapse>
       </view>
