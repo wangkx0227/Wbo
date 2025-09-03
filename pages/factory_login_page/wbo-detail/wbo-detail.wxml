@@ -30,10 +30,8 @@
   </view>
   <view class="status-section">
     <button class="status-btn {{proofing?'active':''}}" bindtap="UpdateStatus">开始打样</button>
-    <view class=" blank_{{blank}} status-item" 
-    style="width: 184px;margin: 0 auto;text-align: center;border-radius: 6px;padding: 8px 0px;">胚体</view>
-    <view class=" drawings_{{drawings}} status-item" 
-    style="width: 184px;margin: 0 auto;text-align: center;border-radius: 6px;padding: 8px 0px;">完成样</view>
+    <view class=" blank_{{blank}} status-item" style="width: 184px;margin: 0 auto;text-align: center;border-radius: 6px;padding: 8px 0px;">胚体</view>
+    <view class=" drawings_{{drawings}} status-item" style="width: 184px;margin: 0 auto;text-align: center;border-radius: 6px;padding: 8px 0px;">完成样</view>
   </view>
   <view class="photo-buttons">
     <button class="photo-btn" bindtap="onChooseImage" data-type="blank_images" data-tp="0">胚体拍照</button>
@@ -68,7 +66,8 @@
           <text style="font-size: 14px;font-weight: bolder;">设计师：</text>
           <view class="arrange-center" style="gap: 10rpx;">
             <view class="status-tag {{item.state2 === 1 ? 'accept active' : 'unselected'}}" data-index="{{index}}" data-type="blank_images" data-id="{{item.id}}" data-state="1" bindtap="onDesignerStatusTap">接受</view>
-            <view class="status-tag {{item.state2 === 2 ? 'reject active' : 'unselected'}}" data-index="{{index}}" data-type="blank_images" data-id="{{item.id}}" data-state="2" bindtap="onDesignerStatusTap">拒绝</view>
+            <!--  bindtap="onDesignerStatusTap"  -->
+            <view class="status-tag {{item.state2 === 2 ? 'reject active' : 'unselected'}}" data-index="{{index}}" data-type="blank_images" data-id="{{item.id}}" data-state="2" bindtap="onOpenDialog">拒绝</view>
             <view wx:if="{{item.state2!==0}}" class="status-date-inline">
               ({{item.state2_updated_by}}--{{item.state2_update_time}})
             </view>
@@ -106,7 +105,8 @@
           <text style="font-size: 14px;font-weight: bolder;">设计师：</text>
           <view class="arrange-center" style="gap: 10rpx;">
             <view class="status-tag {{item.state2 === 1 ? 'accept active' : 'unselected'}}" data-index="{{index}}" data-type="drawings_images" data-id="{{item.id}}" bindtap="onDesignerStatusTap" data-state="1">接受</view>
-            <view class="status-tag {{item.state2 === 2 ? 'reject active' : 'unselected'}}" data-index="{{index}}" data-type="drawings_images" data-id="{{item.id}}" bindtap="onDesignerStatusTap" data-state="2">拒绝</view>
+            <!--  bindtap="onDesignerStatusTap"  -->
+            <view class="status-tag {{item.state2 === 2 ? 'reject active' : 'unselected'}}" data-index="{{index}}" data-type="drawings_images" data-id="{{item.id}}" bindtap="onOpenDialog" data-state="2">拒绝</view>
             <view wx:if="{{item.state2!==0}}" class="status-date-inline">
               <view style="font-size: 12px;">({{item.state2_updated_by}}--{{item.state2_update_time}})</view>
             </view>
@@ -118,3 +118,11 @@
 </view>
 <!-- 提示 -->
 <t-toast id="t-toast" />
+<!-- 评论弹窗 -->
+<t-dialog visible="{{dialogVisible}}" title="拒绝原因：" confirm-btn="确定" cancel-btn="取消" bind:confirm="onCloseDialog" bind:cancel="onCloseDialog">
+  <view slot="content">
+    <view class="dialog-textarea">
+      <t-textarea value="{{ dialogValue }}" placeholder="请输入拒绝原因" bordered maxlength="200" disableDefaultPadding="true" indicator bind:change="onDialogInput" />
+    </view>
+  </view>
+</t-dialog>

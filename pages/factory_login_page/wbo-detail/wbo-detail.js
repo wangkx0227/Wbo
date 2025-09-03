@@ -18,7 +18,12 @@ Page({
     material: '暂无',
     fmr: '暂无',
     userRole: null,
-    montageUrl: montageUrl // 拼接路径
+    montageUrl: montageUrl, // 拼接路径
+    dialogValue: "",
+    dialogVisible: false,
+    refuse_type: null,
+    refuse_id: null,
+    refuse_state: null,
   },
   // 初始化
   onLoad(options) {
@@ -292,6 +297,62 @@ Page({
       }
     })
   },
+  // 拒绝带评论的原因 
+  onDesignerStatusRefuse() {
+    const that = this;
+    const { refuse_type, refuse_id, refuse_state, dialogValue, userName } = that.data;
+    const data = {
+      "type": "updateProofingTimeline",
+      "tl_id": refuse_id,
+      "state2": refuse_state,
+      "state2_updated_by": userName,
+      "username": userName,
+      "note": dialogValue,
+    }
+    wx.request({
+      url: url,
+      method: "POST",
+      data: data,
+      success(res) {
+        if (res.data.code === 200) {
+          const tasks = that.sortByCreateTimeDesc(res.data.task_data[refuse_type])
+          that.setData({ [`${refuse_type}`]: tasks })
+        }
+      }
+    })
+  },
+  // 设计师拒绝弹窗
+  onOpenDialog(e) {
+    const { type, id, state } = e.currentTarget.dataset;
+    this.setData({ dialogVisible: true, refuse_type: type, refuse_id: id, refuse_state: state });
+  },
+  // 弹窗-评论-双向绑定
+  onDialogInput(e) {
+    this.setData({
+      dialogValue: e.detail.value
+    });
+  },
+  // 弹窗-评论-关闭（包含提交功能）
+  onCloseDialog(e) {
+    const that = this;
+    const { dialogValue } = that.data; // 输入的评论的数据
+    const action = e.type; // "confirm" 或 "cancel"
+    if (action === 'confirm') {
+      if (!dialogValue) {
+        utils.showToast(that, "无提交建议", "warning");
+        return;
+      }
+      that.onDesignerStatusRefuse();
+    } else if (action === 'cancel') {
+      utils.showToast(that, "评审提交取消", "warning");
+    }
+    this.setData({ dialogVisible: false, refuse_type: null, refuse_id: null, refuse_state: null, });
+    setTimeout(() => {
+      this.setData({
+        dialogValue: "",
+      })
+    }, 500)
+  },
   // 设计师标记
   onDesignerStatusTap(e) {
     const that = this
@@ -305,6 +366,14 @@ Page({
     if (!userName) {
       return
     }
+    const data = {
+      "type": "updateProofingTimeline",
+      "tl_id": id,
+      "state2": state,
+      "state2_updated_by": userName,
+      "username": userName,
+      "note": "",
+    }
     if (userRole === "fmr") { // 可能需要修改-新增
       wx.showToast({ title: '只能设计师点击', icon: 'error' });
       return
@@ -312,13 +381,7 @@ Page({
     wx.request({
       url: url,
       method: "POST",
-      data: {
-        "type": "updateProofingTimeline",
-        "tl_id": id,
-        "state2": state,
-        "state2_updated_by": userName,
-        "username": userName
-      },
+      data: data,
       success(res) {
         if (res.data.code === 200) {
           const tasks = that.sortByCreateTimeDesc(res.data.task_data[type])
