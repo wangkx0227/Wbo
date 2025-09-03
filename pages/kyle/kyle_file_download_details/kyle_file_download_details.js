@@ -6,7 +6,7 @@ Page({
    */
   data: {
     lineplan_id: null, // id 值
-    Data: [], // 存储数据
+    Data: [1,2,3,4], // 存储数据
     allData: [], // 全部的值
     filteredData: [], // 筛选后的数据
     tabBar: null, // 记录切换值
@@ -90,7 +90,7 @@ Page({
       })
     }
   },
-  
+
   //  实时监听滚动距离，把这个值传给回到顶部的按钮，让它知道是否应该出现
   onPageScroll(e) {
     this.setData({

@@ -15,68 +15,68 @@
   <view class="page-main">
     <view class="wrapper">
       <view class="cell" wx:for="{{Data}}" wx:key="index" wx:for-index="outerIndex">
-        <view class="arrange-space-between title-font-main">
-          <text>Title：{{ item.title }}</text>
-        </view>
-        <view class="title-font-other arrange-space-between">
-          <text style="border-bottom: 1px solid currentColor;">材质：{{ item.texture }}</text>
-          <text style="color: {{ item.confirmed == 4 ? 'red' : 'black' }};;">终选状态：{{ item.confirmed_text }}</text>
-        </view>
-        <view class="title-font-other arrange-space-between">
-          <text>Name：{{ item.name }}</text>
-          <text>Code：{{ item.code }}</text>
-        </view>
-        <view class="cell-swiper">
-          <!-- <t-swiper wx:if="{{item.picture_list.length}}" autoplay="{{false}}" duration="{{500}}" navigation="{{ { type: 'dots' } }}" list="{{item.picture_list}}" bind:click="onSwiperImagesTap" data-images="{{item.picture_list}}">
-          </t-swiper> -->
-          <swiper wx:if="{{item.picture_list.length}}" autoplay="{{false}}" interval="3000" duration="500" circular="{{false}}" indicator-dots="{{true}}" indicator-color="#ccc" indicator-active-color="#fff" style="width: 690rpx;height:384rpx ;">
-            <block wx:for="{{item.picture_list}}" wx:key="index">
-              <view>{{item.url}}</view>
-              <swiper-item>
-                <image src="{{item}}" mode="widthFix" style="width:55%;display: block; margin: 0 auto; " data-outer-index="{{outerIndex}}" data-index="{{index}}" bindtap="onSwiperImagesTap" />
-              </swiper-item>
-            </block>
-          </swiper>
-          <!-- 9宫格遮罩层 -->
-          <view class="grid-overlay" wx:if="{{item.picture_list.length}}">
-            <view class="grid-cell" wx:for="{{9}}" wx:key="index"></view>
-          </view>
-          <!-- 无数据时显示占位内容 -->
-          <t-image wx:else src="" shape="round" error="slot" width="690rpx" height="384rpx">
-            <text class="error-text" slot="error">图片加载失败</text>
-          </t-image>
-        </view>
-        <!-- shelley审核与FMR审核 -->
-        <view class="arrange-center">
-          <view class="arrange-center title-font-other">
-            <text class="title-font-main">Shelley可行性：</text>
-            <text>{{ item.confirmed2_text }}</text>
-          </view>
-          <t-divider layout="vertical" />
-          <view class="arrange-center title-font-other">
-            <text class="title-font-main">FMR可行性：</text>
-            <text>{{ item.fmr2_text }}</text>
-          </view>
-        </view>
-        <!-- 最终评论 -->
-        <view class="arrange-center">
-          <view class="arrange-center title-font-other">
-            <text class="title-font-main">终审评论：</text>
-            <t-link size="small" content="点击评论" hover underline suffixIcon="chat-message" variant="outline" bind:tap="onOpenDialog" data-timeline-id="{{ item.timeline_id }}" data-task-id="{{ item.id }}" data-confirmed="{{ item.confirmed }}" />
-          </view>
-          <t-divider layout="vertical" />
-          <view class="arrange-center title-font-other">
-            <text class="title-font-main">时间线：</text>
-            <t-link size="small" content="查看历史时间线" hover underline variant="outline" bind:tap="onOpenHistoryTimeLine" data-task-id="{{ item.id }}" />
-          </view>
-        </view>
-        <!-- 终审 -->
-        <view class="arrange-center title-font-other">
-          <text class="title-font-main">操作：</text>
-          <t-link size="small" content="舍弃" data-content-status="N" hover underline theme="danger" bindtap="onModifyArtworkStatus" data-timelineid="{{ item.timeline_id }}" />
-          <t-divider layout="vertical" />
-          <t-link size="small" content="保留" data-content-status="Y" hover underline bindtap="onModifyArtworkStatus" data-timelineid="{{ item.timeline_id }}" />
-        </view>
+        <t-collapse theme="card" expandIcon>
+          <t-collapse-panel value="{{0}}">
+            <view slot="header-left-icon">
+              <t-icon name="calendar-1" size="30rpx" style="margin-top: 10rpx;"/>
+            </view>
+            <view slot="header">
+              <text class="title-font-main"> 2025-09-0{{item}} 文件</text>
+            </view>
+            <view slot="header-right-content">
+              <t-link size="small" content="全部导出" hover underline variant="outline" prefixIcon="link" theme="primary" />
+            </view>
+            <view class="arrange-column">
+              <view class="title-font-other arrange-center" style="gap: 10rpx;">
+                <t-icon name="file-1" size="30rpx"/>
+                <text>pom工厂与POM绑定关系表 ——周顺战.xlsx</text>
+              </view>
+              <view class="arrange-center-flex-end">
+                <t-link size="small" content="导出" hover underline variant="outline" prefixIcon="link" theme="primary" />
+              </view>
+            </view>
+            <t-divider />
+            <view class="arrange-column">
+              <view class="title-font-other arrange-center" style="gap: 10rpx;">
+                <t-icon name="file-1" size="30rpx"/>
+                <text>20231030 POM需要改善的问题.doc</text>
+              </view>
+              <view class="arrange-center-flex-end">
+                <t-link size="small" content="导出" hover underline variant="outline" prefixIcon="link" theme="primary" />
+              </view>
+            </view>
+            <t-divider />
+            <view class="arrange-column">
+              <view class="title-font-other arrange-center" style="gap: 10rpx;">
+                <t-icon name="file-1" size="30rpx"/>
+                <text>NNE-10.22-miro问题整理.pptx</text>
+              </view>
+              <view class="arrange-center-flex-end">
+                <t-link size="small" content="导出" hover underline variant="outline" prefixIcon="link" theme="primary" />
+              </view>
+            </view>
+            <t-divider />
+            <view class="arrange-column">
+              <view class="title-font-other arrange-center" style="gap: 10rpx;">
+                <t-icon name="file-1" size="30rpx"/>
+                <text>Hold 3% 扣款通知单-高圣.xlsx</text>
+              </view>
+              <view class="arrange-center-flex-end">
+                <t-link size="small" content="导出" hover underline variant="outline" prefixIcon="link" theme="primary" />
+              </view>
+            </view>
+            <t-divider />
+            <view class="arrange-column">
+              <view class="title-font-other arrange-center" style="gap: 10rpx;">
+                <t-icon name="file-1" size="30rpx" />
+                <text>WBO总流程手册.pdf</text>
+              </view>
+              <view class="arrange-center-flex-end">
+                <t-link size="small" content="导出" hover underline variant="outline" prefixIcon="link" theme="primary" />
+              </view>
+            </view>
+          </t-collapse-panel>
+        </t-collapse>
       </view>
     </view>
   </view>
