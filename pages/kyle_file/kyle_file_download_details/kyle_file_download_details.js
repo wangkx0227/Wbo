@@ -205,10 +205,8 @@ Page({
   exportAttachments(e) {
     const that = this;
     const url = app.globalData.url;
-    // const fileUrl = app.globalData.fileUrl;
     const userName = that.data.userName;
-    const fileUrl = e.currentTarget.dataset;
-    console.log(fileUrl);
+    const fileUrl = e.currentTarget.dataset.fileUrl;
     // const lineplan_id = e.currentTarget.dataset.lineplan_id; // 注意属性名会自动转驼峰
     // wx.request({
     //   url: url, // 请求地址
