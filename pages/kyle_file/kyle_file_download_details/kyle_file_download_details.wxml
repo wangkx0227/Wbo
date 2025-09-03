@@ -21,63 +21,26 @@
               <t-icon name="calendar-1" size="30rpx" style="margin-top: 10rpx;" />
             </view>
             <view slot="header">
-              <text class="title-font-main"> 2025-09-0{{item}} 文件</text>
+              <text class="title-font-main"> {{item.date}} 文件</text>
             </view>
-            <view slot="header-right-content">
-              <t-link size="small" content="全部导出" hover underline variant="outline" prefixIcon="link" theme="primary" />
-            </view>
-            <view class="arrange-column">
+            <view class="arrange-column" wx:for="{{item.data_list}}" wx:key="file_index" wx:for-item="file_item">
               <view class="title-font-other arrange-column">
+                <text class="title-font-other" style="font-weight: 600;">LPName：{{file_item.lp_name}}</text>
                 <view class="arrange-center" style="gap: 10rpx;">
                   <t-icon name="file-1" size="30rpx" />
-                  <text>pom工厂与POM绑定关系表 ——周顺战.xlsx</text>
+                  <text>{{file_item.filename}}</text>
                 </view>
-                <text>LP：123131313132</text>
               </view>
               <view class="arrange-center-flex-end">
                 <t-link size="small" content="导出" hover underline variant="outline" prefixIcon="link" theme="primary" />
               </view>
             </view>
-            <t-divider />
-            <view class="arrange-column">
-              <view class="title-font-other arrange-center" style="gap: 10rpx;">
-                <t-icon name="file-1" size="30rpx" />
-                <text>20231030 POM需要改善的问题.doc</text>
-              </view>
-              <view class="arrange-center-flex-end">
-                <t-link size="small" content="导出" hover underline variant="outline" prefixIcon="link" theme="primary" />
-              </view>
-            </view>
-            <t-divider />
-            <view class="arrange-column">
-              <view class="title-font-other arrange-center" style="gap: 10rpx;">
-                <t-icon name="file-1" size="30rpx" />
-                <text>NNE-10.22-miro问题整理.pptx</text>
-              </view>
-              <view class="arrange-center-flex-end">
-                <t-link size="small" content="导出" hover underline variant="outline" prefixIcon="link" theme="primary" />
-              </view>
-            </view>
-            <t-divider />
-            <view class="arrange-column">
-              <view class="title-font-other arrange-center" style="gap: 10rpx;">
-                <t-icon name="file-1" size="30rpx" />
-                <text>Hold 3% 扣款通知单-高圣.xlsx</text>
-              </view>
-              <view class="arrange-center-flex-end">
-                <t-link size="small" content="导出" hover underline variant="outline" prefixIcon="link" theme="primary" />
-              </view>
-            </view>
-            <t-divider />
-            <view class="arrange-column">
-              <view class="title-font-other arrange-center" style="gap: 10rpx;">
-                <t-icon name="file-1" size="30rpx" />
-                <text>WBO总流程手册.pdf</text>
-              </view>
-              <view class="arrange-center-flex-end">
-                <t-link size="small" content="导出" hover underline variant="outline" prefixIcon="link" theme="primary" />
-              </view>
-            </view>
+
+
+
+
+
+
           </t-collapse-panel>
         </t-collapse>
       </view>

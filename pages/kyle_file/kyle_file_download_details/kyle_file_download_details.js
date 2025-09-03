@@ -1,16 +1,14 @@
-// pages/kyle/kyle_file_download_details/kyle_file_download_details.js
+const app = getApp();
+const utils = require('../../../utils/util')
+const montageUrl = app.globalData.montageUrl;
 Page({
-
-  /**
-   * 页面的初始数据
-   */
   data: {
     lineplan_id: null, // id 值
-    Data: [1,2,3,4], // 存储数据
+    Data: [], // 存储数据
     allData: [], // 全部的值
     filteredData: [], // 筛选后的数据
     tabBar: null, // 记录切换值
-    pageSize: 6, // 每次加载几条数据
+    pageSize: 10, // 每次加载几条数据
     currentIndex: 0, // 当前加载到第几个ID
     skeletonLoading: false,
     noMoreData: false, // 数据是否全部加载完毕
@@ -46,10 +44,90 @@ Page({
     filterSorter: false, // 排序筛选条件
   },
 
-  /**
-   * 生命周期函数--监听页面加载
-   */
+  // 数据处理
+  dataStructure(dataList) {
+    let arrangeData = []; // 显示数据
+    let sort_data = {};
+    for (let i = 0; i < dataList.length; i++) {
+      const data = dataList[i];
+      const lp_name = dataList[i].filename.split(".")[0];
+      dataList[i]["lp_name"] = lp_name;
+      const uploaded_at = dataList[i].uploaded_at.split(" ")[0];
+      const time = sort_data[uploaded_at];
+      if (!time) {
+        sort_data[uploaded_at] = [data,];
+      } else {
+        sort_data[uploaded_at].push(data)
+      }
+    }
+    // 数据处理
+    for (const date in sort_data) {
+      const array = sort_data[date];
+      arrangeData.push({
+        "date": date,
+        "data_list": array
+      });
+    }
+    return arrangeData
+  },
+  // 后端请求
+  dataRequest(mode) {
+    const that = this;
+    const development_id = that.data.development_id;
+    const requestData = {
+      "path": "导出的PPT",
+      "project_id": development_id,
+    }
+    wx.request({
+      url: montageUrl + '/wbo/factory_information_app/files/',
+      method: "GET",
+      data: requestData,
+      success: (res) => {
+        if (res.statusCode === 200) {
+          const data = res.data || [];
+          const arrangeData = that.dataStructure(data);
+          that.setData({
+            allData: arrangeData,
+            filteredData: arrangeData,
+          });
+          const pageData = utils.readPageStructure(that); // 分页数据
+          let totalRequests = that.data.pageSize;
+          if (pageData.length !== totalRequests) {
+            totalRequests = pageData.length;
+          };
+          // 针对刷线和第一次加载使用
+          if (mode === 'refresh') {
+            that.setData({
+              Data: pageData,
+            })
+          } else {
+            that.setData({
+              Data: that.data.Data.concat(pageData),
+            })
+          }
+          that.setData({
+            currentIndex: that.data.currentIndex + pageData.length // 记录下标索引
+          });
+        } else {
+          utils.showToast(that, '数据请求失败', "error");
+        }
+      },
+      fail(err) {
+        utils.showToast(that, '网络连接失败', "error");
+      }
+    })
+  },
+  // 请求数据
   onLoad(options) {
+    const userName = wx.getStorageSync('userName')
+    const userRole = wx.getStorageSync('userRole')
+    const development_id = options.development_id; // 开发案id
+    this.setData({
+      userName: userName,
+      userRole: userRole,
+      development_id: development_id,
+    })
+    this.dataRequest('init');
   },
   // 回到顶部
   onToTop(e) {
@@ -90,17 +168,14 @@ Page({
       })
     }
   },
-
   //  实时监听滚动距离，把这个值传给回到顶部的按钮，让它知道是否应该出现
   onPageScroll(e) {
     this.setData({
       scrollTop: e.scrollTop
     });
   },
-
   // 排序
   onYearChange() {
-
   },
   onStatusChange() {
 
