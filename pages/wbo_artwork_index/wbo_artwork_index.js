@@ -367,7 +367,8 @@ Page({
       }
       if (current.value === "file") {
         wx.navigateTo({
-          url: `/pages/kyle_file/index/index` // 文件列表按照开发案进行区分
+          // url: `/pages/kyle_file/index/index` // 文件列表按照开发案进行区分
+          url:"/pages/kyle_file/kyle_file_download_details/kyle_file_download_details"
         });
       }
 

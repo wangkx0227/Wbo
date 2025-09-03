@@ -73,7 +73,7 @@ Page({
   // 后端请求
   dataRequest(mode) {
     const that = this;
-    const development_id = that.data.development_id;
+    const development_id = 20116;
     const requestData = {
       "path": "导出的PPT",
       "project_id": development_id,
@@ -114,11 +114,18 @@ Page({
       },
       fail(err) {
         utils.showToast(that, '网络连接失败', "error");
+      },
+      complete: () => {
+        wx.hideLoading();
+        that.setData({
+          skeletonLoading: false,
+        })
       }
     })
   },
   // 请求数据
   onLoad(options) {
+    wx.showLoading({ title: '加载中...' });
     const userName = wx.getStorageSync('userName')
     const userRole = wx.getStorageSync('userRole')
     const development_id = options.development_id; // 开发案id
@@ -126,6 +133,7 @@ Page({
       userName: userName,
       userRole: userRole,
       development_id: development_id,
+      skeletonLoading: true,
     })
     this.dataRequest('init');
   },

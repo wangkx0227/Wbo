@@ -15,58 +15,10 @@
           </t-col>
         </t-row>
       </view>
-      <view class="page-main">
-        <view class="wrapper">
-          <view wx:for="{{ [1, 2] }}" wx:for-item="item" wx:key="index">
-            <view class="cell" style="margin-bottom: 15rpx;">
-              <view class="arrange-space-between">
-                <t-skeleton theme="text" loading animation="gradient" rowCol="{{ [{ width: '410rpx', height: '38rpx'}]}}"></t-skeleton>
-              </view>
-              <view class="arrange-space-between title-font-other">
-                <t-skeleton theme="text" loading animation="gradient" rowCol="{{ [{ width: '180rpx', height: '32rpx'}]}}"></t-skeleton>
-                <t-skeleton theme="text" loading animation="gradient" rowCol="{{ [{ width: '80px', height: '32rpx'}]}}"></t-skeleton>
-              </view>
-              <view class="arrange-space-between">
-                <t-skeleton theme="text" loading animation="gradient" rowCol="{{ [{ width: '135rpx', height: '32rpx'}]}}"></t-skeleton>
-                <t-skeleton theme="text" loading animation="gradient" rowCol="{{ [{ width: '300rpx', height: '32rpx'}]}}"></t-skeleton>
-              </view>
-              <view class="cell-swiper">
-                <t-skeleton theme="image" loading animation="gradient" rowCol="{{ [{ width: '695rpx', height: '370rpx'}]}}"></t-skeleton>
-              </view>
-              
-              <view class="arrange-center">
-                <view class="arrange-center" style="gap: 10px;">
-                  <t-skeleton theme="text" loading animation="gradient" rowCol="{{ [{ width: '80px', height: '38rpx'}]}}"></t-skeleton>
-                  <t-skeleton theme="text" loading animation="gradient" rowCol="{{ [{ width: '60px', height: '32rpx'}]}}"></t-skeleton>
-                </view>
-                <t-divider layout="vertical" />
-                <view class="arrange-center" style="gap: 10px;">
-                  <t-skeleton theme="text" loading animation="gradient" rowCol="{{ [{ width: '80px', height: '38rpx'}]}}"></t-skeleton>
-                  <t-skeleton theme="text" loading animation="gradient" rowCol="{{ [{ width: '60px', height: '32rpx'}]}}"></t-skeleton>
-                </view>
-              </view>
-              <!-- 时间线骨架 -->
-              <view class="arrange-center">
-                <view class="arrange-center" style="gap: 10px;">
-                  <t-skeleton theme="text" loading animation="gradient" rowCol="{{ [{ width: '55px', height: '38rpx'}]}}"></t-skeleton>
-                  <t-skeleton theme="text" loading animation="gradient" rowCol="{{ [{ width: '60px', height: '38rpx'}]}}"></t-skeleton>
-                </view>
-                <t-divider layout="vertical" />
-                <view class="arrange-center" style="gap: 10px;">
-                  <t-skeleton theme="text" loading animation="gradient" rowCol="{{ [{ width: '45px', height: '38rpx'}]}}"></t-skeleton>
-                  <t-skeleton theme="text" loading animation="gradient" rowCol="{{ [{ width: '80px', height: '38rpx'}]}}"></t-skeleton>
-                </view>
-              </view>
-
-              <view class="arrange-center" style="gap: 10px;">
-                <t-skeleton theme="text" loading animation="gradient" rowCol="{{ [{ width: '25px', height: '38rpx'}]}}"></t-skeleton>
-                <view class="arrange-center">
-                  <t-skeleton theme="text" loading animation="gradient" rowCol="{{ [{ width: '25px', height: '38rpx'}]}}"></t-skeleton>
-                  <t-divider layout="vertical" />
-                  <t-skeleton theme="text" loading animation="gradient" rowCol="{{ [{ width: '25px', height: '38rpx'}]}}"></t-skeleton>
-                </view>
-              </view>
-            </view>
+      <view class="page-main" style="background-color: #ffff;height: 90vh;">
+        <view class="wrapper" >
+          <view wx:for="{{ [1,2,3,4,5,6,7,8] }}" wx:for-item="item" wx:key="index">
+            <t-skeleton theme="paragraph" loading animation="gradient" rowCol="{{ [{ width: '760rpx', height: '154rpx',borderRadius: '10rpx' }]}}" style="margin-bottom: 15rpx;"></t-skeleton>
           </view>
         </view>
       </view>
