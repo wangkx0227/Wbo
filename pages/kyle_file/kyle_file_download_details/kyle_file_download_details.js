@@ -47,22 +47,23 @@ Page({
   // 数据处理
   dataStructure(dataList) {
     let arrangeData = []; // 显示数据
-    let sort_data = {};
-    for (let i = 0; i < dataList.length; i++) {
-      const data = dataList[i];
-      const lp_name = dataList[i].filename.split(".")[0];
-      dataList[i]["lp_name"] = lp_name;
-      const uploaded_at = dataList[i].uploaded_at.split(" ")[0];
-      const time = sort_data[uploaded_at];
-      if (!time) {
-        sort_data[uploaded_at] = [data,];
-      } else {
-        sort_data[uploaded_at].push(data)
-      }
-    }
+    // let sort_data = {};
+    // for (let i = 0; i < dataList.length; i++) {
+    //   const data = dataList[i];
+    //   const lp_name = dataList[i].filename.split(".")[0];
+    //   dataList[i]["lp_name"] = lp_name;
+    //   const uploaded_at = dataList[i].uploaded_at.split(" ")[0];
+    //   const time = sort_data[uploaded_at];
+    //   if (!time) {
+    //     sort_data[uploaded_at] = [data,];
+    //   } else {
+    //     sort_data[uploaded_at].push(data)
+    //   }
+    // }
     // 数据处理
-    for (const date in sort_data) {
-      const array = sort_data[date];
+    for (const date in dataList) {
+      const array = dataList[date];
+      console.log(array);
       arrangeData.push({
         "date": date,
         "data_list": array
@@ -79,7 +80,7 @@ Page({
       "project_id": development_id,
     }
     wx.request({
-      url: montageUrl + '/wbo/factory_information_app/files/',
+      url: montageUrl + '/wbo/factory_information_app/files3/',
       method: "GET",
       data: requestData,
       success: (res) => {
