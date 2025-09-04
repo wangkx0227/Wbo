@@ -25,10 +25,9 @@
             </view>
             <view class="arrange-column" wx:for="{{item.data_list}}" wx:key="key" wx:for-index="key" wx:for-item="value" >
               <t-divider/>
-              <view style="width: 100%; white-space: normal; word-break: break-all;font-size: 12px;">{{key}}</view>
+              <view class="title-font-main" style="width: 100%; white-space: normal; word-break: break-all;font-size: 12px;">{{key}}</view>
               <view style="margin-left: 10rpx;" wx:for="{{value}}" wx:key="value_index" wx:for-index="value_key" wx:for-item="value_item">
-                <view class="title-font-other" wx:if="{{value_key === 0}}" style="width: 100%; white-space: normal; word-break: break-all;font-size: 12px;">{{value_item.lp_title}}</view>
-                <t-link size="small" content="|__{{value_item.filename}}" hover variant="outline" theme="primary" data-file-url="{{value_item.file_url}}" bindtap="exportAttachments" style="width: 100%; white-space: normal; word-break: break-all;" />
+                <t-link size="small" content="● {{value_item.filename}}" hover variant="outline" theme="primary" data-file-url="{{value_item.file_url}}" bindtap="exportAttachments" style="width: 100%; white-space: normal; word-break: break-all;" />
               </view>
             </view>
           </t-collapse-panel>
