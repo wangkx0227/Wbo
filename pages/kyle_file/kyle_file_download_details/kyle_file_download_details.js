@@ -215,7 +215,6 @@ Page({
     const that = this;
     const userName = that.data.userName;
     const fileUrl = e.currentTarget.dataset.fileUrl;
-    return;
     wx.request({
       url: montageUrl + "/wbo/export-file-notification/", // 请求地址
       method: 'POST',
