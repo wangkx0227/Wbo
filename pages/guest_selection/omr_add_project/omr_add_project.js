@@ -12,6 +12,10 @@ Page({
     userName: null, // 名称
     scrollTop: 0, // 回到顶部变量
     tabBarTabLabel: null,// 阶段
+    isDownRefreshing: false, // 下拉刷新状态
+    isLoadingReachMore: false, // 滚动底部加载数据
+    noMoreData: false, // 数据是否全部加载完毕
+    skeletonLoading: true, // 骨架屏控制变量
     // 筛选框变量-1
     dropdownTemplate: {
       value: 'all',

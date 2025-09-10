@@ -26,21 +26,20 @@
         <view class="wrapper">
           <view wx:for="{{ [1, 2, 3, 4, 5] }}" wx:for-item="item" wx:key="index">
             <t-cell-group theme="card" class="t-cell-group">
-              <t-cell hover arrow>
-                <view slot="note">
-                  <t-skeleton theme="text" loading animation="gradient" rowCol="{{ [{ width: '40rpx', height: '32rpx'}]}}"></t-skeleton>
-                </view>
+              <t-cell hover>
                 <view slot="title">
                   <view style="  display: flex;flex-direction: column;">
                     <view style="height: 50rpx;">
                       <t-skeleton theme="text" loading animation="gradient" rowCol="{{ [{ width: '290rpx', height: '32rpx'}]}}"></t-skeleton>
                     </view>
                     <view style="height: 50rpx;">
-                      <t-skeleton theme="text" loading animation="gradient" rowCol="{{ [{ width: '414rpx', height: '32rpx'}]}}"></t-skeleton>
+                      <t-skeleton theme="text" loading animation="gradient" rowCol="{{ [{ width: '150rpx', height: '32rpx'}]}}"></t-skeleton>
                     </view>
-                    <view style="height: 50rpx;">
-                      <t-skeleton theme="text" loading animation="gradient" rowCol="{{ [{ width: '414rpx', height: '32rpx'}]}}"></t-skeleton>
+                    <view class="arrange-space-between" style="gap: 30rpx;height: 50rpx;">
+                      <t-skeleton theme="text" loading animation="gradient" rowCol="{{ [{ width: '270rpx', height: '32rpx'}]}}"></t-skeleton>
+                      <t-skeleton theme="text" loading animation="gradient" rowCol="{{ [{ width: '270rpx', height: '32rpx'}]}}"></t-skeleton>
                     </view>
+
                   </view>
                 </view>
               </t-cell>
