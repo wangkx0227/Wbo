@@ -84,7 +84,8 @@ Page({
       this.setData({
         tabBarShow: true, userTabs: [
           { value: 'primary', label: '第一轮选稿' },
-          { value: 'ultimate', label: '第二轮选稿' }
+          { value: 'ultimate', label: '第二轮选稿' },
+          { value: 'add_project', label: '新增开发案' }
         ]
       });
     }
@@ -359,7 +360,7 @@ Page({
       'dropdownSorter.value': 'default',
     })
     // 如果fmr点击的时样品上传，进行跳转
-    if ((current.value === "ultimate" && (userRole === "fmr" || userRole === "designer")) || (current.value === "file" && userRole === "kyle")) {
+    if ((current.value === "ultimate" && (userRole === "fmr" || userRole === "designer")) || (current.value === "file" && userRole === "kyle") || (current.value === "add_project" && userRole === "chosen_draft")) {
       if (current.value === "ultimate") {
         wx.navigateTo({
           url: `/pages/factory_login_page/index/index` // 样品图上传，使用原来项目
@@ -368,10 +369,14 @@ Page({
       if (current.value === "file") {
         wx.navigateTo({
           // url: `/pages/kyle_file/index/index` // 文件列表按照开发案进行区分
-          url:"/pages/kyle_file/kyle_file_download_details/kyle_file_download_details"
+          url: "/pages/kyle_file/kyle_file_download_details/kyle_file_download_details"
         });
       }
-
+      if (current.value === "add_project") {
+        wx.navigateTo({
+          url: "/pages/guest_selection/omr_add_project/omr_add_project"
+        });
+      }
     } else {
       that.setData({ // 设置切换值
         tabBarValue: e.detail.value,

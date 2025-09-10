@@ -1,0 +1,52 @@
+{
+  "entryPagePath": "pages/wbo_login/wbo_login",
+  "pages": [
+    "pages/wbo_login/wbo_login",
+    "pages/factory_login_page/wbo-list/wbo-list",
+    "pages/factory_login_page/wbo-detail/wbo-detail",
+    "pages/wbo_artwork_index/wbo_artwork_index",
+    "pages/fmr/fmr_artwork_detail/fmr_artwork_detail",
+    "pages/shelley/shelley_artwork_detail/shelley_artwork_detail",
+    "pages/kyle/kyle_artowrk_primary_details/kyle_artowrk_primary_details",
+    "pages/kyle/kyle_artowrk_ultimate_details/kyle_artowrk_ultimate_details",
+    "pages/todo/todo_index/todo_index",
+    "pages/todo/todo_detail/todo_detail",
+    "pages/designer/designer_artwork_detail/designer_artwork_detail",
+    "pages/designer/designer_revision_detail/designer_revision_detail",
+    "pages/guest_selection/guest_selection_first_round/guest_selection_first_round",
+    "pages/guest_selection/guest_selection_final_round/guest_selection_final_round",
+    "pages/factory_login_page/index/index",
+    "pages/kyle_file/kyle_file_download_details/kyle_file_download_details"
+  ],
+  "window": {
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "Wbo小程序",
+    "navigationBarBackgroundColor": "#ffffff",
+    "enablePullDownRefresh": true,
+    "onReachBottomDistance": 50
+  },
+  "style": "v2",
+  "componentFramework": "glass-easel",
+  "sitemapLocation": "sitemap.json",
+  "lazyCodeLoading": "requiredComponents",
+  "usingComponents": {
+    "t-row": "tdesign-miniprogram/row/row",
+    "t-col": "tdesign-miniprogram/col/col",
+    "t-icon": "tdesign-miniprogram/icon/icon",
+    "t-link": "tdesign-miniprogram/link/link",
+    "t-radio": "tdesign-miniprogram/radio/radio",
+    "t-toast": "tdesign-miniprogram/toast/toast",
+    "t-popup": "tdesign-miniprogram/popup/popup",
+    "t-button": "tdesign-miniprogram/button/button",
+    "t-dialog": "tdesign-miniprogram/dialog/dialog",
+    "t-loading": "tdesign-miniprogram/loading/loading",
+    "t-divider": "tdesign-miniprogram/divider/divider",
+    "t-back-top": "tdesign-miniprogram/back-top/back-top",
+    "t-skeleton": "tdesign-miniprogram/skeleton/skeleton",
+    "t-textarea": "tdesign-miniprogram/textarea/textarea",
+    "t-radio-group": "tdesign-miniprogram/radio-group/radio-group",
+    "t-image-viewer": "tdesign-miniprogram/image-viewer/image-viewer",
+    "t-dropdown-item": "tdesign-miniprogram/dropdown-item/dropdown-item",
+    "t-dropdown-menu": "tdesign-miniprogram/dropdown-menu/dropdown-menu"
+  }
+}

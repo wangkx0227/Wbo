@@ -1,0 +1,113 @@
+<!-- 骨架 -->
+<import src="skeleton.wxml" />
+<template is="skeleton" wx:if="{{skeletonLoading}}" />
+<view wx:else="{{skeletonLoading}}" class="page-wrapper">
+  <view class="page-head filter-bar">
+    <t-row>
+      <t-col span="24">
+        <view class="example-search">
+          <t-search placeholder="搜索" shape="round" model:value="{{searchValue}}" bind:submit="onSearchConfirm" confirm-type="search" />
+        </view>
+      </t-col>
+      <t-col span="24">
+        <t-dropdown-menu>
+          <t-dropdown-item options="{{dropdownTemplate.options}}" placement="right" value="{{dropdownTemplate.value}}" bindchange="onTemplateChange" />
+          <t-dropdown-item options="{{dropdownSorter.options}}" placement="right" value="{{dropdownSorter.value}}" bindchange="onSorterChange" />
+        </t-dropdown-menu>
+      </t-col>
+    </t-row>
+  </view>
+  <view class="page-main">
+    <view class="wrapper">
+      <view wx:for="{{Data}}" wx:key="index">
+        <t-cell-group theme="card" class="t-cell-group {{ item.select_status ? 'select-border' : ''}}" bindtap="handleClick" data-lineplan_id="{{ item.line_plan_id }}" data-development_id="{{item.development_id}}">
+          <t-cell hover>
+            <t-badge count="{{item.is_new_development_text}}" slot="note" shape="square" color="{{item.line_plan_is_new_development ?'#1989fa':'red'}}" />
+            <t-tag variant="outline" slot="note" shape="mark" size="medium" wx:if="{{tabBarShow || batchSelectValue}}" style="position: absolute;right: 25rpx;top: 35rpx;" theme="{{tabBarValue === 'primary' ? 'primary' : 'success'}}"> 阶段：{{ tabBarTabLabel }} </t-tag>
+            <t-tag variant="outline" slot="note" shape="mark" size="medium" wx:if="{{userRole==='shelley'}}" style="position: absolute;right: 25rpx;top: 35rpx;" theme="primary"> 阶段：可行性分析 </t-tag>
+            <view slot="title" style="display: grid;gap: 15rpx;">
+              <view class="arrange-center">
+                <text class="title-font-main">LP名称：</text>
+                <text class="title-font-other name-cell">{{ item.lp_title }}</text>
+              </view>
+              <view class="arrange-center">
+                <text class="title-font-main">开发案：</text>
+                <text class="title-font-other name-cell">{{ item.development_name }}</text>
+              </view>
+              <view class="arrange-space-between" style="gap: 155rpx;">
+                <view class="arrange-center">
+                  <text class="title-font-main">风格：</text>
+                  <text class="title-font-other">{{ item.line_plan_season }}</text>
+                </view>
+                <view class="arrange-center">
+                  <text class="title-font-main">客人：</text>
+                  <text class="title-font-other">{{ item.line_plan_client }}</text>
+                </view>
+              </view>
+              <view class="arrange-space-between" style="gap: 155rpx;">
+                <view class="arrange-center">
+                  <text class="title-font-main">主导人：</text>
+                  <text class="title-font-other">{{ item.development_director }}</text>
+                </view>
+                <view class="arrange-center">
+                  <text class="title-font-main">Year：</text>
+                  <text class="title-font-other">{{item.line_plan_year}}</text>
+                </view>
+              </view>
+              <view class="arrange-center">
+                <text class="title-font-main">创建时间：</text>
+                <text class="title-font-other">{{ item.development_start_data }}</text>
+              </view>
+              <!-- 只有kyle导出ppt或者第二轮标记导出附件 -->
+              <view style="position:absolute;right: 40rpx;bottom: 38rpx;" wx:if="{{(userRole === 'kyle' && tabBarValue !== 'file') || (userRole === 'chosen_draft' && tabBarValue === 'ultimate')}}">
+                <t-link prefixIcon="folder-export" size="small" content="导出附件" underline hover catch:tap="exportAttachments" theme="default" data-lineplan_id="{{ item.line_plan_id }}" />
+              </view>
+              <view style="position:absolute;right: 40rpx;bottom: 38rpx;" wx:if="{{userRole === 'desc_upload'}}">
+                <t-link prefixIcon="upload" size="small" content="上传附件" underline hover bindtap="descUpload" theme="default" data-lineplan_id="{{ item.line_plan_id }}" />
+              </view>
+            </view>
+          </t-cell>
+        </t-cell-group>
+      </view>
+    </view>
+  </view>
+  <!-- 当下拉时,进行显示的内容  -->
+  <view class="loading-box loading-flex" wx:if="{{isLoadingReachMore}}">
+    <!-- <text class="loading-text">加载中...</text> -->
+    <t-loading theme="dots" size="60rpx" />
+  </view>
+  <view class="loading-box" wx:if="{{noMoreData}}">
+    <text class="loading-text">-- 已经到底了 --</text>
+  </view>
+</view>
+<!-- 轻提示 -->
+<t-toast id="t-toast" />
+<!-- 标签栏-只有Kyle才能看到 -->
+<view class="tab-bar-wrapper" wx:if="{{tabBarShow && userTabs.length !== 0}}">
+  <t-tab-bar t-class="t-tab-bar" value="{{tabBarValue}}" shape="round" theme="tag" split="false" bindchange="onTabBarChange">
+    <block wx:for="{{userTabs}}" wx:key="value">
+      <t-tab-bar-item value="{{item.value}}">
+        <text>{{item.label}}</text>
+      </t-tab-bar-item>
+    </block>
+  </t-tab-bar>
+</view>
+<!-- 回到顶部 -->
+<t-back-top theme="half-round" text="" scroll-top="{{scrollTop}}" bind:to-top="onToTop" style="z-index: 999;" />
+<!-- 批量操作 -->
+<t-fab wx:if="{{!batchSelectValue && tabBarValue === 'primary' && position_type === 'AIT分配人' && Data.length !== 0}}" bind:click="batchSelect" text="批量操作" aria-label="增加" usingCustomNavbar draggable y-bounds="{{[0, 170]}}" style="z-index: 900;" button-props="{{ { shape:'rectangle',style	: 'height: 150rpx;width: 30rpx;font-size: 24rpx; writing-mode: vertical-rl; text-orientation: upright;margin-left: auto;margin-right: auto;' } }}"></t-fab>
+<!-- 批量操作按钮 -->
+<view wx:if="{{batchSelectValue}}">
+  <t-tab-bar t-class="t-tab-bar" shape="round" theme="tag" split="false">
+    <t-tab-bar-item bindtap="onBatchSelectClose">
+      <t-link content="取消操作" size="small" prefixIcon="close"  />
+    </t-tab-bar-item>
+    <t-tab-bar-item bindtap="onBatchSelectCheck" >
+      <t-link theme="primary" content="AIT分配人" size="small" prefixIcon="check" />
+    </t-tab-bar-item>
+  </t-tab-bar>
+</view>
+<!-- AIT下拉框 -->
+<t-picker visible="{{pickerVisible}}" value="{{pickerValue}}" title="请选择AIT分配人" cancelBtn="取消" confirmBtn="确认" bindchange="onPickerChange" bindcancel="onClosePicker" catchtouchmove>
+  <t-picker-item options="{{pickerItemList}}"></t-picker-item>
+</t-picker>

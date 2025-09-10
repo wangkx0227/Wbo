@@ -1,0 +1,7 @@
+{
+  "usingComponents": {
+    "t-swiper": "tdesign-miniprogram/swiper/swiper",
+    "t-image": "tdesign-miniprogram/image/image",
+    "t-image-viewer": "tdesign-miniprogram/image-viewer/image-viewer"
+  }
+}

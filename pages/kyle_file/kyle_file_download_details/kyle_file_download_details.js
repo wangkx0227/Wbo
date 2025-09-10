@@ -63,7 +63,6 @@ Page({
     // 数据处理
     for (const date in dataList) {
       const array = dataList[date];
-      console.log(array);
       arrangeData.push({
         "date": date,
         "data_list": array

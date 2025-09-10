@@ -1,0 +1,60 @@
+<!-- 骨架 -->
+<import src="skeleton.wxml" />
+<template is="skeleton" wx:if="{{skeletonLoading}}" />
+<view wx:else="{{skeletonLoading}}" class="page-wrapper">
+  <view class="page-head filter-bar">
+    <t-row>
+      <t-col span="24">
+        <view class="example-search">
+          <t-search placeholder="搜索" shape="round" model:value="{{searchValue}}" bind:submit="onSearchConfirm" confirm-type="search" />
+        </view>
+      </t-col>
+      <t-col span="24">
+        <t-dropdown-menu>
+          <t-dropdown-item options="{{dropdownTemplate.options}}" placement="right" value="{{dropdownTemplate.value}}" bindchange="onTemplateChange" />
+          <t-dropdown-item options="{{dropdownSorter.options}}" placement="right" value="{{dropdownSorter.value}}" bindchange="onSorterChange" />
+        </t-dropdown-menu>
+      </t-col>
+    </t-row>
+  </view>
+  <view class="page-main">
+    <view class="wrapper">
+      <view class="wrapper">
+        <view wx:for="{{Data}}" wx:key="index">
+          <t-cell-group theme="card" class="t-cell-group" bindtap="onJumpArtworkDeatails" data-development_id="{{ item.development_id }}">
+            <t-cell hover>
+              <t-tag variant="outline" slot="note" shape="mark" size="medium" style="position: absolute;right: 25rpx;top: 35rpx;" theme="primary"> 阶段：{{ tabBarTabLabel }} </t-tag>
+              <view slot="title" style="display: grid;gap: 25rpx;">
+                <view class="arrange-center">
+                  <text class="title-font-main">开发案名称：</text>
+                  <text class="title-font-other name-cell">{{ item.development_name }}</text>
+                </view>
+                <view class="arrange-space-between" style="gap: 20rpx;">
+                  <view class="arrange-center">
+                    <text class="title-font-main">主导人：</text>
+                    <text class="title-font-other">{{ item.development_director }}</text>
+                  </view>
+                  <view class="arrange-center">
+                    <text class="title-font-main">创建时间：</text>
+                    <text class="title-font-other">{{ item.development_start_data }}</text>
+                  </view>
+                </view>
+              </view>
+            </t-cell>
+          </t-cell-group>
+        </view>
+      </view>
+    </view>
+  </view>
+  <!-- 当下拉时,进行显示的内容  -->
+  <view class="loading-box loading-flex" wx:if="{{isLoadingReachMore}}">
+    <t-loading theme="dots" size="60rpx" />
+  </view>
+  <view class="loading-box" wx:if="{{noMoreData}}">
+    <text class="loading-text">-- 已经到底了 --</text>
+  </view>
+</view>
+<!-- 轻提示 -->
+<t-toast id="t-toast" />
+<!-- 回到顶部 -->
+<t-back-top theme="half-round" text="" scroll-top="{{scrollTop}}" bind:to-top="onToTop" />

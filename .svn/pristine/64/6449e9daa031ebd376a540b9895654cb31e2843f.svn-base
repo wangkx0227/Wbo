@@ -1,0 +1,38 @@
+.example-search {
+  background-color: var(--bg-color-demo);
+  padding: 16rpx 32rpx;
+  background-color: #ffffff;
+}
+.page-main{
+  margin-top: 8px;
+}
+.page-main .wrapper .t-cell-group {
+  margin: 0 0 20rpx 10rpx !important;
+}
+
+/* 最后一个元素不需要间距 */
+.page-main .wrapper .t-cell-group:last-child {
+  margin-bottom: 0;
+}
+
+
+
+/* 重写标签栏组件样式*/
+.t-tab-bar {
+  z-index: 1999 !important;
+}
+.t-tab-bar--round{
+  margin-left: 90rpx !important;
+  margin-right: 90rpx !important;
+}
+.t-tab-bar-item--text-only {
+    font-size: 24rpx !important;
+}
+.t-tab-bar--fixed {
+  margin-bottom: 34px !important;
+}
+
+/* top组件调整位置,防止被标签栏组件遮挡 */
+.t-back-top {
+  margin-bottom: 130rpx !important;
+}

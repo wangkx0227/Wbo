@@ -1,0 +1,146 @@
+<!-- 骨架屏 -->
+<import src="skeleton.wxml" />
+<template is="skeleton" wx:if="{{skeletonLoading}}" />
+<!-- 主体 -->
+<view wx:else="{{skeletonLoading}}" class="page-wrapper">
+  <view class="page-head filter-bar">
+    <t-row>
+      <t-col span="24">
+        <t-dropdown-menu>
+          <t-dropdown-item options="{{dropdownMaterial.options}}" placement="right" value="{{dropdownMaterial.value}}" bindchange="onMaterialChange" />
+          <t-dropdown-item options="{{dropdownStatus.options}}" placement="right" value="{{dropdownStatus.value}}" bindchange="onStatusChange" />
+        </t-dropdown-menu>
+      </t-col>
+    </t-row>
+  </view>
+  <view class="page-main">
+    <view class="wrapper">
+      <view class="cell" wx:for="{{Data}}" wx:key="index" wx:for-index="outerIndex">
+        <view class="arrange-space-between title-font-main">
+          <text>Title：{{ item.title }}</text>
+        </view>
+        <view class="arrange-space-between title-font-other">
+          <text style="border-bottom: 1px solid currentColor;">Material：{{ item.texture }}</text>
+          <text style="color: {{ item.confirmed == 2 ? 'red' : 'black' }};;">初选状态：{{ item.confirmed_text }}</text>
+        </view>
+        <view class="title-font-other arrange-space-between">
+          <text>Name：{{ item.name }}</text>
+          <text>Code：{{ item.code }}</text>
+        </view>
+        <view class="cell-swiper">
+          <!-- <t-swiper wx:if="{{item.picture_list.length}}" autoplay="{{false}}" duration="{{500}}" navigation="{{ { type: 'dots' } }}" list="{{item.picture_list}}" bind:click="onSwiperImagesTap" data-images="{{item.picture_list}}">
+          </t-swiper> -->
+          <swiper wx:if="{{item.picture_list.length}}" autoplay="{{false}}" interval="3000" duration="500" circular="{{false}}" indicator-dots="{{true}}" indicator-color="#ccc" indicator-active-color="#fff" style="width: 690rpx;height:384rpx ;">
+            <block wx:for="{{item.picture_list}}" wx:key="index">
+              <swiper-item>
+                <image src="{{item}}" mode="widthFix" style="width:55%;display: block; margin: 0 auto; " bindtap="onSwiperImagesTap" data-outer-index="{{outerIndex}}" data-index="{{index}}" />
+              </swiper-item>
+            </block>
+          </swiper>
+          <!-- 9宫格遮罩层 -->
+          <view class="grid-overlay" wx:if="{{item.picture_list.length}}">
+            <view class="grid-cell" wx:for="{{9}}" wx:key="index"></view>
+          </view>
+          <!-- 无数据时显示占位内容 -->
+          <t-image wx:else src="" shape="round" error="slot" width="690rpx" height="384rpx">
+            <text class="error-text" slot="error">图片加载失败</text>
+          </t-image>
+        </view>
+        <view class="arrange-center">
+          <view class="arrange-center title-font-other">
+            <text class="title-font-main">ReviewComments：</text>
+            <t-link size="small" content="评审" hover underline suffixIcon="chat-message" variant="outline" bind:tap="onOpenDialog" data-timeline-id="{{ item.timeline_id }}" data-task-id="{{ item.id }}" />
+          </view>
+          <t-divider layout="vertical" />
+          <view class="arrange-center title-font-other">
+            <text class="title-font-main">时间线：</text>
+            <t-link size="small" content="查看历史时间线" hover underline variant="outline" bind:tap="onOpenHistoryTimeLine" data-task-id="{{ item.id }}" />
+          </view>
+        </view>
+        <view class="arrange-center title-font-other">
+          <text class="title-font-main">操作：</text>
+          <t-link size="small" content="舍弃" data-content-status="N" hover underline theme="danger" bindtap="onModifyArtworkStatus" data-timelineid="{{ item.timeline_id }}" />
+          <t-divider layout="vertical" />
+          <t-link size="small" content="保留" data-content-status="Y" hover underline bindtap="onModifyArtworkStatus" data-timelineid="{{ item.timeline_id }}" />
+        </view>
+      </view>
+    </view>
+  </view>
+  <!-- 当下拉时,进行显示的内容  -->
+  <view wx:if="{{noMoreData || isLoadingReachMore}}">
+    <view class="loading-box loading-flex" wx:if="{{isLoadingReachMore}}">
+      <!-- <text class="loading-text">加载中...</text> -->
+      <t-loading theme="dots" size="60rpx" />
+    </view>
+    <view class="loading-box" wx:if="{{noMoreData}}">
+      <text class="loading-text">-- 已经到底了 --</text>
+    </view>
+  </view>
+
+</view>
+<!-- 轻提示 -->
+<t-toast id="t-toast" />
+<!-- 回到顶部 -->
+<t-back-top theme="half-round" text="顶部" scroll-top="{{scrollTop}}" bind:to-top="onToTop" />
+<!-- 评论弹窗 -->
+<t-dialog visible="{{dialogVisible}}" title="评审意见：" confirm-btn="确定" cancel-btn="取消" bind:confirm="onCloseDialog" bind:cancel="onCloseDialog">
+  <view slot="content">
+    <view class="dialog-textarea">
+      <t-textarea value="{{ dialogValue }}" placeholder="请输入评审意见" bordered maxlength="200" disableDefaultPadding="true" indicator bind:change="onDialogInput" />
+    </view>
+  </view>
+</t-dialog>
+<!-- 抽屉/展示时间线 -->
+<t-popup visible="{{popupTimeLineVisible}}" placement="left">
+  <view class="popup-block" style="padding: 10rpx;height: 100%;">
+    <view class="popup-header arrange-column">
+      <view class="popup-title">时间线历史：</view>
+    </view>
+    <view class="popup-comments">
+      <scroll-view scroll-y style="height: calc(100% - 120rpx);padding: 0 20rpx;" class="popup-comments" bindtouchmove="onDummyTouchMove" catchtouchmove>
+        <view wx:for="{{timeLineValue}}" wx:key="index" style="width: 93%;">
+          <view class="arrange-space-between">
+            <view class="arrange-center">
+              <text class="title-font-main">类型：</text>
+              <text class="title-font-other">{{item.timeline_type_text}}</text>
+            </view>
+            <view class="arrange-center">
+              <text class="title-font-main">评论人：</text>
+              <text class="title-font-other">{{item.name}}</text>
+            </view>
+          </view>
+          <view class="cell-swiper" style="margin-top: 20rpx;">
+            <!-- <t-swiper wx:if="{{item.picture_list.length}}" autoplay="{{false}}" duration="{{500}}" navigation="{{ { type: 'dots' } }}" list="{{item.picture_list}}" bind:click="onSwiperImagesTap" data-images="{{item.picture_list}}">
+            </t-swiper> -->
+            <swiper wx:if="{{item.picture_list.length}}" autoplay="{{false}}" interval="3000" duration="500" circular="{{false}}" indicator-dots="{{true}}" indicator-color="#ccc" indicator-active-color="#fff" style="width: 690rpx;height:384rpx ;">
+              <block wx:for="{{item.picture_list}}" wx:key="index">
+                <swiper-item>
+                  <image src="{{item}}" mode="widthFix" style="width:55%;display: block; margin: 0 auto; " />
+                </swiper-item>
+              </block>
+            </swiper>
+            <!-- 无数据时显示占位内容 -->
+            <t-image wx:else src="" shape="round" error="slot" width="660rpx" height="384rpx">
+              <text class="error-text" slot="error">图片加载失败</text>
+            </t-image>
+          </view>
+          <view class="arrange-column" style="margin-top: 20rpx;">
+            <view class="arrange-space-between">
+              <text class="title-font-main">评论内容：</text>
+              <view class="arrange-center">
+                <text class="title-font-main">评论时间：</text>
+                <text class="title-font-other">{{item.time}}</text>
+              </view>
+            </view>
+            <text class="title-font-other" style="margin-left: 20rpx;font-size:14px">{{item.comment}}</text>
+          </view>
+
+          <t-divider content="时间线-{{index+1}}" />
+        </view>
+      </scroll-view>
+      <view class="button-example" style="padding: 10rpx 0;">
+        <t-button theme="light" block t-class="group-btn" bindtap="onCloseHistoryTimeLine">关闭</t-button>
+      </view>
+    </view>
+  </view>
+</t-popup>

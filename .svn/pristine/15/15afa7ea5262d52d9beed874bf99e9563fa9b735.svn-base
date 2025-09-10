@@ -1,0 +1,5 @@
+.status-font {
+  /* font-weight: bolder; */
+  color: #333;
+}
+

@@ -1,0 +1,128 @@
+<view class="container">
+  <view class="container-title">FMR反馈页面</view>
+  <view class="sub-title">NO.{{code}}</view>
+
+  <view class="image-section">
+    <view class="image-box">
+      <swiper class="image-swiper" indicator-dots circular>
+        <block wx:for="{{images_0}}" wx:key="index">
+          <swiper-item>
+            <image class="image" src="{{montageUrl}}/{{item.image}}" mode="aspectFit" bindtap="onPreviewImage" data-type="images_0" data-index="{{index}}"></image>
+          </swiper-item>
+        </block>
+      </swiper>
+
+    </view>
+    <view class="image-box">
+      <swiper class="image-swiper" indicator-dots circular>
+        <block wx:for="{{images_1}}" wx:key="index">
+          <swiper-item>
+            <image class="image" src="{{montageUrl}}/{{item.image}}" mode="aspectFit" bindtap="onPreviewImage" data-type="images_1" data-index="{{index}}"></image>
+          </swiper-item>
+        </block>
+      </swiper>
+    </view>
+  </view>
+  <view class="info-section">
+    <view class="info-text">工厂：{{factory}}</view>
+    <view class="info-text">材质：{{material}}</view>
+    <view class="info-text">FMR：{{fmr}}</view>
+  </view>
+  <view class="status-section">
+    <button class="status-btn {{proofing?'active':''}}" bindtap="UpdateStatus">开始打样</button>
+    <view class=" blank_{{blank}} status-item" style="width: 184px;margin: 0 auto;text-align: center;border-radius: 6px;padding: 8px 0px;">胚体</view>
+    <view class=" drawings_{{drawings}} status-item" style="width: 184px;margin: 0 auto;text-align: center;border-radius: 6px;padding: 8px 0px;">完成样</view>
+  </view>
+  <view class="photo-buttons">
+    <button class="photo-btn" bindtap="onChooseImage" data-type="blank_images" data-tp="0">胚体拍照</button>
+    <button class="photo-btn" bindtap="onChooseImage" data-type="drawings_images" data-tp="1">完成样拍照</button>
+  </view>
+  <view class="title-with-bar">胚体记录</view>
+  <view wx:for="{{blank_images}}" wx:for-index="barIndex" wx:key="index" class="image-block">
+    <swiper class="image-swiper" indicator-dots circular>
+      <block wx:for="{{item.images}}" wx:key="image_index">
+        <swiper-item>
+          <image class="real-image" src="{{montageUrl}}{{item.image}}" mode="aspectFit" bindtap="onPreviewImage" data-type="blank_images" data-bar="{{barIndex}}" data-index="{{index}}"></image>
+        </swiper-item>
+      </block>
+    </swiper>
+    <view class="info">
+      <view>上传：{{item.created_by}}--{{item.create_time}}</view>
+      <view class="text-box">
+        <text>说明：{{item.note}}</text>
+      </view>
+      <view class="status-row">
+        <view class="arrange-column">
+          <text style="font-size: 14px;font-weight: bolder;">FMR：</text>
+          <view class="arrange-center" style="gap: 10rpx;">
+            <view class="status-tag {{item.state === 1 ? 'accept active' : 'unselected'}}" data-index="{{index}}" data-type="blank_images" data-id="{{item.id}}" data-state="1" bindtap="onStatusTap">接受</view>
+            <view class="status-tag {{item.state === 2 ? 'reject active' : 'unselected'}}" data-index="{{index}}" data-type="blank_images" data-id="{{item.id}}" data-state="2" bindtap="onStatusTap">拒绝</view>
+            <view wx:if="{{item.state!==0}}" class="status-date-inline">
+              ({{item.state_updated_by}}--{{item.state_update_time}})
+            </view>
+          </view>
+        </view>
+        <view class="arrange-column">
+          <text style="font-size: 14px;font-weight: bolder;">设计师：</text>
+          <view class="arrange-center" style="gap: 10rpx;">
+            <view class="status-tag {{item.state2 === 1 ? 'accept active' : 'unselected'}}" data-index="{{index}}" data-type="blank_images" data-id="{{item.id}}" data-state="1" bindtap="onDesignerStatusTap">接受</view>
+            <!--  bindtap="onDesignerStatusTap"  -->
+            <view class="status-tag {{item.state2 === 2 ? 'reject active' : 'unselected'}}" data-index="{{index}}" data-type="blank_images" data-id="{{item.id}}" data-state="2" bindtap="onOpenDialog">拒绝</view>
+            <view wx:if="{{item.state2!==0}}" class="status-date-inline">
+              ({{item.state2_updated_by}}--{{item.state2_update_time}})
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+  <view class="title-with-bar">完成样记录</view>
+  <view wx:for="{{drawings_images}}" wx:for-index="barIndex" wx:key="index" class="image-block">
+    <swiper class="image-swiper" indicator-dots circular>
+      <block wx:for="{{item.images}}" wx:key="image_index">
+        <swiper-item>
+          <image class="real-image" src="{{montageUrl}}{{item.image}}" mode="aspectFit" bindtap="onPreviewImage" data-type="drawings_images" data-bar="{{barIndex}}" data-index="{{index}}"></image>
+        </swiper-item>
+      </block>
+    </swiper>
+    <view class="info">
+      <view>上传：{{item.created_by}}--{{item.create_time}}</view>
+      <view class="text-box">
+        <text>说明：{{item.note}}</text>
+      </view>
+      <view class="status-row">
+        <view class=" arrange-column ">
+          <text style="font-size: 14px;font-weight: bolder;">FMR：</text>
+          <view class="arrange-center" style="gap: 10rpx;">
+            <view class="status-tag {{item.state === 1 ? 'accept active' : 'unselected'}}" data-index="{{index}}" data-type="drawings_images" data-id="{{item.id}}" data-state="1" bindtap="onStatusTap">接受</view>
+            <view class="status-tag {{item.state === 2 ? 'reject active' : 'unselected'}}" data-index="{{index}}" data-type="drawings_images" data-id="{{item.id}}" data-state="2" bindtap="onStatusTap">拒绝</view>
+            <view wx:if="{{item.state!==0}}" class="status-date-inline ">
+              <view style="font-size: 12px;"> ({{item.state_updated_by}}--{{item.update_time}})</view>
+            </view>
+          </view>
+        </view>
+        <view class="arrange-column">
+          <text style="font-size: 14px;font-weight: bolder;">设计师：</text>
+          <view class="arrange-center" style="gap: 10rpx;">
+            <view class="status-tag {{item.state2 === 1 ? 'accept active' : 'unselected'}}" data-index="{{index}}" data-type="drawings_images" data-id="{{item.id}}" bindtap="onDesignerStatusTap" data-state="1">接受</view>
+            <!--  bindtap="onDesignerStatusTap"  -->
+            <view class="status-tag {{item.state2 === 2 ? 'reject active' : 'unselected'}}" data-index="{{index}}" data-type="drawings_images" data-id="{{item.id}}" bindtap="onOpenDialog" data-state="2">拒绝</view>
+            <view wx:if="{{item.state2!==0}}" class="status-date-inline">
+              <view style="font-size: 12px;">({{item.state2_updated_by}}--{{item.state2_update_time}})</view>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>
+<!-- 提示 -->
+<t-toast id="t-toast" />
+<!-- 评论弹窗 -->
+<t-dialog visible="{{dialogVisible}}" title="拒绝原因：" confirm-btn="确定" cancel-btn="取消" bind:confirm="onCloseDialog" bind:cancel="onCloseDialog">
+  <view slot="content">
+    <view class="dialog-textarea">
+      <t-textarea value="{{ dialogValue }}" placeholder="请输入拒绝原因" bordered maxlength="200" disableDefaultPadding="true" indicator bind:change="onDialogInput" />
+    </view>
+  </view>
+</t-dialog>

@@ -1,0 +1,51 @@
+<import src="skeleton.wxml" />
+<template is="skeleton" wx:if="{{skeletonLoading}}" />
+<!-- 主体 -->
+<view wx:else="{{skeletonLoading}}" class="page-wrapper">
+  <view class="page-head filter-bar">
+    <t-row>
+      <t-col span="24">
+        <t-dropdown-menu>
+          <t-dropdown-item options="{{dropdownYear.options}}" placement="right" value="{{dropdownYear.value}}" bindchange="onYearChange" />
+          <t-dropdown-item options="{{dropdownSorter.options}}" placement="right" value="{{dropdownSorter.value}}" bindchange="onSorterChange" />
+        </t-dropdown-menu>
+      </t-col>
+    </t-row>
+  </view>
+  <view class="page-main">
+    <view class="wrapper">
+      <view class="cell" wx:for="{{Data}}" wx:key="index" wx:for-index="outerIndex">
+        <t-collapse theme="card" expandIcon>
+          <t-collapse-panel value="{{0}}">
+            <view slot="header-left-icon">
+              <t-icon name="calendar-1" size="30rpx" style="margin-top: 10rpx;" />
+            </view>
+            <view slot="header">
+              <text class="title-font-main"> {{item.date}} 文件</text>
+            </view>
+            <view class="arrange-column" wx:for="{{item.data_list}}" wx:key="key" wx:for-index="key" wx:for-item="value" >
+              <t-divider/>
+              <view class="title-font-main" style="width: 100%; white-space: normal; word-break: break-all;font-size: 12px;">{{key}}</view>
+              <view style="margin-left: 10rpx;" wx:for="{{value}}" wx:key="value_index" wx:for-index="value_key" wx:for-item="value_item">
+                <t-link size="small" content="● {{value_item.filename}}" hover variant="outline" theme="primary" data-file-url="{{value_item.file_url}}" bindtap="exportAttachments" style="width: 100%; white-space: normal; word-break: break-all;" />
+              </view>
+            </view>
+          </t-collapse-panel>
+        </t-collapse>
+      </view>
+    </view>
+  </view>
+  <!-- 当下拉时,进行显示的内容  -->
+  <view class="loading-box loading-flex" wx:if="{{isLoadingReachMore}}">
+    <!-- <text class="loading-text">加载中...</text> -->
+    <t-loading theme="dots" size="60rpx" />
+  </view>
+  <view class="loading-box" wx:if="{{noMoreData}}">
+    <text class="loading-text">-- 已经到底了 --</text>
+  </view>
+
+</view>
+<!-- 轻提示 -->
+<t-toast id="t-toast" />
+<!-- 回到顶部 -->
+<t-back-top theme="half-round" text="顶部" scroll-top="{{scrollTop}}" bind:to-top="onToTop" />
