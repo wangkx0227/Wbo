@@ -1,7 +1,0 @@
-{
-  "usingComponents": {
-    "t-divider": "tdesign-miniprogram/divider/divider",
-    "t-collapse": "tdesign-miniprogram/collapse/collapse",
-    "t-collapse-panel": "tdesign-miniprogram/collapse-panel/collapse-panel"
-  }
-}
