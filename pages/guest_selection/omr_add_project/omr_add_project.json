@@ -6,6 +6,7 @@
     "t-cell": "tdesign-miniprogram/cell/cell",
     "t-cell-group": "tdesign-miniprogram/cell-group/cell-group",
     "t-fab": "tdesign-miniprogram/fab/fab",
-    "t-input": "tdesign-miniprogram/input/input"
+    "t-input": "tdesign-miniprogram/input/input",
+    "t-calendar": "tdesign-miniprogram/calendar/calendar"
   }
 }

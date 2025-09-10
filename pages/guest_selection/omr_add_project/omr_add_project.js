@@ -46,7 +46,7 @@ Page({
     addProjectData: {
       name: null,
       start_date: null,
-      end_date: 0,
+      end_date: null,
       director: null,
       member: [],
     }, 
@@ -319,7 +319,7 @@ Page({
   handleInput(e) {
     const field = e.currentTarget.dataset.field; // 获取字段名（year/month）
     this.setData({
-      [`addLPData.${field}`]: e.detail.value // 动态更新对应字段
+      [`addProjectData.${field}`]: e.detail.value // 动态更新对应字段
     });
   },
 })

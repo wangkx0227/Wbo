@@ -2,6 +2,7 @@
 <import src="skeleton.wxml" />
 <template is="skeleton" wx:if="{{skeletonLoading}}" />
 <view wx:else="{{skeletonLoading}}" class="page-wrapper">
+
   <view class="page-head filter-bar">
     <t-row>
       <t-col span="24">
@@ -29,9 +30,9 @@
                   <text class="title-font-other name-cell">{{ item.development_name }}</text>
                 </view>
                 <view class="arrange-center">
-                    <text class="title-font-main">主导人：</text>
-                    <text class="title-font-other">{{ item.development_director }}</text>
-                  </view>
+                  <text class="title-font-main">主导人：</text>
+                  <text class="title-font-other">{{ item.development_director }}</text>
+                </view>
                 <view class="arrange-space-between" style="gap: 30rpx;">
                   <view class="arrange-center">
                     <text class="title-font-main">创建时间：</text>
@@ -62,33 +63,33 @@
 <!-- 回到顶部 -->
 <t-back-top theme="half-round" text="" scroll-top="{{scrollTop}}" bind:to-top="onToTop" />
 <!-- 添加个新的图稿按钮 -->
-<t-fab icon="add" bind:click="onOpenAddProject" aria-label="增加" usingCustomNavbar draggable y-bounds="{{[0, 110]}}"></t-fab>
+<t-fab icon="add" bind:click="onOpenAddProject" aria-label="增加" usingCustomNavbar draggable y-bounds="{{[0, 80]}}"></t-fab>
 <!-- 增加弹窗-左 -->
 <t-popup visible="{{popupAddVisible}}" placement="left">
   <view class="popup-block" style="padding: 10rpx;height: 100%;">
     <view class="popup-header">
-      <view class="popup-title" style="text-align: left;">新增开发案：</view>
+      <view class="popup-title" style="text-align: center;">新增开发案：</view>
     </view>
     <view class="popup-comments">
       <view class="input-example">
         <view class="input-example-label"> 名称 <text style=" color: red;">*</text></view>
-        <t-input placeholder="请输入名称" borderless="{{true}}" class="input-example-input" value="{{addProjectData.name}}" data-field="title" bindchange="handleInput" />
+        <t-input placeholder="请输入名称" borderless="{{true}}" class="input-example-input" value="{{addProjectData.name}}" data-field="name" bindchange="handleInput" />
       </view>
       <view class="input-example">
         <view class="input-example-label"> 开始时间 <text style=" color: red;">*</text></view>
-        <t-input placeholder="请选择开始时间" borderless="{{true}}" class="input-example-input" value="{{addProjectData.start_date}}" data-field="client" bindchange="handleInput"/>
+        <t-input placeholder="请选择开始时间" borderless="{{true}}" class="input-example-input" value="{{addProjectData.start_date}}" data-field="start_date" bindchange="handleInput" />
       </view>
       <view class="input-example">
         <view class="input-example-label"> 结束时间 <text style=" color: red;">*</text></view>
-        <t-input placeholder="请选择结束时间" borderless="{{true}}" class="input-example-input" value="{{addProjectData.end_date}}" data-field="year" bindchange="handleInput"/>
+        <t-input placeholder="请选择结束时间" borderless="{{true}}" class="input-example-input" value="{{addProjectData.end_date}}" data-field="end_date" bindchange="handleInput" />
       </view>
       <view class="input-example">
         <view class="input-example-label"> 主导人 <text style=" color: red;">*</text></view>
-        <t-input placeholder="请选择主导人" borderless="{{true}}" class="input-example-input" value="{{addProjectData.director}}" data-field="season" bindchange="handleInput"/>
+        <t-input placeholder="请选择主导人" borderless="{{true}}" class="input-example-input" value="{{addProjectData.director}}" data-field="director" bindchange="handleInput" />
       </view>
       <view class="input-example">
         <view class="input-example-label"> 参与人员 <text style=" color: red;">*</text></view>
-        <t-input placeholder="请选择参与人员" borderless="{{true}}" class="input-example-input" value="{{addProjectData.director}}" data-field="season" bindchange="handleInput"/>
+        <t-input placeholder="请选择参与人员" borderless="{{true}}" class="input-example-input" value="{{addProjectData.member}}" data-field="member" bindchange="handleInput" />
       </view>
       <view class="button-example">
         <t-button theme="light" block t-class="group-btn" bindtap="onCloseAddProject">关闭</t-button>
