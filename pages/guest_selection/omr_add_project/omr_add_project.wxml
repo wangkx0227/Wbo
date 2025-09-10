@@ -61,3 +61,40 @@
 <t-toast id="t-toast" />
 <!-- 回到顶部 -->
 <t-back-top theme="half-round" text="" scroll-top="{{scrollTop}}" bind:to-top="onToTop" />
+<!-- 添加个新的图稿按钮 -->
+<t-fab icon="add" bind:click="onOpenAddProject" aria-label="增加" usingCustomNavbar draggable y-bounds="{{[0, 110]}}"></t-fab>
+<!-- 增加弹窗-左 -->
+<t-popup visible="{{popupAddVisible}}" placement="left">
+  <view class="popup-block" style="padding: 10rpx;height: 100%;">
+    <view class="popup-header">
+      <view class="popup-title" style="text-align: left;">新增开发案：</view>
+    </view>
+    <view class="popup-comments">
+      <view class="input-example">
+        <view class="input-example-label"> 名称 <text style=" color: red;">*</text></view>
+        <t-input placeholder="请输入名称" borderless="{{true}}" class="input-example-input" value="{{addProjectData.name}}" data-field="title" bindchange="handleInput" />
+      </view>
+      <view class="input-example">
+        <view class="input-example-label"> 开始时间 <text style=" color: red;">*</text></view>
+        <t-input placeholder="请选择开始时间" borderless="{{true}}" class="input-example-input" value="{{addProjectData.start_date}}" data-field="client" bindchange="handleInput"/>
+      </view>
+      <view class="input-example">
+        <view class="input-example-label"> 结束时间 <text style=" color: red;">*</text></view>
+        <t-input placeholder="请选择结束时间" borderless="{{true}}" class="input-example-input" value="{{addProjectData.end_date}}" data-field="year" bindchange="handleInput"/>
+      </view>
+      <view class="input-example">
+        <view class="input-example-label"> 主导人 <text style=" color: red;">*</text></view>
+        <t-input placeholder="请选择主导人" borderless="{{true}}" class="input-example-input" value="{{addProjectData.director}}" data-field="season" bindchange="handleInput"/>
+      </view>
+      <view class="input-example">
+        <view class="input-example-label"> 参与人员 <text style=" color: red;">*</text></view>
+        <t-input placeholder="请选择参与人员" borderless="{{true}}" class="input-example-input" value="{{addProjectData.director}}" data-field="season" bindchange="handleInput"/>
+      </view>
+      <view class="button-example">
+        <t-button theme="light" block t-class="group-btn" bindtap="onCloseAddProject">关闭</t-button>
+        <t-divider layout="vertical" style="height:64rpx" />
+        <t-button theme="primary" block t-class="group-btn" bindtap="onSubmitAddProject">提交</t-button>
+      </view>
+    </view>
+  </view>
+</t-popup>

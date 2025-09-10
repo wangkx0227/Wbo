@@ -42,6 +42,14 @@ Page({
       ],
     },
     filterSorter: false, // 排序筛选条件
+    popupAddVisible: false, // 新增按钮
+    addProjectData: {
+      name: null,
+      start_date: null,
+      end_date: 0,
+      director: null,
+      member: [],
+    }, 
   },
   // 滚动-回到顶部
   onToTop(e) {
@@ -65,7 +73,7 @@ Page({
       const development_name = item.name; // 开发案名称
       const development_director = item.director; // 主导人
       const development_start_date = item.start_date; // 开发案开始时间
-      const development_end_date =  item.end_date; // 结束时间
+      const development_end_date = item.end_date; // 结束时间
       // 对内部的line_plan_list变量进行循环
       let line_plan_id_list = [];
       item.line_plan_list.forEach((line_plan) => {
@@ -75,8 +83,8 @@ Page({
         development_id: development_id, // 开发案id
         development_name: development_name, // 开发案的名称
         development_director: development_director,// 主导人
-        development_start_date: development_start_date, 
-        development_end_date: development_end_date, 
+        development_start_date: development_start_date,
+        development_end_date: development_end_date,
         line_plan_id_list: line_plan_id_list, // lp的id
       }
       arrangeData.push(development_data)
@@ -144,7 +152,7 @@ Page({
     that.setData({
       userRole: userRole,
       userName: userName,
-      apiUserName:apiUserName,
+      apiUserName: apiUserName,
       tabBarTabLabel: tabBarTabLabel
     });
     this.dataRequest("init"); // 分页处理
@@ -269,6 +277,49 @@ Page({
     that.setData({
       Data: firstPage, // 显示
       currentIndex: firstPage.length,
+    });
+  },
+  // 新增开发案
+  onOpenAddProject(e) {
+    this.setData({
+      popupAddVisible: true
+    });
+  },
+  // 新增内部关闭按钮
+  onCloseAddProject(e) {
+    const that = this;
+    that.setData({
+      popupAddVisible: false
+    });
+  },
+  // 新增内部提交按钮
+  onSubmitAddProject(e) {
+    // const that = this;
+    // const development_id = that.data.development_id;
+    // that.setData({
+    //   'addLPData.project_id': development_id // 使用路径语法
+    // });
+    // const { title, client, year, season } = that.data.addLPData;
+    // if (!title || !client || !year || !season) {
+    //   utils.showToast(that, "数据不能为空", "error");
+    //   return
+    // } else {
+    //   utils.UpdateData({
+    //     page: that,
+    //     data: that.data.addLPData,
+    //     message: "新增LP成功"
+    //   })
+    //   that.setData({
+    //     popupAddVisible: false
+    //   });
+    // }
+
+  },
+  // 通用输入处理
+  handleInput(e) {
+    const field = e.currentTarget.dataset.field; // 获取字段名（year/month）
+    this.setData({
+      [`addLPData.${field}`]: e.detail.value // 动态更新对应字段
     });
   },
 })
