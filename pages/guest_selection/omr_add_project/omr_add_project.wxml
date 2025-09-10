@@ -77,11 +77,11 @@
       </view>
       <view class="input-example">
         <view class="input-example-label"> 开始时间 <text style=" color: red;">*</text></view>
-        <t-input placeholder="请选择开始时间" borderless="{{true}}" class="input-example-input" value="{{addProjectData.start_date}}" data-field="start_date" bindchange="handleInput" />
+        <t-input placeholder="请选择开始时间" borderless="{{true}}" class="input-example-input" value="{{addProjectData.start_date}}" data-field="start_date" bindtap="onDateInputClick" readonly="{{true}}"/>
       </view>
       <view class="input-example">
         <view class="input-example-label"> 结束时间 <text style=" color: red;">*</text></view>
-        <t-input placeholder="请选择结束时间" borderless="{{true}}" class="input-example-input" value="{{addProjectData.end_date}}" data-field="end_date" bindchange="handleInput" />
+        <t-input placeholder="请选择结束时间" borderless="{{true}}" class="input-example-input" value="{{addProjectData.end_date}}" data-field="end_date" bindtap="onDateInputClick" readonly="{{true}}"/>
       </view>
       <view class="input-example">
         <view class="input-example-label"> 主导人 <text style=" color: red;">*</text></view>
@@ -99,3 +99,5 @@
     </view>
   </view>
 </t-popup>
+<!-- 年月日选择器 -->
+<t-date-time-picker auto-close title="选择日期" visible="{{dateVisible}}" mode="date" format="YYYY-MM-DD" bindchange="onDateConfirm" bindcancel="onDateHidePicker"  start="{{start}}" end="{{end}}" defaultValue="{{defaultValue}}"/>

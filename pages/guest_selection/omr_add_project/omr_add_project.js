@@ -49,7 +49,12 @@ Page({
       end_date: null,
       director: null,
       member: [],
-    }, 
+    },
+    date_field: null,
+    dateVisible: false,
+    start: '2025-01-01',
+    end: '2050-12-31',
+    defaultValue: '2025-09-10', // 默认时间
   },
   // 滚动-回到顶部
   onToTop(e) {
@@ -137,6 +142,12 @@ Page({
   },
   // 生命周期函数--监听页面加载 
   onLoad() {
+    // 获取当前时间
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0'); // 月份补0
+    const day = String(now.getDate()).padStart(2, '0'); // 日期补0
+    console.log();
     const that = this;
     if (!utils.LoginStatusAuthentication(that)) {
       // 未登录状态，函数已处理跳转逻辑
@@ -152,6 +163,7 @@ Page({
     that.setData({
       userRole: userRole,
       userName: userName,
+      defaultValue: `${year}-${month}-${day}`,
       apiUserName: apiUserName,
       tabBarTabLabel: tabBarTabLabel
     });
@@ -279,20 +291,13 @@ Page({
       currentIndex: firstPage.length,
     });
   },
-  // 新增开发案
+  // 打开新增开发案
   onOpenAddProject(e) {
     this.setData({
       popupAddVisible: true
     });
   },
-  // 新增内部关闭按钮
-  onCloseAddProject(e) {
-    const that = this;
-    that.setData({
-      popupAddVisible: false
-    });
-  },
-  // 新增内部提交按钮
+  // 提交新增内部
   onSubmitAddProject(e) {
     // const that = this;
     // const development_id = that.data.development_id;
@@ -315,6 +320,24 @@ Page({
     // }
 
   },
+  // 关闭新增内部
+  onCloseAddProject(e) {
+    const that = this;
+    that.setData({
+      popupAddVisible: false,
+    });
+    setTimeout(() => {
+      that.setData({
+        addProjectData: {
+          name: null,
+          start_date: null,
+          end_date: null,
+          director: null,
+          member: [],
+        },
+      })
+    }, 500)
+  },
   // 通用输入处理
   handleInput(e) {
     const field = e.currentTarget.dataset.field; // 获取字段名（year/month）
@@ -322,4 +345,30 @@ Page({
       [`addProjectData.${field}`]: e.detail.value // 动态更新对应字段
     });
   },
+
+  // 选择时间框的点击事项
+  onDateInputClick(e) {
+    const field = e.currentTarget.dataset.field; // 获取字段名（year/month）
+    this.setData({
+      date_field: field,
+      dateVisible: true,
+    });
+  },
+  // 时间选择器确定
+  onDateConfirm(e) {
+    const { value } = e.detail;
+    const date_field = this.data.date_field;
+    this.setData({
+      [`addProjectData.${date_field}`]: value,
+    });
+    this.onDateHidePicker();
+  },
+  // 时间选择器关闭
+  onDateHidePicker() {
+    this.setData({
+      date_field: null,
+      dateVisible: false,
+    });
+  },
+
 })
