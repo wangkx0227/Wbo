@@ -12,6 +12,10 @@ Page({
     userName: null, // 名称
     scrollTop: 0, // 回到顶部变量
     tabBarTabLabel: null,// 阶段
+    isDownRefreshing: false, // 下拉刷新状态
+    isLoadingReachMore: false, // 滚动底部加载数据
+    noMoreData: false, // 数据是否全部加载完毕
+    skeletonLoading: true, // 骨架屏控制变量
     // 筛选框变量-1
     dropdownTemplate: {
       value: 'all',
@@ -60,7 +64,8 @@ Page({
       const development_id = item.id; // 开发案id
       const development_name = item.name; // 开发案名称
       const development_director = item.director; // 主导人
-      const development_start_data = item.start_date; // 开发案开始时间
+      const development_start_date = item.start_date; // 开发案开始时间
+      const development_end_date = item.end_date;
       // 对内部的line_plan_list变量进行循环
       let line_plan_id_list = [];
       item.line_plan_list.forEach((line_plan) => {
@@ -70,7 +75,8 @@ Page({
         development_id: development_id, // 开发案id
         development_name: development_name, // 开发案的名称
         development_director: development_director,// 主导人
-        development_start_data: development_start_data, //开发案时间
+        development_start_date: development_start_date, //开发案时间
+        development_end_date: development_end_date, 
         line_plan_id_list: line_plan_id_list, // lp的id
       }
       arrangeData.push(development_data)

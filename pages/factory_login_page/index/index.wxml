@@ -23,20 +23,24 @@
         <view wx:for="{{Data}}" wx:key="index">
           <t-cell-group theme="card" class="t-cell-group" bindtap="onJumpArtworkDeatails" data-development_id="{{ item.development_id }}">
             <t-cell hover>
-              <t-tag variant="outline" slot="note" shape="mark" size="medium" style="position: absolute;right: 25rpx;top: 35rpx;" theme="primary"> 阶段：{{ tabBarTabLabel }} </t-tag>
+              <t-tag variant="outline" slot="note" shape="mark" size="medium" style="position: absolute;right: 25rpx;top: 35rpx;" theme="primary">{{ tabBarTabLabel }} </t-tag>
               <view slot="title" style="display: grid;gap: 25rpx;">
                 <view class="arrange-center">
-                  <text class="title-font-main">开发案名称：</text>
+                  <text class="title-font-main">开发案：</text>
                   <text class="title-font-other name-cell">{{ item.development_name }}</text>
                 </view>
-                <view class="arrange-space-between" style="gap: 20rpx;">
-                  <view class="arrange-center">
-                    <text class="title-font-main">主导人：</text>
-                    <text class="title-font-other">{{ item.development_director }}</text>
-                  </view>
+                <view class="arrange-center">
+                  <text class="title-font-main">主导人：</text>
+                  <text class="title-font-other">{{ item.development_director }}</text>
+                </view>
+                <view class="arrange-space-between" style="gap: 30rpx;">
                   <view class="arrange-center">
                     <text class="title-font-main">创建时间：</text>
-                    <text class="title-font-other">{{ item.development_start_data }}</text>
+                    <text class="title-font-other">{{ item.development_start_date }}</text>
+                  </view>
+                  <view class="arrange-center">
+                    <text class="title-font-main">结束时间：</text>
+                    <text class="title-font-other">{{ item.development_end_date }}</text>
                   </view>
                 </view>
               </view>
