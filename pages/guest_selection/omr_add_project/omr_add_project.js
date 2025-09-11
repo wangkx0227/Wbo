@@ -56,6 +56,8 @@ Page({
     end: '2050-12-31',
     defaultValue: '2025-09-10', // 默认时间
     userList: [],
+    AITUserList: [],
+    AIEUserList: [],
     userSelectPickerVisible: false,
     userSelectPickerValue: [],// 选择主导人
     popupUserVisible: false,
@@ -65,6 +67,8 @@ Page({
   dataUserRequest(mode) {
     const that = this;
     const seen = new Set();
+    const AITUserList = [];
+    const AIEUserList = [];
     utils.LoadDataList({
       page: that,
       data: {
@@ -88,10 +92,19 @@ Page({
               label: `${name}-${role}`,
               value: name
             })
+            if (role === 'AIT') {
+              AITUserList.push(name)
+            }
+            if (role === 'AIE') {
+              AIEUserList.push(name)
+            }
           }
         }
         that.setData({
           userList: userList,
+          AITUserList: AITUserList,
+          AIEUserList: AIEUserList,
+
         })
       }
     });
@@ -470,5 +483,20 @@ Page({
       "addProjectData.member": checkAllValues,
     })
     that.oncloseUserPopup();
+  },
+  // 根据分组选择参与人
+  onUserGruopSubmit(e) {
+    const that = this;
+    const gruop = e.currentTarget.dataset.gruop;
+    let data = [];
+    if (gruop === "AIT") {
+      data = that.data.AITUserList;
+    }
+    if (gruop === "AIE") {
+      data = that.data.AIEUserList;
+    }
+    that.setData({
+      checkAllValues: data,
+    });
   }
 })
