@@ -98,7 +98,6 @@ Page({
               };
             };
           };
-          console.log(AIEUserList,AITUserList);
           that.setData({
             userList: userList,
             AITUserList: AITUserList,
@@ -351,15 +350,23 @@ Page({
     if (!name || !start_date || !end_date || !director || members.length === 0) {
       utils.showToast(that, "数据不能为空", "error");
       return
-    } //else {
-    //   utils.UpdateData({
-    //     page: that,
-    //     data: that.data.addLPData,
-    //     message: "创建开发案成功"
-    //   })
-    // that.onCloseAddProject();
-    // }
-
+    } else {
+      wx.request({
+        url: montageUrl + '/wbo//development-projects/',
+        method: "POST",
+        success: (res) => {
+          if (res.statusCode === 200) {
+            const data = res.data;
+            that.onCloseAddProject();
+          } else {
+            utils.showToast(that, "请求失败", "error");
+          }
+        },
+        fail(err) {
+          utils.showToast(that, "网络连接失败", "error");
+        }
+      })
+    }
   },
   // 关闭新增内部
   onCloseAddProject(e) {
