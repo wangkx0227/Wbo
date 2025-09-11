@@ -57,12 +57,14 @@ Page({
     defaultValue: '2025-09-10', // 默认时间
     userList: [],
     userSelectPickerVisible: false,
-    userSelectPickerTitle: "", // 标题
-    userSelectPickerValue: [],// 选择的人
+    userSelectPickerValue: [],// 选择主导人
+    popupUserVisible: false,
+    checkAllValues: [], // 多选参与人默认选中
   },
   // 获取用户
   dataUserRequest(mode) {
     const that = this;
+    const seen = new Set();
     utils.LoadDataList({
       page: that,
       data: {
@@ -80,10 +82,13 @@ Page({
         for (let i = 0; i < lp_members.length; i++) {
           const name = lp_members[i][0];
           const role = lp_members[i][1];
-          userList.push({
-            label: `${name}-${role}`,
-            value: name
-          })
+          if (!seen.has(name)) {
+            seen.add(name);
+            userList.push({
+              label: `${name}-${role}`,
+              value: name
+            })
+          }
         }
         that.setData({
           userList: userList,
@@ -404,24 +409,66 @@ Page({
       dateVisible: false,
     });
   },
-  // 选择时间框的点击事项
+  // 打开筛选框-主导人
   onUserInputClick(e) {
     this.setData({
       userSelectPickerVisible: true,
+      userSelectPickerValue: this.data.addProjectData.director,
     });
   },
-  // 关闭筛选器
+  // 关闭筛选器-主导人
   onUserSelectClosePicker(e) {
     this.setData({
       userSelectPickerVisible: false,
     });
+    setTimeout(() => {
+      this.setData({
+        userSelectPickerValue: [],
+      });
+    }, 500)
   },
-  // 确认筛选器
+  // 确认筛选器-主导人
   onUserSelectPickerChange(e) {
     const that = this;
     const { value } = e.detail;
     that.setData({
-     "addProjectData.director": value,
+      "addProjectData.director": value,
+    });
+    setTimeout(() => {
+      that.setData({
+        userSelectPickerValue: [],
+      });
+    }, 500)
+  },
+  // 打开弹窗-参与人
+  onOpneUserPopup(e) {
+    const that = this;
+    const member = that.data.addProjectData.member;
+    that.setData({
+      popupUserVisible: true,// 先显示弹窗
+      checkAllValues: member,
     });
   },
+  // 关闭弹窗-参与人
+  oncloseUserPopup(e) {
+    this.setData({
+      checkAllValues: [],
+      popupUserVisible: false,
+    });
+  },
+  // 多选参与人
+  onCheckAllChange(event) {
+    this.setData({
+      checkAllValues: event.detail.value,
+    });
+  },
+  // 确定参与人
+  onUserSubmit() {
+    const that = this;
+    const checkAllValues = that.data.checkAllValues;
+    that.setData({
+      "addProjectData.member": checkAllValues,
+    })
+    that.oncloseUserPopup();
+  }
 })
