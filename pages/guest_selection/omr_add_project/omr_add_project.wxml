@@ -85,11 +85,11 @@
       </view>
       <view class="input-example">
         <view class="input-example-label"> 主导人 <text style=" color: red;">*</text></view>
-        <t-input placeholder="请选择主导人" borderless="{{true}}" class="input-example-input" value="{{addProjectData.director}}" data-field="director" bindtap="onUserInputClick" readonly="{{true}}" />
+        <t-input placeholder="请选择主导人" borderless="{{true}}" class="input-example-input" value="{{showDirectorUserName}}" data-field="director" bindtap="onUserInputClick" readonly="{{true}}" />
       </view>
       <view class="input-example">
         <view class="input-example-label"> 参与人员 <text style=" color: red;">*</text></view>
-        <t-input placeholder="请选择参与人员" borderless="{{true}}" class="input-example-input" value="{{addProjectData.members}}" data-field="members" bindtap="onOpneUserPopup" readonly="{{true}}" />
+        <t-input placeholder="请选择参与人员" borderless="{{true}}" class="input-example-input" value="{{showMembersUserName}}" data-field="members" bindtap="onOpneUserPopup" readonly="{{true}}" />
       </view>
       <view class="button-example">
         <t-button theme="light" block t-class="group-btn" bindtap="onCloseAddProject">关闭</t-button>

@@ -1,4 +1,6 @@
+const app = getApp();
 const utils = require('../../../utils/util')
+const montageUrl = app.globalData.montageUrl;
 Page({
   data: {
     Data: [], // 页面展示数据
@@ -52,6 +54,8 @@ Page({
       create_man: null, // 创建人的id
       members: [], // 参与成员 id 列表
     },
+    showDirectorUserName: [],
+    showMembersUserName: [],
     date_field: null,
     dateVisible: false,
     start: '2025-01-01',
@@ -66,50 +70,77 @@ Page({
     checkAllValues: [], // 多选参与人默认选中
   },
   // 获取用户
-  dataUserRequest(mode) {
+  dataUserRequest() {
     const that = this;
-    const seen = new Set();
     const AITUserList = [];
     const AIEUserList = [];
-    utils.LoadDataList({
-      page: that,
-      data: {
-        "type": "get_lps_data",
-        "project_id": 20115,
-        "username": "Jasonyu" // 访问人必须是管理员
-      },
-      mode: mode,
-      showLoading: false,
-      showSkeleton: false,
-    }).then(list => { // list 就是data数据
-      if (list.lps.length !== 0) {
-        let userList = [];
-        const lp_members = list.lps[0].lp_members;
-        for (let i = 0; i < lp_members.length; i++) {
-          const name = lp_members[i][0];
-          const role = lp_members[i][1];
-          if (!seen.has(name)) {
-            seen.add(name);
+    wx.request({
+      url: montageUrl + '/wbo/user-roles/',
+      method: "GET",
+      success: (res) => {
+        if (res.statusCode === 200) {
+          let userList = [];
+          const data = res.data;
+          for (let i = 0; i < data.length; i++) {
+            const id = data[i].id;
+            const name = data[i].name;
             userList.push({
-              label: `${name}-${role}`,
-              value: name
+              label: name,
+              value: id
             })
-            if (role === 'AIT') {
-              AITUserList.push(name)
-            }
-            if (role === 'AIE') {
-              AIEUserList.push(name)
-            }
-          }
+          };
+          that.setData({
+            userList: userList,
+            AITUserList: AITUserList,
+            AIEUserList: AIEUserList,
+          })
+        } else {
+          utils.showToast(that, "请求失败", "error");
         }
-        that.setData({
-          userList: userList,
-          AITUserList: AITUserList,
-          AIEUserList: AIEUserList,
-
-        })
+      },
+      fail(err) {
+        utils.showToast(that, "网络连接失败", "error");
       }
-    });
+    })
+    // utils.LoadDataList({
+    //   page: that,
+    //   data: {
+    //     "type": "get_lps_data",
+    //     "project_id": 20115,
+    //     "username": "Jasonyu" // 访问人必须是管理员
+    //   },
+    //   mode: mode,
+    //   showLoading: false,
+    //   showSkeleton: false,
+    // }).then(list => { // list 就是data数据
+    //   if (list.lps.length !== 0) {
+    //     let userList = [];
+    //     const lp_members = list.lps[0].lp_members;
+    //     for (let i = 0; i < lp_members.length; i++) {
+    //       const name = lp_members[i][0];
+    //       const role = lp_members[i][1];
+    //       if (!seen.has(name)) {
+    //         seen.add(name);
+    //         userList.push({
+    //           label: `${name}-${role}`,
+    //           value: name
+    //         })
+    //         if (role === 'AIT') {
+    //           AITUserList.push(name)
+    //         }
+    //         if (role === 'AIE') {
+    //           AIEUserList.push(name)
+    //         }
+    //       }
+    //     }
+    //     that.setData({
+    //       userList: userList,
+    //       AITUserList: AITUserList,
+    //       AIEUserList: AIEUserList,
+
+    //     })
+    //   }
+    // });
   },
   // 滚动-回到顶部
   onToTop(e) {
@@ -214,16 +245,11 @@ Page({
     const userRole = wx.getStorageSync('userRole');
     const userName = wx.getStorageSync('userName');
     const apiUserName = wx.getStorageSync('apiUserName');
-    let tabBarTabLabel = "样品图审核"
-    if (userRole === "fmr") {
-      tabBarTabLabel = "上传样品图"
-    }
     that.setData({
       userRole: userRole,
       userName: userName,
       defaultValue: `${year}-${month}-${day}`,
       apiUserName: apiUserName,
-      tabBarTabLabel: tabBarTabLabel
     });
     that.dataRequest("init"); // 分页处理
     that.dataUserRequest();
@@ -350,7 +376,7 @@ Page({
   // 提交新增内部
   onSubmitAddProject(e) {
     const that = this;
-    const { name, start_date, end_date, director,members } = that.data.addProjectData;
+    const { name, start_date, end_date, director, members } = that.data.addProjectData;
     if (!name || !start_date || !end_date || !director || members.length === 0) {
       utils.showToast(that, "数据不能为空", "error");
       return
@@ -379,6 +405,8 @@ Page({
           director: null,
           members: [],
         },
+        showDirectorUserName: [],
+        showMembersUserName: [],
       })
     }, 500)
   },
@@ -434,8 +462,9 @@ Page({
   // 确认筛选器-主导人
   onUserSelectPickerChange(e) {
     const that = this;
-    const { value } = e.detail;
+    const { value, label } = e.detail;
     that.setData({
+      showDirectorUserName: label,
       "addProjectData.director": value,
     });
     setTimeout(() => {
@@ -469,8 +498,15 @@ Page({
   // 确定参与人
   onUserSubmit() {
     const that = this;
+    let userNameList = [];
     const checkAllValues = that.data.checkAllValues;
+    that.data.userList.forEach(item => {
+      if (checkAllValues.includes(item.value)) {
+        userNameList.push(item.label);
+      };
+    });
     that.setData({
+      showMembersUserName: userNameList,
       "addProjectData.members": checkAllValues,
     })
     that.oncloseUserPopup();
