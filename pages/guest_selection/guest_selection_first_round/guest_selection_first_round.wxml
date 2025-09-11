@@ -107,7 +107,7 @@
 <t-popup visible="{{popupAddVisible}}" placement="left">
   <view class="popup-block" style="padding: 10rpx;height: 100%;">
     <view class="popup-header">
-      <view class="popup-title" style="text-align: left;">新增LP：</view>
+      <view class="popup-title" style="text-align: center;">新增LP</view>
     </view>
     <view class="popup-comments">
       <view class="input-example">
@@ -134,10 +134,6 @@
     </view>
   </view>
 </t-popup>
-<!-- 设计师选择框 -->
-<t-picker visible="{{pickerDesignerVisible}}" value="{{pickerDesignerValue}}" title="设计师" cancelBtn="取消" confirmBtn="确认" usingCustomNavbar bindchange="onPickerDesignerChange" bindcancel="onCloseDesignerPicker">
-  <t-picker-item options="{{pickerDesignerItemList}}"></t-picker-item>
-</t-picker>
 <!-- 抽屉/展示时间线 -->
 <t-popup visible="{{popupTimeLineVisible}}" placement="left">
   <view class="popup-block" style="padding: 10rpx;height: 100%;">

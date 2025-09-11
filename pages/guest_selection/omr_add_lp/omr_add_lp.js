@@ -257,7 +257,7 @@ Page({
       popupAddVisible: true
     });
   },
-  // 新增内部关闭按钮
+  // 新增lp内部关闭
   onCloseAddDialog() {
     const that = this;
     that.setData({
@@ -286,7 +286,7 @@ Page({
       [`addLPData.${field}`]: e.detail.value // 动态更新对应字段
     });
   },
-  // 新增内部提交按钮
+  // 新增lp内部提交
   onSubmitAddDialog() {
     const that = this;
     const development_id = that.data.development_id;
@@ -303,10 +303,7 @@ Page({
         data: that.data.addLPData,
         message: "添加LP成功"
       })
-      that.setData({
-        popupAddVisible: false
-      });
+      that.onCloseAddDialog();
     }
-
   },
 })

@@ -257,6 +257,7 @@ Page({
   },
   // 空方法，避免抽屉的滚动
   onDummyTouchMove() { },
+  
   // 页面上拉刷新
   onPullDownRefresh() {
     if (this.data.isLoadingReachMore) return; // 如果正在加载更多，则禁止下拉刷新
@@ -518,11 +519,26 @@ Page({
     });
   },
   // 新增内部关闭按钮
-  onCloseAddDialog(e) {
+   onCloseAddDialog() {
     const that = this;
-    this.setData({
-      popupAddVisible: false
+    that.setData({
+      popupAddVisible: false,
     });
+    setTimeout(()=>{
+      that.setData({
+        addLPData:{
+          project_id: null,
+          type: "addLp",
+          lp_type: 0,
+          title: null,
+          client: null,
+          year: null,
+          season: null,
+          is_new_development: 1,
+          username: "管理员",
+        },
+      });
+    },500)
   },
   // 通用输入处理
   handleInput(e) {
@@ -532,7 +548,7 @@ Page({
     });
   },
   // 新增内部提交按钮
-  onSubmitAddDialog(e) {
+  onSubmitAddDialog() {
     const that = this;
     const development_id = that.data.development_id;
     that.setData({
@@ -548,9 +564,7 @@ Page({
         data: that.data.addLPData,
         message: "新增LP成功"
       })
-      that.setData({
-        popupAddVisible: false
-      });
+      that.onCloseAddDialog();
     }
 
   },
