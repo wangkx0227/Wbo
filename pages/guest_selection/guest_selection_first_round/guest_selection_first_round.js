@@ -62,7 +62,7 @@ Page({
       ],
     },
     filterStatusValue: 'all',  // 筛选存储变量
-    // 增加图稿
+    // 增加lp
     popupAddVisible: false,
   },
   // 数据结构处理

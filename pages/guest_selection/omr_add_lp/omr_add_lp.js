@@ -9,7 +9,6 @@ Page({
     filteredData: [], // 筛选后的数据
     pageSize: 6, // 每次加载多少条数据
     currentIndex: 0, // 加载到数据的第几个索引
-
     // 下拉刷新与滚动底部刷新使用变量
     isDownRefreshing: false, // 下拉刷新状态
     isLoadingReachMore: false, // 滚动底部加载数据
@@ -42,6 +41,18 @@ Page({
       ],
     },
     filterSorter: false, // 排序筛选条件
+    popupAddVisible: false, // 新增lp
+    addLPData: {
+      project_id: null,
+      type: "addLp",
+      lp_type: 0,
+      title: null,
+      client: null,
+      year: null,
+      season: null,
+      is_new_development: 1,
+      username: "管理员",
+    }, // 新增lp
   },
   // 生命周期函数
   onLoad(options) {
@@ -236,9 +247,66 @@ Page({
       currentIndex: firstPage.length,
     });
   },
-
   // 跳转到详情页面
   onJumpArtworkDeatails(e) {
     console.log("跳转");
+  },
+  // 新增lp
+  onOpenAddLP() {
+    this.setData({
+      popupAddVisible: true
+    });
+  },
+  // 新增内部关闭按钮
+  onCloseAddDialog() {
+    const that = this;
+    that.setData({
+      popupAddVisible: false,
+    });
+    setTimeout(()=>{
+      that.setData({
+        addLPData:{
+          project_id: null,
+          type: "addLp",
+          lp_type: 0,
+          title: null,
+          client: null,
+          year: null,
+          season: null,
+          is_new_development: 1,
+          username: "管理员",
+        },
+      });
+    },500)
+  },
+  // 新增lp输入处理
+  handleInput(e) {
+    const field = e.currentTarget.dataset.field; // 获取字段名（year/month）
+    this.setData({
+      [`addLPData.${field}`]: e.detail.value // 动态更新对应字段
+    });
+  },
+  // 新增内部提交按钮
+  onSubmitAddDialog() {
+    const that = this;
+    const development_id = that.data.development_id;
+    that.setData({
+      'addLPData.project_id': development_id // 使用路径语法
+    });
+    const { title, client, year, season } = that.data.addLPData;
+    if (!title || !client || !year || !season) {
+      utils.showToast(that, "数据不能为空", "error");
+      return
+    } else {
+      utils.UpdateData({
+        page: that,
+        data: that.data.addLPData,
+        message: "添加LP成功"
+      })
+      that.setData({
+        popupAddVisible: false
+      });
+    }
+
   },
 })
