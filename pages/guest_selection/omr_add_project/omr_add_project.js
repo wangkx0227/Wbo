@@ -84,11 +84,21 @@ Page({
           for (let i = 0; i < data.length; i++) {
             const id = data[i].id;
             const name = data[i].name;
+            const role = data[i].role;
             userList.push({
               label: name,
               value: id
             })
+            if (role.length > 0) {
+              if (role[0].name === "AIT") {
+                AITUserList.push(id);
+              };
+              if (role[0].name === "AIE") {
+                AIEUserList.push(id);
+              };
+            };
           };
+          console.log(AIEUserList,AITUserList);
           that.setData({
             userList: userList,
             AITUserList: AITUserList,
@@ -102,45 +112,6 @@ Page({
         utils.showToast(that, "网络连接失败", "error");
       }
     })
-    // utils.LoadDataList({
-    //   page: that,
-    //   data: {
-    //     "type": "get_lps_data",
-    //     "project_id": 20115,
-    //     "username": "Jasonyu" // 访问人必须是管理员
-    //   },
-    //   mode: mode,
-    //   showLoading: false,
-    //   showSkeleton: false,
-    // }).then(list => { // list 就是data数据
-    //   if (list.lps.length !== 0) {
-    //     let userList = [];
-    //     const lp_members = list.lps[0].lp_members;
-    //     for (let i = 0; i < lp_members.length; i++) {
-    //       const name = lp_members[i][0];
-    //       const role = lp_members[i][1];
-    //       if (!seen.has(name)) {
-    //         seen.add(name);
-    //         userList.push({
-    //           label: `${name}-${role}`,
-    //           value: name
-    //         })
-    //         if (role === 'AIT') {
-    //           AITUserList.push(name)
-    //         }
-    //         if (role === 'AIE') {
-    //           AIEUserList.push(name)
-    //         }
-    //       }
-    //     }
-    //     that.setData({
-    //       userList: userList,
-    //       AITUserList: AITUserList,
-    //       AIEUserList: AIEUserList,
-
-    //     })
-    //   }
-    // });
   },
   // 滚动-回到顶部
   onToTop(e) {
