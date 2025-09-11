@@ -196,6 +196,10 @@ Page({
   // 生命周期函数--监听页面加载 
   onLoad() {
     const that = this;
+    if (!utils.LoginStatusAuthentication(that)) {
+      // 未登录状态，函数已处理跳转逻辑
+      return;
+    }
     // 获取当前时间
     const now = new Date();
     const year = now.getFullYear();
@@ -256,26 +260,17 @@ Page({
   },
   // 跳转到详情页面
   onJumpArtworkDeatails(e) {
-    const userName = this.data.userName;
-    const userRole = this.data.userRole;
     const development_id = e.currentTarget.dataset.development_id;
-    // // fmr与设计师进行跳转
-    // if (userName && (userRole === "fmr" || userRole === "designer")) {
-    //   wx.navigateTo({
-    //     url: `/pages/factory_login_page/wbo-list/wbo-list?development_id=${JSON.stringify(development_id)}`,
-    //     fail: (err) => {
-    //       wx.showToast({
-    //         title: '跳转失败',
-    //         icon: 'error'
-    //       });
-    //     }
-    //   });
-    // } else {
-    //   wx.showToast({
-    //     title: '未登录',
-    //     icon: 'error'
-    //   });
-    // }
+    wx.navigateTo({
+      url: `/pages/guest_selection/omr_add_lp/omr_add_lp?development_id=${JSON.stringify(development_id)}`,
+      fail: (err) => {
+        console.log(err);
+        wx.showToast({
+          title: '跳转失败',
+          icon: 'error'
+        });
+      }
+    });
   },
   // 搜索
   onSearchConfirm(e) {
@@ -352,6 +347,7 @@ Page({
   },
   // 提交新增内部
   onSubmitAddProject(e) {
+    console.log("新增");
     // const that = this;
     // const development_id = that.data.development_id;
     // that.setData({

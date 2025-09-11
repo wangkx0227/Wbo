@@ -17,7 +17,8 @@
     "pages/guest_selection/guest_selection_final_round/guest_selection_final_round",
     "pages/factory_login_page/index/index",
     "pages/kyle_file/kyle_file_download_details/kyle_file_download_details",
-    "pages/guest_selection/omr_add_project/omr_add_project"
+    "pages/guest_selection/omr_add_project/omr_add_project",
+    "pages/guest_selection/omr_add_lp/omr_add_lp"
   ],
   "window": {
     "navigationBarTextStyle": "black",
