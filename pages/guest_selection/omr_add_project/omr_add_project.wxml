@@ -85,11 +85,11 @@
       </view>
       <view class="input-example">
         <view class="input-example-label"> 主导人 <text style=" color: red;">*</text></view>
-        <t-input placeholder="请选择主导人" borderless="{{true}}" class="input-example-input" value="{{addProjectData.director}}" data-field="director" bindtap="onDateInputClick" readonly="{{true}}"/>
+        <t-input placeholder="请选择主导人" borderless="{{true}}" class="input-example-input" value="{{addProjectData.director}}" data-field="director" bindtap="onUserInputClick" readonly="{{true}}"/>
       </view>
       <view class="input-example">
         <view class="input-example-label"> 参与人员 <text style=" color: red;">*</text></view>
-        <t-input placeholder="请选择参与人员" borderless="{{true}}" class="input-example-input" value="{{addProjectData.member}}" data-field="member" bindtap="onDateInputClick" readonly="{{true}}"/>
+        <t-input placeholder="请选择参与人员" borderless="{{true}}" class="input-example-input" value="{{addProjectData.member}}" data-field="member" bindtap="onUserInputClick" readonly="{{true}}"/>
       </view>
       <view class="button-example">
         <t-button theme="light" block t-class="group-btn" bindtap="onCloseAddProject">关闭</t-button>
@@ -101,7 +101,7 @@
 </t-popup>
 <!-- 年月日选择器 -->
 <t-date-time-picker auto-close title="选择日期" visible="{{dateVisible}}" mode="date" format="YYYY-MM-DD" bindchange="onDateConfirm" bindcancel="onDateHidePicker"  start="{{start}}" end="{{end}}" defaultValue="{{defaultValue}}"/>
-<!-- 选择框 -->
+<!-- 主导人选择框 -->
 <t-picker visible="{{userSelectPickerVisible}}" value="{{userSelectPickerValue}}" title="{{userSelectPickerTitle}}" cancelBtn="取消" confirmBtn="确认" bindchange="onUserSelectPickerChange" bindcancel="onUserSelectClosePicker" catchtouchmove>
   <t-picker-item options="{{userList}}"></t-picker-item>
 </t-picker>

@@ -404,9 +404,8 @@ Page({
       dateVisible: false,
     });
   },
-
   // 选择时间框的点击事项
-  onDateInputClick(e) {
+  onUserInputClick(e) {
     this.setData({
       userSelectPickerVisible: true,
     });
@@ -421,6 +420,8 @@ Page({
   onUserSelectPickerChange(e) {
     const that = this;
     const { value } = e.detail;
-    console.log(value);
+    that.setData({
+     "addProjectData.director": value,
+    });
   },
 })
