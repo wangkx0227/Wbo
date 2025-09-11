@@ -22,3 +22,14 @@
   margin: 32rpx;
   display: flex;
 }
+.page-main{
+  margin-top: 8px;
+}
+.page-main .wrapper .t-cell-group {
+  margin-bottom: 20rpx !important;
+}
+
+/* 最后一个元素不需要间距 */
+.page-main .wrapper .t-cell-group:last-child {
+  margin-bottom: 0;
+}

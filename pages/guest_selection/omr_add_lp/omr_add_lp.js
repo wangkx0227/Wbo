@@ -1,4 +1,3 @@
-const app = getApp();
 const utils = require('../../../utils/util')
 Page({
   data: {
@@ -13,7 +12,7 @@ Page({
     isDownRefreshing: false, // 下拉刷新状态
     isLoadingReachMore: false, // 滚动底部加载数据
     noMoreData: false,    // 数据是否全部加载完毕
-    skeletonLoading: false, // 骨架控制变量
+    skeletonLoading: true, // 骨架控制变量
     scrollTop: 0, // 回到顶部变量
     // 筛选框变量-1
     dropdownTemplate: {
@@ -52,7 +51,7 @@ Page({
       season: null,
       is_new_development: 1,
       username: "管理员",
-    }, // 新增lp
+    },
   },
   // 生命周期函数
   onLoad(options) {
@@ -61,11 +60,17 @@ Page({
       // 未登录状态，函数已处理跳转逻辑
       return;
     }
+    const userRole = wx.getStorageSync('userRole');
+    const userName = wx.getStorageSync('userName');
+    const apiUserName = wx.getStorageSync('apiUserName');
     const development_id = options.development_id; // 开发案id
     that.setData({
+      userRole:userRole,
+      userName:userName,
+      apiUserName:apiUserName,
       development_id: development_id,
     })
-    // 需要一个根据开发案id获取当前创建lp的接口
+    that.dataRequest("init");
   },
   // 首页数据结构处理
   dataStructure(dataList) {
@@ -74,21 +79,18 @@ Page({
     dataList.forEach(item => {
       const development_id = item.id; // 开发案id
       const development_name = item.name; // 开发案名称
-      const development_director = item.director; // 主导人
       const development_start_data = item.start_date; // 开发案开始时间
       // 对内部的line_plan_list变量进行循环
       item.line_plan_list.forEach((line_plan) => {
         const lp_data = {
           development_id: development_id, // 开发案id
           line_plan_id: line_plan.id, // id
-          line_plan_title: `${development_name}-${line_plan.title}`, // 名称
           lp_title: line_plan.title,
           development_name: development_name,
           line_plan_client: line_plan.client || "未记录", // 客户
           line_plan_year: line_plan.year || "未记录", // 年
           line_plan_season: line_plan.season || "未记录", // 风格
           line_plan_is_new_development: line_plan.is_new_development, // 是否结案
-          development_director: development_director,// 主导人
           development_start_data: development_start_data, //开发案时间
         }
         if (lp_data['line_plan_is_new_development']) {
@@ -115,18 +117,12 @@ Page({
   },
   // 数据分页显示处理
   dataRequest(mode) {
-    /*
-        mode：模式
-        filter：筛选条件
-        field: 筛选数据内的key也就是字段
-        , filter = "all", field
-    */
-
     const that = this;
     const apiUserName = that.data.apiUserName;
+    const development_id = that.data.development_id;
     utils.LoadDataList({
       page: that,
-      data: { type: "getProjectList", username: apiUserName },
+      data: { type: "getProjectList", username: apiUserName, project_id: development_id },
       mode: mode
     }).then(list => { // list 就是data数据
       const arrangeData = that.dataStructure(list);

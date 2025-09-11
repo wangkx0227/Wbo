@@ -20,33 +20,31 @@
   </view>
   <view class="page-main">
     <view class="wrapper">
-      <view class="wrapper">
-        <view wx:for="{{Data}}" wx:key="index">
-          <t-cell-group theme="card" class="t-cell-group" bindtap="onJumpArtworkDeatails" data-development_id="{{ item.development_id }}">
-            <t-cell hover>
-              <view slot="title" style="display: grid;gap: 25rpx;">
+      <view wx:for="{{Data}}" wx:key="index">
+        <t-cell-group theme="card" class="t-cell-group" bindtap="onJumpArtworkDeatails" data-development_id="{{ item.development_id }}">
+          <t-cell hover>
+            <view slot="title" style="display: grid;gap: 25rpx;">
+              <view class="arrange-center">
+                <text class="title-font-main">开发案：</text>
+                <text class="title-font-other name-cell">{{ item.development_name }}</text>
+              </view>
+              <view class="arrange-center">
+                <text class="title-font-main">主导人：</text>
+                <text class="title-font-other">{{ item.development_director }}</text>
+              </view>
+              <view class="arrange-space-between" style="gap: 30rpx;">
                 <view class="arrange-center">
-                  <text class="title-font-main">开发案：</text>
-                  <text class="title-font-other name-cell">{{ item.development_name }}</text>
+                  <text class="title-font-main">创建时间：</text>
+                  <text class="title-font-other">{{ item.development_start_date }}</text>
                 </view>
                 <view class="arrange-center">
-                  <text class="title-font-main">主导人：</text>
-                  <text class="title-font-other">{{ item.development_director }}</text>
-                </view>
-                <view class="arrange-space-between" style="gap: 30rpx;">
-                  <view class="arrange-center">
-                    <text class="title-font-main">创建时间：</text>
-                    <text class="title-font-other">{{ item.development_start_date }}</text>
-                  </view>
-                  <view class="arrange-center">
-                    <text class="title-font-main">结束时间：</text>
-                    <text class="title-font-other">{{ item.development_end_date }}</text>
-                  </view>
+                  <text class="title-font-main">结束时间：</text>
+                  <text class="title-font-other">{{ item.development_end_date }}</text>
                 </view>
               </view>
-            </t-cell>
-          </t-cell-group>
-        </view>
+            </view>
+          </t-cell>
+        </t-cell-group>
       </view>
     </view>
   </view>
@@ -115,10 +113,10 @@
     </view>
     <view class="arrange-center" style="padding-left: 20rpx;border-bottom: 1px solid #F5F5F5F5;">
       <text class="title-font-main">按照分组选择：</text>
-      <t-radio-group t-class="box"  borderless class="arrange-center" style="gap: 15rpx;">
-        <t-radio label="AIT组" value="AIT" bindtap='onUserGruopSubmit' data-gruop="AIT"/>
-        <t-radio label="AIE组" value="AIE" bindtap='onUserGruopSubmit' data-gruop="AIE"/>
-        <t-radio label="取消组选中" value="null" bindtap='onUserGruopSubmit' data-gruop="null"/>
+      <t-radio-group t-class="box" borderless class="arrange-center" style="gap: 15rpx;">
+        <t-radio label="AIT组" value="AIT" bindtap='onUserGruopSubmit' data-gruop="AIT" />
+        <t-radio label="AIE组" value="AIE" bindtap='onUserGruopSubmit' data-gruop="AIE" />
+        <t-radio label="取消组选中" value="null" bindtap='onUserGruopSubmit' data-gruop="null" />
       </t-radio-group>
     </view>
     <view style="padding: 0 20rpx;">

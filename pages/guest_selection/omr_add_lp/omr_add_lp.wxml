@@ -14,17 +14,13 @@
   </view>
   <view class="page-main">
     <view class="wrapper">
-      <view wx:for="{{Data}}" wx:key="index">
-        <t-cell-group theme="card" class="t-cell-group {{ item.select_status ? 'select-border' : ''}}" bindtap="handleClick" data-lineplan_id="{{ item.line_plan_id }}" data-development_id="{{item.development_id}}">
+      <view wx:for="{{Data}}" wx:key="index" style="gap: 15px;">
+        <t-cell-group theme="card" class="t-cell-group" bindtap="handleClick" >
           <t-cell hover>
-            <view slot="title" style="display: grid;gap: 15rpx;">
+            <view slot="title" style="display: grid;gap: 25rpx;">
               <view class="arrange-center">
                 <text class="title-font-main">LP名称：</text>
                 <text class="title-font-other name-cell">{{ item.lp_title }}</text>
-              </view>
-              <view class="arrange-center">
-                <text class="title-font-main">开发案：</text>
-                <text class="title-font-other name-cell">{{ item.development_name }}</text>
               </view>
               <view class="arrange-space-between" style="gap: 155rpx;">
                 <view class="arrange-center">
@@ -38,17 +34,13 @@
               </view>
               <view class="arrange-space-between" style="gap: 155rpx;">
                 <view class="arrange-center">
-                  <text class="title-font-main">主导人：</text>
-                  <text class="title-font-other">{{ item.development_director }}</text>
-                </view>
-                <view class="arrange-center">
                   <text class="title-font-main">Year：</text>
                   <text class="title-font-other">{{item.line_plan_year}}</text>
                 </view>
-              </view>
-              <view class="arrange-center">
-                <text class="title-font-main">创建时间：</text>
-                <text class="title-font-other">{{ item.development_start_data }}</text>
+                <view class="arrange-center">
+                  <text class="title-font-main">创建时间：</text>
+                  <text class="title-font-other">{{ item.development_start_data }}</text>
+                </view>
               </view>
             </view>
           </t-cell>
@@ -84,15 +76,15 @@
       </view>
       <view class="input-example">
         <view class="input-example-label"> 客户 <text style=" color: red;">*</text></view>
-        <t-input placeholder="请输入客户简称" borderless="{{true}}" class="input-example-input" value="{{addLPData.client}}" data-field="client" bindchange="handleInput"/>
+        <t-input placeholder="请输入客户简称" borderless="{{true}}" class="input-example-input" value="{{addLPData.client}}" data-field="client" bindchange="handleInput" />
       </view>
       <view class="input-example">
         <view class="input-example-label"> 年份 <text style=" color: red;">*</text></view>
-        <t-input placeholder="请输入年份" borderless="{{true}}" class="input-example-input" value="{{addLPData.year}}" data-field="year" bindchange="handleInput"/>
+        <t-input placeholder="请输入年份" borderless="{{true}}" class="input-example-input" value="{{addLPData.year}}" data-field="year" bindchange="handleInput" />
       </view>
       <view class="input-example">
         <view class="input-example-label"> 季节 <text style=" color: red;">*</text></view>
-        <t-input placeholder="请输入风格类型" borderless="{{true}}" class="input-example-input" value="{{addLPData.season}}" data-field="season" bindchange="handleInput"/>
+        <t-input placeholder="请输入风格类型" borderless="{{true}}" class="input-example-input" value="{{addLPData.season}}" data-field="season" bindchange="handleInput" />
       </view>
       <view class="button-example">
         <t-button theme="light" block t-class="group-btn" bindtap="onCloseAddDialog">关闭</t-button>
