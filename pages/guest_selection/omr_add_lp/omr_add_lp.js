@@ -65,9 +65,9 @@ Page({
     const apiUserName = wx.getStorageSync('apiUserName');
     const development_id = options.development_id; // 开发案id
     that.setData({
-      userRole:userRole,
-      userName:userName,
-      apiUserName:apiUserName,
+      userRole: userRole,
+      userName: userName,
+      apiUserName: apiUserName,
       development_id: development_id,
     })
     that.dataRequest("init");
@@ -166,6 +166,7 @@ Page({
   },
   // 页面下拉刷新
   onPullDownRefresh() {
+    console.log(11);
     if (this.data.isLoadingReachMore) return; // 如果正在加载更多，则禁止下拉刷新
     // 重置 currentIndex 让它从头开始访问
     this.setData({
@@ -300,8 +301,23 @@ Page({
         page: that,
         data: that.data.addLPData,
         message: "添加LP成功"
+      }).then(res => {
+        if (res.statusCode === 200) {
+          let lp_data = {
+            lp_title: title,
+            line_plan_year: year,
+            line_plan_season: season,
+            line_plan_client: client,
+            development_start_data: "暂未获取"
+          }
+          that.setData({
+            Data: [lp_data, ...that.data.Data],
+            allData: [lp_data, ...that.data.allData],
+            filteredData: [lp_data, ...that.data.filteredData],
+          });
+          that.onCloseAddDialog();
+        }
       })
-      that.onCloseAddDialog();
     }
   },
 })

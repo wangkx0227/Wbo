@@ -59,9 +59,9 @@
 <!-- 轻提示 -->
 <t-toast id="t-toast" />
 <!-- 回到顶部 -->
-<t-back-top theme="half-round" text="" scroll-top="{{scrollTop}}" bind:to-top="onToTop" />
+<t-back-top theme="half-round" text="" scroll-top="{{scrollTop}}" bind:to-top="onToTop" tyle="z-index: 999;"/>
 <!-- 添加个新的图稿按钮 -->
-<t-fab icon="add" bind:click="onOpenAddProject" aria-label="增加" usingCustomNavbar draggable y-bounds="{{[0, 80]}}"></t-fab>
+<t-fab icon="add" bind:click="onOpenAddProject" aria-label="增加" usingCustomNavbar draggable y-bounds="{{[0, 100]}}"></t-fab>
 <!-- 增加弹窗-左 -->
 <t-popup visible="{{popupAddVisible}}" placement="left">
   <view class="popup-block" style="padding: 10rpx;height: 100%;">

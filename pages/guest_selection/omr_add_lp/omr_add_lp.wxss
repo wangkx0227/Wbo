@@ -33,3 +33,8 @@
 .page-main .wrapper .t-cell-group:last-child {
   margin-bottom: 0;
 }
+
+/* top组件调整位置,防止被标签栏组件遮挡 */
+.t-back-top {
+  margin-bottom: 100px !important;
+}
