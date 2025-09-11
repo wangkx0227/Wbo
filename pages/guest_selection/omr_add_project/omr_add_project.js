@@ -48,7 +48,6 @@ Page({
     addProjectData: {
       name: null,
       start_date: null,
-      is_completed: false,
       end_date: null,
       director: null, // 主导人id
       create_man: null, // 创建人的id
@@ -351,12 +350,38 @@ Page({
       utils.showToast(that, "数据不能为空", "error");
       return
     } else {
+      const userInfo = wx.getStorageSync('userInfo');
+      let data = {
+        "name": name,
+        "start_date": start_date,
+        "end_date": end_date,
+        "is_completed": false,
+        "director": director[0],
+        "create_man": 1,
+        "members": members
+      }
+      if (userInfo) {
+        data["create_man"] = userInfo.fmr.user_id;
+      }
       wx.request({
-        url: montageUrl + '/wbo//development-projects/',
+        url: montageUrl + '/wbo/development-projects/',
         method: "POST",
+        data: data,
         success: (res) => {
-          if (res.statusCode === 200) {
+          if (res.statusCode === 201) {
             const data = res.data;
+            const development_data = {
+              development_director: data.director.name,
+              development_end_date: data.end_date,
+              development_id: data.id,
+              development_name: data.name,
+              development_start_date: data.start_date,
+            }
+            that.setData({
+              Data: [development_data, ...that.data.Data],
+              allData: [development_data, ...that.data.allData],
+              filteredData: [development_data, ...that.data.filteredData],
+            });
             that.onCloseAddProject();
           } else {
             utils.showToast(that, "请求失败", "error");
