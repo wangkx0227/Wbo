@@ -55,6 +55,41 @@ Page({
     start: '2025-01-01',
     end: '2050-12-31',
     defaultValue: '2025-09-10', // 默认时间
+    userList: [],
+    userSelectPickerVisible: false,
+    userSelectPickerTitle: "", // 标题
+    userSelectPickerValue: [],// 选择的人
+  },
+  // 获取用户
+  dataUserRequest(mode) {
+    const that = this;
+    utils.LoadDataList({
+      page: that,
+      data: {
+        "type": "get_lps_data",
+        "project_id": 20115,
+        "username": "Jasonyu" // 访问人必须是管理员
+      },
+      mode: mode,
+      showLoading: false,
+      showSkeleton: false,
+    }).then(list => { // list 就是data数据
+      if (list.lps.length !== 0) {
+        let userList = [];
+        const lp_members = list.lps[0].lp_members;
+        for (let i = 0; i < lp_members.length; i++) {
+          const name = lp_members[i][0];
+          const role = lp_members[i][1];
+          userList.push({
+            label: `${name}-${role}`,
+            value: name
+          })
+        }
+        that.setData({
+          userList: userList,
+        })
+      }
+    });
   },
   // 滚动-回到顶部
   onToTop(e) {
@@ -142,13 +177,12 @@ Page({
   },
   // 生命周期函数--监听页面加载 
   onLoad() {
+    const that = this;
     // 获取当前时间
     const now = new Date();
     const year = now.getFullYear();
     const month = String(now.getMonth() + 1).padStart(2, '0'); // 月份补0
     const day = String(now.getDate()).padStart(2, '0'); // 日期补0
-    console.log();
-    const that = this;
     if (!utils.LoginStatusAuthentication(that)) {
       // 未登录状态，函数已处理跳转逻辑
       return;
@@ -167,7 +201,8 @@ Page({
       apiUserName: apiUserName,
       tabBarTabLabel: tabBarTabLabel
     });
-    this.dataRequest("init"); // 分页处理
+    that.dataRequest("init"); // 分页处理
+    that.dataUserRequest();
   },
   // 页面下拉刷新
   onPullDownRefresh() {
@@ -345,7 +380,6 @@ Page({
       [`addProjectData.${field}`]: e.detail.value // 动态更新对应字段
     });
   },
-
   // 选择时间框的点击事项
   onDateInputClick(e) {
     const field = e.currentTarget.dataset.field; // 获取字段名（year/month）
@@ -371,4 +405,22 @@ Page({
     });
   },
 
+  // 选择时间框的点击事项
+  onDateInputClick(e) {
+    this.setData({
+      userSelectPickerVisible: true,
+    });
+  },
+  // 关闭筛选器
+  onUserSelectClosePicker(e) {
+    this.setData({
+      userSelectPickerVisible: false,
+    });
+  },
+  // 确认筛选器
+  onUserSelectPickerChange(e) {
+    const that = this;
+    const { value } = e.detail;
+    console.log(value);
+  },
 })

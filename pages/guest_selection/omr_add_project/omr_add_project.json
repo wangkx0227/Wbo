@@ -1,13 +1,14 @@
 {
   "usingComponents": {
+    "t-fab": "tdesign-miniprogram/fab/fab",
+    "t-cell": "tdesign-miniprogram/cell/cell",
+    "t-input": "tdesign-miniprogram/input/input",
+    "t-picker": "tdesign-miniprogram/picker/picker",
+    "t-search": "tdesign-miniprogram/search/search",
+    "t-cell-group": "tdesign-miniprogram/cell-group/cell-group",
+    "t-picker-item": "tdesign-miniprogram/picker-item/picker-item",
     "t-dropdown-menu": "tdesign-miniprogram/dropdown-menu/dropdown-menu",
     "t-dropdown-item": "tdesign-miniprogram/dropdown-item/dropdown-item",
-    "t-search": "tdesign-miniprogram/search/search",
-    "t-cell": "tdesign-miniprogram/cell/cell",
-    "t-cell-group": "tdesign-miniprogram/cell-group/cell-group",
-    "t-fab": "tdesign-miniprogram/fab/fab",
-    "t-input": "tdesign-miniprogram/input/input",
     "t-date-time-picker": "tdesign-miniprogram/date-time-picker/date-time-picker"
-
   }
 }
