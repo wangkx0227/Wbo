@@ -46,9 +46,11 @@ Page({
     addProjectData: {
       name: null,
       start_date: null,
+      is_completed: false,
       end_date: null,
-      director: null,
-      member: [],
+      director: null, // 主导人id
+      create_man: null, // 创建人的id
+      members: [], // 参与成员 id 列表
     },
     date_field: null,
     dateVisible: false,
@@ -382,7 +384,7 @@ Page({
           start_date: null,
           end_date: null,
           director: null,
-          member: [],
+          members: [],
         },
       })
     }, 500)
@@ -452,10 +454,10 @@ Page({
   // 打开弹窗-参与人
   onOpneUserPopup(e) {
     const that = this;
-    const member = that.data.addProjectData.member;
+    const members = that.data.addProjectData.members;
     that.setData({
       popupUserVisible: true,// 先显示弹窗
-      checkAllValues: member,
+      checkAllValues: members,
     });
   },
   // 关闭弹窗-参与人
@@ -476,7 +478,7 @@ Page({
     const that = this;
     const checkAllValues = that.data.checkAllValues;
     that.setData({
-      "addProjectData.member": checkAllValues,
+      "addProjectData.members": checkAllValues,
     })
     that.oncloseUserPopup();
   },

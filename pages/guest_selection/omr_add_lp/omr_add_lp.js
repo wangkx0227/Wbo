@@ -65,7 +65,6 @@ Page({
     that.setData({
       development_id: development_id,
     })
-    console.log(development_id);
     // 需要一个根据开发案id获取当前创建lp的接口
   },
   // 首页数据结构处理
