@@ -62,6 +62,9 @@ Page({
       return;
     }
     const development_id = options.development_id; // 开发案id
+    that.setData({
+      development_id: development_id,
+    })
     console.log(development_id);
     // 需要一个根据开发案id获取当前创建lp的接口
   },
@@ -263,9 +266,9 @@ Page({
     that.setData({
       popupAddVisible: false,
     });
-    setTimeout(()=>{
+    setTimeout(() => {
       that.setData({
-        addLPData:{
+        addLPData: {
           project_id: null,
           type: "addLp",
           lp_type: 0,
@@ -277,7 +280,7 @@ Page({
           username: "管理员",
         },
       });
-    },500)
+    }, 500)
   },
   // 新增lp输入处理
   handleInput(e) {
