@@ -349,25 +349,18 @@ Page({
   },
   // 提交新增内部
   onSubmitAddProject(e) {
-    console.log("新增");
-    // const that = this;
-    // const development_id = that.data.development_id;
-    // that.setData({
-    //   'addLPData.project_id': development_id // 使用路径语法
-    // });
-    // const { title, client, year, season } = that.data.addLPData;
-    // if (!title || !client || !year || !season) {
-    //   utils.showToast(that, "数据不能为空", "error");
-    //   return
-    // } else {
+    const that = this;
+    const { name, start_date, end_date, director,members } = that.data.addProjectData;
+    if (!name || !start_date || !end_date || !director || members.length === 0) {
+      utils.showToast(that, "数据不能为空", "error");
+      return
+    } //else {
     //   utils.UpdateData({
     //     page: that,
     //     data: that.data.addLPData,
-    //     message: "新增LP成功"
+    //     message: "创建开发案成功"
     //   })
-    //   that.setData({
-    //     popupAddVisible: false
-    //   });
+    // that.onCloseAddProject();
     // }
 
   },
