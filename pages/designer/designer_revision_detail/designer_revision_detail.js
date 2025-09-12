@@ -67,7 +67,15 @@ Page({
     batchSelectPickerItemList: [],
     batchSelectPickerTitle: "",
     // 附件
-    popupFileArtworkVisible: false,
+    popupFileArtworkVisible: false, // 附件上传 控制变量
+    fileSelectPickerVisible: false, // 附件类型 控制变量
+    fileSelectPickerValue: "",
+    fileTypeList: [ // 附件上传的状态列表
+      { label: '切图', value: 1 },
+      { label: "修图", value: 2 },
+    ],
+    image_type: null, // 附件上传的状态
+
   },
   // 数据结构处理
   dataStructure(dataList) {
@@ -769,7 +777,6 @@ Page({
       }
     })
   },
-
   // 批量操作选择触发按钮
   batchSelect() {
     const that = this;
@@ -921,7 +928,21 @@ Page({
     }
   },
 
-  // 打开附件
+
+  // 提交-附件上传
+  onSubmitFileArtwork(e) {
+    const that = this;
+    const task_id = that.data.task_id;
+    const timeline_id = that.data.timeline_id;
+    const imageFileList = that.data.imageFileList;
+    const image_type = that.data.image_type;
+    setTimeout(() => {
+      utils.showToast(that, "上传成功");
+      that.onCloseUploadFileArtwork();
+    }, 1500)
+  },
+
+  // 打开-附件上传
   onOpenUploadFileArtwork(e) {
     const {
       taskId,
@@ -934,7 +955,7 @@ Page({
       popupFileArtworkVisible: true,
     });
   },
-  // 关闭-上传工厂打样稿
+  // 关闭-附件上传
   onCloseUploadFileArtwork() {
     this.setData({
       popupFileArtworkVisible: false,
@@ -943,13 +964,32 @@ Page({
     setTimeout(() => {
       this.setData({
         task_id: null,
+        image_type: null,
         timeline_id: null,
         imageFileList: [],
+        fileSelectPickerKey: null,
       })
     }, 500)
   },
-  // 提交-
-  onSubmitFileArtwork(e) {
-    console.log(e);
-  }
+  // 附件上传类型-打开
+  onFileInputClick() {
+    this.setData({
+      fileSelectPickerVisible: true,
+    });
+  },
+  // 附件上传类型-关闭
+  onFileSelectClosePicker(e) {
+    this.setData({
+      fileSelectPickerVisible: false,
+    });
+  },
+  // 附件上传类型-选择
+  onFileSelectPickerChange(e) {
+    const that = this;
+    const { value, label } = e.detail;
+    that.setData({
+      image_type: value,
+      fileSelectPickerKey: label,
+    });
+  },
 })

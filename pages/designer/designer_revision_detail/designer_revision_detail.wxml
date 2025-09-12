@@ -130,7 +130,7 @@
       <view class="arrange-column">
         <text class="title-font-main">附件：</text>
         <view class="input-example">
-          <t-upload mediaType="{{['image','ai']}}" max="{{1}}" files="{{imageFileList}}" bind:add="onImageAdd" bind:remove="onImageRemove">
+          <t-upload mediaType="{{['image']}}" max="{{1}}" files="{{imageFileList}}" bind:add="onImageAdd" bind:remove="onImageRemove">
           </t-upload>
         </view>
 
@@ -138,7 +138,7 @@
       <view class="arrange-column">
         <text class="title-font-main">类型：</text>
         <view class="input-example">
-    
+          <t-input placeholder="请选择类型" borderless="{{true}}" class="input-example-input" value="{{fileSelectPickerKey}}" data-field="director" bindtap="onFileInputClick" readonly="{{true}}" />
         </view>
       </view>
       <view class="button-example">
@@ -231,4 +231,9 @@
 <!-- AIT下拉框 -->
 <t-picker visible="{{batchSelectPickerVisible}}" value="{{batchSelectPickerValue}}" title="{{batchSelectPickerTitle}}" cancelBtn="取消" confirmBtn="确认" bindchange="onBatchSelectPickerChange" bindcancel="onBatchSelectClosePicker" catchtouchmove>
   <t-picker-item options="{{batchSelectPickerItemList}}"></t-picker-item>
+</t-picker>
+
+<!-- 附件上传类型选择框 -->
+<t-picker visible="{{fileSelectPickerVisible}}" value="{{fileSelectPickerValue}}" title="请选上传类型" cancelBtn="取消" confirmBtn="确认" bindchange="onFileSelectPickerChange" bindcancel="onFileSelectClosePicker" catchtouchmove>
+  <t-picker-item options="{{fileTypeList}}"></t-picker-item>
 </t-picker>
