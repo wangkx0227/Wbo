@@ -947,25 +947,29 @@ Page({
       utils.showToast(that, "选择完毕后在提交", "error");
       return;
     };
+    const formData = {
+      task: task_id,
+    };
+
+    image_type.forEach((id, index) => {
+      formData[`file_type_ids[${index}]`] = id;
+    });
+
     wx.uploadFile({
       url: montageUrl + '/wbo/uploads/',
       filePath: imageFileList[0].url, // 临时文件路径
       name: 'file',       // 与接口的 file 字段一致
-      formData: {
-        task: task_id,   // task ID
-        file_type_ids: JSON.stringify(image_type), // 类型列表
-      },
+      formData: formData,
+      // formData: {
+      //   task: task_id,   // task ID
+      //   file_type_ids: JSON.stringify(image_type), // 类型列表
+      // },
       success(res) {
-        try {
-          const data = JSON.parse(res.data);
-          if (data.code === 200) {
-            utils.showToast(that, "上传成功");
-            that.onCloseUploadFileAttachment();
-          } else {
-            utils.showToast(that, "上传失败", "error");
-          }
-        } catch (e) {
-          utils.showToast(that, "返回数据解析失败", "error");
+        if (res.statusCode === 201) {
+          utils.showToast(that, "上传成功");
+          that.onCloseUploadFileAttachment();
+        } else {
+          utils.showToast(that, "上传失败", "error");
         }
       },
       fail(err) {
