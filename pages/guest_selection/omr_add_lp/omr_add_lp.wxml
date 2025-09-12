@@ -17,6 +17,7 @@
       <view wx:for="{{Data}}" wx:key="index" style="gap: 15px;">
         <t-cell-group theme="card" class="t-cell-group" bindtap="handleClick" >
           <t-cell hover>
+            <t-badge count="NEW" slot="note" shape="ribbon" wx:if="{{ item.line_new }}"/>
             <view slot="title" style="display: grid;gap: 25rpx;">
               <view class="arrange-center">
                 <text class="title-font-main">LP名称：</text>

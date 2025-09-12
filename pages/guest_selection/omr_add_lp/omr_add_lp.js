@@ -78,7 +78,6 @@ Page({
     let client_list = [];
     dataList.forEach(item => {
       const development_id = item.id; // 开发案id
-      const development_name = item.name; // 开发案名称
       const development_start_data = item.start_date; // 开发案开始时间
       // 对内部的line_plan_list变量进行循环
       item.line_plan_list.forEach((line_plan) => {
@@ -86,17 +85,11 @@ Page({
           development_id: development_id, // 开发案id
           line_plan_id: line_plan.id, // id
           lp_title: line_plan.title,
-          development_name: development_name,
           line_plan_client: line_plan.client || "未记录", // 客户
           line_plan_year: line_plan.year || "未记录", // 年
           line_plan_season: line_plan.season || "未记录", // 风格
-          line_plan_is_new_development: line_plan.is_new_development, // 是否结案
           development_start_data: development_start_data, //开发案时间
-        }
-        if (lp_data['line_plan_is_new_development']) {
-          lp_data['is_new_development_text'] = "完结"
-        } else {
-          lp_data['is_new_development_text'] = "未完结"
+          line_new: false,
         }
         client_list.push(lp_data["line_plan_client"].trim()); // 客户列表加入
         lp_data["select_status"] = false; // 批量选中状态
@@ -308,7 +301,8 @@ Page({
             line_plan_year: year,
             line_plan_season: season,
             line_plan_client: client,
-            development_start_data: "暂未获取"
+            development_start_data: "暂未获取",
+            line_new: true,
           }
           that.setData({
             Data: [lp_data, ...that.data.Data],
@@ -318,6 +312,7 @@ Page({
           that.onCloseAddDialog();
         }
       })
+      
     }
   },
 })

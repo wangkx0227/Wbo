@@ -134,18 +134,13 @@ Page({
       const development_director = item.director; // 主导人
       const development_start_date = item.start_date; // 开发案开始时间
       const development_end_date = item.end_date; // 结束时间
-      // 对内部的line_plan_list变量进行循环
-      let line_plan_id_list = [];
-      item.line_plan_list.forEach((line_plan) => {
-        line_plan_id_list.push(line_plan.id);
-      })
       const development_data = {
         development_id: development_id, // 开发案id
         development_name: development_name, // 开发案的名称
         development_director: development_director,// 主导人
         development_start_date: development_start_date,
         development_end_date: development_end_date,
-        line_plan_id_list: line_plan_id_list, // lp的id
+        development_new: false,
       }
       arrangeData.push(development_data)
       name_list.push(development_data["development_director"].trim());
@@ -350,6 +345,7 @@ Page({
       utils.showToast(that, "数据不能为空", "error");
       return
     } else {
+      wx.showLoading({ title: '加载中...' });
       const userInfo = wx.getStorageSync('userInfo');
       let data = {
         "name": name,
@@ -376,6 +372,7 @@ Page({
               development_id: data.id,
               development_name: data.name,
               development_start_date: data.start_date,
+              development_new: true,
             }
             that.setData({
               Data: [development_data, ...that.data.Data],
@@ -383,12 +380,16 @@ Page({
               filteredData: [development_data, ...that.data.filteredData],
             });
             that.onCloseAddProject();
+            utils.showToast(that, "添加成功");
           } else {
             utils.showToast(that, "请求失败", "error");
           }
         },
         fail(err) {
           utils.showToast(that, "网络连接失败", "error");
+        },
+        complete: () => {
+          wx.hideLoading();
         }
       })
     }

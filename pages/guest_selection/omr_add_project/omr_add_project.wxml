@@ -23,6 +23,7 @@
       <view wx:for="{{Data}}" wx:key="index">
         <t-cell-group theme="card" class="t-cell-group" bindtap="onJumpArtworkDeatails" data-development_id="{{ item.development_id }}">
           <t-cell hover>
+            <t-badge count="NEW" slot="note" shape="ribbon" wx:if="{{ item.development_new }}"/>
             <view slot="title" style="display: grid;gap: 25rpx;">
               <view class="arrange-center">
                 <text class="title-font-main">开发案：</text>
