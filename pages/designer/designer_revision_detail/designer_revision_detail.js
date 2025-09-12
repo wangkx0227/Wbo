@@ -70,8 +70,11 @@ Page({
     popupFileArtworkVisible: false, // 附件上传 控制变量
     fileSelectPickerVisible: false, // 附件类型 控制变量
     fileTypeList: [ // 附件上传的状态列表
+      { label: '无类型', value: 0 },
       { label: '切图', value: 1 },
-      { label: "修图", value: 2 },
+      { label: "AI档", value: 2 },
+      { label: "AI档图", value: 3 },
+      { label: "附图", value: 4 },
     ],
     fileSelectPickerValue: [],
     fileSelectPickerKey: "",
@@ -933,17 +936,42 @@ Page({
   onSubmitFileAttachment() {
     const that = this;
     const fileSelectPickerVisible = that.data.fileSelectPickerVisible;
-    if (fileSelectPickerVisible){
+    if (fileSelectPickerVisible) {
       return;
     };
     const task_id = that.data.task_id;
-    const timeline_id = that.data.timeline_id;
     const imageFileList = that.data.imageFileList;
-    const image_type = that.data.image_type;
-    setTimeout(() => {
-      utils.showToast(that, "上传成功");
-      that.onCloseUploadFileAttachment();
-    }, 1500)
+    const image_type = that.data.image_type.map(Number);
+    const montageUrl = app.globalData.montageUrl; // 请求后端接口
+    if (imageFileList.length === 0 || image_type.length === 0) {
+      utils.showToast(that, "选择完毕后在提交", "error");
+      return;
+    };
+    wx.uploadFile({
+      url: montageUrl + '/wbo/uploads/',
+      filePath: imageFileList[0].url, // 临时文件路径
+      name: 'file',       // 与接口的 file 字段一致
+      formData: {
+        task: task_id,   // task ID
+        file_type_ids: JSON.stringify(image_type), // 类型列表
+      },
+      success(res) {
+        try {
+          const data = JSON.parse(res.data);
+          if (data.code === 200) {
+            utils.showToast(that, "上传成功");
+            that.onCloseUploadFileAttachment();
+          } else {
+            utils.showToast(that, "上传失败", "error");
+          }
+        } catch (e) {
+          utils.showToast(that, "返回数据解析失败", "error");
+        }
+      },
+      fail(err) {
+        utils.showToast(that, "接口调用失败", "error");
+      }
+    });
   },
   // 打开-附件上传弹窗
   onOpenUploadFileArtwork(e) {
@@ -961,7 +989,7 @@ Page({
   // 关闭-附件上传弹窗
   onCloseUploadFileAttachment() {
     const fileSelectPickerVisible = this.data.fileSelectPickerVisible;
-    if (fileSelectPickerVisible){
+    if (fileSelectPickerVisible) {
       return;
     };
     this.setData({
@@ -971,11 +999,11 @@ Page({
     setTimeout(() => {
       this.setData({
         task_id: null,
-        image_type: null,
+        image_type: [],
         timeline_id: null,
         imageFileList: [],
         fileSelectPickerKey: null,
-        fileSelectPickerValue:[],
+        fileSelectPickerValue: [],
       })
     }, 500)
   },
@@ -994,6 +1022,7 @@ Page({
   // 附件类型-多选
   onCheckAllChange(e) {
     this.setData({
+      image_type: e.detail.value,
       fileSelectPickerValue: e.detail.value,
     });
   },
