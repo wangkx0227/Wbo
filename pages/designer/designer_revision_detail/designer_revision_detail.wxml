@@ -133,7 +133,6 @@
           <t-upload mediaType="{{['image']}}" max="{{1}}" files="{{imageFileList}}" bind:add="onImageAdd" bind:remove="onImageRemove">
           </t-upload>
         </view>
-
       </view>
       <view class="arrange-column">
         <text class="title-font-main">类型：</text>
@@ -142,9 +141,9 @@
         </view>
       </view>
       <view class="button-example">
-        <t-button theme="light" block t-class="group-btn" bindtap="onCloseUploadFileArtwork">关闭</t-button>
+        <t-button theme="light" block t-class="group-btn" bindtap="onCloseUploadFileAttachment">关闭</t-button>
         <t-divider layout="vertical" style="height:64rpx" />
-        <t-button theme="primary" block t-class="group-btn" bindtap="onSubmitFileArtwork">提交</t-button>
+        <t-button theme="primary" block t-class="group-btn" bindtap="onSubmitFileAttachment">提交</t-button>
       </view>
     </view>
   </view>
@@ -233,7 +232,18 @@
   <t-picker-item options="{{batchSelectPickerItemList}}"></t-picker-item>
 </t-picker>
 
-<!-- 附件上传类型选择框 -->
-<t-picker visible="{{fileSelectPickerVisible}}" value="{{fileSelectPickerValue}}" title="请选上传类型" cancelBtn="取消" confirmBtn="确认" bindchange="onFileSelectPickerChange" bindcancel="onFileSelectClosePicker" catchtouchmove>
-  <t-picker-item options="{{fileTypeList}}"></t-picker-item>
-</t-picker>
+<!-- 类型多选 -->
+<t-popup visible="{{fileSelectPickerVisible}}" placement="bottom" style="height: 600rpx;">
+  <view class="block">
+    <view class="header">
+      <view class="btn btn--cancel" aria-role="button" bindtap='onFileSelectClose'>取消</view>
+      <view class="title">请选上传类型</view>
+      <view class="btn btn--confirm" aria-role="button" bindtap='onFileSelectSubmit'>确定</view>
+    </view>
+    <view style="padding: 0 20rpx;">
+      <scroll-view scroll-y class="checkbox-scroll-container" enhanced show-scrollbar="{{false}}">
+        <t-checkbox-group options="{{fileTypeList}}" value="{{fileSelectPickerValue}}" bind:change="onCheckAllChange"></t-checkbox-group>
+      </scroll-view>
+    </view>
+  </view>
+</t-popup>

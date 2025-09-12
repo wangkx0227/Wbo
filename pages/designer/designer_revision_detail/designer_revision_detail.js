@@ -69,12 +69,13 @@ Page({
     // 附件
     popupFileArtworkVisible: false, // 附件上传 控制变量
     fileSelectPickerVisible: false, // 附件类型 控制变量
-    fileSelectPickerValue: "",
     fileTypeList: [ // 附件上传的状态列表
       { label: '切图', value: 1 },
       { label: "修图", value: 2 },
     ],
-    image_type: null, // 附件上传的状态
+    fileSelectPickerValue: [],
+    fileSelectPickerKey: "",
+    image_type: [], // 附件上传的状态-多选
 
   },
   // 数据结构处理
@@ -928,21 +929,23 @@ Page({
     }
   },
 
-
-  // 提交-附件上传
-  onSubmitFileArtwork(e) {
+  // 提交-附件上传弹窗
+  onSubmitFileAttachment() {
     const that = this;
+    const fileSelectPickerVisible = that.data.fileSelectPickerVisible;
+    if (fileSelectPickerVisible){
+      return;
+    };
     const task_id = that.data.task_id;
     const timeline_id = that.data.timeline_id;
     const imageFileList = that.data.imageFileList;
     const image_type = that.data.image_type;
     setTimeout(() => {
       utils.showToast(that, "上传成功");
-      that.onCloseUploadFileArtwork();
+      that.onCloseUploadFileAttachment();
     }, 1500)
   },
-
-  // 打开-附件上传
+  // 打开-附件上传弹窗
   onOpenUploadFileArtwork(e) {
     const {
       taskId,
@@ -955,8 +958,12 @@ Page({
       popupFileArtworkVisible: true,
     });
   },
-  // 关闭-附件上传
-  onCloseUploadFileArtwork() {
+  // 关闭-附件上传弹窗
+  onCloseUploadFileAttachment() {
+    const fileSelectPickerVisible = this.data.fileSelectPickerVisible;
+    if (fileSelectPickerVisible){
+      return;
+    };
     this.setData({
       popupFileArtworkVisible: false,
     });
@@ -968,28 +975,41 @@ Page({
         timeline_id: null,
         imageFileList: [],
         fileSelectPickerKey: null,
+        fileSelectPickerValue:[],
       })
     }, 500)
   },
-  // 附件上传类型-打开
+  // 附件类型-打开
   onFileInputClick() {
     this.setData({
       fileSelectPickerVisible: true,
     });
   },
-  // 附件上传类型-关闭
-  onFileSelectClosePicker(e) {
+  // 附件类型-关闭
+  onFileSelectClose() {
     this.setData({
       fileSelectPickerVisible: false,
     });
   },
-  // 附件上传类型-选择
-  onFileSelectPickerChange(e) {
-    const that = this;
-    const { value, label } = e.detail;
-    that.setData({
-      image_type: value,
-      fileSelectPickerKey: label,
+  // 附件类型-多选
+  onCheckAllChange(e) {
+    this.setData({
+      fileSelectPickerValue: e.detail.value,
     });
+  },
+  // 附件类型-确定
+  onFileSelectSubmit() {
+    const that = this;
+    let fileSelectPickerKey = [];
+    const fileSelectPickerValue = that.data.fileSelectPickerValue;
+    that.data.fileTypeList.forEach(item => {
+      if (fileSelectPickerValue.includes(item.value)) {
+        fileSelectPickerKey.push(item.label);
+      };
+    });
+    that.setData({
+      fileSelectPickerKey: fileSelectPickerKey,
+    });
+    that.onFileSelectClose();
   },
 })
