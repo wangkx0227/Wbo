@@ -49,7 +49,7 @@ Page({
       client: null,
       year: null,
       season: null,
-      status: "", // 是TD还是AIE
+      lp_type: "", // 是TD还是AIE
       is_new_development: 1,
       username: "管理员",
     },
@@ -247,7 +247,7 @@ Page({
   // 创建类型 单选的状态赋值
   onRadioChange(event) {
     const { value } = event.detail;
-    this.setData({ "addLPData.type": value });
+    this.setData({ "addLPData.lp_type": value });
   },
   // 新增lp
   onOpenAddLP() {
@@ -292,8 +292,8 @@ Page({
     that.setData({
       'addLPData.project_id': development_id // 使用路径语法
     });
-    const { title, client, year, season,type } = that.data.addLPData;
-    if (!title || !client || !year || !season || !type) {
+    const { title, client, year, season, lp_type } = that.data.addLPData;
+    if (!title || !client || !year || !season || !lp_type) {
       utils.showToast(that, "数据不能为空", "error");
       return
     } else {
@@ -310,7 +310,7 @@ Page({
             line_plan_client: client,
             development_start_data: "暂未获取",
             line_new: true,
-            type:type,
+            lp_type: lp_type,
           }
           that.setData({
             Data: [lp_data, ...that.data.Data],

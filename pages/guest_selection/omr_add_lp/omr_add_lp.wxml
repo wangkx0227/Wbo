@@ -90,7 +90,7 @@
       <view class="input-example">
         <view class="input-example-label"> 创建类型 <text style=" color: red;">*</text></view>
         <t-radio-group  bind:change="onRadioChange" t-class="box" borderless class="arrange-center" style="gap: 15rpx;" 
-        value="{{addLPData.type}}" >
+        value="{{addLPData.lp_type}}" >
           <t-radio label="AIE" value="0"/>
           <t-radio label="TD" value="1" />
         </t-radio-group>
