@@ -33,8 +33,7 @@
             <block wx:for="{{item.picture_list}}" wx:key="index">
               <view>{{item.url}}</view>
               <swiper-item>
-                <image src="{{item}}" mode="widthFix" style="width:55%;display: block; margin: 0 auto; "
-                data-outer-index="{{outerIndex}}" data-index="{{index}}" bindtap="onSwiperImagesTap" />
+                <image src="{{item}}" mode="widthFix" style="width:55%;display: block; margin: 0 auto; " data-outer-index="{{outerIndex}}" data-index="{{index}}" bindtap="onSwiperImagesTap" />
               </swiper-item>
             </block>
           </swiper>
@@ -60,12 +59,27 @@
         </view>
         <view class="arrange-column">
           <text class="title-font-main">评估操作：</text>
-          <t-radio-group t-class="radio-horizontal-box" value="{{item.confirmed2}}" bind:change="onRadioChange" data-confirmed2="{{item.confirmed2}}" data-timeline-id="{{ item.timeline_id }}" data-task-id="{{ item.id }}">
+          <t-radio-group t-class="radio-horizontal-box" value="{{item.confirmed2}}" bind:change="onRadioChange" data-confirmed2="{{item.confirmed2}}" data-timeline-id="{{ item.timeline_id }}" data-task-id="{{ item.id }}" wx:if="{{ item.lp_type === 0 }}">
             <view class="radio-card   {{ item.confirmed2 == 1 ? 'radio-active' : ''}}">
               <t-icon name="check" t-class="radio-icon" />
               <t-radio value="1" label="可生产" icon="none" borderless />
             </view>
             <view class="radio-card  {{ item.confirmed2 == 2 ? 'radio-active' : ''}}">
+              <t-icon name="check" t-class="radio-icon" />
+              <t-radio value="2" label="小幅度修改" icon="none" borderless t-class="radio-text" />
+            </view>
+            <view class="radio-card  {{ item.confirmed2 == 3 ? 'radio-active' : ''}}">
+              <t-icon name="check" t-class=radio-icon" />
+              <t-radio value="3" label="不具备可行性" icon="none" borderless />
+            </view>
+          </t-radio-group>
+
+          <t-radio-group t-class="radio-horizontal-box" value="{{item.confirmed2}}" bind:change="onRadioChange" data-confirmed2="{{item.confirmed2}}" data-timeline-id="{{ item.timeline_id }}" data-task-id="{{ item.id }}" wx:else="{{ item.lp_type === 1 }}">
+            <view class="radio-card   {{ item.confirmed2 == 1 ? 'radio-active' : ''}}"  wx:if="{{ !item.client_status }}">
+              <t-icon name="check" t-class="radio-icon" />
+              <t-radio value="1" label="可生产" icon="none" borderless />
+            </view>
+            <view class="radio-card  {{ item.confirmed2 == 2 ? 'radio-active' : ''}}" wx:if="{{ item.client_status }}">
               <t-icon name="check" t-class="radio-icon" />
               <t-radio value="2" label="小幅度修改" icon="none" borderless t-class="radio-text" />
             </view>
@@ -126,13 +140,13 @@
             <!-- <t-swiper wx:if="{{item.picture_list.length}}" autoplay="{{false}}" duration="{{500}}" navigation="{{ { type: 'dots' } }}" list="{{item.picture_list}}" bind:click="onSwiperImagesTap" data-images="{{item.picture_list}}">
             </t-swiper> -->
             <swiper wx:if="{{item.picture_list.length}}" autoplay="{{false}}" interval="3000" duration="500" circular="{{false}}" indicator-dots="{{true}}" indicator-color="#ccc" indicator-active-color="#fff" style="width: 690rpx;height:384rpx ;">
-            <block wx:for="{{item.picture_list}}" wx:key="index">
-              <view>{{item.url}}</view>
-              <swiper-item>
-                <image src="{{item}}" mode="widthFix" style="width:55%;display: block; margin: 0 auto; " />
-              </swiper-item>
-            </block>
-          </swiper>
+              <block wx:for="{{item.picture_list}}" wx:key="index">
+                <view>{{item.url}}</view>
+                <swiper-item>
+                  <image src="{{item}}" mode="widthFix" style="width:55%;display: block; margin: 0 auto; " />
+                </swiper-item>
+              </block>
+            </swiper>
             <!-- 无数据时显示占位内容 -->
             <t-image wx:else src="" shape="round" error="slot" width="660rpx" height="384rpx">
               <text class="error-text" slot="error">图片加载失败</text>

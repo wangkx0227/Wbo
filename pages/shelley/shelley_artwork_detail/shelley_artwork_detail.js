@@ -1,7 +1,6 @@
 const utils = require('../../../utils/util')
 Page({
   data: {
-    client:null, // 客户属性
     lineplan_id: null, // 存储的lp id值
     Data: [], // 页面渲染数据存储列表
     allData: [], // 全部的数据
@@ -64,7 +63,7 @@ Page({
 
   // 数据结构处理
   dataStructure(dataList) {
-    
+
     let arrangeData = [];
     let material_list = [];
     const taskTimeLineData = {}; // 时间线数据
@@ -81,7 +80,9 @@ Page({
         texture: task_list[index].texture,
         name: task_list[index].AIT_designer1,
         fmr: task_list[index].fmr || "暂未指派FMR", // 当前指派的fmr
-        fmr2: fmr2 // 当前fmr的状态
+        fmr2: fmr2, // 当前fmr的状态
+        lp_type: task_list[index].lp_type || 0,
+        client_status: /234/.test(client),
       }
       if (fmr2 === 1) {
         data_dict["fmr2_text"] = "可生产";
@@ -140,9 +141,6 @@ Page({
         "dropdownMaterial.options": options.concat(material)
       })
     }
-    this.setData({
-      client:client
-    })
     return { arrangeData, taskTimeLineData }; // 返回整理的结构体
   },
   // 后端请求
