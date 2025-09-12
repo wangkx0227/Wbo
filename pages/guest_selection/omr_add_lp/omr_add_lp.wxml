@@ -15,9 +15,9 @@
   <view class="page-main">
     <view class="wrapper">
       <view wx:for="{{Data}}" wx:key="index" style="gap: 15px;">
-        <t-cell-group theme="card" class="t-cell-group" bindtap="handleClick" >
+        <t-cell-group theme="card" class="t-cell-group" bindtap="handleClick">
           <t-cell hover>
-            <t-badge count="NEW" slot="note" shape="ribbon" wx:if="{{ item.line_new }}"/>
+            <t-badge count="NEW" slot="note" shape="ribbon" wx:if="{{ item.line_new }}" />
             <view slot="title" style="display: grid;gap: 25rpx;">
               <view class="arrange-center">
                 <text class="title-font-main">LP名称：</text>
@@ -86,6 +86,14 @@
       <view class="input-example">
         <view class="input-example-label"> 季节 <text style=" color: red;">*</text></view>
         <t-input placeholder="请输入风格类型" borderless="{{true}}" class="input-example-input" value="{{addLPData.season}}" data-field="season" bindchange="handleInput" />
+      </view>
+      <view class="input-example">
+        <view class="input-example-label"> 创建类型 <text style=" color: red;">*</text></view>
+        <t-radio-group  bind:change="onRadioChange" t-class="box" borderless class="arrange-center" style="gap: 15rpx;" 
+        value="{{addLPData.type}}" >
+          <t-radio label="AIE" value="0"/>
+          <t-radio label="TD" value="1" />
+        </t-radio-group>
       </view>
       <view class="button-example">
         <t-button theme="light" block t-class="group-btn" bindtap="onCloseAddDialog">关闭</t-button>
