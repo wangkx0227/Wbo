@@ -941,7 +941,7 @@ Page({
     };
     const task_id = that.data.task_id;
     const imageFileList = that.data.imageFileList;
-    const image_type = that.data.image_type.map(Number);
+    const image_type = that.data.image_type;
     const montageUrl = app.globalData.montageUrl; // 请求后端接口
     if (imageFileList.length === 0 || image_type.length === 0) {
       utils.showToast(that, "选择完毕后在提交", "error");
