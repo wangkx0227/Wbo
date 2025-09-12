@@ -1,6 +1,7 @@
 const utils = require('../../../utils/util')
 Page({
   data: {
+    client:null, // 客户属性
     lineplan_id: null, // 存储的lp id值
     Data: [], // 页面渲染数据存储列表
     allData: [], // 全部的数据
@@ -63,9 +64,11 @@ Page({
 
   // 数据结构处理
   dataStructure(dataList) {
+    
     let arrangeData = [];
     let material_list = [];
     const taskTimeLineData = {}; // 时间线数据
+    const client = dataList.client; // 客户
     const image_url = dataList.WBO_URL
     const task_list = dataList.task_list
     for (const index in task_list) {
@@ -137,6 +140,9 @@ Page({
         "dropdownMaterial.options": options.concat(material)
       })
     }
+    this.setData({
+      client:client
+    })
     return { arrangeData, taskTimeLineData }; // 返回整理的结构体
   },
   // 后端请求
