@@ -66,6 +66,8 @@ Page({
     batchSelectPickerValue: "",
     batchSelectPickerItemList: [],
     batchSelectPickerTitle: "",
+    // 附件
+    popupFileArtworkVisible: false,
   },
   // 数据结构处理
   dataStructure(dataList) {
@@ -918,4 +920,36 @@ Page({
       })
     }
   },
+
+  // 打开附件
+  onOpenUploadFileArtwork(e) {
+    const {
+      taskId,
+      timelineId
+    } = e.currentTarget.dataset;
+
+    this.setData({
+      task_id: taskId,
+      timeline_id: timelineId,
+      popupFileArtworkVisible: true,
+    });
+  },
+  // 关闭-上传工厂打样稿
+  onCloseUploadFileArtwork() {
+    this.setData({
+      popupFileArtworkVisible: false,
+    });
+    // 等动画结束后，清空imageFileList的图
+    setTimeout(() => {
+      this.setData({
+        task_id: null,
+        timeline_id: null,
+        imageFileList: [],
+      })
+    }, 500)
+  },
+  // 提交-
+  onSubmitFileArtwork(e) {
+    console.log(e);
+  }
 })

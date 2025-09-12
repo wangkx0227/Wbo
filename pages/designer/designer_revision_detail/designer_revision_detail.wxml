@@ -75,9 +75,15 @@
           </view>
         </view>
         <!-- 设计师上传 -->
-        <view class="arrange-center" wx:if="{{ item.name === userName }}">
-          <text class="title-font-main">改稿上传：</text>
-          <t-link size="small" content="点击上传" hover underline catchtap="onOpenUploadFactoryArtwork" prefixIcon="upload" data-task-id="{{ item.id }}" data-timeline-id="{{ item.timeline_id }}" />
+        <view class="arrange-center" style="gap: 25rpx;">
+          <view class="arrange-center" wx:if="{{ item.name === userName }}">
+            <text class="title-font-main">改稿上传：</text>
+            <t-link size="small" content="点击上传" hover underline catchtap="onOpenUploadFactoryArtwork" prefixIcon="upload" data-task-id="{{ item.id }}" data-timeline-id="{{ item.timeline_id }}" />
+          </view>
+          <view class="arrange-center" wx:if="{{ item.name === userName }}">
+            <text class="title-font-main">附件上传：</text>
+            <t-link size="small" content="点击上传" hover underline catchtap="onOpenUploadFileArtwork" prefixIcon="upload" data-task-id="{{ item.id }}" data-timeline-id="{{ item.timeline_id }}" />
+          </view>
         </view>
       </view>
     </view>
@@ -95,7 +101,7 @@
 <t-toast id="t-toast" />
 <!-- 回到顶部 -->
 <t-back-top theme="half-round" text="顶部" scroll-top="{{scrollTop}}" bind:to-top="onToTop" />
-<!-- 抽屉 -->
+<!-- 抽屉-改稿上传 -->
 <t-popup visible="{{popupFactoryArtworkVisible}}" placement="left">
   <view class="popup-block" style="padding: 10rpx;height: 100%;">
     <view class="popup-header">
@@ -110,6 +116,35 @@
         <t-button theme="light" block t-class="group-btn" bindtap="onCloseUploadFactoryArtwork">关闭</t-button>
         <t-divider layout="vertical" style="height:64rpx" />
         <t-button theme="primary" block t-class="group-btn" bindtap="onSubmitFactoryArtwork">提交</t-button>
+      </view>
+    </view>
+  </view>
+</t-popup>
+<!-- 抽屉-附件上传 -->
+<t-popup visible="{{popupFileArtworkVisible}}" placement="left">
+  <view class="popup-block" style="padding: 10rpx;height: 100%;">
+    <view class="popup-header">
+      <view class="popup-title">附件上传：</view>
+    </view>
+    <view class="popup-comments">
+      <view class="arrange-column">
+        <text class="title-font-main">附件：</text>
+        <view class="input-example">
+          <t-upload mediaType="{{['image','ai']}}" max="{{1}}" files="{{imageFileList}}" bind:add="onImageAdd" bind:remove="onImageRemove">
+          </t-upload>
+        </view>
+
+      </view>
+      <view class="arrange-column">
+        <text class="title-font-main">类型：</text>
+        <view class="input-example">
+    
+        </view>
+      </view>
+      <view class="button-example">
+        <t-button theme="light" block t-class="group-btn" bindtap="onCloseUploadFileArtwork">关闭</t-button>
+        <t-divider layout="vertical" style="height:64rpx" />
+        <t-button theme="primary" block t-class="group-btn" bindtap="onSubmitFileArtwork">提交</t-button>
       </view>
     </view>
   </view>
