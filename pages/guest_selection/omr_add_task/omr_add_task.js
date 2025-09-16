@@ -44,19 +44,27 @@ Page({
 
     seriesValue: null,  // 系列内容
     showSeriesDialog: false, // 系列弹出框
-    seriesList:[
+    seriesList: [
       {
-        "series_id":1,
-        "series_name":"圣诞系列",
-      }
+        "series_id": 1,
+        "series_name": "圣诞系列",
+      },
+      {
+        "series_id": 1,
+        "series_name": "圣诞系列",
+      },
     ], // 系列列表
     showFileDataDialog: false, // 附件弹出框
     fileList: [], // 附件列表
-    fileDataList:[
+    fileDataList: [
       {
-        "file_id":1,
-        "file_name":"xxxx_xxx.pnf",
-      }
+        "file_id": 1,
+        "file_name": "xxxx_xxx.pnf",
+      },
+      {
+        "file_id": 1,
+        "file_name": "xxxx_xxx.pnf",
+      },
     ], // 资料列表
   },
   // 首页数据结构处理 - 未用
@@ -306,6 +314,11 @@ Page({
     }, 1000)
     that.closeSeriesDialog();
   },
+  // 资料-删除
+  onDeleteFileDataClick(e) {
+    const { file_id } = e.target.dataset;
+    console.log( file_id );
+  },
 
   // 系列-打开
   onCatectSeriesClick() {
@@ -338,5 +351,10 @@ Page({
       utils.showToast(that, "提交失败", "error")
     }, 1000)
     that.closeSeriesDialog();
+  },
+  // 资料-删除
+  onDeleteSeriesDataClick(e) {
+    const { series_id } = e.target.dataset;
+    console.log( series_id );
   },
 })

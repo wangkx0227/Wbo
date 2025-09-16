@@ -22,12 +22,12 @@
           </view>
           <view slot="content">
             <view wx:for="{{fileDataList}}" wx:key="index">
-              <view class="arrange-space-between">
+              <view class="arrange-space-between" style="margin-bottom: 20rpx;">
                 <view class="arrange-center">
                   <text class="title-font-main">文件名称：</text>
                   <text class="title-font-other">{{ item.file_name }}</text>
                 </view>
-                <t-link size="small" content="删除" hover theme="primary" prefixIcon="delete" style="margin-right: 10rpx;" data-file_id="{{ item.file_id }}"/>
+                <t-link size="small" content="删除" hover theme="primary" prefixIcon="delete" style="margin-right: 10rpx;" data-file_id="{{ item.file_id }}" catchtap="onDeleteFileDataClick"/>
               </view>
             </view>
           </view>
@@ -43,12 +43,12 @@
           </view>
           <view slot="content">
             <view wx:for="{{seriesList}}" wx:key="index">
-              <view class="arrange-space-between">
+              <view class="arrange-space-between" style="margin-bottom: 20rpx;">
                 <view class="arrange-center">
                   <text class="title-font-main">系列名称：</text>
                   <text class="title-font-other">{{ item.series_name }}</text>
                 </view>
-                <t-link size="small" content="删除" hover theme="primary" prefixIcon="delete" style="margin-right: 10rpx;" data-file_id="{{ item.series_id }}" />
+                <t-link size="small" content="删除" hover theme="primary" prefixIcon="delete" style="margin-right: 10rpx;" data-series_id="{{ item.series_id }}" catchtap="onDeleteSeriesDataClick"/>
               </view>
             </view>
           </view>
