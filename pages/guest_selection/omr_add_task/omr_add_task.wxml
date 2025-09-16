@@ -27,7 +27,7 @@
                   <text class="title-font-main">文件名称：</text>
                   <text class="title-font-other">{{ item.file_name }}</text>
                 </view>
-                <t-link size="small" content="删除" hover theme="primary" prefixIcon="delete" style="margin-right: 10rpx;" data-file_id="{{ item.file_id }}" catchtap="onDeleteFileDataClick"/>
+                <t-link size="small" content="删除" hover theme="primary" prefixIcon="delete" style="margin-right: 10rpx;" data-file_id="{{ item.file_id }}" catchtap="onDeleteFileDataClick" />
               </view>
             </view>
           </view>
@@ -48,12 +48,16 @@
                   <text class="title-font-main">系列名称：</text>
                   <text class="title-font-other">{{ item.series_name }}</text>
                 </view>
-                <t-link size="small" content="删除" hover theme="primary" prefixIcon="delete" style="margin-right: 10rpx;" data-series_id="{{ item.series_id }}" catchtap="onDeleteSeriesDataClick"/>
+                <t-link size="small" content="删除" hover theme="primary" prefixIcon="delete" style="margin-right: 10rpx;" data-series_id="{{ item.series_id }}" catchtap="onDeleteSeriesDataClick" />
               </view>
             </view>
           </view>
         </t-collapse-panel>
       </t-collapse>
+    </view>
+    <view class="button-example">
+      <t-button theme="default" block size="extra-small" t-class="group-btn">添加TASK</t-button>
+      <t-button theme="primary" block size="extra-small" t-class="group-btn">确认TASK</t-button>
     </view>
   </view>
   <view class="page-main">
