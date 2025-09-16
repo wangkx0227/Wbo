@@ -33,7 +33,7 @@
                   <text class="title-font-other">{{ item.line_plan_client }}</text>
                 </view>
               </view>
-              <view class="arrange-space-between" style="gap: 155rpx;">
+              <view class="arrange-space-between" style="gap: 100rpx;">
                 <view class="arrange-center">
                   <text class="title-font-main">Year：</text>
                   <text class="title-font-other">{{item.line_plan_year}}</text>
@@ -63,7 +63,7 @@
 <!-- 回到顶部 -->
 <t-back-top theme="half-round" text="" scroll-top="{{scrollTop}}" bind:to-top="onToTop" style="z-index: 999;" />
 <!-- 添加 lp -->
-<t-fab icon="add" bind:click="onOpenAddLP" aria-label="增加" usingCustomNavbar draggable y-bounds="{{[0, 100]}}"></t-fab>
+<t-fab icon="add" bind:click="onOpenAddLP" aria-label="增加" usingCustomNavbar draggable y-bounds="{{[0, 60]}}"></t-fab>
 <!-- 增加弹窗-左 -->
 <t-popup visible="{{popupAddVisible}}" placement="left">
   <view class="popup-block" style="padding: 10rpx;height: 100%;">

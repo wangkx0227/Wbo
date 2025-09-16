@@ -105,3 +105,6 @@
 .checkbox-scroll-container {
   height: 400rpx; /* 设置固定高度 */
 }
+.page-main .wrapper .t-cell-group {
+  margin: 0 0 20rpx 10rpx !important;
+}
