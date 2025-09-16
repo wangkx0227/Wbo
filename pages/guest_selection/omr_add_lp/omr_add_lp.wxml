@@ -15,7 +15,7 @@
   <view class="page-main">
     <view class="wrapper">
       <view wx:for="{{Data}}" wx:key="index" style="gap: 15px;">
-        <t-cell-group theme="card" class="t-cell-group" bindtap="handleClick">
+        <t-cell-group theme="card" class="t-cell-group" bindtap="onJumpArtworkDeatails" data-development_id="{{ item.development_id }}" data-line_plan_id="{{ item.line_plan_id }}"> 
           <t-cell hover>
             <t-badge count="NEW" slot="note" shape="ribbon" wx:if="{{ item.line_new }}" />
             <view slot="title" style="display: grid;gap: 25rpx;">

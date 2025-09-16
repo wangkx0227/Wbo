@@ -242,7 +242,17 @@ Page({
   },
   // 跳转到详情页面
   onJumpArtworkDeatails(e) {
-    console.log("跳转");
+    const line_plan_id = e.currentTarget.dataset.lp_id;
+    wx.navigateTo({
+      url: `/pages/guest_selection/omr_add_task/omr_add_task?line_plan_id=${JSON.stringify(line_plan_id)}`,
+      fail: (err) => {
+        console.log(err);
+        wx.showToast({
+          title: '跳转失败',
+          icon: 'error'
+        });
+      }
+    });
   },
   // 创建类型 单选的状态赋值
   onRadioChange(event) {
@@ -304,7 +314,7 @@ Page({
       }).then(res => {
         if (res.statusCode === 200) {
           let lp_data = {
-            type:"addLp",
+            type: "addLp",
             lp_title: title,
             line_plan_year: year,
             line_plan_season: season,
