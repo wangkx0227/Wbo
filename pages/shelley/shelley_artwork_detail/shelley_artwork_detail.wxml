@@ -46,7 +46,7 @@
           <text class="title-font-main">时间线：</text>
           <t-link size="small" content="查看历史时间线" hover underline variant="outline" bind:tap="onOpenHistoryTimeLine" data-task-id="{{ item.id }}" />
         </view>
-        <view class="arrange-center">
+        <view class="arrange-center" wx:if="{{ !item.client_status }}">
           <view class="arrange-center">
             <text class="title-font-main">指派FMR：</text>
             <t-link size="small" content="{{item.fmr}}" hover underline catchtap="onOpenPicker" data-task-id="{{ item.id }}" />
@@ -62,30 +62,30 @@
           <t-radio-group t-class="radio-horizontal-box" value="{{item.confirmed2}}" bind:change="onRadioChange" data-confirmed2="{{item.confirmed2}}" data-timeline-id="{{ item.timeline_id }}" data-task-id="{{ item.id }}" wx:if="{{ item.lp_type === 0 }}">
             <view class="radio-card   {{ item.confirmed2 == 1 ? 'radio-active' : ''}}">
               <t-icon name="check" t-class="radio-icon" />
-              <t-radio value="1" label="可生产" icon="none" borderless />
+              <t-radio value="1" label="OK" icon="none" borderless />
             </view>
             <view class="radio-card  {{ item.confirmed2 == 2 ? 'radio-active' : ''}}">
               <t-icon name="check" t-class="radio-icon" />
-              <t-radio value="2" label="小幅度修改" icon="none" borderless t-class="radio-text" />
+              <t-radio value="2" label="寻求意见" icon="none" borderless t-class="radio-text" />
             </view>
             <view class="radio-card  {{ item.confirmed2 == 3 ? 'radio-active' : ''}}">
               <t-icon name="check" t-class=radio-icon" />
-              <t-radio value="3" label="不具备可行性" icon="none" borderless />
+              <t-radio value="3" label="不合适" icon="none" borderless />
             </view>
           </t-radio-group>
 
           <t-radio-group t-class="radio-horizontal-box" value="{{item.confirmed2}}" bind:change="onRadioChange" data-confirmed2="{{item.confirmed2}}" data-timeline-id="{{ item.timeline_id }}" data-task-id="{{ item.id }}" wx:else="{{ item.lp_type === 1 }}">
-            <view class="radio-card   {{ item.confirmed2 == 1 ? 'radio-active' : ''}}"  wx:if="{{ !item.client_status }}">
+            <view class="radio-card   {{ item.confirmed2 == 1 ? 'radio-active' : ''}}"  wx:if="{{ item.client_status }}">
               <t-icon name="check" t-class="radio-icon" />
-              <t-radio value="1" label="可生产" icon="none" borderless />
+              <t-radio value="1" label="OK" icon="none" borderless />
             </view>
-            <view class="radio-card  {{ item.confirmed2 == 2 ? 'radio-active' : ''}}" wx:if="{{ item.client_status }}">
+            <view class="radio-card  {{ item.confirmed2 == 2 ? 'radio-active' : ''}}" wx:if="{{ !item.client_status }}">
               <t-icon name="check" t-class="radio-icon" />
-              <t-radio value="2" label="小幅度修改" icon="none" borderless t-class="radio-text" />
+              <t-radio value="2" label="寻求意见" icon="none" borderless t-class="radio-text" />
             </view>
             <view class="radio-card  {{ item.confirmed2 == 3 ? 'radio-active' : ''}}">
               <t-icon name="check" t-class=radio-icon" />
-              <t-radio value="3" label="不具备可行性" icon="none" borderless />
+              <t-radio value="3" label="不合适" icon="none" borderless />
             </view>
           </t-radio-group>
         </view>

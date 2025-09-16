@@ -70,6 +70,7 @@ Page({
     const client = dataList.client; // 客户
     const image_url = dataList.WBO_URL
     const task_list = dataList.task_list
+    const lp_type = dataList.lp_type // 当前模板的类型
     for (const index in task_list) {
       const task_id = task_list[index].id;
       const fmr2 = task_list[index].fmr2;
@@ -81,8 +82,8 @@ Page({
         name: task_list[index].AIT_designer1,
         fmr: task_list[index].fmr || "暂未指派FMR", // 当前指派的fmr
         fmr2: fmr2, // 当前fmr的状态
-        lp_type: task_list[index].lp_type || 0,
         client_status: /234/.test(client),
+        lp_type: lp_type,
       }
       if (fmr2 === 1) {
         data_dict["fmr2_text"] = "可生产";
