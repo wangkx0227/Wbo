@@ -44,14 +44,20 @@ Page({
 
     seriesValue: null,  // 系列内容
     showSeriesDialog: false, // 系列弹出框
-
+    seriesList:[
+      {
+        "series_id":1,
+        "series_name":"圣诞系列",
+      }
+    ], // 系列列表
     showFileDataDialog: false, // 附件弹出框
     fileList: [], // 附件列表
-    gridConfig: {
-      column: 4,
-      width: 160,
-      height: 160,
-    },
+    fileDataList:[
+      {
+        "file_id":1,
+        "file_name":"xxxx_xxx.pnf",
+      }
+    ], // 资料列表
   },
   // 首页数据结构处理 - 未用
   dataStructure(dataList) {
@@ -259,6 +265,8 @@ Page({
     this.setData({ "addLPData.lp_type": value });
   },
 
+
+
   // 资料-打开
   onUpdateFileDataClick() {
     this.setData({ showFileDataDialog: true });
@@ -283,7 +291,21 @@ Page({
       fileList: files,
     });
   },
-
+  // 资料上传-提交
+  onFileDataConfirm() {
+    const that = this;
+    const seriesValue = that.data.seriesValue; // 系列的值
+    if (!seriesValue) {
+      utils.showToast(that, "填写后再提交", "error")
+      return;
+    }
+    const line_plan_id = that.data.line_plan_id; // lp的id
+    utils.showToast(that, "提交成功")
+    setTimeout(() => {
+      utils.showToast(that, "提交失败", "error")
+    }, 1000)
+    that.closeSeriesDialog();
+  },
 
   // 系列-打开
   onCatectSeriesClick() {
@@ -306,7 +328,7 @@ Page({
   onSeriesDialogConfirm() {
     const that = this;
     const seriesValue = that.data.seriesValue; // 系列的值
-    if(!seriesValue){
+    if (!seriesValue) {
       utils.showToast(that, "填写后再提交", "error")
       return;
     }

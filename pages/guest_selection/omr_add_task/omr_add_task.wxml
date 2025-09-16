@@ -21,7 +21,15 @@
             <t-link size="small" content="添加资料" hover theme="primary" prefixIcon="add" catchtap="onUpdateFileDataClick" />
           </view>
           <view slot="content">
-            资料列表
+            <view wx:for="{{fileDataList}}" wx:key="index">
+              <view class="arrange-space-between">
+                <view class="arrange-center">
+                  <text class="title-font-main">文件名称：</text>
+                  <text class="title-font-other">{{ item.file_name }}</text>
+                </view>
+                <t-link size="small" content="删除" hover theme="primary" prefixIcon="delete" style="margin-right: 10rpx;"/>
+              </view>
+            </view>
           </view>
         </t-collapse-panel>
       </t-collapse>
@@ -34,7 +42,15 @@
             <t-link size="small" content="添加系列" hover theme="primary" prefixIcon="add" catchtap="onCatectSeriesClick" />
           </view>
           <view slot="content">
-            系列列表
+            <view wx:for="{{seriesList}}" wx:key="index">
+              <view class="arrange-space-between">
+                <view class="arrange-center">
+                  <text class="title-font-main">系列名称：</text>
+                  <text class="title-font-other">{{ item.series_name }}</text>
+                </view>
+                <t-link size="small" content="删除" hover theme="primary" prefixIcon="delete" style="margin-right: 10rpx;"/>
+              </view>
+            </view>
           </view>
         </t-collapse-panel>
       </t-collapse>
@@ -95,7 +111,7 @@
   <t-input placeholder="请输入文字" slot="content" value="{{seriesValue}}" bind:change="onSeriesInputChange" />
 </t-dialog>
 
-<t-dialog visible="{{showFileDataDialog}}" title="添加附件" confirm-btn="确定" cancel-btn="取消" bind:confirm="onSeriesDialogConfirm" bind:cancel="closeFileDataDialog">
+<t-dialog visible="{{showFileDataDialog}}" title="添加附件" confirm-btn="确定" cancel-btn="取消" bind:confirm="onFileDataConfirm" bind:cancel="closeFileDataDialog">
   <view slot="content" style="margin-top: 60rpx;">
     <t-upload accept="*/*" max="{{1}}" files="{{fileList}}" bind:success="fileDataSuccess" bind:remove="fileDataRemove" gridConfig="{{ { column: 1, width: 300, height: 200  } }}">
     </t-upload>
