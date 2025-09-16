@@ -304,6 +304,7 @@ Page({
       }).then(res => {
         if (res.statusCode === 200) {
           let lp_data = {
+            type:"addLp",
             lp_title: title,
             line_plan_year: year,
             line_plan_season: season,
