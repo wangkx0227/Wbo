@@ -41,7 +41,31 @@ Page({
       ],
     },
     filterSorter: false, // 排序筛选条件
-    popupAddVisible: false, // 新增lp
+
+    seriesValue: null,  // 系列内容
+    showSeriesDialog: false, // 系列弹出框
+    seriesList: [
+      {
+        "series_id": 1,
+        "series_name": "圣诞系列",
+      },
+      {
+        "series_id": 1,
+        "series_name": "圣诞系列",
+      },
+    ], // 系列列表
+    showFileDataDialog: false, // 附件弹出框
+    fileList: [], // 附件列表
+    fileDataList: [
+      {
+        "file_id": 1,
+        "file_name": "xxxx_xxx.pnf",
+      },
+      {
+        "file_id": 1,
+        "file_name": "xxxx_xxx.pnf",
+      },
+    ], // 资料列表
   },
   // 首页数据结构处理 - 未用
   dataStructure(dataList) {
@@ -115,26 +139,24 @@ Page({
       });
     });
   },
-
-
   // 生命周期函数
   onLoad(options) {
-    const that = this;
-    if (!utils.LoginStatusAuthentication(that)) {
-      // 未登录状态，函数已处理跳转逻辑
-      return;
-    }
-    const userRole = wx.getStorageSync('userRole');
-    const userName = wx.getStorageSync('userName');
-    const apiUserName = wx.getStorageSync('apiUserName');
-    const line_plan_id = options.line_plan_id; // 开发案id
-    that.setData({
-      userRole: userRole,
-      userName: userName,
-      apiUserName: apiUserName,
-      line_plan_id: line_plan_id,
+    // const that = this;
+    // if (!utils.LoginStatusAuthentication(that)) {
+    //   // 未登录状态，函数已处理跳转逻辑
+    //   return;
+    // }
+    // const userRole = wx.getStorageSync('userRole');
+    // const userName = wx.getStorageSync('userName');
+    // const apiUserName = wx.getStorageSync('apiUserName');
+    // const line_plan_id = options.line_plan_id; // 开发案id
+    // that.setData({
+    //   userRole: userRole,
+    //   userName: userName,
+    //   apiUserName: apiUserName,
+    //   line_plan_id: line_plan_id,
 
-    })
+    // })
   },
   // 回到顶部
   onToTop(e) {
@@ -251,95 +273,88 @@ Page({
     this.setData({ "addLPData.lp_type": value });
   },
 
-  // 资料上传触发函数
-  onDataUpdateClick(e) {
-    console.log(11);
+
+
+  // 资料-打开
+  onUpdateFileDataClick() {
+    this.setData({ showFileDataDialog: true });
   },
-  // 系列上传触发函数
-  onCatectSeriesClick(e) {
-    console.log(22);
+  // 资料-关闭
+  closeFileDataDialog() {
+    this.setData({ showFileDataDialog: false });
   },
-  // 添加task
-  onAddTaskClick(e) {
-    console.log(33);
+  // 资料上传-删除
+  fileDataRemove(e) {
+    const { index } = e.detail;
+    const { fileList } = this.data;
+    fileList.splice(index, 1);
+    this.setData({
+      fileList,
+    });
   },
-  // 生成task
-  onGenerateTaskClick(e) {
-    console.log(44);
+  // 资料上传-赋值
+  fileDataSuccess(e) {
+    const { files } = e.detail;
+    this.setData({
+      fileList: files,
+    });
+  },
+  // 资料上传-提交
+  onFileDataConfirm() {
+    const that = this;
+    const seriesValue = that.data.seriesValue; // 系列的值
+    if (!seriesValue) {
+      utils.showToast(that, "填写后再提交", "error")
+      return;
+    }
+    const line_plan_id = that.data.line_plan_id; // lp的id
+    utils.showToast(that, "提交成功")
+    setTimeout(() => {
+      utils.showToast(that, "提交失败", "error")
+    }, 1000)
+    that.closeSeriesDialog();
+  },
+  // 资料-删除
+  onDeleteFileDataClick(e) {
+    const { file_id } = e.target.dataset;
+    console.log( file_id );
   },
 
-  // 新增lp
-  onOpenAddLP() {
+  // 系列-打开
+  onCatectSeriesClick() {
+    this.setData({ showSeriesDialog: true });
+  },
+  // 系列-监听输入框
+  onSeriesInputChange(e) {
     this.setData({
-      popupAddVisible: true
+      seriesValue: e.detail.value, // TDesign Input 取值用 e.detail.value
     });
   },
-  // 新增lp内部关闭
-  onCloseAddDialog() {
-    const that = this;
-    that.setData({
-      popupAddVisible: false,
-    });
+  // 系列-关闭
+  closeSeriesDialog() {
+    this.setData({ showSeriesDialog: false });
     setTimeout(() => {
-      that.setData({
-        addLPData: {
-          project_id: null,
-          type: "addLp",
-          lp_type: 0,
-          title: null,
-          client: null,
-          year: null,
-          season: null,
-          type: "",
-          is_new_development: 1,
-          username: "管理员",
-        },
-      });
+      this.setData({ seriesValue: null, });
     }, 500)
   },
-  // 新增lp输入处理
-  handleInput(e) {
-    const field = e.currentTarget.dataset.field; // 获取字段名（year/month）
-    this.setData({
-      [`addLPData.${field}`]: e.detail.value // 动态更新对应字段
-    });
-  },
-  // 新增lp内部提交
-  onSubmitAddDialog() {
+  // 系列-提交
+  onSeriesDialogConfirm() {
     const that = this;
-    const development_id = that.data.development_id;
-    that.setData({
-      'addLPData.project_id': development_id // 使用路径语法
-    });
-    const { title, client, year, season, lp_type } = that.data.addLPData;
-    if (!title || !client || !year || !season || !lp_type) {
-      utils.showToast(that, "数据不能为空", "error");
-      return
-    } else {
-      utils.UpdateData({
-        page: that,
-        data: that.data.addLPData,
-        message: "添加LP成功"
-      }).then(res => {
-        if (res.statusCode === 200) {
-          let lp_data = {
-            type: "addLp",
-            lp_title: title,
-            line_plan_year: year,
-            line_plan_season: season,
-            line_plan_client: client,
-            development_start_data: "暂未获取",
-            line_new: true,
-            lp_type: lp_type,
-          }
-          that.setData({
-            Data: [lp_data, ...that.data.Data],
-            allData: [lp_data, ...that.data.allData],
-            filteredData: [lp_data, ...that.data.filteredData],
-          });
-          that.onCloseAddDialog();
-        }
-      })
+    const seriesValue = that.data.seriesValue; // 系列的值
+    if (!seriesValue) {
+      utils.showToast(that, "填写后再提交", "error")
+      return;
     }
+    const line_plan_id = that.data.line_plan_id; // lp的id
+    utils.showToast(that, "提交成功")
+    setTimeout(() => {
+      utils.showToast(that, "提交失败", "error")
+    }, 1000)
+    that.closeSeriesDialog();
+  },
+  // 资料-删除
+  onDeleteSeriesDataClick(e) {
+    const { series_id } = e.target.dataset;
+    console.log( series_id );
   },
 })

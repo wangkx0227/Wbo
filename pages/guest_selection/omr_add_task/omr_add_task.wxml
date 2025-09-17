@@ -11,6 +11,54 @@
         </t-dropdown-menu>
       </t-col>
     </t-row>
+    <view style="margin-top: 10rpx;">
+      <t-collapse>
+        <t-collapse-panel expandIcon>
+          <view slot="header" class="title-font-main" style="padding-left: 30rpx;">
+            资料列表
+          </view>
+          <view slot="header-right-content">
+            <t-link size="small" content="添加资料" hover theme="primary" prefixIcon="add" catchtap="onUpdateFileDataClick" />
+          </view>
+          <view slot="content">
+            <view wx:for="{{fileDataList}}" wx:key="index">
+              <view class="arrange-space-between" style="margin-bottom: 20rpx;">
+                <view class="arrange-center">
+                  <text class="title-font-main">文件名称：</text>
+                  <text class="title-font-other">{{ item.file_name }}</text>
+                </view>
+                <t-link size="small" content="删除" hover theme="primary" prefixIcon="delete" style="margin-right: 10rpx;" data-file_id="{{ item.file_id }}" catchtap="onDeleteFileDataClick" />
+              </view>
+            </view>
+          </view>
+        </t-collapse-panel>
+      </t-collapse>
+      <t-collapse>
+        <t-collapse-panel expandIcon>
+          <view slot="header" class="title-font-main" style="padding-left: 30rpx;">
+            系列列表
+          </view>
+          <view slot="header-right-content">
+            <t-link size="small" content="添加系列" hover theme="primary" prefixIcon="add" catchtap="onCatectSeriesClick" />
+          </view>
+          <view slot="content">
+            <view wx:for="{{seriesList}}" wx:key="index">
+              <view class="arrange-space-between" style="margin-bottom: 20rpx;">
+                <view class="arrange-center">
+                  <text class="title-font-main">系列名称：</text>
+                  <text class="title-font-other">{{ item.series_name }}</text>
+                </view>
+                <t-link size="small" content="删除" hover theme="primary" prefixIcon="delete" style="margin-right: 10rpx;" data-series_id="{{ item.series_id }}" catchtap="onDeleteSeriesDataClick" />
+              </view>
+            </view>
+          </view>
+        </t-collapse-panel>
+      </t-collapse>
+    </view>
+    <view class="button-example">
+      <t-button theme="default" block size="extra-small" t-class="group-btn">添加TASK</t-button>
+      <t-button theme="primary" block size="extra-small" t-class="group-btn">确认TASK</t-button>
+    </view>
   </view>
   <view class="page-main">
     <view class="wrapper">
@@ -62,62 +110,3 @@
 <t-toast id="t-toast" />
 <!-- 回到顶部 -->
 <t-back-top theme="half-round" text="" scroll-top="{{scrollTop}}" bind:to-top="onToTop" style="z-index: 999;" />
-<!-- 添加 task -->
-<t-fab customStyle="{{'right:12px;bottom:164px'}}">
-  <view class="wrap" style="gap: 10rpx;">
-    <view class="item" bindtap="onDataUpdateClick">
-      <view class="text">资料上传</view>
-    </view>
-    <view class="item" bindtap="onCatectSeriesClick">
-      <view class="text">系列添加</view>
-    </view>
-    <view class="item" bindtap="onAddTaskClick">
-      <view class="text">添加TASK</view>
-    </view>
-    <view class="item" bindtap="onGenerateTaskClick">
-      <view class="text">创建TASK</view>
-    </view>
-  </view>
-</t-fab>
-
-
-
-
-<!-- 增加弹窗-左 -->
-<t-popup visible="{{popupAddVisible}}" placement="left">
-  <view class="popup-block" style="padding: 10rpx;height: 100%;">
-    <view class="popup-header">
-      <view class="popup-title" style="text-align: center;">新增LP</view>
-    </view>
-    <view class="popup-comments">
-      <view class="input-example">
-        <view class="input-example-label"> 标题 <text style=" color: red;">*</text></view>
-        <t-input placeholder="请输入标题" borderless="{{true}}" class="input-example-input" value="{{addLPData.title}}" data-field="title" bindchange="handleInput" />
-      </view>
-      <view class="input-example">
-        <view class="input-example-label"> 客户 <text style=" color: red;">*</text></view>
-        <t-input placeholder="请输入客户简称" borderless="{{true}}" class="input-example-input" value="{{addLPData.client}}" data-field="client" bindchange="handleInput" />
-      </view>
-      <view class="input-example">
-        <view class="input-example-label"> 年份 <text style=" color: red;">*</text></view>
-        <t-input placeholder="请输入年份" borderless="{{true}}" class="input-example-input" value="{{addLPData.year}}" data-field="year" bindchange="handleInput" />
-      </view>
-      <view class="input-example">
-        <view class="input-example-label"> 季节 <text style=" color: red;">*</text></view>
-        <t-input placeholder="请输入风格类型" borderless="{{true}}" class="input-example-input" value="{{addLPData.season}}" data-field="season" bindchange="handleInput" />
-      </view>
-      <view class="input-example">
-        <view class="input-example-label"> 创建类型 <text style=" color: red;">*</text></view>
-        <t-radio-group bind:change="onRadioChange" t-class="box" borderless class="arrange-center" style="gap: 15rpx;" value="{{addLPData.lp_type}}">
-          <t-radio label="AIE" value="0" />
-          <t-radio label="TD" value="1" />
-        </t-radio-group>
-      </view>
-      <view class="button-example">
-        <t-button theme="light" block t-class="group-btn" bindtap="onCloseAddDialog">关闭</t-button>
-        <t-divider layout="vertical" style="height:64rpx" />
-        <t-button theme="primary" block t-class="group-btn" bindtap="onSubmitAddDialog">提交</t-button>
-      </view>
-    </view>
-  </view>
-</t-popup>
