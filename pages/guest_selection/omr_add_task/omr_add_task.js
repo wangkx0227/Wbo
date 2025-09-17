@@ -14,7 +14,7 @@ Page({
 
 
     Data: [{
-      task_id: 1,
+      task_id: 9999,
       task_code: "Jasonyu_2025_30296_001",
       allocate: "暂无"
     }], // 页面展示数据变量
@@ -29,7 +29,7 @@ Page({
         "series_name": "圣诞系列",
       },
       {
-        "series_id": 1,
+        "series_id": 2,
         "series_name": "圣诞系列",
       },
     ], // 系列列表
@@ -41,7 +41,7 @@ Page({
         "file_name": "xxxx_xxx.pnf",
       },
       {
-        "file_id": 1,
+        "file_id": 2,
         "file_name": "xxxx_xxx.pnf",
       },
     ], // 资料列表
@@ -53,8 +53,8 @@ Page({
         label: "南宁TD",
         value: "南宁TD",
       }, {
-        label: "深圳TD",
-        value: "深圳TD",
+        label: "长沙TD",
+        value: "长沙TD",
       }
     ]
   },
@@ -166,38 +166,38 @@ Page({
   },
 
   // 页面下拉刷新
-  onPullDownRefresh() {
-    if (this.data.isLoadingReachMore) return; // 如果正在加载更多，则禁止下拉刷新
-    // 重置 currentIndex 让它从头开始访问
-    this.setData({
-      searchValue: "",
-      currentIndex: 0,
-      noMoreData: false,
-      isLoadingReachMore: false
-    })
-    // this.dataRequest('refresh');
-  },
+  // onPullDownRefresh() {
+  //   if (this.data.isLoadingReachMore) return; // 如果正在加载更多，则禁止下拉刷新
+  //   // 重置 currentIndex 让它从头开始访问
+  //   this.setData({
+  //     searchValue: "",
+  //     currentIndex: 0,
+  //     noMoreData: false,
+  //     isLoadingReachMore: false
+  //   })
+  //   // this.dataRequest('refresh');
+  // },
   // 页面上拉触底加载更多数据
-  onReachBottom() {
-    // 下拉刷线，读取原来的加载过的数据即可
-    const that = this;
-    // 如果在下拉刷新，禁止滚动加载
-    if (that.data.isDownRefreshing || that.data.noMoreData) return;
-    const pageData = utils.readPageStructure(that); // 分页数据
-    let totalRequests = that.data.pageSize;
-    if (pageData.length !== totalRequests) {
-      totalRequests = pageData.length;
-    }
-    that.setData({
-      Data: that.data.Data.concat(pageData),
-      currentIndex: that.data.currentIndex + pageData.length // 记录下标索引
-    });
-    if (that.data.currentIndex === that.data.filteredData.length) {
-      that.setData({
-        noMoreData: true
-      })
-    }
-  },
+  // onReachBottom() {
+  //   // 下拉刷线，读取原来的加载过的数据即可
+  //   const that = this;
+  //   // 如果在下拉刷新，禁止滚动加载
+  //   if (that.data.isDownRefreshing || that.data.noMoreData) return;
+  //   const pageData = utils.readPageStructure(that); // 分页数据
+  //   let totalRequests = that.data.pageSize;
+  //   if (pageData.length !== totalRequests) {
+  //     totalRequests = pageData.length;
+  //   }
+  //   that.setData({
+  //     Data: that.data.Data.concat(pageData),
+  //     currentIndex: that.data.currentIndex + pageData.length // 记录下标索引
+  //   });
+  //   if (that.data.currentIndex === that.data.filteredData.length) {
+  //     that.setData({
+  //       noMoreData: true
+  //     })
+  //   }
+  // },
 
 
 
@@ -235,8 +235,16 @@ Page({
       return;
     }
     const fileUrls = fileList.map(f => f.url || f.response.url); // 文件临时路径
+    const fileName = fileList.map(f => f.name || f.response.name); // 文件名称
     const line_plan_id = that.data.line_plan_id; // lp的id
-    utils.showToast(that, "提交成功")
+
+    // 假数据
+    that.setData({
+      fileDataList: [{
+        "file_id": 100,
+        "file_name": fileName,
+      }, ...that.data.fileDataList]
+    })
     // 附件上传
     // wx.uploadFile({
     //   url: montageUrl + '/wbo/upload_task_image/',
@@ -293,16 +301,30 @@ Page({
     //     utils.showToast(that, "接口调用失败", "error");
     //   }
     // });
-
-    setTimeout(() => {
-      utils.showToast(that, "提交失败", "error")
-    }, 1000)
+    utils.showToast(that, "提交成功")
+    // setTimeout(() => {
+    //   utils.showToast(that, "提交失败", "error")
+    // }, 1000)
     that.closeFileDataDialog();
   },
   // 资料-删除
   onDeleteFileDataClick(e) {
+    const that = this;
     const { file_id } = e.target.dataset;
-    console.log(file_id);
+    // 假数据
+    wx.showModal({
+      title: '提示',
+      content: '是否删除资料',
+      success(res) {
+        if (res.confirm) {
+          const updatedFileDataList = that.data.fileDataList.filter(item => item.file_id !== file_id);
+          that.setData({
+            fileDataList: updatedFileDataList
+          });
+          utils.showToast(that, "删除成功")
+        }
+      }
+    })
   },
 
   // 系列-打开
@@ -331,16 +353,37 @@ Page({
       return;
     }
     const line_plan_id = that.data.line_plan_id; // lp的id
+    // 假数据
+    that.setData({
+      seriesList: [{
+        "series_id": 110,
+        "series_name": seriesValue,
+      }, ...that.data.seriesList]
+    })
     utils.showToast(that, "提交成功")
-    setTimeout(() => {
-      utils.showToast(that, "提交失败", "error")
-    }, 1000)
+    // setTimeout(() => {
+    //   utils.showToast(that, "提交失败", "error")
+    // }, 1000)
     that.closeSeriesDialog();
   },
   // 资料-删除
   onDeleteSeriesDataClick(e) {
+    const that = this;
     const { series_id } = e.target.dataset;
-    console.log(series_id);
+    // 假数据
+    wx.showModal({
+      title: '提示',
+      content: '是否删除系列',
+      success(res) {
+        if (res.confirm) {
+          const updatedSeriesList = that.data.seriesList.filter(item => item.series_id !== series_id);
+          that.setData({
+            seriesList: updatedSeriesList
+          });
+          utils.showToast(that, "删除成功")
+        }
+      }
+    })
   },
 
   // task-弹窗
@@ -364,19 +407,32 @@ Page({
   // task-提交
   onTasksDialogConfirm() {
     const that = this;
+    let new_data = [];
     const taskValue = that.data.taskValue; // 系列的值
     if (!taskValue) {
       utils.showToast(that, "填写后再提交", "error")
       return;
     };
     const line_plan_id = that.data.line_plan_id; // lp的id
+    // 假数据添加
+    for (let i = 0; i < taskValue; i++) {
+      new_data.push({
+        task_id: i + 1,
+        task_code: `Jasonyu_2025_30296_00${i}`,
+        allocate: "暂无"
+      })
+    }
+    if (new_data.length !== 0) {
+      that.setData({
+        Data: [...new_data, ...that.data.Data]
+      })
+    }
     utils.showToast(that, "提交成功")
-    setTimeout(() => {
-      utils.showToast(that, "提交失败", "error")
-    }, 1000)
+    // setTimeout(() => {
+    //   utils.showToast(that, "提交失败", "error")
+    // }, 1000)
     that.closeTaskDialog();
   },
-
   // TASK - 提交导入
   onTaskSubmit() {
     const that = this;
@@ -384,8 +440,22 @@ Page({
   },
   // TASK - 删除
   onDeleteTaskClick(e) {
+    const that = this;
     const task_id = e.target.dataset.task_id;
-    console.log(task_id);
+    wx.showModal({
+      title: '提示',
+      content: '是否删除TASK',
+      success(res) {
+        if (res.confirm) {
+          const updatedData = that.data.Data.filter(item => item.task_id !== task_id);
+          that.setData({
+            Data: updatedData
+          });
+          utils.showToast(that, "删除成功")
+        }
+      }
+    })
+
   },
 
   // 图稿公司分配
