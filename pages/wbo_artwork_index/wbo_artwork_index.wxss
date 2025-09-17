@@ -22,8 +22,8 @@
   z-index: 1999 !important;
 }
 .t-tab-bar--round{
-  margin-left: 90rpx !important;
-  margin-right: 90rpx !important;
+  margin-left: 45rpx !important;
+  margin-right: 45rpx !important;
 }
 .t-tab-bar-item--text-only {
     font-size: 24rpx !important;
@@ -34,5 +34,5 @@
 
 /* top组件调整位置,防止被标签栏组件遮挡 */
 .t-back-top {
-  margin-bottom: 130rpx !important;
+  margin-bottom: 160rpx !important;
 }

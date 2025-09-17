@@ -75,9 +75,11 @@ Page({
     } else if (userRole === "designer") {
       this.setData({
         tabBarShow: true, userTabs: [
+          { value: 'allocate', label: '分配设计师' }, // 只有主管获取其他的人可以看到，需要调整
           { value: 'primary', label: "图稿修改" },
           { value: 'factory', label: '工厂稿上传' },
-          { value: 'ultimate', label: '样品图审查' }
+          { value: 'ultimate', label: '样品图审查' },
+          
         ]
       });
     } else if (userRole === "chosen_draft") {
@@ -298,6 +300,10 @@ Page({
       } else if (tabBarValue === "factory") {
         wx.navigateTo({
           url: `/pages/designer/designer_artwork_detail/designer_artwork_detail?lineplan_id=${lineplan_id}`,
+        });
+      } else if (tabBarValue === "allocate") {
+        wx.navigateTo({
+          url: `/pages/designer/desigenr_allocate_detail/desigenr_allocate_detail?lineplan_id=${lineplan_id}`,
         });
       }
     }

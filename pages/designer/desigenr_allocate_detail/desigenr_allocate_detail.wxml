@@ -1,0 +1,83 @@
+<!-- 骨架 -->
+<import src="skeleton.wxml" />
+<template is="skeleton" wx:if="{{skeletonLoading}}" />
+<view wx:else="{{skeletonLoading}}" class="page-wrapper">
+  <view class="page-head filter-bar">
+    <t-collapse>
+      <t-collapse-panel expandIcon>
+        <view slot="header" class="title-font-main" style="padding-left: 30rpx;">
+          资料列表
+        </view>
+        <view slot="content">
+          <view wx:for="{{fileDataList}}" wx:key="index">
+            <view class="arrange-space-between" style="margin-bottom: 20rpx;">
+              <view class="arrange-center">
+                <text class="title-font-main">文件名称：</text>
+                <text class="title-font-other">{{ item.file_name }}</text>
+              </view>
+            </view>
+          </view>
+        </view>
+      </t-collapse-panel>
+    </t-collapse>
+    <t-collapse>
+      <t-collapse-panel expandIcon>
+        <view slot="header" class="title-font-main" style="padding-left: 30rpx;">
+          系列列表
+        </view>
+        <view slot="content">
+          <view wx:for="{{seriesList}}" wx:key="index">
+            <view class="arrange-space-between" style="margin-bottom: 20rpx;">
+              <view class="arrange-center">
+                <text class="title-font-main">系列名称：</text>
+                <text class="title-font-other">{{ item.series_name }}</text>
+              </view>
+            </view>
+          </view>
+        </view>
+      </t-collapse-panel>
+    </t-collapse>
+  </view>
+  <view class="page-main">
+    <view class="wrapper">
+      <view wx:for="{{Data}}" wx:key="index" style="gap: 15px;">
+        <t-cell-group theme="card" class="t-cell-group">
+          <t-cell hover>
+            <view slot="title">
+              <view class="arrange-column">
+                <view class="arrange-center">
+                  <text class="title-font-main">Code：</text>
+                  <text class="title-font-other name-cell">{{ item.task_code }}</text>
+                </view>
+                <view class="arrange-center">
+                  <text class="title-font-main">分配：</text>
+                  <text class="title-font-other name-cell">{{ item.allocate }}</text>
+                </view>
+                <view class="arrange-center">
+                  <text class="title-font-main">指定设计师：</text>
+                  <t-link size="small" content="{{item.desigenr_name}}" hover theme="primary" data-task_id="{{ item.task_id }}" catchtap="onAllocateClick" />
+                </view>
+              </view>
+            </view>
+          </t-cell>
+        </t-cell-group>
+      </view>
+    </view>
+  </view>
+  <!-- 当下拉时,进行显示的内容  -->
+  <view class="loading-box loading-flex" wx:if="{{isLoadingReachMore}}">
+    <!-- <text class="loading-text">加载中...</text> -->
+    <t-loading theme="dots" size="60rpx" />
+  </view>
+  <view class="loading-box" wx:if="{{noMoreData}}">
+    <text class="loading-text">-- 已经到底了 --</text>
+  </view>
+</view>
+<!-- 轻提示 -->
+<t-toast id="t-toast" />
+<!-- 回到顶部 -->
+<t-back-top theme="half-round" text="" scroll-top="{{scrollTop}}" bind:to-top="onToTop" style="z-index: 999;" />
+<!-- 图稿任务分配 -->
+<t-picker visible="{{desigenrPickerVisible}}" title="请选择" cancelBtn="取消" confirmBtn="确认" bindchange="onAllocatePickerChange" bindcancel="onAllocateClosePicker" catchtouchmove>
+  <t-picker-item options="{{desigenrPickerItemList}}"></t-picker-item>
+</t-picker>
