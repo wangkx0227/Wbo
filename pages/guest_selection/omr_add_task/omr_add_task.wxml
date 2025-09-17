@@ -75,7 +75,7 @@
       <view class="text">添加TASK</view>
     </view>
     <view class="item" bindtap="onGenerateTaskClick">
-      <view class="text">添加TASK</view>
+      <view class="text">创建TASK</view>
     </view>
   </view>
 </t-fab>
