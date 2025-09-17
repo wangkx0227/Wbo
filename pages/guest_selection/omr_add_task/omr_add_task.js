@@ -277,6 +277,7 @@ Page({
 
   // 资料-打开
   onUpdateFileDataClick() {
+    console.log(11);
     this.setData({ showFileDataDialog: true });
   },
   // 资料-关闭

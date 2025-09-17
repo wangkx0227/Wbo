@@ -56,9 +56,10 @@
       </t-collapse>
     </view>
     <view class="button-example">
-      <t-button theme="default" block size="extra-small" t-class="group-btn">添加TASK</t-button>
-      <t-button theme="primary" block size="extra-small" t-class="group-btn">确认TASK</t-button>
+      <t-button theme="default" block size="extra-small" t-class="group-btn" style="width: 100px;">添加TASK</t-button>
+      <t-button theme="primary" block size="extra-small" t-class="group-btn" style="width: 100px;">确认TASK</t-button>
     </view>
+    <t-divider/>
   </view>
   <view class="page-main">
     <view class="wrapper">
@@ -110,3 +111,14 @@
 <t-toast id="t-toast" />
 <!-- 回到顶部 -->
 <t-back-top theme="half-round" text="" scroll-top="{{scrollTop}}" bind:to-top="onToTop" style="z-index: 999;" />
+<!-- 系列弹窗 -->
+<t-dialog visible="{{showSeriesDialog}}" title="添加系列" confirm-btn="确定" cancel-btn="取消" bind:confirm="onSeriesDialogConfirm" bind:cancel="closeSeriesDialog">
+  <t-input placeholder="请输入文字" slot="content" value="{{seriesValue}}" bind:change="onSeriesInputChange" />
+</t-dialog>
+<!-- 附件弹窗 -->
+<t-dialog visible="{{showFileDataDialog}}" title="添加附件" confirm-btn="确定" cancel-btn="取消" bind:confirm="onFileDataConfirm" bind:cancel="closeFileDataDialog">
+  <view slot="content" style="margin-top: 60rpx;">
+    <t-upload accept="*/*" max="{{1}}" files="{{fileList}}" bind:success="fileDataSuccess" bind:remove="fileDataRemove" gridConfig="{{ { column: 1, width: 300, height: 200  } }}">
+    </t-upload>
+  </view>
+</t-dialog>
