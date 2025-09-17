@@ -8,6 +8,9 @@
     "t-dialog": "tdesign-miniprogram/dialog/dialog",
     "t-upload": "tdesign-miniprogram/upload/upload",
     "t-collapse": "tdesign-miniprogram/collapse/collapse",
-    "t-collapse-panel": "tdesign-miniprogram/collapse-panel/collapse-panel"
+    "t-badge": "tdesign-miniprogram/badge/badge",
+    "t-collapse-panel": "tdesign-miniprogram/collapse-panel/collapse-panel",
+    "t-picker": "tdesign-miniprogram/picker/picker",
+    "t-picker-item": "tdesign-miniprogram/picker-item/picker-item"
   }
 }

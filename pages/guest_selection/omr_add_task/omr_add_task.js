@@ -1,8 +1,6 @@
 const utils = require('../../../utils/util')
 Page({
   data: {
-    line_plan_id: null, // lp id
-    Data: [], // 页面展示数据变量
     allData: [],// 全部的数据
     userRole: null, // 角色
     userName: null, // 名称
@@ -13,35 +11,16 @@ Page({
     isDownRefreshing: false, // 下拉刷新状态
     isLoadingReachMore: false, // 滚动底部加载数据
     noMoreData: false,    // 数据是否全部加载完毕
+
+
+    Data: [{
+      task_id: 1,
+      task_code: "Jasonyu_2025_30296_001",
+      allocate: "暂无"
+    }], // 页面展示数据变量
+    line_plan_id: null, // lp id
     skeletonLoading: false, // 骨架控制变量
     scrollTop: 0, // 回到顶部变量
-    // 筛选框变量-1
-    dropdownTemplate: {
-      value: 'all',
-      options: [
-        {
-          value: 'all',
-          label: '全部客户',
-        },
-      ],
-    },
-    filterTemplate: 'all',
-    // 筛选框变量-2
-    dropdownSorter: {
-      value: 'default',
-      options: [
-        {
-          value: 'default',
-          label: '默认排序',
-        },
-        {
-          value: 'reverse',
-          label: '从低到高排序',
-        },
-      ],
-    },
-    filterSorter: false, // 排序筛选条件
-
     seriesValue: null,  // 系列内容
     showSeriesDialog: false, // 系列弹出框
     seriesList: [
@@ -66,7 +45,35 @@ Page({
         "file_name": "xxxx_xxx.pnf",
       },
     ], // 资料列表
+    showTaskDialog: false, // task弹窗
+    taskValue: null, // task数量
+    allocatePickerVisible: false, // task分配公司
+    allocatePickerItemList: [
+      {
+        label: "南宁TD",
+        value: "南宁TD",
+      }, {
+        label: "深圳TD",
+        value: "深圳TD",
+      }
+    ]
   },
+  // 回到顶部
+  onToTop(e) {
+    wx.pageScrollTo({
+      scrollTop: 0,
+      duration: 300
+    });
+  },
+  //  实时监听滚动距离，把这个值传给回到顶部的按钮，让它知道是否应该出现
+  onPageScroll(e) {
+    this.setData({
+      scrollTop: e.scrollTop
+    });
+  },
+
+
+
   // 首页数据结构处理 - 未用
   dataStructure(dataList) {
     let arrangeData = [];
@@ -141,39 +148,25 @@ Page({
   },
   // 生命周期函数
   onLoad(options) {
-    // const that = this;
+    const that = this;
     // if (!utils.LoginStatusAuthentication(that)) {
     //   // 未登录状态，函数已处理跳转逻辑
     //   return;
     // }
-    // const userRole = wx.getStorageSync('userRole');
-    // const userName = wx.getStorageSync('userName');
-    // const apiUserName = wx.getStorageSync('apiUserName');
-    // const line_plan_id = options.line_plan_id; // 开发案id
-    // that.setData({
-    //   userRole: userRole,
-    //   userName: userName,
-    //   apiUserName: apiUserName,
-    //   line_plan_id: line_plan_id,
+    const userRole = wx.getStorageSync('userRole');
+    const userName = wx.getStorageSync('userName');
+    const apiUserName = wx.getStorageSync('apiUserName');
+    const line_plan_id = options.line_plan_id; // 开发案id
+    that.setData({
+      userRole: userRole,
+      userName: userName,
+      apiUserName: apiUserName,
+      line_plan_id: line_plan_id,
+    })
+  },
 
-    // })
-  },
-  // 回到顶部
-  onToTop(e) {
-    wx.pageScrollTo({
-      scrollTop: 0,
-      duration: 300
-    });
-  },
-  //  实时监听滚动距离，把这个值传给回到顶部的按钮，让它知道是否应该出现
-  onPageScroll(e) {
-    this.setData({
-      scrollTop: e.scrollTop
-    });
-  },
   // 页面下拉刷新
   onPullDownRefresh() {
-    console.log(11);
     if (this.data.isLoadingReachMore) return; // 如果正在加载更多，则禁止下拉刷新
     // 重置 currentIndex 让它从头开始访问
     this.setData({
@@ -182,7 +175,7 @@ Page({
       noMoreData: false,
       isLoadingReachMore: false
     })
-    this.dataRequest('refresh');
+    // this.dataRequest('refresh');
   },
   // 页面上拉触底加载更多数据
   onReachBottom() {
@@ -204,73 +197,6 @@ Page({
         noMoreData: true
       })
     }
-  },
-  // 下拉菜单-模板
-  onTemplateChange(e) {
-    const that = this;
-    const value = e.detail.value; // 筛选框内容
-    const filterSorter = that.data.filterSorter; // 排序
-    const filtered = that.data.allData.filter(item => {
-      if (value === 'all') {
-        return item;
-      }
-      return !value || item.line_plan_client === value;
-    });
-    that.setData({
-      filterTemplate: value,
-      filteredData: filterSorter ? filtered.reverse() : filtered, // 记录筛选数据
-      Data: [],
-      currentIndex: 0,
-      noMoreData: false
-    });
-    const firstPage = utils.readPageStructure(that);
-    that.setData({
-      Data: firstPage, // 显示
-      currentIndex: firstPage.length,
-      'dropdownTemplate.value': value,
-    });
-  },
-  // 下拉菜单-排序
-  onSorterChange(e) {
-    const that = this;
-    const filterTemplate = that.data.filterTemplate;
-    let sorted = [...that.data.filteredData]; // 拷贝一份，避免直接改动原数组
-    const filtered = sorted.filter(item => {
-      const matchName = (filterTemplate === 'all') ? true : item.line_plan_client === filterTemplate;
-      return matchName;
-    });
-    sorted = filtered.reverse(); // 生成一个新的
-    that.setData({
-      Data: [],
-      currentIndex: 0,
-      filterSorter: true,
-      filteredData: sorted, // 存储筛选记录数据
-      'dropdownSorter.value': e.detail.value,
-    });
-    const firstPage = utils.readPageStructure(that);
-    that.setData({
-      Data: firstPage, // 显示
-      currentIndex: firstPage.length,
-    });
-  },
-  // 跳转到详情页面
-  onJumpArtworkDeatails(e) {
-    const line_plan_id = e.currentTarget.dataset.lp_id;
-    wx.navigateTo({
-      url: `/pages/guest_selection/omr_add_task/omr_add_task?line_plan_id=${JSON.stringify(line_plan_id)}`,
-      fail: (err) => {
-        console.log(err);
-        wx.showToast({
-          title: '跳转失败',
-          icon: 'error'
-        });
-      }
-    });
-  },
-  // 创建类型 单选的状态赋值
-  onRadioChange(event) {
-    const { value } = event.detail;
-    this.setData({ "addLPData.lp_type": value });
   },
 
 
@@ -303,22 +229,80 @@ Page({
   // 资料上传-提交
   onFileDataConfirm() {
     const that = this;
-    const seriesValue = that.data.seriesValue; // 系列的值
-    if (!seriesValue) {
+    const fileList = that.data.fileList; // 系列的值
+    if (fileList.length === 0) {
       utils.showToast(that, "填写后再提交", "error")
       return;
     }
+    const fileUrls = fileList.map(f => f.url || f.response.url); // 文件临时路径
     const line_plan_id = that.data.line_plan_id; // lp的id
     utils.showToast(that, "提交成功")
+    // 附件上传
+    // wx.uploadFile({
+    //   url: montageUrl + '/wbo/upload_task_image/',
+    //   filePath: imageFileList[0].url, // 临时文件路径
+    //   name: 'file',       // 与接口的 file 字段一致
+    //   formData: {
+    //     task_id: task_id,   // task ID
+    //     AIT_designer2: true, // 默认设计师选中
+    //   },
+    //   success(res) {
+    //     try {
+    //       const data = JSON.parse(res.data);
+    //       if (data.code === 200) {
+    //         // 修改设计师标记状态，默认标记
+    //         const data = {
+    //           "type": "update_task",
+    //           "task_id": task_id,
+    //           "username": userName,
+    //           "AIT_designer2": true,
+    //         }
+    //         // 数据提交
+    //         utils.UpdateData({
+    //           page: that,
+    //           data: data,
+    //           toastShow: false
+    //         });
+    //         // 更新数据
+    //         const updatedData = that.data.Data.map(item => {
+    //           if (item.id === task_id) {
+    //             item["AIT_designer2"] = true;
+    //             item["AIT_designer2_text"] = "已上传图稿";
+    //           }
+    //           if (item.timeline_id === timeline_id) {
+    //             return {
+    //               ...item,
+    //               picture_list: [...item.picture_list, imageFileList[0].url]
+    //             };
+    //           }
+    //           return item;
+    //         })
+    //         that.setData({
+    //           Data: updatedData,
+    //           popupFactoryArtworkVisible: false,
+    //         });
+    //         utils.showToast(that, "上传成功");
+    //       } else {
+    //         utils.showToast(that, "上传失败", "error");
+    //       }
+    //     } catch (e) {
+    //       utils.showToast(that, "返回数据解析失败", "error");
+    //     }
+    //   },
+    //   fail(err) {
+    //     utils.showToast(that, "接口调用失败", "error");
+    //   }
+    // });
+
     setTimeout(() => {
       utils.showToast(that, "提交失败", "error")
     }, 1000)
-    that.closeSeriesDialog();
+    that.closeFileDataDialog();
   },
   // 资料-删除
   onDeleteFileDataClick(e) {
     const { file_id } = e.target.dataset;
-    console.log( file_id );
+    console.log(file_id);
   },
 
   // 系列-打开
@@ -356,6 +340,85 @@ Page({
   // 资料-删除
   onDeleteSeriesDataClick(e) {
     const { series_id } = e.target.dataset;
-    console.log( series_id );
+    console.log(series_id);
+  },
+
+  // task-弹窗
+  onCreateTaskClick() {
+    this.setData({ showTaskDialog: true });
+  },
+  // task-监听输入框
+  onTaskInputChange(e) {
+    let value = e.detail.value.replace(/\D/g, ""); // 去掉非数字
+    this.setData({
+      taskValue: value, // TDesign Input 取值用 e.detail.value
+    });
+  },
+  // task-关闭
+  closeTaskDialog() {
+    this.setData({ showTaskDialog: false });
+    setTimeout(() => {
+      this.setData({ taskValue: null, });
+    }, 500)
+  },
+  // task-提交
+  onTasksDialogConfirm() {
+    const that = this;
+    const taskValue = that.data.taskValue; // 系列的值
+    if (!taskValue) {
+      utils.showToast(that, "填写后再提交", "error")
+      return;
+    };
+    const line_plan_id = that.data.line_plan_id; // lp的id
+    utils.showToast(that, "提交成功")
+    setTimeout(() => {
+      utils.showToast(that, "提交失败", "error")
+    }, 1000)
+    that.closeTaskDialog();
+  },
+
+  // TASK - 提交导入
+  onTaskSubmit() {
+    const that = this;
+    utils.showToast(that, "提交")
+  },
+  // TASK - 删除
+  onDeleteTaskClick(e) {
+    const task_id = e.target.dataset.task_id;
+    console.log(task_id);
+  },
+
+  // 图稿公司分配
+  onAllocateClick(e) {
+    const task_id = e.target.dataset.task_id;
+    this.setData({
+      task_id: task_id,
+      allocatePickerVisible: true
+    });
+  },
+  // 关闭 AIT筛选器
+  onAllocateClosePicker() {
+    this.setData({
+      task_id: null,
+      allocatePickerValue: null,
+      allocatePickerVisible: false,
+    });
+  },
+  // 提交 AIT筛选器
+  onAllocatePickerChange(e) {
+    const that = this;
+    const userName = that.data.userName;
+    const task_id = that.data.task_id;
+    const { value } = e.detail;
+    const updatedData = that.data.Data.map(item => {
+      if (item.task_id === task_id) {
+        item["allocate"] = value;
+      };
+      return item;
+    })
+    that.setData({
+      Data: updatedData
+    });
+    that.onAllocateClosePicker();
   },
 })

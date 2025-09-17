@@ -3,93 +3,72 @@
 <template is="skeleton" wx:if="{{skeletonLoading}}" />
 <view wx:else="{{skeletonLoading}}" class="page-wrapper">
   <view class="page-head filter-bar">
-    <t-row>
-      <t-col span="24">
-        <t-dropdown-menu>
-          <t-dropdown-item options="{{dropdownTemplate.options}}" placement="right" value="{{dropdownTemplate.value}}" bindchange="onTemplateChange" />
-          <t-dropdown-item options="{{dropdownSorter.options}}" placement="right" value="{{dropdownSorter.value}}" bindchange="onSorterChange" />
-        </t-dropdown-menu>
-      </t-col>
-    </t-row>
-    <view style="margin-top: 10rpx;">
-      <t-collapse>
-        <t-collapse-panel expandIcon>
-          <view slot="header" class="title-font-main" style="padding-left: 30rpx;">
-            资料列表
-          </view>
-          <view slot="header-right-content">
-            <t-link size="small" content="添加资料" hover theme="primary" prefixIcon="add" catchtap="onUpdateFileDataClick" />
-          </view>
-          <view slot="content">
-            <view wx:for="{{fileDataList}}" wx:key="index">
-              <view class="arrange-space-between" style="margin-bottom: 20rpx;">
-                <view class="arrange-center">
-                  <text class="title-font-main">文件名称：</text>
-                  <text class="title-font-other">{{ item.file_name }}</text>
-                </view>
-                <t-link size="small" content="删除" hover theme="primary" prefixIcon="delete" style="margin-right: 10rpx;" data-file_id="{{ item.file_id }}" catchtap="onDeleteFileDataClick" />
+    <t-collapse>
+      <t-collapse-panel expandIcon>
+        <view slot="header" class="title-font-main" style="padding-left: 30rpx;">
+          资料列表
+        </view>
+        <view slot="header-right-content">
+          <t-link size="small" content="添加资料" hover theme="primary" prefixIcon="add" catchtap="onUpdateFileDataClick" />
+        </view>
+        <view slot="content">
+          <view wx:for="{{fileDataList}}" wx:key="index">
+            <view class="arrange-space-between" style="margin-bottom: 20rpx;">
+              <view class="arrange-center">
+                <text class="title-font-main">文件名称：</text>
+                <text class="title-font-other">{{ item.file_name }}</text>
               </view>
+              <t-link size="small" content="删除" hover theme="primary" prefixIcon="delete" style="margin-right: 10rpx;" data-file_id="{{ item.file_id }}" catchtap="onDeleteFileDataClick" />
             </view>
           </view>
-        </t-collapse-panel>
-      </t-collapse>
-      <t-collapse>
-        <t-collapse-panel expandIcon>
-          <view slot="header" class="title-font-main" style="padding-left: 30rpx;">
-            系列列表
-          </view>
-          <view slot="header-right-content">
-            <t-link size="small" content="添加系列" hover theme="primary" prefixIcon="add" catchtap="onCatectSeriesClick" />
-          </view>
-          <view slot="content">
-            <view wx:for="{{seriesList}}" wx:key="index">
-              <view class="arrange-space-between" style="margin-bottom: 20rpx;">
-                <view class="arrange-center">
-                  <text class="title-font-main">系列名称：</text>
-                  <text class="title-font-other">{{ item.series_name }}</text>
-                </view>
-                <t-link size="small" content="删除" hover theme="primary" prefixIcon="delete" style="margin-right: 10rpx;" data-series_id="{{ item.series_id }}" catchtap="onDeleteSeriesDataClick" />
+        </view>
+      </t-collapse-panel>
+    </t-collapse>
+    <t-collapse>
+      <t-collapse-panel expandIcon>
+        <view slot="header" class="title-font-main" style="padding-left: 30rpx;">
+          系列列表
+        </view>
+        <view slot="header-right-content">
+          <t-link size="small" content="添加系列" hover theme="primary" prefixIcon="add" catchtap="onCatectSeriesClick" />
+        </view>
+        <view slot="content">
+          <view wx:for="{{seriesList}}" wx:key="index">
+            <view class="arrange-space-between" style="margin-bottom: 20rpx;">
+              <view class="arrange-center">
+                <text class="title-font-main">系列名称：</text>
+                <text class="title-font-other">{{ item.series_name }}</text>
               </view>
+              <t-link size="small" content="删除" hover theme="primary" prefixIcon="delete" style="margin-right: 10rpx;" data-series_id="{{ item.series_id }}" catchtap="onDeleteSeriesDataClick" />
             </view>
           </view>
-        </t-collapse-panel>
-      </t-collapse>
+        </view>
+      </t-collapse-panel>
+    </t-collapse>
+    <view class="arrange-center" style="background-color: #ffffff;padding:30rpx;border-bottom:1px solid #e7e7e7;">
+      <t-button theme="default" block size="extra-small" t-class="group-btn" style="width: 100px;" bindtap="onCreateTaskClick">添加TASK</t-button>
+      <t-button theme="primary" block size="extra-small" t-class="group-btn" style="width: 100px;" bindtap="onTaskSubmit">导入TASK</t-button>
     </view>
-    <view class="button-example">
-      <t-button theme="default" block size="extra-small" t-class="group-btn" style="width: 100px;">添加TASK</t-button>
-      <t-button theme="primary" block size="extra-small" t-class="group-btn" style="width: 100px;">确认TASK</t-button>
-    </view>
-    <t-divider/>
   </view>
   <view class="page-main">
     <view class="wrapper">
       <view wx:for="{{Data}}" wx:key="index" style="gap: 15px;">
-        <t-cell-group theme="card" class="t-cell-group" bindtap="onJumpArtworkDeatails" data-development_id="{{ item.development_id }}" data-line_plan_id="{{ item.line_plan_id }}">
+        <t-cell-group theme="card" class="t-cell-group">
           <t-cell hover>
-            <t-badge count="NEW" slot="note" shape="ribbon" wx:if="{{ item.line_new }}" />
-            <view slot="title" style="display: grid;gap: 25rpx;">
-              <view class="arrange-center">
-                <text class="title-font-main">LP名称：</text>
-                <text class="title-font-other name-cell">{{ item.lp_title }}</text>
+            <t-badge slot="note" shape="ribbon">
+              <view slot="count">
+                <t-button icon="delete" shape="square" size="extra-small" style="position: relative;top: 0px;left: 0px;" bindtap="onDeleteTaskClick" data-task_id="{{item.task_id}}" theme="default" />
               </view>
-              <view class="arrange-space-between" style="gap: 155rpx;">
+            </t-badge>
+            <view slot="title">
+              <view class="arrange-column">
                 <view class="arrange-center">
-                  <text class="title-font-main">风格：</text>
-                  <text class="title-font-other">{{ item.line_plan_season }}</text>
+                  <text class="title-font-main">Code：</text>
+                  <text class="title-font-other name-cell">{{ item.task_code }}</text>
                 </view>
                 <view class="arrange-center">
-                  <text class="title-font-main">客人：</text>
-                  <text class="title-font-other">{{ item.line_plan_client }}</text>
-                </view>
-              </view>
-              <view class="arrange-space-between" style="gap: 100rpx;">
-                <view class="arrange-center">
-                  <text class="title-font-main">Year：</text>
-                  <text class="title-font-other">{{item.line_plan_year}}</text>
-                </view>
-                <view class="arrange-center">
-                  <text class="title-font-main">创建时间：</text>
-                  <text class="title-font-other">{{ item.development_start_data }}</text>
+                  <text class="title-font-main">分配：</text>
+                  <t-link size="small" content="{{item.allocate}}" hover theme="primary" data-task_id="{{ item.task_id }}" catchtap="onAllocateClick" />
                 </view>
               </view>
             </view>
@@ -122,3 +101,11 @@
     </t-upload>
   </view>
 </t-dialog>
+<!-- 生成数量 -->
+<t-dialog visible="{{showTaskDialog}}" title="添加TASK" confirm-btn="确定" cancel-btn="取消" bind:confirm="onTasksDialogConfirm" bind:cancel="closeTaskDialog">
+  <t-input placeholder="请输入生成数量" slot="content" value="{{taskValue}}" bind:change="onTaskInputChange" type="number" maxlength="5" />
+</t-dialog>
+<!-- 图稿任务分配 -->
+<t-picker visible="{{allocatePickerVisible}}" title="请选择" cancelBtn="取消" confirmBtn="确认" bindchange="onAllocatePickerChange" bindcancel="onAllocateClosePicker" catchtouchmove>
+  <t-picker-item options="{{allocatePickerItemList}}"></t-picker-item>
+</t-picker>
