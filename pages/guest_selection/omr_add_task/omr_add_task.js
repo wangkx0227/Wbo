@@ -353,28 +353,42 @@ Page({
   // 系列-提交
   onSeriesDialogConfirm() {
     const that = this;
+    const userName = that.data.userName;
+    const line_plan_id = that.data.line_plan_id;
     const seriesValue = that.data.seriesValue; // 系列的值
     if (!seriesValue) {
       utils.showToast(that, "填写后再提交", "error")
       return;
     }
-    const line_plan_id = that.data.line_plan_id; // lp的id
-    // 假数据
-    that.setData({
-      seriesList: [{
-        "series_id": 110,
-        "series_name": seriesValue,
-      }, ...that.data.seriesList]
+    utils.UpdateData({
+      page: that,
+      data: {
+        "type": "add_create_lp_series",
+        "lp_id": line_plan_id,
+        "name": seriesValue,
+        "username": userName || "Jasonyu"
+      },
+      toastShow: false
+    }).then(item => {
+      const data = item.data;
+      if (data.code === 200) {
+        const seriesList = data.lp_data.series_names_list.map(item => {
+          return { value: item.id, label: item.name }
+        })
+        that.setData({
+          seriesList: seriesList
+        });
+        utils.showToast(that, "添加成功");
+        that.closeSeriesDialog();
+      } else {
+        utils.showToast(that, "添加失败", "error");
+      }
     })
-    utils.showToast(that, "提交成功")
-    // setTimeout(() => {
-    //   utils.showToast(that, "提交失败", "error")
-    // }, 1000)
-    that.closeSeriesDialog();
   },
-  // 资料-删除
+  // 系列-删除
   onDeleteSeriesDataClick(e) {
     const that = this;
+    const userName = that.data.userName;
     const { series_id } = e.target.dataset;
     // 假数据
     wx.showModal({
@@ -382,16 +396,33 @@ Page({
       content: '是否删除系列',
       success(res) {
         if (res.confirm) {
-          const updatedSeriesList = that.data.seriesList.filter(item => item.series_id !== series_id);
-          that.setData({
-            seriesList: updatedSeriesList
-          });
-          utils.showToast(that, "删除成功")
+          wx.showLoading({ title: '加载中...' });
+          utils.UpdateData({
+            page: that,
+            data: {
+              "type": "update_create_lp_series",
+              "series_id": series_id,
+              "hide": 1,
+              "username": userName || "Jasonyu"
+            },
+            toastShow: false
+          }).then(item => {
+            const data = item.data;
+            if (data.code === 200) {
+              const updatedSeriesList = that.data.seriesList.filter(item => item.value !== series_id);
+              that.setData({
+                seriesList: updatedSeriesList
+              });
+              utils.showToast(that, "删除成功")
+            } else {
+              utils.showToast(that, "删除失败", "error");
+            }
+            wx.hideLoading();
+          })
         }
       }
     })
   },
-
   // task-弹窗
   onCreateTaskClick() {
     this.setData({ showTaskDialog: true });
