@@ -75,7 +75,7 @@ Page({
     } else if (userRole === "designer") {
       this.setData({
         tabBarShow: true, userTabs: [
-          { value: 'allocate', label: '分配设计师' }, // 只有主管获取其他的人可以看到，需要调整
+          { value: 'allocate', label: '指派设计师' },
           { value: 'primary', label: "图稿修改" },
           { value: 'factory', label: '工厂稿上传' },
           { value: 'ultimate', label: '样品图审查' },

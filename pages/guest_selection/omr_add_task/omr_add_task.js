@@ -1,3 +1,4 @@
+const app = getApp();
 const utils = require('../../../utils/util')
 Page({
   data: {
@@ -33,6 +34,14 @@ Page({
     showCodeDialog: false, // code
     codeValue: null, // code 值
   },
+  // 补充函数 
+  shortenFileName(filename, frontLen = 10, backLen = 8) {
+    if (filename.length <= frontLen + backLen) {
+      return filename; // 太短就不省略
+    }
+    return filename.substring(0, frontLen) + "..." + filename.substring(filename.length - backLen);
+  },
+
   // 回到顶部
   onToTop(e) {
     wx.pageScrollTo({
@@ -84,9 +93,11 @@ Page({
     // 资料处理
     let fileDataList = [];
     trends_images.forEach(item => {
+      const filename = item.imageURL.split("/").pop();
+      const shortName = this.shortenFileName(filename);
       fileDataList.push({
         "file_id": item.id,
-        "file_name": item.imageURL.split("/").pop(),
+        "file_name": shortName,
       })
     });
     // 系列处理
@@ -204,7 +215,6 @@ Page({
   },
   // 资料-打开
   onUpdateFileDataClick() {
-    console.log(11);
     this.setData({ showFileDataDialog: true });
   },
   // 资料-关闭
@@ -230,83 +240,55 @@ Page({
   // 资料上传-提交
   onFileDataConfirm() {
     const that = this;
+    const userName = that.data.userName;
     const fileList = that.data.fileList; // 系列的值
+    const line_plan_id = that.data.line_plan_id;
+    const montageUrl = app.globalData.montageUrl; // 请求后端接口
     if (fileList.length === 0) {
       utils.showToast(that, "填写后再提交", "error")
       return;
     }
     const fileUrls = fileList.map(f => f.url || f.response.url); // 文件临时路径
-    const fileName = fileList.map(f => f.name || f.response.name); // 文件名称
-    const line_plan_id = that.data.line_plan_id; // lp的id
-
-    // 假数据
-    that.setData({
-      fileDataList: [{
-        "file_id": 100,
-        "file_name": fileName,
-      }, ...that.data.fileDataList]
-    })
     // 附件上传
-    // wx.uploadFile({
-    //   url: montageUrl + '/wbo/upload_task_image/',
-    //   filePath: imageFileList[0].url, // 临时文件路径
-    //   name: 'file',       // 与接口的 file 字段一致
-    //   formData: {
-    //     task_id: task_id,   // task ID
-    //     AIT_designer2: true, // 默认设计师选中
-    //   },
-    //   success(res) {
-    //     try {
-    //       const data = JSON.parse(res.data);
-    //       if (data.code === 200) {
-    //         // 修改设计师标记状态，默认标记
-    //         const data = {
-    //           "type": "update_task",
-    //           "task_id": task_id,
-    //           "username": userName,
-    //           "AIT_designer2": true,
-    //         }
-    //         // 数据提交
-    //         utils.UpdateData({
-    //           page: that,
-    //           data: data,
-    //           toastShow: false
-    //         });
-    //         // 更新数据
-    //         const updatedData = that.data.Data.map(item => {
-    //           if (item.id === task_id) {
-    //             item["AIT_designer2"] = true;
-    //             item["AIT_designer2_text"] = "已上传图稿";
-    //           }
-    //           if (item.timeline_id === timeline_id) {
-    //             return {
-    //               ...item,
-    //               picture_list: [...item.picture_list, imageFileList[0].url]
-    //             };
-    //           }
-    //           return item;
-    //         })
-    //         that.setData({
-    //           Data: updatedData,
-    //           popupFactoryArtworkVisible: false,
-    //         });
-    //         utils.showToast(that, "上传成功");
-    //       } else {
-    //         utils.showToast(that, "上传失败", "error");
-    //       }
-    //     } catch (e) {
-    //       utils.showToast(that, "返回数据解析失败", "error");
-    //     }
-    //   },
-    //   fail(err) {
-    //     utils.showToast(that, "接口调用失败", "error");
-    //   }
-    // });
-    utils.showToast(that, "提交成功")
-    // setTimeout(() => {
-    //   utils.showToast(that, "提交失败", "error")
-    // }, 1000)
-    that.closeFileDataDialog();
+    wx.uploadFile({
+      url: montageUrl + '/wbo/upload_create_lp_task_image/',
+      filePath: fileUrls[0], // 临时文件路径
+      name: 'file',       // 与接口的 file 字段一致
+      formData: {
+        image_type: 2,
+        lp_id: line_plan_id,   // task ID
+        username: userName || "Jasonyu",
+      },
+      success(res) {
+        try {
+          const data = JSON.parse(res.data);
+          if (data.code === 200) {
+            let fileDataList = [];
+            data.lp_data.trends_images.forEach(item => {
+              const filename = item.imageURL.split("/").pop();
+              const shortName = that.shortenFileName(filename);
+              fileDataList.push({
+                "file_id": item.id,
+                "file_name": shortName,
+              })
+            });
+            that.setData({
+              fileDataList: fileDataList
+            });
+            utils.showToast(that, "上传成功");
+            that.closeFileDataDialog();
+          } else {
+            utils.showToast(that, "上传失败", "error");
+          }
+        } catch (e) {
+          utils.showToast(that, "返回数据解析失败", "error");
+        }
+      },
+      fail(err) {
+        console.log(err);
+        utils.showToast(that, "接口调用失败", "error");
+      }
+    });
   },
   // 资料-删除
   onDeleteFileDataClick(e) {
