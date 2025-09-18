@@ -21,6 +21,7 @@
               <t-link size="small" content="删除" hover theme="primary" prefixIcon="delete" style="margin-right: 10rpx;" data-file_id="{{ item.file_id }}" catchtap="onDeleteFileDataClick" />
             </view>
           </view>
+          <t-empty description="无内容" wx:if="{{fileDataList.length === 0}}" />
         </view>
       </t-collapse-panel>
     </t-collapse>
@@ -42,6 +43,7 @@
               <t-link size="small" content="删除" hover theme="primary" prefixIcon="delete" style="margin-right: 10rpx;" data-series_id="{{ item.value }}" catchtap="onDeleteSeriesDataClick" />
             </view>
           </view>
+          <t-empty description="无内容" wx:if="{{seriesList.length === 0}}" />
         </view>
       </t-collapse-panel>
     </t-collapse>

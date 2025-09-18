@@ -294,20 +294,21 @@ Page({
   onDeleteFileDataClick(e) {
     const that = this;
     const { file_id } = e.target.dataset;
+    console.log(file_id);
     // 假数据
-    wx.showModal({
-      title: '提示',
-      content: '是否删除资料',
-      success(res) {
-        if (res.confirm) {
-          const updatedFileDataList = that.data.fileDataList.filter(item => item.file_id !== file_id);
-          that.setData({
-            fileDataList: updatedFileDataList
-          });
-          utils.showToast(that, "删除成功")
-        }
-      }
-    })
+    // wx.showModal({
+    //   title: '提示',
+    //   content: '是否删除资料',
+    //   success(res) {
+    //     if (res.confirm) {
+    //       const updatedFileDataList = that.data.fileDataList.filter(item => item.file_id !== file_id);
+    //       that.setData({
+    //         fileDataList: updatedFileDataList
+    //       });
+    //       utils.showToast(that, "删除成功")
+    //     }
+    //   }
+    // })
   },
   // 系列-打开
   onCatectSeriesClick() {
