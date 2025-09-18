@@ -242,7 +242,7 @@ Page({
   },
   // 跳转到详情页面
   onJumpArtworkDeatails(e) {
-    const line_plan_id = e.currentTarget.dataset.lp_id;
+    const line_plan_id = e.currentTarget.dataset.line_plan_id;
     wx.navigateTo({
       url: `/pages/guest_selection/omr_add_task/omr_add_task?line_plan_id=${JSON.stringify(line_plan_id)}`,
       fail: (err) => {

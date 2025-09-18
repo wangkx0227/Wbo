@@ -1,6 +1,8 @@
 const utils = require('../../../utils/util')
 Page({
   data: {
+    line_plan_id: null, // lp id
+    Data: [], // 页面展示数据变量
     allData: [],// 全部的数据
     userRole: null, // 角色
     userName: null, // 名称
@@ -11,40 +13,14 @@ Page({
     isDownRefreshing: false, // 下拉刷新状态
     isLoadingReachMore: false, // 滚动底部加载数据
     noMoreData: false,    // 数据是否全部加载完毕
-
-
-    Data: [{
-      task_id: 9999,
-      task_code: "Jasonyu_2025_30296_001",
-      allocate: "暂无"
-    }], // 页面展示数据变量
-    line_plan_id: null, // lp id
     skeletonLoading: false, // 骨架控制变量
     scrollTop: 0, // 回到顶部变量
     seriesValue: null,  // 系列内容
     showSeriesDialog: false, // 系列弹出框
-    seriesList: [
-      {
-        "series_id": 1,
-        "series_name": "圣诞系列",
-      },
-      {
-        "series_id": 2,
-        "series_name": "圣诞系列",
-      },
-    ], // 系列列表
+    seriesList: [], // 系列列表
     showFileDataDialog: false, // 附件弹出框
     fileList: [], // 附件列表
-    fileDataList: [
-      {
-        "file_id": 1,
-        "file_name": "xxxx_xxx.pnf",
-      },
-      {
-        "file_id": 2,
-        "file_name": "xxxx_xxx.pnf",
-      },
-    ], // 资料列表
+    fileDataList: [], // 资料列表
     showTaskDialog: false, // task弹窗
     taskValue: null, // task数量
     allocatePickerVisible: false, // task分配公司
@@ -56,7 +32,8 @@ Page({
         label: "长沙TD",
         value: "长沙TD",
       }
-    ]
+    ],
+    tdUserRoleList: [],
   },
   // 回到顶部
   onToTop(e) {
@@ -71,53 +48,66 @@ Page({
       scrollTop: e.scrollTop
     });
   },
-
-
-
-  // 首页数据结构处理 - 未用
+  // 首页数据结构处理
   dataStructure(dataList) {
     let arrangeData = [];
-    let client_list = [];
-    dataList.forEach(item => {
-      const development_id = item.id; // 开发案id
-      const development_start_data = item.start_date; // 开发案开始时间
-      // 对内部的line_plan_list变量进行循环
-      item.line_plan_list.forEach((line_plan) => {
-        const lp_data = {
-          development_id: development_id, // 开发案id
-          line_plan_id: line_plan.id, // id
-          lp_title: line_plan.title,
-          line_plan_client: line_plan.client || "未记录", // 客户
-          line_plan_year: line_plan.year || "未记录", // 年
-          line_plan_season: line_plan.season || "未记录", // 风格
-          development_start_data: development_start_data, //开发案时间
-          line_new: false,
-        }
-        client_list.push(lp_data["line_plan_client"].trim()); // 客户列表加入
-        lp_data["select_status"] = false; // 批量选中状态
-        arrangeData.push(lp_data)
+    const line_plan_type = dataList.line_plan_type;// 当前的LP类型是TD还是AIE
+    const trends_images = dataList.trends_images; // 资料
+    const series_names_list = dataList.series_names_list; // 系列
+    const td_user_role_list = dataList.td_user_role_list; // TD组长
+    const task_list = dataList.task_list;// task数据
+    task_list.forEach(item => {
+      const task_id = item.id; // taks 的id
+      const task_code = item.code || "暂无"; // taks 的code
+      const task_leader = item.leader || "暂无"; // 指派的组长
+      arrangeData.push({
+        line_plan_type: line_plan_type,
+        task_id: task_id,
+        task_code: task_code,
+        task_leader: task_leader,
+        task_allocate: "暂无",
       })
     })
-    // 筛选条件加入
-    const client = utils.filterDataProcess(client_list);
-    const options = this.data.dropdownTemplate.options;
-    // 只有 筛选框的列表为1（内部默认有一条数据）才会添加
-    if (options.length === 1) {
-      this.setData({
-        "dropdownTemplate.options": options.concat(client)
+    // TD组长处理
+    let tdUserRoleList = [];
+    td_user_role_list.forEach(item => {
+      tdUserRoleList.push({
+        label: item.name,
+        value: item.id,
       })
-    }
-
+    });
+    // 资料处理
+    let fileDataList = [];
+    trends_images.forEach(item => {
+      fileDataList.push({
+        "file_id": item.id,
+        "file_name": item.imageURL.split("/").pop(),
+      })
+    });
+    // 系列处理
+    let seriesList = [];
+    series_names_list.forEach(item => {
+      seriesList.push({
+        "series_id": item.id,
+        "series_name": item.name,
+      })
+    });
+    // 设置值
+    this.setData({
+      seriesList: seriesList,
+      fileDataList: fileDataList,
+      tdUserRoleList: tdUserRoleList,
+    });
     return arrangeData // 全部数据
   },
-  // 数据分页显示处理 - 未用
+  // 数据分页显示处理
   dataRequest(mode) {
     const that = this;
     const apiUserName = that.data.apiUserName;
-    const development_id = that.data.development_id;
+    const line_plan_id = that.data.line_plan_id;
     utils.LoadDataList({
       page: that,
-      data: { type: "getProjectList", username: apiUserName, project_id: development_id },
+      data: { type: "get_create_lp_data", username: apiUserName, lp_id: line_plan_id },
       mode: mode
     }).then(list => { // list 就是data数据
       const arrangeData = that.dataStructure(list);
@@ -156,50 +146,49 @@ Page({
     const userRole = wx.getStorageSync('userRole');
     const userName = wx.getStorageSync('userName');
     const apiUserName = wx.getStorageSync('apiUserName');
-    const line_plan_id = options.line_plan_id; // 开发案id
+    const line_plan_id = options.line_plan_id; // lp的id
     that.setData({
       userRole: userRole,
       userName: userName,
       apiUserName: apiUserName,
       line_plan_id: line_plan_id,
-    })
+    });
+    this.dataRequest("init");
   },
-
   // 页面下拉刷新
-  // onPullDownRefresh() {
-  //   if (this.data.isLoadingReachMore) return; // 如果正在加载更多，则禁止下拉刷新
-  //   // 重置 currentIndex 让它从头开始访问
-  //   this.setData({
-  //     searchValue: "",
-  //     currentIndex: 0,
-  //     noMoreData: false,
-  //     isLoadingReachMore: false
-  //   })
-  //   // this.dataRequest('refresh');
-  // },
+  onPullDownRefresh() {
+    if (this.data.isLoadingReachMore) return; // 如果正在加载更多，则禁止下拉刷新
+    // 重置 currentIndex 让它从头开始访问
+    this.setData({
+      searchValue: "",
+      currentIndex: 0,
+      noMoreData: false,
+      isLoadingReachMore: false
+    })
+    this.dataRequest('refresh');
+  },
   // 页面上拉触底加载更多数据
-  // onReachBottom() {
-  //   // 下拉刷线，读取原来的加载过的数据即可
-  //   const that = this;
-  //   // 如果在下拉刷新，禁止滚动加载
-  //   if (that.data.isDownRefreshing || that.data.noMoreData) return;
-  //   const pageData = utils.readPageStructure(that); // 分页数据
-  //   let totalRequests = that.data.pageSize;
-  //   if (pageData.length !== totalRequests) {
-  //     totalRequests = pageData.length;
-  //   }
-  //   that.setData({
-  //     Data: that.data.Data.concat(pageData),
-  //     currentIndex: that.data.currentIndex + pageData.length // 记录下标索引
-  //   });
-  //   if (that.data.currentIndex === that.data.filteredData.length) {
-  //     that.setData({
-  //       noMoreData: true
-  //     })
-  //   }
-  // },
-
-
+  onReachBottom() {
+    // 下拉刷线，读取原来的加载过的数据即可
+    const that = this;
+    console.log(111);
+    // 如果在下拉刷新，禁止滚动加载
+    if (that.data.isDownRefreshing || that.data.noMoreData) return;
+    const pageData = utils.readPageStructure(that); // 分页数据
+    let totalRequests = that.data.pageSize;
+    if (pageData.length !== totalRequests) {
+      totalRequests = pageData.length;
+    }
+    that.setData({
+      Data: that.data.Data.concat(pageData),
+      currentIndex: that.data.currentIndex + pageData.length // 记录下标索引
+    });
+    if (that.data.currentIndex === that.data.filteredData.length) {
+      that.setData({
+        noMoreData: true
+      })
+    }
+  },
 
   // 资料-打开
   onUpdateFileDataClick() {

@@ -63,13 +63,25 @@
             <view slot="title">
               <view class="arrange-column">
                 <view class="arrange-center">
+                  <text class="title-font-main">ID：</text>
+                  <text class="title-font-other name-cell">{{ item.task_id }}</text>
+                </view>
+                <view class="arrange-center">
                   <text class="title-font-main">Code：</text>
                   <text class="title-font-other name-cell">{{ item.task_code }}</text>
                 </view>
                 <view class="arrange-center">
-                  <text class="title-font-main">分配：</text>
-                  <t-link size="small" content="{{item.allocate}}" hover theme="primary" data-task_id="{{ item.task_id }}" catchtap="onAllocateClick" />
+                  <view class="arrange-center">
+                    <text class="title-font-main">分配区域：</text>
+                    <t-link size="small" content="{{item.task_allocate}}" hover theme="primary" data-task_id="{{ item.task_id }}" catchtap="onAllocateClick" />
+                  </view>
+                  <t-divider layout="vertical" />
+                  <view class="arrange-center">
+                    <text class="title-font-main">分配组长：</text>
+                    <t-link size="small" content="{{item.task_leader}}" hover theme="primary" data-task_id="{{ item.task_id }}" catchtap="onAllocateClick" />
+                  </view>
                 </view>
+
               </view>
             </view>
           </t-cell>

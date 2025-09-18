@@ -85,9 +85,10 @@ Page({
     } else if (userRole === "chosen_draft") {
       this.setData({
         tabBarShow: true, userTabs: [
+          { value: 'add_project', label: '新增开发案' },
           { value: 'primary', label: '第一轮选稿' },
           { value: 'ultimate', label: '第二轮选稿' },
-          { value: 'add_project', label: '新增开发案' }
+          
         ]
       });
     }
