@@ -47,7 +47,7 @@
     </t-collapse>
     <view class="arrange-center" style="background-color: #ffffff;padding:30rpx;border-bottom:1px solid #e7e7e7;">
       <t-button theme="default" block size="extra-small" t-class="group-btn" style="width: 100px;" bindtap="onCreateTaskClick">添加TASK</t-button>
-      <t-button theme="primary" block size="extra-small" t-class="group-btn" style="width: 100px;" bindtap="onTaskSubmit">导入TASK</t-button>
+      <!-- <t-button theme="primary" block size="extra-small" t-class="group-btn" style="width: 100px;" bindtap="onTaskSubmit">导入TASK</t-button> -->
     </view>
   </view>
   <view class="page-main">
@@ -60,28 +60,28 @@
                 <t-button icon="delete" shape="square" size="extra-small" style="position: relative;top: 0px;left: 0px;" bindtap="onDeleteTaskClick" data-task_id="{{item.task_id}}" theme="default" />
               </view>
             </t-badge>
-            <view slot="title">
+            <view slot="title" style="gap: 15rpx;">
               <view class="arrange-column">
                 <view class="arrange-center">
-                  <text class="title-font-main">ID：</text>
-                  <text class="title-font-other name-cell">{{ item.task_id }}</text>
+                  <text class="title-font-main">Title：</text>
+                  <t-link size="small" content="{{item.task_title}}" hover theme="primary" data-task_id="{{ item.task_id }}" catchtap="onTitleClick" />
+                </view>
+                <view class="arrange-center">
+                  <text class="title-font-main">系列：</text>
+                  <text class="title-font-other name-cell">{{ item.task_series }}</text>
+                </view>
+                <view class="arrange-center">
+                  <text class="title-font-main">材质：</text>
+                  <text class="title-font-other name-cell">{{ item.task_material }}</text>
                 </view>
                 <view class="arrange-center">
                   <text class="title-font-main">Code：</text>
                   <text class="title-font-other name-cell">{{ item.task_code }}</text>
                 </view>
                 <view class="arrange-center">
-                  <view class="arrange-center">
-                    <text class="title-font-main">分配区域：</text>
-                    <t-link size="small" content="{{item.task_allocate}}" hover theme="primary" data-task_id="{{ item.task_id }}" catchtap="onAllocateClick" />
-                  </view>
-                  <t-divider layout="vertical" />
-                  <view class="arrange-center">
-                    <text class="title-font-main">分配组长：</text>
-                    <t-link size="small" content="{{item.task_leader}}" hover theme="primary" data-task_id="{{ item.task_id }}" catchtap="onAllocateClick" />
-                  </view>
+                  <text class="title-font-main">分配组长：</text>
+                  <t-link size="small" content="{{item.task_leader}}" hover theme="primary" data-task_id="{{ item.task_id }}" catchtap="onAllocateClick" />
                 </view>
-
               </view>
             </view>
           </t-cell>
@@ -118,6 +118,10 @@
   <t-input placeholder="请输入生成数量" slot="content" value="{{taskValue}}" bind:change="onTaskInputChange" type="number" maxlength="5" />
 </t-dialog>
 <!-- 图稿任务分配 -->
-<t-picker visible="{{allocatePickerVisible}}" title="请选择" cancelBtn="取消" confirmBtn="确认" bindchange="onAllocatePickerChange" bindcancel="onAllocateClosePicker" catchtouchmove>
-  <t-picker-item options="{{allocatePickerItemList}}"></t-picker-item>
+<t-picker visible="{{leaderPickerVisible}}" title="请选择" cancelBtn="取消" confirmBtn="确认" bindchange="onAllocatePickerChange" bindcancel="onAllocateClosePicker" catchtouchmove>
+  <t-picker-item options="{{tdUserRoleList}}"></t-picker-item>
 </t-picker>
+<!-- 标题弹窗 -->
+<t-dialog visible="{{showTitleDialog}}" title="编辑Title" confirm-btn="确定" cancel-btn="取消" bind:confirm="onTitleDialogConfirm" bind:cancel="closeTitleDialog">
+  <t-input placeholder="请输入Title" slot="content" value="{{titleValue}}" bind:change="onTitleInputChange" />
+</t-dialog>

@@ -13,7 +13,7 @@ Page({
     isDownRefreshing: false, // 下拉刷新状态
     isLoadingReachMore: false, // 滚动底部加载数据
     noMoreData: false,    // 数据是否全部加载完毕
-    skeletonLoading: false, // 骨架控制变量
+    skeletonLoading: true, // 骨架控制变量
     scrollTop: 0, // 回到顶部变量
     seriesValue: null,  // 系列内容
     showSeriesDialog: false, // 系列弹出框
@@ -23,17 +23,11 @@ Page({
     fileDataList: [], // 资料列表
     showTaskDialog: false, // task弹窗
     taskValue: null, // task数量
-    allocatePickerVisible: false, // task分配公司
-    allocatePickerItemList: [
-      {
-        label: "南宁TD",
-        value: "南宁TD",
-      }, {
-        label: "长沙TD",
-        value: "长沙TD",
-      }
-    ],
-    tdUserRoleList: [],
+    leaderPickerVisible: false, // task分配公司
+    tdUserRoleList: [], // 组长列表
+    materialList: [], // 材质列表
+    showTileDialog: false, // 标题弹窗
+    titleValue: null, // 标题
   },
   // 回到顶部
   onToTop(e) {
@@ -56,16 +50,22 @@ Page({
     const series_names_list = dataList.series_names_list; // 系列
     const td_user_role_list = dataList.td_user_role_list; // TD组长
     const task_list = dataList.task_list;// task数据
+    const material_list = dataList.material_names_list; // 材质列表
     task_list.forEach(item => {
       const task_id = item.id; // taks 的id
-      const task_code = item.code || "暂无"; // taks 的code
-      const task_leader = item.leader || "暂无"; // 指派的组长
+      const task_code = item.code || "未生成"; // taks 的code
+      const task_leader = item.leader || "未指派"; // 指派的组长
+      const task_series = item.series || "未指定";// 系列
+      const task_title = item.title || "未填写";// 名称
+      const task_material = item.material || "未选择";// 材质
       arrangeData.push({
         line_plan_type: line_plan_type,
         task_id: task_id,
         task_code: task_code,
         task_leader: task_leader,
-        task_allocate: "暂无",
+        task_series: task_series,
+        task_title: task_title,
+        task_material: task_material
       })
     })
     // TD组长处理
@@ -73,7 +73,7 @@ Page({
     td_user_role_list.forEach(item => {
       tdUserRoleList.push({
         label: item.name,
-        value: item.id,
+        value: item.name,
       })
     });
     // 资料处理
@@ -92,10 +92,19 @@ Page({
         "series_name": item.name,
       })
     });
+    // 材质处理
+    let materialList = [];
+    material_list.forEach(item => {
+      materialList.push({
+        label: item,
+        value: item,
+      })
+    });
     // 设置值
     this.setData({
       seriesList: seriesList,
       fileDataList: fileDataList,
+      materialList: materialList,
       tdUserRoleList: tdUserRoleList,
     });
     return arrangeData // 全部数据
@@ -171,7 +180,6 @@ Page({
   onReachBottom() {
     // 下拉刷线，读取原来的加载过的数据即可
     const that = this;
-    console.log(111);
     // 如果在下拉刷新，禁止滚动加载
     if (that.data.isDownRefreshing || that.data.noMoreData) return;
     const pageData = utils.readPageStructure(that); // 分页数据
@@ -393,6 +401,49 @@ Page({
       this.setData({ taskValue: null, });
     }, 500)
   },
+  // TASK - 提交导入-暂时不用
+  onTaskSubmit() {
+    const that = this;
+    utils.showToast(that, "提交")
+  },
+  // TASK - 删除
+  onDeleteTaskClick(e) {
+    const that = this;
+    const task_id = e.target.dataset.task_id;
+    const userName = that.data.userName;
+    wx.showModal({
+      title: '提示',
+      content: '是否删除TASK',
+      success(res) {
+        if (res.confirm) {
+          wx.showLoading({ title: '加载中...' });
+          utils.UpdateData({
+            page: that,
+            data: {
+              "type": "update_create_lp_task",
+              "task_id": task_id,
+              "hide": 1,
+              "username": userName || "Jasonyu"
+            },
+            toastShow: false
+          }).then(item => {
+            const data = item.data;
+            if (data.code === 200) {
+              const updatedData = that.data.Data.filter(item => item.task_id !== task_id);
+              that.setData({
+                Data: updatedData
+              });
+              utils.showToast(that, "删除成功");
+            } else {
+              utils.showToast(that, "删除失败", "error");
+            }
+            wx.hideLoading();
+          })
+        }
+      }
+    })
+
+  },
   // task-提交
   onTasksDialogConfirm() {
     const that = this;
@@ -422,62 +473,117 @@ Page({
     // }, 1000)
     that.closeTaskDialog();
   },
-  // TASK - 提交导入
-  onTaskSubmit() {
-    const that = this;
-    utils.showToast(that, "提交")
-  },
-  // TASK - 删除
-  onDeleteTaskClick(e) {
-    const that = this;
-    const task_id = e.target.dataset.task_id;
-    wx.showModal({
-      title: '提示',
-      content: '是否删除TASK',
-      success(res) {
-        if (res.confirm) {
-          const updatedData = that.data.Data.filter(item => item.task_id !== task_id);
-          that.setData({
-            Data: updatedData
-          });
-          utils.showToast(that, "删除成功")
-        }
-      }
-    })
 
-  },
-
-  // 图稿公司分配
+  // 图稿组长-选择
   onAllocateClick(e) {
     const task_id = e.target.dataset.task_id;
     this.setData({
       task_id: task_id,
-      allocatePickerVisible: true
+      leaderPickerVisible: true
     });
   },
-  // 关闭 AIT筛选器
+  // 图稿组长-关闭
   onAllocateClosePicker() {
     this.setData({
       task_id: null,
-      allocatePickerValue: null,
-      allocatePickerVisible: false,
+      leaderPickerVisible: false,
     });
   },
-  // 提交 AIT筛选器
+  //图稿组长-提交
   onAllocatePickerChange(e) {
     const that = this;
     const userName = that.data.userName;
     const task_id = that.data.task_id;
     const { value } = e.detail;
-    const updatedData = that.data.Data.map(item => {
-      if (item.task_id === task_id) {
-        item["allocate"] = value;
-      };
-      return item;
+    utils.UpdateData({
+      page: that,
+      data: {
+        "type": "update_create_lp_task",
+        "task_id": task_id,
+        "leader": value[0],
+        "username": userName || "Jasonyu"
+      },
+      toastShow: false
+    }).then(item => {
+      const data = item.data;
+      if (data.code === 200) {
+        const updatedData = that.data.Data.map(item => {
+          if (item.task_id === task_id) {
+            item["task_leader"] = value;
+          };
+          return item;
+        })
+        that.setData({
+          Data: updatedData
+        });
+        utils.showToast(that, "选择成功");
+        that.onAllocateClosePicker();
+      } else {
+        utils.showToast(that, "选择失败", "error");
+      }
     })
-    that.setData({
-      Data: updatedData
+  },
+
+  // 系列-选择
+  onTitleClick(e) {
+    const task_id = e.target.dataset.task_id;
+    this.setData({
+      task_id: task_id,
+      showTitleDialog: true
     });
-    that.onAllocateClosePicker();
+  },
+  // 系列-关闭
+  closeTitleDialog() {
+    this.setData({
+      task_id: null,
+      titleValue: null,
+      showTitleDialog: false,
+    });
+  },
+  // 系列监听
+  onTitleInputChange(e) {
+    this.setData({
+      titleValue: e.detail.value, // TDesign Input 取值用 e.detail.value
+    });
+  },
+  // 系列提交
+  onTitleDialogConfirm() {
+    const that = this;
+    const task_id = that.data.task_id;
+    const userName = that.data.userName;
+    const titleValue = that.data.titleValue; // 系列的值
+    if (!titleValue) {
+      utils.showToast(that, "填写后再提交", "error")
+      return;
+    };
+    utils.UpdateData({
+      page: that,
+      data: {
+        "type": "update_create_lp_task",
+        "task_id": task_id,
+        "title": titleValue,
+        "username": userName || "Jasonyu"
+      },
+      toastShow: false
+    }).then(item => {
+      const data = item.data;
+      if (data.code === 200) {
+        const updatedData = that.data.Data.map(item => {
+          if (item.task_id === task_id) {
+            item["task_title"] = titleValue;
+          };
+          return item;
+        })
+        that.setData({
+          Data: updatedData
+        });
+        utils.showToast(that, "提交成功")
+        that.closeTitleDialog();
+      } else {
+        utils.showToast(that, "提交失败", "error");
+      }
+    })
+
+
   },
 })
