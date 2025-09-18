@@ -293,22 +293,40 @@ Page({
   // 资料-删除
   onDeleteFileDataClick(e) {
     const that = this;
+    const userName = that.data.userName;
     const { file_id } = e.target.dataset;
-    console.log(file_id);
-    // 假数据
-    // wx.showModal({
-    //   title: '提示',
-    //   content: '是否删除资料',
-    //   success(res) {
-    //     if (res.confirm) {
-    //       const updatedFileDataList = that.data.fileDataList.filter(item => item.file_id !== file_id);
-    //       that.setData({
-    //         fileDataList: updatedFileDataList
-    //       });
-    //       utils.showToast(that, "删除成功")
-    //     }
-    //   }
-    // })
+    wx.showModal({
+      title: '提示',
+      content: '是否删除资料',
+      success(res) {
+        if (res.confirm) {
+          wx.showLoading({ title: '加载中...' });
+          utils.UpdateData({
+            page: that,
+            data: {
+              "type": "update_create_lp_image",
+              "image_id": file_id,
+              "hide": 1,
+              "username": userName || "Jasonyu"
+            },
+            toastShow: false
+          }).then(item => {
+            const data = item.data;
+            if (data.code === 200) {
+              const updatedFileDataList = that.data.fileDataList.filter(item => item.file_id !== file_id);
+              that.setData({
+                fileDataList: updatedFileDataList
+              });
+              utils.showToast(that, "删除成功")
+            } else {
+              utils.showToast(that, "删除失败", "error");
+            }
+            wx.hideLoading();
+          })
+
+        }
+      }
+    })
   },
   // 系列-打开
   onCatectSeriesClick() {
@@ -786,7 +804,5 @@ Page({
         utils.showToast(that, "提交失败", "error");
       }
     })
-
-
   },
 })
