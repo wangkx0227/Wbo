@@ -25,18 +25,13 @@ Page({
     taskValue: null, // task数量
     leaderPickerVisible: false, // task分配公司
     tdUserRoleList: [], // 组长列表
-
-
     titleValue: null, // 标题
     showTileDialog: false, // 标题弹窗
-
     materialList: [], // 材质列表
     seriesPickerVisible: false,// 系列
     materialPickerVisible: false,// 材质
-
     showCodeDialog: false, // code
     codeValue: null, // code 值
-
   },
   // 回到顶部
   onToTop(e) {
@@ -58,8 +53,9 @@ Page({
     const trends_images = dataList.trends_images; // 资料
     const series_names_list = dataList.series_names_list; // 系列
     const td_user_role_list = dataList.td_user_role_list; // TD组长
-    const task_list = dataList.task_list;// task数据
     const material_list = dataList.material_names_list; // 材质列表
+    const task_list = dataList.task_list;// task数据
+
     task_list.forEach(item => {
       const task_id = item.id; // taks 的id
       const task_code = item.code || "未生成"; // taks 的code
@@ -206,7 +202,6 @@ Page({
       })
     }
   },
-
   // 资料-打开
   onUpdateFileDataClick() {
     console.log(11);
@@ -332,7 +327,6 @@ Page({
       }
     })
   },
-
   // 系列-打开
   onCatectSeriesClick() {
     this.setData({ showSeriesDialog: true });
@@ -487,33 +481,60 @@ Page({
   // task-提交
   onTasksDialogConfirm() {
     const that = this;
-    let new_data = [];
+    const userName = that.data.userName;
     const taskValue = that.data.taskValue; // 系列的值
+    const line_plan_id = that.data.line_plan_id; // lp的id
+    const userInfo = wx.getStorageSync('userInfo');
     if (!taskValue) {
       utils.showToast(that, "填写后再提交", "error")
       return;
     };
-    const line_plan_id = that.data.line_plan_id; // lp的id
-    // 假数据添加
-    for (let i = 0; i < taskValue; i++) {
-      new_data.push({
-        task_id: i + 1,
-        task_code: `Jasonyu_2025_30296_00${i}`,
-        allocate: "暂无"
-      })
-    }
-    if (new_data.length !== 0) {
-      that.setData({
-        Data: [...new_data, ...that.data.Data]
-      })
-    }
-    utils.showToast(that, "提交成功")
-    // setTimeout(() => {
-    //   utils.showToast(that, "提交失败", "error")
-    // }, 1000)
-    that.closeTaskDialog();
+    let user_id = null;
+    if (userInfo) {
+      user_id = userInfo.fmr.user_id;
+    };
+    let post_data = {
+      "type": "add_create_lp_task",
+      "lp_id": line_plan_id,
+      "number": parseInt(taskValue),
+      "user_role_id": user_id || 5,
+      "username": userName || "Jasonyu"
+    };
+    wx.showLoading({ title: '加载中...' });
+    utils.UpdateData({
+      page: that,
+      data: post_data,
+      toastShow: false
+    }).then(item => {
+      const data = item.data;
+      if (data.code === 200) {
+        const dataList = data.data;
+        const arrangeData = that.dataStructure(dataList);
+        that.setData({
+          allData: arrangeData, // 初始数据保持不变
+          filteredData: arrangeData,
+          currentIndex: 0, // 索引重置
+        })
+        // 分页基于 filteredData
+        const pageData = utils.readPageStructure(that); // 分页数据
+        let totalRequests = that.data.pageSize;
+        if (pageData.length !== totalRequests) {
+          totalRequests = pageData.length;
+        };
+        that.setData({
+          Data: pageData,
+        })
+        that.setData({
+          currentIndex: that.data.currentIndex + pageData.length // 记录下标索引
+        });
+        utils.showToast(that, "提交成功")
+        that.closeTaskDialog();
+      } else {
+        utils.showToast(that, "选择失败", "error");
+      };
+      wx.hideLoading();
+    })
   },
-
   // 图稿组长-选择
   onAllocateClick(e) {
     const task_id = e.target.dataset.task_id;
@@ -563,7 +584,6 @@ Page({
       }
     })
   },
-
   // 标题-选择
   onTitleClick(e) {
     const task_id = e.target.dataset.task_id;
@@ -626,7 +646,6 @@ Page({
 
 
   },
-
   // 系列-打开
   onSeriesClick(e) {
     const task_id = e.target.dataset.task_id;
@@ -676,8 +695,6 @@ Page({
       }
     })
   },
-
-
   // 材质-打开
   onMaterialClick(e) {
     const task_id = e.target.dataset.task_id;
@@ -727,7 +744,6 @@ Page({
       }
     })
   },
-
   // code-选择
   onCodeClick(e) {
     const task_id = e.target.dataset.task_id;
