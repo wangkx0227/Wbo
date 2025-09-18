@@ -7,7 +7,7 @@ Page({
     userRole: null, // 角色
     userName: null, // 名称
     filteredData: [], // 筛选后的数据
-    pageSize: 6, // 每次加载多少条数据
+    pageSize: 10, // 每次加载多少条数据
     currentIndex: 0, // 加载到数据的第几个索引
     // 下拉刷新与滚动底部刷新使用变量
     isDownRefreshing: false, // 下拉刷新状态
@@ -25,9 +25,18 @@ Page({
     taskValue: null, // task数量
     leaderPickerVisible: false, // task分配公司
     tdUserRoleList: [], // 组长列表
-    materialList: [], // 材质列表
-    showTileDialog: false, // 标题弹窗
+
+
     titleValue: null, // 标题
+    showTileDialog: false, // 标题弹窗
+
+    materialList: [], // 材质列表
+    seriesPickerVisible: false,// 系列
+    materialPickerVisible: false,// 材质
+
+    showCodeDialog: false, // code
+    codeValue: null, // code 值
+
   },
   // 回到顶部
   onToTop(e) {
@@ -88,8 +97,8 @@ Page({
     let seriesList = [];
     series_names_list.forEach(item => {
       seriesList.push({
-        "series_id": item.id,
-        "series_name": item.name,
+        "value": item.id,
+        "label": item.name,
       })
     });
     // 材质处理
@@ -107,7 +116,7 @@ Page({
       materialList: materialList,
       tdUserRoleList: tdUserRoleList,
     });
-    return arrangeData // 全部数据
+    return arrangeData.sort((a, b) => a.task_id - b.task_id); // 进行排序
   },
   // 数据分页显示处理
   dataRequest(mode) {
@@ -489,7 +498,7 @@ Page({
       leaderPickerVisible: false,
     });
   },
-  //图稿组长-提交
+  // 图稿组长-提交
   onAllocatePickerChange(e) {
     const that = this;
     const userName = that.data.userName;
@@ -524,7 +533,7 @@ Page({
     })
   },
 
-  // 系列-选择
+  // 标题-选择
   onTitleClick(e) {
     const task_id = e.target.dataset.task_id;
     this.setData({
@@ -532,7 +541,7 @@ Page({
       showTitleDialog: true
     });
   },
-  // 系列-关闭
+  // 标题-关闭
   closeTitleDialog() {
     this.setData({
       task_id: null,
@@ -540,13 +549,13 @@ Page({
       showTitleDialog: false,
     });
   },
-  // 系列监听
+  // 标题监听
   onTitleInputChange(e) {
     this.setData({
       titleValue: e.detail.value, // TDesign Input 取值用 e.detail.value
     });
   },
-  // 系列提交
+  // 标题提交
   onTitleDialogConfirm() {
     const that = this;
     const task_id = that.data.task_id;
@@ -579,6 +588,170 @@ Page({
         });
         utils.showToast(that, "提交成功")
         that.closeTitleDialog();
+      } else {
+        utils.showToast(that, "提交失败", "error");
+      }
+    })
+
+
+  },
+
+  // 系列-打开
+  onSeriesClick(e) {
+    const task_id = e.target.dataset.task_id;
+    this.setData({
+      task_id: task_id,
+      seriesPickerVisible: true
+    });
+  },
+  //系列-关闭
+  onSeriesClosePicker() {
+    this.setData({
+      task_id: null,
+      seriesPickerVisible: false,
+    });
+  },
+  // 系列-提交
+  onSeriesPickerChange(e) {
+    const that = this;
+    const userName = that.data.userName;
+    const task_id = that.data.task_id;
+    const { value, label } = e.detail;
+    utils.UpdateData({
+      page: that,
+      data: {
+        "type": "update_create_lp_task",
+        "task_id": task_id,
+        "series": value[0],
+        "username": userName || "Jasonyu"
+      },
+      toastShow: false
+    }).then(item => {
+      const data = item.data;
+      if (data.code === 200) {
+        const updatedData = that.data.Data.map(item => {
+          if (item.task_id === task_id) {
+            item["task_series"] = label;
+          };
+          return item;
+        })
+        that.setData({
+          Data: updatedData
+        });
+        utils.showToast(that, "选择成功");
+        that.onAllocateClosePicker();
+      } else {
+        utils.showToast(that, "选择失败", "error");
+      }
+    })
+  },
+
+
+  // 材质-打开
+  onMaterialClick(e) {
+    const task_id = e.target.dataset.task_id;
+    this.setData({
+      task_id: task_id,
+      materialPickerVisible: true
+    });
+  },
+  //材质-关闭
+  onMaterialClosePicker() {
+    this.setData({
+      task_id: null,
+      materialPickerVisible: false,
+    });
+  },
+  // 材质-提交
+  onMaterialPickerChange(e) {
+    const that = this;
+    const userName = that.data.userName;
+    const task_id = that.data.task_id;
+    const { value, label } = e.detail;
+    utils.UpdateData({
+      page: that,
+      data: {
+        "type": "update_create_lp_task",
+        "task_id": task_id,
+        "material": value[0],
+        "username": userName || "Jasonyu"
+      },
+      toastShow: false
+    }).then(item => {
+      const data = item.data;
+      if (data.code === 200) {
+        const updatedData = that.data.Data.map(item => {
+          if (item.task_id === task_id) {
+            item["task_material"] = label;
+          };
+          return item;
+        })
+        that.setData({
+          Data: updatedData
+        });
+        utils.showToast(that, "选择成功");
+        that.onAllocateClosePicker();
+      } else {
+        utils.showToast(that, "选择失败", "error");
+      }
+    })
+  },
+
+  // code-选择
+  onCodeClick(e) {
+    const task_id = e.target.dataset.task_id;
+    this.setData({
+      task_id: task_id,
+      showCodeDialog: true
+    });
+  },
+  // code-关闭
+  closeCodeDialog() {
+    this.setData({
+      task_id: null,
+      codeValue: null,
+      showCodeDialog: false,
+    });
+  },
+  // code-监听
+  onCodeInputChange(e) {
+    this.setData({
+      codeValue: e.detail.value, // TDesign Input 取值用 e.detail.value
+    });
+  },
+  // code-提交
+  onCodeDialogConfirm() {
+    const that = this;
+    const task_id = that.data.task_id;
+    const userName = that.data.userName;
+    const codeValue = that.data.codeValue; // 系列的值
+    if (!codeValue) {
+      utils.showToast(that, "填写后再提交", "error")
+      return;
+    };
+    utils.UpdateData({
+      page: that,
+      data: {
+        "type": "update_create_lp_task",
+        "task_id": task_id,
+        "code": codeValue,
+        "username": userName || "Jasonyu"
+      },
+      toastShow: false
+    }).then(item => {
+      const data = item.data;
+      if (data.code === 200) {
+        const updatedData = that.data.Data.map(item => {
+          if (item.task_id === task_id) {
+            item["task_code"] = codeValue;
+          };
+          return item;
+        })
+        that.setData({
+          Data: updatedData
+        });
+        utils.showToast(that, "提交成功")
+        that.closeCodeDialog();
       } else {
         utils.showToast(that, "提交失败", "error");
       }
