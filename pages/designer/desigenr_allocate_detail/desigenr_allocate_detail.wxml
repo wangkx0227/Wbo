@@ -8,9 +8,6 @@
         <view slot="header" class="title-font-main" style="padding-left: 30rpx;">
           资料列表
         </view>
-        <!-- <view slot="header-right-content">
-          <t-link size="small" content="添加资料" hover theme="primary" prefixIcon="add" catchtap="onUpdateFileDataClick" />
-        </view> -->
         <view slot="content">
           <view wx:for="{{fileDataList}}" wx:key="index">
             <view class="arrange-space-between" style="margin-bottom: 20rpx;">
@@ -18,7 +15,6 @@
                 <text class="title-font-main">文件名称：</text>
                 <text class="title-font-other">{{ item.file_name }}</text>
               </view>
-              <!-- <t-link size="small" content="删除" hover theme="primary" prefixIcon="delete" style="margin-right: 10rpx;" data-file_id="{{ item.file_id }}" catchtap="onDeleteFileDataClick" /> -->
             </view>
           </view>
           <t-empty description="无内容" wx:if="{{fileDataList.length === 0}}" />
@@ -71,9 +67,15 @@
                     <text class="title-font-other">{{item.task_code}}</text>
                   </view>
                 </view>
-                <view class="arrange-center" wx:if="{{item.line_plan_type === 1}}">
-                  <text class="title-font-main">指派设计师：</text>
-                  <t-link size="small" content="{{item.task_desigenr}}" hover theme="primary" data-task_id="{{ item.task_id }}" catchtap="onAllocateClick" />
+                <view class="arrange-space-between">
+                  <view class="arrange-center">
+                    <text class="title-font-main">设计师组长：</text>
+                    <text class="title-font-other">{{item.task_leader}}</text>
+                  </view>
+                  <view class="arrange-center" wx:if="{{item.line_plan_type === 1}}">
+                    <text class="title-font-main">指派设计师：</text>
+                    <t-link size="small" content="{{item.task_desigenr}}" hover theme="primary" data-task_id="{{ item.task_id }}" catchtap="onAllocateClick" data-task_leader="{{item.task_leader}}"/>
+                  </view>
                 </view>
               </view>
             </view>

@@ -13,15 +13,16 @@ Page({
     isDownRefreshing: false, // 下拉刷新状态
     isLoadingReachMore: false, // 滚动底部加载数据
     noMoreData: false, // 数据是否全部加载完毕
-
     Data: [], // 页面展示数据变量
     line_plan_id: null, // lp id
-    skeletonLoading: false, // 骨架控制变量
+    skeletonLoading: true, // 骨架控制变量
     scrollTop: 0, // 回到顶部变量
     desigenrPickerVisible: false, // 指派设计师弹窗
     desigenrPickerItemList: [], //被指派设计师列表
     fileDataList: [], // 资料列表
     seriesList: [], // 系列列表
+    task_id: null,
+    task_leader: null,
   },
 
   // 补充函数 文件名称省略
@@ -79,6 +80,7 @@ Page({
     const series_names_list = dataList.series_names_list; // 系列
     task_list.forEach(item => {
       const task_id = item.id; // taks 的id
+      const task_leader = item.leader || "未指派";
       const task_code = item.code || "未生成"; // taks 的code
       const task_series = item.series || "未指定"; // 系列
       const task_title = item.title || "未填写"; // 名称
@@ -92,6 +94,7 @@ Page({
         task_title: task_title,
         task_material: task_material,
         task_desigenr: task_desigenr,
+        task_leader: task_leader
       })
       // 资料处理
       let fileDataList = [];
@@ -157,10 +160,10 @@ Page({
   // 生命周期函数
   onLoad(options) {
     const that = this;
-    // if (!utils.LoginStatusAuthentication(that)) {
-    //   // 未登录状态，函数已处理跳转逻辑
-    //   return;
-    // }
+    if (!utils.LoginStatusAuthentication(that)) {
+      // 未登录状态，函数已处理跳转逻辑
+      return;
+    }
     const userRole = wx.getStorageSync('userRole');
     const userName = wx.getStorageSync('userName');
     const apiUserName = wx.getStorageSync('apiUserName');
@@ -210,8 +213,10 @@ Page({
   // 指派设计师 
   onAllocateClick(e) {
     const task_id = e.target.dataset.task_id;
+    const task_leader = e.target.dataset.task_leader;
     this.setData({
       task_id: task_id,
+      task_leader: task_leader,
       desigenrPickerVisible: true
     });
   },
@@ -219,6 +224,7 @@ Page({
   onAllocateClosePicker() {
     this.setData({
       task_id: null,
+      task_leader: null,
       desigenrPickerVisible: false,
     });
   },
@@ -227,12 +233,15 @@ Page({
     const that = this;
     const userName = that.data.userName;
     const task_id = that.data.task_id;
-    console.log(task_id);
+    const task_leader = that.data.task_leader;
     const {
       value,
       label
     } = e.detail;
- 
+    if (task_leader !== userName) {
+      utils.showToast(that, "权限不足无法指派", "warning");
+      return;
+    };
     utils.UpdateData({
       page: that,
       data: {
@@ -244,7 +253,6 @@ Page({
       toastShow: false
     }).then(item => {
       const data = item.data;
-      console.log(data);
       if (data.code === 200) {
         const updatedData = that.data.Data.map(item => {
           if (item.task_id === task_id) {
