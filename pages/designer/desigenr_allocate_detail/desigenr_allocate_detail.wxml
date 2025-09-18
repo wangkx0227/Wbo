@@ -30,9 +30,6 @@
         <view slot="header" class="title-font-main" style="padding-left: 30rpx;">
           系列列表
         </view>
-        <!-- <view slot="header-right-content">
-          <t-link size="small" content="添加系列" hover theme="primary" prefixIcon="add" catchtap="onCatectSeriesClick" />
-        </view> -->
         <view slot="content">
           <view wx:for="{{seriesList}}" wx:key="index">
             <view class="arrange-space-between" style="margin-bottom: 20rpx;">
@@ -40,51 +37,41 @@
                 <text class="title-font-main">系列名称：</text>
                 <text class="title-font-other">{{ item.label }}</text>
               </view>
-              <!-- <t-link size="small" content="删除" hover theme="primary" prefixIcon="delete" style="margin-right: 10rpx;" data-series_id="{{ item.value }}" catchtap="onDeleteSeriesDataClick" /> -->
             </view>
           </view>
           <t-empty description="无内容" wx:if="{{seriesList.length === 0}}" />
         </view>
       </t-collapse-panel>
     </t-collapse>
-    <view class="arrange-center" style="background-color: #ffffff;padding:30rpx;border-bottom:1px solid #e7e7e7;">
-      <t-button theme="default" block size="extra-small" t-class="group-btn" style="width: 100px;" bindtap="onCreateTaskClick">添加TASK</t-button>
-      <!-- <t-button theme="primary" block size="extra-small" t-class="group-btn" style="width: 100px;" bindtap="onTaskSubmit">导入TASK</t-button> -->
-    </view>
   </view>
   <view class="page-main">
     <view class="wrapper">
       <view wx:for="{{Data}}" wx:key="index" style="gap: 15px;">
         <t-cell-group theme="card" class="t-cell-group">
           <t-cell hover>
-            <!-- <t-badge slot="note" shape="ribbon">
-              <view slot="count">
-                <t-button icon="delete" shape="square" size="extra-small" style="position: relative;top: 0px;left: 0px;" bindtap="onDeleteTaskClick" data-task_id="{{item.task_id}}" theme="default" />
-              </view>
-            </t-badge> -->
             <view slot="title" style="width: 100%;">
               <view class="arrange-column" style="gap: 15rpx;">
                 <view class="arrange-space-between">
                   <view class="arrange-center">
                     <text class="title-font-main">Title：</text>
-                    <t-link size="small" content="{{item.task_title}}" hover  data-task_id="{{ item.task_id }}"  />
+                    <text class="title-font-other">{{item.task_title}}</text>
                   </view>
                   <view class="arrange-center">
                     <text class="title-font-main">系列：</text>
-                    <t-link size="small" content="{{ item.task_series }}" hover data-task_id="{{ item.task_id }}"  />
+                    <text class="title-font-other">{{item.task_series}}</text>
                   </view>
                 </view>
                 <view class="arrange-space-between">
                   <view class="arrange-center">
                     <text class="title-font-main">材质：</text>
-                    <t-link size="small" content="{{ item.task_material }}" hover data-task_id="{{ item.task_id }}"  />
+                    <text class="title-font-other">{{item.task_material}}</text>
                   </view>
                   <view class="arrange-center">
                     <text class="title-font-main">Code：</text>
-                    <t-link size="small" content="{{item.task_code}}" hover data-task_id="{{ item.task_id }}"  />
+                    <text class="title-font-other">{{item.task_code}}</text>
                   </view>
                 </view>
-                <view class="arrange-center">
+                <view class="arrange-center" wx:if="{{item.line_plan_type === 1}}">
                   <text class="title-font-main">指派设计师：</text>
                   <t-link size="small" content="{{item.task_desigenr}}" hover theme="primary" data-task_id="{{ item.task_id }}" catchtap="onAllocateClick" />
                 </view>
@@ -108,41 +95,7 @@
 <t-toast id="t-toast" />
 <!-- 回到顶部 -->
 <t-back-top theme="half-round" text="" scroll-top="{{scrollTop}}" bind:to-top="onToTop" style="z-index: 999;" />
-
-<!-- 系列弹窗 -->
-<t-dialog visible="{{showSeriesDialog}}" title="添加系列" confirm-btn="确定" cancel-btn="取消" bind:confirm="onSeriesDialogConfirm" bind:cancel="closeSeriesDialog">
-  <t-input placeholder="请输入文字" slot="content" value="{{seriesValue}}" bind:change="onSeriesInputChange" />
-</t-dialog>
-<!-- 附件弹窗 -->
-<t-dialog visible="{{showFileDataDialog}}" title="添加附件" confirm-btn="确定" cancel-btn="取消" bind:confirm="onFileDataConfirm" bind:cancel="closeFileDataDialog">
-  <view slot="content" style="margin-top: 60rpx;">
-    <t-upload accept="*/*" max="{{1}}" files="{{fileList}}" bind:success="fileDataSuccess" bind:remove="fileDataRemove" gridConfig="{{ { column: 1, width: 300, height: 200  } }}">
-    </t-upload>
-  </view>
-</t-dialog>
-<!-- 生成数量 -->
-<t-dialog visible="{{showTaskDialog}}" title="添加TASK" confirm-btn="确定" cancel-btn="取消" bind:confirm="onTasksDialogConfirm" bind:cancel="closeTaskDialog">
-  <t-input placeholder="请输入生成数量" slot="content" value="{{taskValue}}" bind:change="onTaskInputChange" type="number" maxlength="5" />
-</t-dialog>
-<!-- 图稿任务分配 -->
+<!-- 指派设计师 任务分配 -->
 <t-picker visible="{{desigenrPickerVisible}}" title="请选择" cancelBtn="取消" confirmBtn="确认" bindchange="onAllocatePickerChange" bindcancel="onAllocateClosePicker" catchtouchmove>
   <t-picker-item options="{{desigenrPickerItemList}}"></t-picker-item>
 </t-picker>
-<!-- 标题弹窗 -->
-<t-dialog visible="{{showTitleDialog}}" title="编辑Title" confirm-btn="确定" cancel-btn="取消" bind:confirm="onTitleDialogConfirm" bind:cancel="closeTitleDialog">
-  <t-input placeholder="请输入Title" slot="content" value="{{titleValue}}" bind:change="onTitleInputChange" />
-</t-dialog>
-<!-- 系列分配 -->
-<t-picker visible="{{seriesPickerVisible}}" title="请选择" cancelBtn="取消" confirmBtn="确认" bindchange="onSeriesPickerChange" bindcancel="onSeriesClosePicker" catchtouchmove>
-  <t-picker-item options="{{seriesList}}"></t-picker-item>
-</t-picker>
-
-<!-- 材质分配 -->
-<t-picker visible="{{materialPickerVisible}}" title="请选择" cancelBtn="取消" confirmBtn="确认" bindchange="onMaterialPickerChange" bindcancel="onMaterialClosePicker" catchtouchmove>
-  <t-picker-item options="{{materialList}}"></t-picker-item>
-</t-picker>
-
-<!-- code弹窗 -->
-<t-dialog visible="{{showCodeDialog}}" title="编辑Code" confirm-btn="确定" cancel-btn="取消" bind:confirm="onCodeDialogConfirm" bind:cancel="closeCodeDialog">
-  <t-input placeholder="请输入Code" slot="content" value="{{codeValue}}" bind:change="onCodeInputChange" />
-</t-dialog>
