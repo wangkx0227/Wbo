@@ -47,17 +47,17 @@
           <t-cell hover>
             <view slot="title" style="width: 100%;">
               <view class="arrange-column" style="gap: 15rpx;">
-                <view class="arrange-space-between">
+                <!-- <view class="arrange-space-between"> -->
                   <view class="arrange-center">
                     <text class="title-font-main">Title：</text>
-                    <text class="title-font-other">{{item.task_title}}</text>
+                    <text class="title-font-other ">{{item.task_title}}</text>
                   </view>
                   <view class="arrange-center">
                     <text class="title-font-main">系列：</text>
                     <text class="title-font-other">{{item.task_series}}</text>
                   </view>
-                </view>
-                <view class="arrange-space-between">
+                <!-- </view> -->
+                <!-- <view class="arrange-space-between"> -->
                   <view class="arrange-center">
                     <text class="title-font-main">材质：</text>
                     <text class="title-font-other">{{item.task_material}}</text>
@@ -65,7 +65,7 @@
                   <view class="arrange-center">
                     <text class="title-font-main">Code：</text>
                     <text class="title-font-other">{{item.task_code}}</text>
-                  </view>
+                  <!-- </view> -->
                 </view>
                 <view class="arrange-space-between" wx:if="{{item.line_plan_type === 1}}">
                   <view class="arrange-center">

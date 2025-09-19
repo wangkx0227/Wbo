@@ -64,26 +64,26 @@
             </t-badge>
             <view slot="title" style="width: 100%;">
               <view class="arrange-column" style="gap: 15rpx;">
-                <view class="arrange-space-between">
-                  <view class="arrange-center">
-                    <text class="title-font-main">Title：</text>
-                    <t-link size="small" content="{{item.task_title}}" hover theme="primary" data-task_id="{{ item.task_id }}" catchtap="onTitleClick" />
-                  </view>
-                  <view class="arrange-center">
-                    <text class="title-font-main">系列：</text>
-                    <t-link size="small" content="{{ item.task_series }}" hover theme="primary" data-task_id="{{ item.task_id }}" catchtap="onSeriesClick" />
-                  </view>
+                <!-- <view class="arrange-space-between"> -->
+                <view class="arrange-center">
+                  <text class="title-font-main">Title：</text>
+                  <t-link size="small" content="{{item.task_title}}" hover theme="primary" data-task_id="{{ item.task_id }}" catchtap="onTitleClick" />
                 </view>
-                <view class="arrange-space-between">
-                  <view class="arrange-center">
-                    <text class="title-font-main">材质：</text>
-                    <t-link size="small" content="{{ item.task_material }}" hover theme="primary" data-task_id="{{ item.task_id }}" catchtap="onMaterialClick" />
-                  </view>
-                  <view class="arrange-center">
-                    <text class="title-font-main">Code：</text>
-                    <t-link size="small" content="{{item.task_code}}" hover theme="primary" data-task_id="{{ item.task_id }}" catchtap="onCodeClick" />
-                  </view>
+                <view class="arrange-center">
+                  <text class="title-font-main">系列：</text>
+                  <t-link size="small" content="{{ item.task_series }}" hover theme="primary" data-task_id="{{ item.task_id }}" catchtap="onSeriesClick" />
                 </view>
+                <!-- </view> -->
+                <!-- <view class="arrange-space-between"> -->
+                <view class="arrange-center">
+                  <text class="title-font-main">材质：</text>
+                  <t-link size="small" content="{{ item.task_material }}" hover theme="primary" data-task_id="{{ item.task_id }}" catchtap="onMaterialClick" />
+                </view>
+                <view class="arrange-center">
+                  <text class="title-font-main">Code：</text>
+                  <t-link size="small" content="{{item.task_code}}" hover theme="primary" data-task_id="{{ item.task_id }}" catchtap="onCodeClick" />
+                </view>
+                <!-- </view> -->
                 <view class="arrange-center" wx:if="{{item.line_plan_type === 1}}">
                   <text class="title-font-main">分配组长：</text>
                   <t-link size="small" content="{{item.task_leader}}" hover theme="primary" data-task_id="{{ item.task_id }}" catchtap="onAllocateClick" />

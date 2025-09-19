@@ -160,10 +160,10 @@ Page({
   // 生命周期函数
   onLoad(options) {
     const that = this;
-    if (!utils.LoginStatusAuthentication(that)) {
-      // 未登录状态，函数已处理跳转逻辑
-      return;
-    }
+    // if (!utils.LoginStatusAuthentication(that)) {
+    //   // 未登录状态，函数已处理跳转逻辑
+    //   return;
+    // }
     const userRole = wx.getStorageSync('userRole');
     const userName = wx.getStorageSync('userName');
     const apiUserName = wx.getStorageSync('apiUserName');

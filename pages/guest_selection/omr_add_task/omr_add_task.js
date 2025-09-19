@@ -35,7 +35,7 @@ Page({
     codeValue: null, // code 值
   },
   // 补充函数 
-  shortenFileName(filename, frontLen = 10, backLen = 8) {
+  shortenFileName(filename, frontLen = 15, backLen = 10) {
     if (filename.length <= frontLen + backLen) {
       return filename; // 太短就不省略
     }
@@ -103,9 +103,10 @@ Page({
     // 系列处理
     let seriesList = [];
     series_names_list.forEach(item => {
+      const label = this.shortenFileName(item.name);
       seriesList.push({
         "value": item.id,
-        "label": item.name,
+        "label": label,
       })
     });
     // 材质处理
@@ -368,7 +369,8 @@ Page({
       const data = item.data;
       if (data.code === 200) {
         const seriesList = data.lp_data.series_names_list.map(item => {
-          return { value: item.id, label: item.name }
+          const label = that.shortenFileName(item.name);
+          return { value: item.id, label: label }
         })
         that.setData({
           seriesList: seriesList
@@ -777,7 +779,7 @@ Page({
       utils.showToast(that, "填写后再提交", "error")
       return;
     };
-    
+
     utils.UpdateData({
       page: that,
       data: {
