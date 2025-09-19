@@ -260,9 +260,9 @@ Page({
         wx.setStorageSync('apiUserName', "lkb"); // 访问接口携带名字
         wx.setStorageSync('position_list', ["FMR"]); // 访问接口携带名字
       } else if (productValue === "designer") {
-        wx.setStorageSync('userName', "黄思杰"); // 样品照片拍照审核  设计师 测试 上传ait稿与工厂稿和照片审核
-        wx.setStorageSync('apiUserName', "hsj"); // 访问接口携带名字
-        wx.setStorageSync('position_list', ["AIT"]); // 访问接口携带名字
+        wx.setStorageSync('userName', "Ethan"); // 样品照片拍照审核  设计师 测试 上传ait稿与工厂稿和照片审核
+        wx.setStorageSync('apiUserName', "Ethan"); // 访问接口携带名字
+        wx.setStorageSync('position_list', ["设计经理"]); // 访问接口携带名字
       } else if (productValue === "chosen_draft") { // 第7轮与第9轮
         wx.setStorageSync('userName', "Vivi");
         wx.setStorageSync('apiUserName', "Vivi"); // 访问接口携带名字

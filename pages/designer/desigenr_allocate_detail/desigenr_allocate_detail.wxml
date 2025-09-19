@@ -67,12 +67,12 @@
                     <text class="title-font-other">{{item.task_code}}</text>
                   </view>
                 </view>
-                <view class="arrange-space-between">
+                <view class="arrange-space-between" wx:if="{{item.line_plan_type === 1}}">
                   <view class="arrange-center">
                     <text class="title-font-main">设计师组长：</text>
                     <text class="title-font-other">{{item.task_leader}}</text>
                   </view>
-                  <view class="arrange-center" wx:if="{{item.line_plan_type === 1}}">
+                  <view class="arrange-center" >
                     <text class="title-font-main">指派设计师：</text>
                     <t-link size="small" content="{{item.task_desigenr}}" hover theme="primary" data-task_id="{{ item.task_id }}" catchtap="onAllocateClick" data-task_leader="{{item.task_leader}}"/>
                   </view>
