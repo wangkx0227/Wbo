@@ -114,6 +114,10 @@ Page({
           "label": item.name,
         })
       });
+      this.setData({
+        seriesList: seriesList,
+        fileDataList: fileDataList
+      })
     })
     return arrangeData.sort((a, b) => a.task_id - b.task_id); // 进行排序
   },
