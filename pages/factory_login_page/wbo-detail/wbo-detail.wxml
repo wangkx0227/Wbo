@@ -48,6 +48,74 @@
     </swiper>
     <view class="info">
       <view>上传：{{item.created_by}}--{{item.create_time}}</view>
+      <scroll-view scroll-y="true" class="table-scroll-y">
+        <view class="table">
+          <!-- 表头 -->
+          <view class="table-row header">
+            <view class="cell">评估标准</view>
+            <view class="cell">合格</view>
+            <view class="cell">不合格</view>
+          </view>
+          <!-- 数据行 -->
+          <view class="table-row">
+            <view class="cell">顏色匹配（喷漆或印刷）</view>
+            <view class="cell" data-name="color" data-id="{{item.id}}">
+            </view>
+            <view class="cell" data-name="color" data-id="{{item.id}}">
+            </view>
+          </view>
+          <view class="table-row">
+            <view class="cell">表面处理质量</view>
+            <view class="cell"></view>
+            <view class="cell"></view>
+          </view>
+          <view class="table-row">
+            <view class="cell">图案与图像位置</view>
+            <view class="cell"></view>
+            <view class="cell"></view>
+          </view>
+          <view class="table-row">
+            <view class="cell">整体轮廓一致性</view>
+            <view class="cell"></view>
+            <view class="cell"></view>
+          </view>
+          <view class="table-row">
+            <view class="cell">尺寸检查（目测或卷尺）</view>
+            <view class="cell"></view>
+            <view class="cell"></view>
+          </view>
+          <view class="table-row">
+            <view class="cell">对称性与平衡感</view>
+            <view class="cell"></view>
+            <view class="cell"></view>
+          </view>
+          <view class="table-row">
+            <view class="cell">表面纹理真实感</view>
+            <view class="cell"></view>
+            <view class="cell"></view>
+          </view>
+          <view class="table-row">
+            <view class="cell">结构与细节</view>
+            <view class="cell"></view>
+            <view class="cell"></view>
+          </view>
+          <view class="table-row">
+            <view class="cell">边缘与角部处理</view>
+            <view class="cell"></view>
+            <view class="cell"></view>
+          </view>
+          <view class="table-row">
+            <view class="cell">装饰性元素（如铆钉、铆条、镂嵌）</view>
+            <view class="cell"></view>
+            <view class="cell"></view>
+          </view>
+          <view class="table-row">
+            <view class="cell">重量与稳定性</view>
+            <view class="cell"></view>
+            <view class="cell"></view>
+          </view>
+        </view>
+      </scroll-view>
       <view class="text-box">
         <text>说明：{{item.note}}</text>
       </view>
