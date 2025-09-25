@@ -16,6 +16,7 @@
   <view class="page-main">
     <view class="wrapper">
       <view wx:for="{{Data}}" wx:key="index" wx:for-index="outerIndex" class="cell {{ item.select_status ? 'select-border' : ''}}" bindtap="selectTtrigger" data-task-id="{{ item.id }}">
+        <t-notice-bar visible="{{true}}" theme="error" content="当前图稿已被上一个节点拒绝，不可操作。" wx:if="{{ item.confirmed2 === 3 }}"></t-notice-bar>
         <view class="title-font-main arrange-space-between">
           <text>Title：{{ item.title }}</text>
           <text class="title-font-other" style="color: {{ item.AIT_manager2 ?  'black' : 'red' }};">图稿确认：{{ item.AIT_manager2_text }}</text>
@@ -67,7 +68,6 @@
           <view class="arrange-center">
             <text class="title-font-main">时间线：</text>
             <t-link size="small" content="查看历史时间线" hover underline variant="outline" bind:tap="onOpenHistoryTimeLine" data-task-id="{{ item.id }}" />
-            <text wx:if="{{ item.confirmed2 === 3 }}" style="color: red;" class="title-font-other">（已被上一个节点拒绝，无需操作）</text>
           </view>
           <view class="arrange-center " wx:if="{{ item.AIT_manager1 === userName }}">
             <t-divider layout="vertical" />

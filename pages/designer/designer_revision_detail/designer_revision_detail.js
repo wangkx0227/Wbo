@@ -145,7 +145,6 @@ Page({
       // if (data_dict["confirmed2"] === 3) {
       //   continue
       // }
-      console.log(typeof data_dict["confirmed2"]);
       /*
       只有当前用户才可以看到自己的图稿并上传
       设计师：只显示自己的

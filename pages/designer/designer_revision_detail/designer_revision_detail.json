@@ -10,6 +10,7 @@
     "t-tab-bar": "tdesign-miniprogram/tab-bar/tab-bar",
     "t-tab-bar-item": "tdesign-miniprogram/tab-bar-item/tab-bar-item",
     "t-input": "tdesign-miniprogram/input/input",
+    "t-notice-bar": "tdesign-miniprogram/notice-bar/notice-bar",
     "t-checkbox-group": "tdesign-miniprogram/checkbox-group/checkbox-group"
   }
 }
