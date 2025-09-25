@@ -142,6 +142,15 @@ Page({
         "dropdownMaterial.options": options.concat(material)
       })
     }
+    arrangeData.sort((a, b) => {
+      if (a.confirmed2 === 3 && b.confirmed2 !== 3) {
+        return 1;  // a 放后面
+      }
+      if (a.confirmed2 !== 3 && b.confirmed2 === 3) {
+        return -1; // b 放后面
+      }
+      return a.confirmed2 - b.confirmed2; // 其他按数值升序
+    });
     return { arrangeData, taskTimeLineData }; // 返回整理的结构体
   },
   // 后端请求

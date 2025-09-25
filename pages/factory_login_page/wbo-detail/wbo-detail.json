@@ -1,5 +1,8 @@
 {
   "usingComponents": {
+    "t-textarea": "tdesign-miniprogram/textarea/textarea",
+    "t-divider": "tdesign-miniprogram/divider/divider",
+    "t-link": "tdesign-miniprogram/link/link",
     "t-radio": "tdesign-miniprogram/radio/radio",
     "t-radio-group": "tdesign-miniprogram/radio-group/radio-group"
   },

@@ -21,9 +21,25 @@ Page({
     montageUrl: montageUrl, // 拼接路径
     dialogValue: "",
     dialogVisible: false,
+    textValue: "",
+    textareaVisible: false,
     refuse_type: null,
     refuse_id: null,
     refuse_state: null,
+    currentOpenId: null, //当前打开多行文本框的item id
+    table: [{ //所有单选按钮值
+      colorMatch: false, // 颜色匹配（喷漆或印刷）检查结果
+      surfaceQuality: false, // 表面处理质量检查结果
+      graphicPosition: false, // 图案与图像位置检查结果
+      contourConsistency: false, // 整体轮廓一致性检查结果
+      sizeCheck: false, // 尺寸检查（目测或卷尺）结果
+      symmetryBalance: false, // 对称性与平衡感检查结果
+      textureRealism: false, // 表面纹理真实感检查结果
+      buildDetails: false, // 结构与细节检查结果
+      edgeFinish: false, // 边缘与角部处理检查结果
+      decorativeElements: false, // 装饰性元素（如铆钉、饰条、镂嵌）检查结果
+      weightStability: false // 重量与稳定性检查结果
+    }]
   },
   // 初始化
   onLoad(options) {
@@ -42,11 +58,19 @@ Page({
     const userRole = wx.getStorageSync('userRole');
     if (options.scene) {
       const scene = this.urlParams(options.scene)
-      this.setData({ project_id: scene.project_id })
+      this.setData({
+        project_id: scene.project_id
+      })
     } else {
-      this.setData({ project_id: options.project_id })
+      this.setData({
+        project_id: options.project_id
+      })
     }
-    this.setData({ app, userName: userName, userRole: userRole })
+    this.setData({
+      app,
+      userName: userName,
+      userRole: userRole
+    })
     this.getTlData()
   },
   // 获取数据
@@ -166,16 +190,25 @@ Page({
                         [`${type}`]: updatedImages
                       });
                     } else {
-                      wx.showToast({ title: '上传失败', icon: 'error' });
+                      wx.showToast({
+                        title: '上传失败',
+                        icon: 'error'
+                      });
                     }
                   },
                   fail: err => {
-                    wx.showToast({ title: '上传失败', icon: 'none' });
+                    wx.showToast({
+                      title: '上传失败',
+                      icon: 'none'
+                    });
                   }
                 });
               });
             } else {
-              wx.showToast({ title: '生成timeline失败', icon: 'error' });
+              wx.showToast({
+                title: '生成timeline失败',
+                icon: 'error'
+              });
             }
           },
           /**
@@ -183,7 +216,10 @@ Page({
            * @param {Object} err - 错误对象，包含失败详情
            */
           fail(err) {
-            wx.showToast({ title: '生成timeline失败', icon: 'error' });
+            wx.showToast({
+              title: '生成timeline失败',
+              icon: 'error'
+            });
           }
         })
       }
@@ -231,8 +267,7 @@ Page({
         title: '开始打样',
         content: '确定开始打样吗',
         complete: (res) => {
-          if (res.cancel) {
-          }
+          if (res.cancel) {}
           if (res.confirm) {
             wx.request({
               url: url,
@@ -245,7 +280,9 @@ Page({
               },
               success(res) {
                 if (res.data.code = 200) {
-                  that.setData({ proofing: 1 })
+                  that.setData({
+                    proofing: 1
+                  })
                 }
               },
               fail(err) {
@@ -269,14 +306,22 @@ Page({
     // if (!that.data.userInfo.name) {
     //   return
     // }
-    const { index, type, id, state } = e.currentTarget.dataset;
+    const {
+      index,
+      type,
+      id,
+      state
+    } = e.currentTarget.dataset;
     const userRole = that.data.userRole; // 可能需要修改-新增
     const userName = that.data.userName; // 可能需要修改-新增
     if (!userName) {
       return
     }
     if (userRole === "designer") { // 可能需要修改-新增
-      wx.showToast({ title: '只能FMR点击', icon: 'error' });
+      wx.showToast({
+        title: '只能FMR点击',
+        icon: 'error'
+      });
       return
     }
     wx.request({
@@ -292,7 +337,9 @@ Page({
       success(res) {
         if (res.data.code === 200) {
           const tasks = that.sortByCreateTimeDesc(res.data.task_data[type])
-          that.setData({ [`${type}`]: tasks })
+          that.setData({
+            [`${type}`]: tasks
+          })
         }
       }
     })
@@ -300,7 +347,13 @@ Page({
   // 拒绝带评论的原因 
   onDesignerStatusRefuse() {
     const that = this;
-    const { refuse_type, refuse_id, refuse_state, dialogValue, userName } = that.data;
+    const {
+      refuse_type,
+      refuse_id,
+      refuse_state,
+      dialogValue,
+      userName
+    } = that.data;
     const data = {
       "type": "updateProofingTimeline",
       "tl_id": refuse_id,
@@ -316,16 +369,30 @@ Page({
       success(res) {
         if (res.data.code === 200) {
           const tasks = that.sortByCreateTimeDesc(res.data.task_data[refuse_type])
-          that.setData({ [`${refuse_type}`]: tasks })
+          that.setData({
+            [`${refuse_type}`]: tasks
+          })
         }
       }
     })
   },
-  // 设计师拒绝弹窗
+
+
+  // 设计师拒绝弹窗-old
   onOpenDialog(e) {
-    const { type, id, state } = e.currentTarget.dataset;
-    this.setData({ dialogVisible: true, refuse_type: type, refuse_id: id, refuse_state: state });
+    const {
+      type,
+      id,
+      state
+    } = e.currentTarget.dataset;
+    this.setData({
+      dialogVisible: true,
+      refuse_type: type,
+      refuse_id: id,
+      refuse_state: state
+    });
   },
+
   // 弹窗-评论-双向绑定
   onDialogInput(e) {
     this.setData({
@@ -335,7 +402,9 @@ Page({
   // 弹窗-评论-关闭（包含提交功能）
   onCloseDialog(e) {
     const that = this;
-    const { dialogValue } = that.data; // 输入的评论的数据
+    const {
+      dialogValue
+    } = that.data; // 输入的评论的数据
     const action = e.type; // "confirm" 或 "cancel"
     if (action === 'confirm') {
       if (!dialogValue) {
@@ -346,7 +415,12 @@ Page({
     } else if (action === 'cancel') {
       utils.showToast(that, "评审提交取消", "warning");
     }
-    this.setData({ dialogVisible: false, refuse_type: null, refuse_id: null, refuse_state: null, });
+    this.setData({
+      dialogVisible: false,
+      refuse_type: null,
+      refuse_id: null,
+      refuse_state: null,
+    });
     setTimeout(() => {
       this.setData({
         dialogValue: "",
@@ -356,7 +430,12 @@ Page({
   // 设计师标记
   onDesignerStatusTap(e) {
     const that = this
-    const { index, type, id, state } = e.currentTarget.dataset;
+    const {
+      index,
+      type,
+      id,
+      state
+    } = e.currentTarget.dataset;
     // const username = that.data.userInfo.name;
     // if (!username) {
     //   return
@@ -375,7 +454,10 @@ Page({
       "note": "",
     }
     if (userRole === "fmr") { // 可能需要修改-新增
-      wx.showToast({ title: '只能设计师点击', icon: 'error' });
+      wx.showToast({
+        title: '只能设计师点击',
+        icon: 'error'
+      });
       return
     }
     wx.request({
@@ -385,9 +467,147 @@ Page({
       success(res) {
         if (res.data.code === 200) {
           const tasks = that.sortByCreateTimeDesc(res.data.task_data[type])
-          that.setData({ [`${type}`]: tasks })
+          that.setData({
+            [`${type}`]: tasks
+          })
         }
       }
     })
   },
+  // new 
+  //表格-单选按钮-动态变量名称 (需扩充改变提交)
+  chooseRadio(e) {
+    const {
+      booleanParam,
+      radioName
+    } = e.currentTarget.dataset;
+    let that = this;
+    that.setData({
+      [`table[0].${radioName}`]: booleanParam
+    })
+  },
+  // 设计师拒绝弹窗-new
+  onOpenTextArea(e) {
+    const {
+      type,
+      id,
+      state
+    } = e.currentTarget.dataset;
+    this.setData({
+      textareaVisible: "true",
+      refuse_type: type,
+      refuse_id: id,
+      refuse_state: state,
+      state2: state,
+    });
+    this.onDesignerStatusRefuse();
+    this.onOpenTextarea(id);
+  },
+  //拒绝说明 文字提交
+  sumbitNote() {
+    let that = this;
+    const {
+      refuse_type,
+      refuse_id,
+      refuse_state,
+      textValue,
+      userName
+    } = that.data;
+    const data = {
+      "type": "updateProofingTimeline",
+      "tl_id": refuse_id,
+      "state2": refuse_state,
+      "state2_updated_by": userName,
+      "username": userName,
+      "note": textValue,
+    }
+    wx.request({
+      url: url,
+      method: "POST",
+      data: data,
+      success(res) {
+        if (res.data.code === 200) {
+          const tasks = that.sortByCreateTimeDesc(res.data.task_data[refuse_type])
+          that.setData({
+            [`${refuse_type}`]: tasks
+          })
+        }
+      }
+    });
+    setTimeout(() => {
+      that.setData({
+        textareaVisible: "false",
+        textValue: "" //初始值
+      });
+    }, 500)
+  },
+  // 失焦时触发 拒绝说明 文字提交
+  handleTextareaBlur(e) {
+    const value = e.detail.value; // 获取文本框的值
+    this.sumbitNote();// 调用提交方法
+  },
+  // 拒绝说明多行文本框-评论-双向绑定
+  onTextareaInput(e) {
+    this.setData({
+      textValue: e.detail.value
+    });
+  },
+  // 通过item id 单独 打开拒绝多行文本框
+  onOpenTextarea(id) {
+    this.setData({
+      currentOpenId: id
+    });
+  },
+  // 设计师标记 接受按钮
+  onDesignerStatusTapNew(e) {
+    const that = this
+    const {
+      index,
+      type,
+      id,
+      state
+    } = e.currentTarget.dataset;
+    // const username = that.data.userInfo.name;
+    // if (!username) {
+    //   return
+    // }
+    const userRole = that.data.userRole; // 可能需要修改-新增
+    const userName = that.data.userName;
+    if (!userName) {
+      return
+    }
+    const data = {
+      "type": "updateProofingTimeline",
+      "tl_id": id,
+      "state2": state,
+      "state2_updated_by": userName,
+      "username": userName,
+      "note": this.data.note || "",
+    }
+    if (userRole === "fmr") { // 可能需要修改-新增
+      wx.showToast({
+        title: '只能设计师点击',
+        icon: 'error'
+      });
+      return
+    }
+    that.setData({
+      textareaVisible: false,
+      note: this.data.note
+    })
+    wx.request({
+      url: url,
+      method: "POST",
+      data: data,
+      success(res) {
+        if (res.data.code === 200) {
+          const tasks = that.sortByCreateTimeDesc(res.data.task_data[type])
+          that.setData({
+            [`${type}`]: tasks
+          })
+        }
+      }
+    })
+  },
+  // 新增结束
 })

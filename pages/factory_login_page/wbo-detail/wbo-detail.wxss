@@ -312,6 +312,9 @@
     border: 1px solid #ddd;
     padding: 10rpx;
     text-align: center;
+    display: flex; /* 设置为Flex容器 */
+    justify-content: center; /* 水平居中 */
+    align-items: center; /* 垂直居中 */
   }
   .header {
     background: #f5f5f5;
@@ -328,3 +331,7 @@
     display: none; /* 隐藏滚动条（Chrome/Safari） */
   }
   
+  .radiostyle {
+    text-align: center;
+    padding-left: 100rpx;
+  }

@@ -142,15 +142,17 @@ Page({
         data_dict["timeline_id"] = timeline_id;
       }
       // 过了shelley标记不具备可行性的图稿
-      if (data_dict["confirmed2"] === 3) {
-        continue
-      }
+      // if (data_dict["confirmed2"] === 3) {
+      //   continue
+      // }
+      console.log(typeof data_dict["confirmed2"]);
       /*
       只有当前用户才可以看到自己的图稿并上传
       设计师：只显示自己的
       设计部经理：只显示被分配的
       AIT分配人：显示全部的
     */
+   
       if (position_type === "设计经理") {
         if (AIT_manager1 === userName) {
           arrangeData.push(data_dict);
@@ -176,7 +178,17 @@ Page({
       this.setData({
         "dropdownMaterial.options": options.concat(material)
       })
-    }
+    };
+
+    arrangeData.sort((a, b) => {
+      if (a.confirmed2 === 3 && b.confirmed2 !== 3) {
+        return 1;  // a 放后面
+      }
+      if (a.confirmed2 !== 3 && b.confirmed2 === 3) {
+        return -1; // b 放后面
+      }
+      return a.confirmed2 - b.confirmed2; // 其他按数值升序
+    });
     return {
       arrangeData,
       taskTimeLineData

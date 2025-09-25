@@ -67,6 +67,7 @@
           <view class="arrange-center">
             <text class="title-font-main">时间线：</text>
             <t-link size="small" content="查看历史时间线" hover underline variant="outline" bind:tap="onOpenHistoryTimeLine" data-task-id="{{ item.id }}" />
+            <text wx:if="{{ item.confirmed2 === 3 }}" style="color: red;" class="title-font-other">（已被上一个节点拒绝，无需操作）</text>
           </view>
           <view class="arrange-center " wx:if="{{ item.AIT_manager1 === userName }}">
             <t-divider layout="vertical" />
@@ -75,7 +76,7 @@
           </view>
         </view>
         <!-- 设计师上传 -->
-        <view class="arrange-center" style="gap: 25rpx;">
+        <view class="arrange-center" style="gap: 25rpx;" wx:if="{{ item.confirmed2 !== 3 }}">
           <view class="arrange-center" wx:if="{{ item.name === userName }}">
             <text class="title-font-main">改稿上传：</text>
             <t-link size="small" content="点击上传" hover underline catchtap="onOpenUploadFactoryArtwork" prefixIcon="upload" data-task-id="{{ item.id }}" data-timeline-id="{{ item.timeline_id }}" />

@@ -46,8 +46,12 @@
         </swiper-item>
       </block>
     </swiper>
-    <view class="info">
+    <view class="info"  >
       <view>上传：{{item.created_by}}--{{item.create_time}}</view>
+      <view class="text-box" wx:if="{{ item.state2 === 2}}" >
+        <text>说明：{{item.note}}</text>
+      </view>
+      <!-- 表格（new） -->
       <scroll-view scroll-y="true" class="table-scroll-y">
         <view class="table">
           <!-- 表头 -->
@@ -59,64 +63,133 @@
           <!-- 数据行 -->
           <view class="table-row">
             <view class="cell">顏色匹配（喷漆或印刷）</view>
-            <view class="cell" data-name="color" data-id="{{item.id}}">
+            <view class="cell" data-id="{{item.id}}" data-radio-name="colorMatch" data-boolean-param="{{true}}" bindtap="chooseRadio">
+              <t-radio default-checked="{{table[0].colorMatch === 'true'}}" checked="{{table[0].colorMatch}}" allow-uncheck icon="dot" />
             </view>
-            <view class="cell" data-name="color" data-id="{{item.id}}">
+            <view class="cell" data-id="{{item.id}}" data-radio-name="colorMatch" data-boolean-param="{{false}}" bindtap="chooseRadio">
+              <t-radio default-checked="{{table[0].colorMatch === 'false'}}" checked="{{!table[0].colorMatch}}" allow-uncheck icon="dot" />
             </view>
           </view>
           <view class="table-row">
             <view class="cell">表面处理质量</view>
-            <view class="cell"></view>
-            <view class="cell"></view>
+            <view class="cell" data-id="{{item.id}}" data-radio-name="surfaceQuality" data-boolean-param="{{true}}" bindtap="chooseRadio">
+              <t-radio default-checked="{{table[0].surfaceQuality === 'true'}}" checked="{{table[0].surfaceQuality}}" allow-uncheck icon="dot" />
+            </view>
+            <view class="cell" data-id="{{item.id}}" data-radio-name="surfaceQuality" data-boolean-param="{{false}}" bindtap="chooseRadio">
+              <t-radio default-checked="{{table[0].surfaceQuality === 'false'}}" checked="{{!table[0].surfaceQuality}}" allow-uncheck icon="dot" />
+            </view>
           </view>
           <view class="table-row">
             <view class="cell">图案与图像位置</view>
-            <view class="cell"></view>
-            <view class="cell"></view>
+            <view class="cell" data-id="{{item.id}}" data-radio-name="graphicPosition" data-boolean-param="{{true}}" bindtap="chooseRadio">
+              <t-radio default-checked="{{table[0].graphicPosition === 'true'}}" checked="{{table[0].graphicPosition}}" allow-uncheck icon="dot" />
+            </view>
+            <view class="cell" data-id="{{item.id}}" data-radio-name="graphicPosition" data-boolean-param="{{false}}" bindtap="chooseRadio">
+              <t-radio default-checked="{{table[0].graphicPosition === 'false'}}" checked="{{!table[0].graphicPosition}}" allow-uncheck icon="dot" />
+            </view>
           </view>
           <view class="table-row">
             <view class="cell">整体轮廓一致性</view>
-            <view class="cell"></view>
-            <view class="cell"></view>
+            <view class="cell" data-id="{{item.id}}" data-radio-name="contourConsistency" data-boolean-param="{{true}}" bindtap="chooseRadio">
+              <t-radio default-checked="{{table[0].contourConsistency === 'true'}}" checked="{{table[0].contourConsistency}}" allow-uncheck icon="dot" />
+            </view>
+            <view class="cell" data-id="{{item.id}}" data-radio-name="contourConsistency" data-boolean-param="{{false}}" bindtap="chooseRadio">
+              <t-radio default-checked="{{table[0].contourConsistency === 'false'}}" checked="{{!table[0].contourConsistency}}" allow-uncheck icon="dot" />
+            </view>
           </view>
           <view class="table-row">
             <view class="cell">尺寸检查（目测或卷尺）</view>
-            <view class="cell"></view>
-            <view class="cell"></view>
+            <view class="cell" data-id="{{item.id}}" data-radio-name="sizeCheck" data-boolean-param="{{true}}" bindtap="chooseRadio">
+              <t-radio default-checked="{{table[0].sizeCheck === 'true'}}" checked="{{table[0].sizeCheck}}" allow-uncheck icon="dot" />
+            </view>
+            <view class="cell" data-id="{{item.id}}" data-radio-name="sizeCheck" data-boolean-param="{{false}}" bindtap="chooseRadio">
+              <t-radio default-checked="{{table[0].sizeCheck === 'false'}}" checked="{{!table[0].sizeCheck}}" allow-uncheck icon="dot" />
+            </view>
           </view>
           <view class="table-row">
             <view class="cell">对称性与平衡感</view>
-            <view class="cell"></view>
-            <view class="cell"></view>
+            <view class="cell" data-id="{{item.id}}" data-radio-name="symmetryBalance" data-boolean-param="{{true}}" bindtap="chooseRadio">
+              <t-radio default-checked="{{table[0].symmetryBalance === 'true'}}" checked="{{table[0].symmetryBalance}}" allow-uncheck icon="dot" />
+            </view>
+            <view class="cell" data-id="{{item.id}}" data-radio-name="symmetryBalance" data-boolean-param="{{false}}" bindtap="chooseRadio">
+              <t-radio default-checked="{{table[0].symmetryBalance === 'false'}}" checked="{{!table[0].symmetryBalance}}" allow-uncheck icon="dot" />
+            </view>
           </view>
           <view class="table-row">
             <view class="cell">表面纹理真实感</view>
-            <view class="cell"></view>
-            <view class="cell"></view>
+            <view class="cell" data-id="{{item.id}}" data-radio-name="textureRealism" data-boolean-param="{{true}}" bindtap="chooseRadio">
+              <t-radio default-checked="{{table[0].textureRealism === 'true'}}" checked="{{table[0].textureRealism}}" allow-uncheck icon="dot" />
+            </view>
+            <view class="cell" data-id="{{item.id}}" data-radio-name="textureRealism" data-boolean-param="{{false}}" bindtap="chooseRadio">
+              <t-radio default-checked="{{table[0].textureRealism === 'false'}}" checked="{{!table[0].textureRealism}}" allow-uncheck icon="dot" />
+            </view>
           </view>
           <view class="table-row">
             <view class="cell">结构与细节</view>
-            <view class="cell"></view>
-            <view class="cell"></view>
+            <view class="cell" data-id="{{item.id}}" data-radio-name="buildDetails" data-boolean-param="{{true}}" bindtap="chooseRadio">
+              <t-radio default-checked="{{table[0].buildDetails === 'true'}}" checked="{{table[0].buildDetails}}" allow-uncheck icon="dot" />
+            </view>
+            <view class="cell" data-id="{{item.id}}" data-radio-name="buildDetails" data-boolean-param="{{false}}" bindtap="chooseRadio">
+              <t-radio default-checked="{{table[0].buildDetails === 'false'}}" checked="{{!table[0].buildDetails}}" allow-uncheck icon="dot" />
+            </view>
           </view>
           <view class="table-row">
             <view class="cell">边缘与角部处理</view>
-            <view class="cell"></view>
-            <view class="cell"></view>
+            <view class="cell" data-id="{{item.id}}" data-radio-name="edgeFinish" data-boolean-param="{{true}}" bindtap="chooseRadio">
+              <t-radio default-checked="{{table[0].edgeFinish === 'true'}}" checked="{{table[0].edgeFinish}}" allow-uncheck icon="dot" />
+            </view>
+            <view class="cell" data-id="{{item.id}}" data-radio-name="edgeFinish" data-boolean-param="{{false}}" bindtap="chooseRadio">
+              <t-radio default-checked="{{table[0].edgeFinish === 'false'}}" checked="{{!table[0].edgeFinish}}" allow-uncheck icon="dot" />
+            </view>
           </view>
           <view class="table-row">
             <view class="cell">装饰性元素（如铆钉、铆条、镂嵌）</view>
-            <view class="cell"></view>
-            <view class="cell"></view>
+            <view class="cell" data-id="{{item.id}}" data-radio-name="decorativeElements" data-boolean-param="{{true}}" bindtap="chooseRadio">
+              <t-radio default-checked="{{table[0].decorativeElements === 'true'}}" checked="{{table[0].decorativeElements}}" allow-uncheck icon="dot" />
+            </view>
+            <view class="cell" data-id="{{item.id}}" data-radio-name="decorativeElements" data-boolean-param="{{false}}" bindtap="chooseRadio">
+              <t-radio default-checked="{{table[0].decorativeElements === 'false'}}" checked="{{!table[0].decorativeElements}}" allow-uncheck icon="dot" />
+            </view>
           </view>
           <view class="table-row">
             <view class="cell">重量与稳定性</view>
-            <view class="cell"></view>
-            <view class="cell"></view>
+            <view class="cell" data-id="{{item.id}}" data-radio-name="weightStability" data-boolean-param="{{true}}" bindtap="chooseRadio">
+              <t-radio default-checked="{{table[0].weightStability === 'true'}}" checked="{{table[0].weightStability}}" allow-uncheck icon="dot" />
+            </view>
+            <view class="cell" data-id="{{item.id}}" data-radio-name="weightStability" data-boolean-param="{{false}}" bindtap="chooseRadio">
+              <t-radio default-checked="{{table[0].weightStability === 'false'}}" checked="{{!table[0].weightStability}}" allow-uncheck icon="dot" />
+            </view>
           </view>
         </view>
       </scroll-view>
-      <view class="text-box">
+      <view class="status-row" wx:if="{{ item.state2 === 2 && textareaVisible==='true' && currentOpenId === item.id }}">
+        <text>说明：</text>
+        <view>
+          <t-textarea value="{{item.note}}" bordered placeholder="请输入文字" disableDefaultPadding="{{true}}" autosize="{{autosize}}"
+          data-index="{{index}}" data-type="blank_images" data-id="{{item.id}}" data-state="2"  bind:change="onTextareaInput" bindblur="handleTextareaBlur">
+          </t-textarea>
+        </view>
+        <t-link class="arrange-center-flex-end"  data-index="{{index}}" data-type="blank_images" data-id="{{item.id}}" data-state="2"  bind:tap="sumbitNote">提交</t-link>
+      </view>
+      <view class="status-row">
+
+        <view class="arrange-column">
+
+          <view class="arrange-center" style="gap: 10rpx;">
+            <view class="status-tag {{item.state2 === 1 ? 'accept active' : 'unselected'}}" data-index="{{index}}" data-type="blank_images" data-id="{{item.id}}" data-state="1" bindtap="onDesignerStatusTapNew">接受</view>
+            <!--  bindtap="onDesignerStatusTap"  -->
+            <view class="status-tag {{item.state2 === 2 ? 'reject active' : 'unselected'}}" data-index="{{index}}" data-type="blank_images" data-id="{{item.id}}" data-state="2" bindtap="onOpenTextArea">拒绝</view>
+            <view wx:if="{{item.state2!==0}}" class="status-date-inline">
+              ({{item.state2_updated_by}}--{{item.state2_update_time}})
+            </view>
+          </view>
+        </view>
+      </view>
+     
+
+      <!-- <t-divider content="新旧分割"></t-divider> -->
+      <!-- old -->
+      <!-- <view class="text-box">
         <text>说明：{{item.note}}</text>
       </view>
       <view class="status-row">
@@ -134,14 +207,14 @@
           <text style="font-size: 14px;font-weight: bolder;">设计师：</text>
           <view class="arrange-center" style="gap: 10rpx;">
             <view class="status-tag {{item.state2 === 1 ? 'accept active' : 'unselected'}}" data-index="{{index}}" data-type="blank_images" data-id="{{item.id}}" data-state="1" bindtap="onDesignerStatusTap">接受</view>
-            <!--  bindtap="onDesignerStatusTap"  -->
             <view class="status-tag {{item.state2 === 2 ? 'reject active' : 'unselected'}}" data-index="{{index}}" data-type="blank_images" data-id="{{item.id}}" data-state="2" bindtap="onOpenDialog">拒绝</view>
             <view wx:if="{{item.state2!==0}}" class="status-date-inline">
               ({{item.state2_updated_by}}--{{item.state2_update_time}})
             </view>
           </view>
         </view>
-      </view>
+      </view> -->
+      <!-- old -->
     </view>
   </view>
   <view class="title-with-bar">完成样记录</view>
@@ -155,10 +228,144 @@
     </swiper>
     <view class="info">
       <view>上传：{{item.created_by}}--{{item.create_time}}</view>
-      <view class="text-box">
+      <view class="text-box" wx:if="{{ item.state2 === 2}}" >
         <text>说明：{{item.note}}</text>
       </view>
+       <!-- 表格（new） -->
+       <scroll-view scroll-y="true" class="table-scroll-y">
+        <view class="table">
+          <!-- 表头 -->
+          <view class="table-row header">
+            <view class="cell">评估标准</view>
+            <view class="cell">合格</view>
+            <view class="cell">不合格</view>
+          </view>
+          <!-- 数据行 -->
+          <view class="table-row">
+            <view class="cell">顏色匹配（喷漆或印刷）</view>
+            <view class="cell" data-id="{{item.id}}" data-radio-name="colorMatch" data-boolean-param="{{true}}" bindtap="chooseRadio">
+              <t-radio default-checked="{{table[0].colorMatch === 'true'}}" checked="{{table[0].colorMatch}}" allow-uncheck icon="dot" />
+            </view>
+            <view class="cell" data-id="{{item.id}}" data-radio-name="colorMatch" data-boolean-param="{{false}}" bindtap="chooseRadio">
+              <t-radio default-checked="{{table[0].colorMatch === 'false'}}" checked="{{!table[0].colorMatch}}" allow-uncheck icon="dot" />
+            </view>
+          </view>
+          <view class="table-row">
+            <view class="cell">表面处理质量</view>
+            <view class="cell" data-id="{{item.id}}" data-radio-name="surfaceQuality" data-boolean-param="{{true}}" bindtap="chooseRadio">
+              <t-radio default-checked="{{table[0].surfaceQuality === 'true'}}" checked="{{table[0].surfaceQuality}}" allow-uncheck icon="dot" />
+            </view>
+            <view class="cell" data-id="{{item.id}}" data-radio-name="surfaceQuality" data-boolean-param="{{false}}" bindtap="chooseRadio">
+              <t-radio default-checked="{{table[0].surfaceQuality === 'false'}}" checked="{{!table[0].surfaceQuality}}" allow-uncheck icon="dot" />
+            </view>
+          </view>
+          <view class="table-row">
+            <view class="cell">图案与图像位置</view>
+            <view class="cell" data-id="{{item.id}}" data-radio-name="graphicPosition" data-boolean-param="{{true}}" bindtap="chooseRadio">
+              <t-radio default-checked="{{table[0].graphicPosition === 'true'}}" checked="{{table[0].graphicPosition}}" allow-uncheck icon="dot" />
+            </view>
+            <view class="cell" data-id="{{item.id}}" data-radio-name="graphicPosition" data-boolean-param="{{false}}" bindtap="chooseRadio">
+              <t-radio default-checked="{{table[0].graphicPosition === 'false'}}" checked="{{!table[0].graphicPosition}}" allow-uncheck icon="dot" />
+            </view>
+          </view>
+          <view class="table-row">
+            <view class="cell">整体轮廓一致性</view>
+            <view class="cell" data-id="{{item.id}}" data-radio-name="contourConsistency" data-boolean-param="{{true}}" bindtap="chooseRadio">
+              <t-radio default-checked="{{table[0].contourConsistency === 'true'}}" checked="{{table[0].contourConsistency}}" allow-uncheck icon="dot" />
+            </view>
+            <view class="cell" data-id="{{item.id}}" data-radio-name="contourConsistency" data-boolean-param="{{false}}" bindtap="chooseRadio">
+              <t-radio default-checked="{{table[0].contourConsistency === 'false'}}" checked="{{!table[0].contourConsistency}}" allow-uncheck icon="dot" />
+            </view>
+          </view>
+          <view class="table-row">
+            <view class="cell">尺寸检查（目测或卷尺）</view>
+            <view class="cell" data-id="{{item.id}}" data-radio-name="sizeCheck" data-boolean-param="{{true}}" bindtap="chooseRadio">
+              <t-radio default-checked="{{table[0].sizeCheck === 'true'}}" checked="{{table[0].sizeCheck}}" allow-uncheck icon="dot" />
+            </view>
+            <view class="cell" data-id="{{item.id}}" data-radio-name="sizeCheck" data-boolean-param="{{false}}" bindtap="chooseRadio">
+              <t-radio default-checked="{{table[0].sizeCheck === 'false'}}" checked="{{!table[0].sizeCheck}}" allow-uncheck icon="dot" />
+            </view>
+          </view>
+          <view class="table-row">
+            <view class="cell">对称性与平衡感</view>
+            <view class="cell" data-id="{{item.id}}" data-radio-name="symmetryBalance" data-boolean-param="{{true}}" bindtap="chooseRadio">
+              <t-radio default-checked="{{table[0].symmetryBalance === 'true'}}" checked="{{table[0].symmetryBalance}}" allow-uncheck icon="dot" />
+            </view>
+            <view class="cell" data-id="{{item.id}}" data-radio-name="symmetryBalance" data-boolean-param="{{false}}" bindtap="chooseRadio">
+              <t-radio default-checked="{{table[0].symmetryBalance === 'false'}}" checked="{{!table[0].symmetryBalance}}" allow-uncheck icon="dot" />
+            </view>
+          </view>
+          <view class="table-row">
+            <view class="cell">表面纹理真实感</view>
+            <view class="cell" data-id="{{item.id}}" data-radio-name="textureRealism" data-boolean-param="{{true}}" bindtap="chooseRadio">
+              <t-radio default-checked="{{table[0].textureRealism === 'true'}}" checked="{{table[0].textureRealism}}" allow-uncheck icon="dot" />
+            </view>
+            <view class="cell" data-id="{{item.id}}" data-radio-name="textureRealism" data-boolean-param="{{false}}" bindtap="chooseRadio">
+              <t-radio default-checked="{{table[0].textureRealism === 'false'}}" checked="{{!table[0].textureRealism}}" allow-uncheck icon="dot" />
+            </view>
+          </view>
+          <view class="table-row">
+            <view class="cell">结构与细节</view>
+            <view class="cell" data-id="{{item.id}}" data-radio-name="buildDetails" data-boolean-param="{{true}}" bindtap="chooseRadio">
+              <t-radio default-checked="{{table[0].buildDetails === 'true'}}" checked="{{table[0].buildDetails}}" allow-uncheck icon="dot" />
+            </view>
+            <view class="cell" data-id="{{item.id}}" data-radio-name="buildDetails" data-boolean-param="{{false}}" bindtap="chooseRadio">
+              <t-radio default-checked="{{table[0].buildDetails === 'false'}}" checked="{{!table[0].buildDetails}}" allow-uncheck icon="dot" />
+            </view>
+          </view>
+          <view class="table-row">
+            <view class="cell">边缘与角部处理</view>
+            <view class="cell" data-id="{{item.id}}" data-radio-name="edgeFinish" data-boolean-param="{{true}}" bindtap="chooseRadio">
+              <t-radio default-checked="{{table[0].edgeFinish === 'true'}}" checked="{{table[0].edgeFinish}}" allow-uncheck icon="dot" />
+            </view>
+            <view class="cell" data-id="{{item.id}}" data-radio-name="edgeFinish" data-boolean-param="{{false}}" bindtap="chooseRadio">
+              <t-radio default-checked="{{table[0].edgeFinish === 'false'}}" checked="{{!table[0].edgeFinish}}" allow-uncheck icon="dot" />
+            </view>
+          </view>
+          <view class="table-row">
+            <view class="cell">装饰性元素（如铆钉、铆条、镂嵌）</view>
+            <view class="cell" data-id="{{item.id}}" data-radio-name="decorativeElements" data-boolean-param="{{true}}" bindtap="chooseRadio">
+              <t-radio default-checked="{{table[0].decorativeElements === 'true'}}" checked="{{table[0].decorativeElements}}" allow-uncheck icon="dot" />
+            </view>
+            <view class="cell" data-id="{{item.id}}" data-radio-name="decorativeElements" data-boolean-param="{{false}}" bindtap="chooseRadio">
+              <t-radio default-checked="{{table[0].decorativeElements === 'false'}}" checked="{{!table[0].decorativeElements}}" allow-uncheck icon="dot" />
+            </view>
+          </view>
+          <view class="table-row">
+            <view class="cell">重量与稳定性</view>
+            <view class="cell" data-id="{{item.id}}" data-radio-name="weightStability" data-boolean-param="{{true}}" bindtap="chooseRadio">
+              <t-radio default-checked="{{table[0].weightStability === 'true'}}" checked="{{table[0].weightStability}}" allow-uncheck icon="dot" />
+            </view>
+            <view class="cell" data-id="{{item.id}}" data-radio-name="weightStability" data-boolean-param="{{false}}" bindtap="chooseRadio">
+              <t-radio default-checked="{{table[0].weightStability === 'false'}}" checked="{{!table[0].weightStability}}" allow-uncheck icon="dot" />
+            </view>
+          </view>
+        </view>
+      </scroll-view>
+      <view class="status-row" wx:if="{{ item.state2 === 2 && textareaVisible==='true' && currentOpenId === item.id }}">
+        <text>说明：</text>
+        <view>
+          <t-textarea value="{{item.note}}" bordered placeholder="请输入文字" disableDefaultPadding="{{true}}" autosize="{{autosize}}"
+          data-index="{{index}}" data-type="drawings_images" data-id="{{item.id}}" data-state="2"  bind:change="onTextareaInput" bindblur="handleTextareaBlur">
+          </t-textarea>
+        </view>
+        <t-link class="arrange-center-flex-end"  data-index="{{index}}" data-type="drawings_images" data-id="{{item.id}}" data-state="2"  bind:tap="sumbitNote">提交</t-link>
+      </view>
       <view class="status-row">
+        <view class="arrange-column">
+          <view class="arrange-center" style="gap: 10rpx;">
+            <view class="status-tag {{item.state2 === 1 ? 'accept active' : 'unselected'}}" data-index="{{index}}" data-type="drawings_images" data-id="{{item.id}}" data-state="1" bindtap="onDesignerStatusTapNew">接受</view>
+            <!--  bindtap="onDesignerStatusTap"  -->
+            <view class="status-tag {{item.state2 === 2 ? 'reject active' : 'unselected'}}" data-index="{{index}}" data-type="drawings_images" data-id="{{item.id}}" data-state="2" bindtap="onOpenTextArea">拒绝</view>
+            <view wx:if="{{item.state2!==0}}" class="status-date-inline">
+              ({{item.state2_updated_by}}--{{item.state2_update_time}})
+            </view>
+          </view>
+        </view>
+      </view>
+      
+      <!-- old -->
+      <!-- <view class="status-row">
         <view class=" arrange-column ">
           <text style="font-size: 14px;font-weight: bolder;">FMR：</text>
           <view class="arrange-center" style="gap: 10rpx;">
@@ -173,14 +380,15 @@
           <text style="font-size: 14px;font-weight: bolder;">设计师：</text>
           <view class="arrange-center" style="gap: 10rpx;">
             <view class="status-tag {{item.state2 === 1 ? 'accept active' : 'unselected'}}" data-index="{{index}}" data-type="drawings_images" data-id="{{item.id}}" bindtap="onDesignerStatusTap" data-state="1">接受</view>
-            <!--  bindtap="onDesignerStatusTap"  -->
+    
             <view class="status-tag {{item.state2 === 2 ? 'reject active' : 'unselected'}}" data-index="{{index}}" data-type="drawings_images" data-id="{{item.id}}" bindtap="onOpenDialog" data-state="2">拒绝</view>
             <view wx:if="{{item.state2!==0}}" class="status-date-inline">
               <view style="font-size: 12px;">({{item.state2_updated_by}}--{{item.state2_update_time}})</view>
             </view>
           </view>
         </view>
-      </view>
+      </view> -->
+      <!-- old -->
     </view>
   </view>
 </view>
