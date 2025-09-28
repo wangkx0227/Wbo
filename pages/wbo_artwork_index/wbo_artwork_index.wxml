@@ -59,11 +59,16 @@
                 <text class="title-font-other">{{ item.development_start_data }}</text>
               </view>
               <!-- 只有kyle导出ppt或者第二轮标记导出附件 -->
-              <view style="position:absolute;right: 40rpx;bottom: 38rpx;" wx:if="{{(userRole === 'kyle' && tabBarValue !== 'file') || (userRole === 'chosen_draft' && tabBarValue === 'ultimate')}}">
-                <t-link prefixIcon="folder-export" size="small" content="导出附件" underline hover catch:tap="exportAttachments" theme="default" data-lineplan_id="{{ item.line_plan_id }}" />
+              <view style="position:absolute;right: 40rpx;bottom: 38rpx;" wx:if="{{(userRole === 'kyle' && tabBarValue === 'primary') || (userRole === 'chosen_draft' && tabBarValue === 'ultimate')}}">
+                <t-link prefixIcon="folder-export" size="small" content="导出附件" underline hover catchtap="exportAttachments" theme="default" data-lineplan_id="{{ item.line_plan_id }}" />
               </view>
               <view style="position:absolute;right: 40rpx;bottom: 38rpx;" wx:if="{{userRole === 'desc_upload'}}">
-                <t-link prefixIcon="upload" size="small" content="上传附件" underline hover bindtap="descUpload" theme="default" data-lineplan_id="{{ item.line_plan_id }}" />
+                <t-link prefixIcon="upload" size="small" content="上传附件" underline hover catchtap="descUpload" theme="default" data-lineplan_id="{{ item.line_plan_id }}" />
+              </view>
+              <view style="position:absolute;right: 40rpx;bottom: 38rpx;" class="arrange-center" wx:if="{{userRole === 'kyle' && tabBarValue === 'ultimate'}}">
+                <t-link prefixIcon="folder-export" size="small" content="导出PPT" underline hover catchtap="onArtworkExportPPT" theme="default" data-lineplan_id="{{ item.line_plan_id }}" />
+                <t-divider layout="vertical" />
+                <t-link prefixIcon="upload" size="small" content="上传PPT" underline hover catchtap="onArtworkImportPPT" theme="default" data-lineplan_id="{{ item.line_plan_id }}" />
               </view>
             </view>
           </t-cell>

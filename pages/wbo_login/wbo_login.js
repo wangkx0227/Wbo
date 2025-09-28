@@ -270,6 +270,7 @@ Page({
       } else if (productValue === "desc_upload") {
         wx.setStorageSync('userName', "kyle");
         wx.setStorageSync('apiUserName', "kyle"); // 访问接口携带名字
+        wx.setStorageSync('position_list', ["desc_upload"]); // 访问接口携带名字
       }
       wx.setStorageSync('userRole', productValue);
       wx.showToast({

@@ -674,4 +674,17 @@ Page({
       })
     }
   },
+
+  // 负责导出
+  onArtworkExportPPT(e){
+    const that = this;
+    const lineplan_id = e.currentTarget.dataset.lineplan_id;
+    console.log(lineplan_id);
+  },
+  // 负责导入
+  onArtworkImportPPT(e){
+    const that = this;
+    const lineplan_id = e.currentTarget.dataset.lineplan_id;
+    console.log(lineplan_id);
+  },
 })

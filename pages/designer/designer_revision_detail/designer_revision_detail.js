@@ -21,19 +21,16 @@ Page({
     // 筛选框变量-材质
     dropdownMaterial: {
       value: 'all',
-      options: [
-        {
-          value: 'all',
-          label: '全部材质',
-        },
-      ],
+      options: [{
+        value: 'all',
+        label: '全部材质',
+      }, ],
     },
     filterMaterialValue: "all", // 筛选存储变量
     // 图稿状态
     dropdownArtworkStatus: {
       value: 'all',
-      options: [
-        {
+      options: [{
           value: 'all',
           label: '全部状态',
         },
@@ -76,6 +73,21 @@ Page({
       { label: "AI档图", value: 3 },
       { label: "附图", value: 4 },
     ],
+    // fileTypeList: [ // 附件上传的状态列表
+    //   { label: '无类型', value: 0},
+    //   { label: 'AI-E图',value: 1},
+    //   { label: "AI-B图",value: 2},
+    //   { label: "AI-A图",value: 3},
+    //   { label: "切图",value: 4},
+    //   { label: '修图',value: 5},
+    //   { label: 'GPT生图',value: 6},
+    //   { label: "打样图",value: 7},
+    //   { label: "AI档图",value: 8},
+    //   { label: "泥膜修改",value: 9},
+    //   { label: '样品修改',value: 10},
+    //   {label: '原创设计',value: 11},
+    //   {label: "备注",value: 12},
+    // ],
     fileSelectPickerValue: [],
     fileSelectPickerKey: "",
     image_type: [], // 附件上传的状态-多选
@@ -151,7 +163,7 @@ Page({
       设计部经理：只显示被分配的
       AIT分配人：显示全部的
     */
-   
+
       if (position_type === "设计经理") {
         if (AIT_manager1 === userName) {
           arrangeData.push(data_dict);
@@ -181,7 +193,7 @@ Page({
 
     arrangeData.sort((a, b) => {
       if (a.confirmed2 === 3 && b.confirmed2 !== 3) {
-        return 1;  // a 放后面
+        return 1; // a 放后面
       }
       if (a.confirmed2 !== 3 && b.confirmed2 === 3) {
         return -1; // b 放后面
@@ -248,7 +260,11 @@ Page({
     const lineplan_id = that.data.lineplan_id;
     utils.LoadDataList({
       page: that,
-      data: { type: "getTaskByLinePlan", username: userName, "lp_id": lineplan_id, },
+      data: {
+        type: "getTaskByLinePlan",
+        username: userName,
+        "lp_id": lineplan_id,
+      },
       mode: mode
     }).then(list => { // list 就是data数据
       const allResults = that.dataStructure(list);
@@ -290,9 +306,7 @@ Page({
     const userRole = wx.getStorageSync('userRole');
     const userName = wx.getStorageSync('userName');
     const position_list = wx.getStorageSync('position_list'); // 实际的权限列表
-    const position_type = position_list.find(item =>
-      ["设计经理", "AIT", "AIT分配人"].includes(item)
-    ) || "";
+    const position_type = position_list.find(item => ["设计经理", "AIT", "AIT分配人"].includes(item)) || "";
     // 修改批量操作的tab名称
     if (position_type === "设计经理") {
       that.setData({
@@ -360,7 +374,7 @@ Page({
     }, 500)
   },
   // 空方法，避免抽屉的滚动
-  onDummyTouchMove() { },
+  onDummyTouchMove() {},
   // 页面上拉刷新
   onPullDownRefresh() {
     if (this.data.isLoadingReachMore) return; // 如果正在加载更多，则禁止下拉刷新
@@ -459,9 +473,9 @@ Page({
     wx.uploadFile({
       url: montageUrl + '/wbo/upload_task_image/',
       filePath: imageFileList[0].url, // 临时文件路径
-      name: 'file',       // 与接口的 file 字段一致
+      name: 'file', // 与接口的 file 字段一致
       formData: {
-        task_id: task_id,   // task ID
+        task_id: task_id, // task ID
         AIT_designer2: true, // 默认设计师选中
       },
       success(res) {
@@ -892,7 +906,10 @@ Page({
         "username": userName
       }
       let message = '';
-      const { value, label } = e.detail;
+      const {
+        value,
+        label
+      } = e.detail;
       const position_type = that.data.position_type;
       if (position_type === "AIT分配人") {
         data["AIT_manager1"] = value[0];
@@ -969,7 +986,7 @@ Page({
     wx.uploadFile({
       url: montageUrl + '/wbo/uploads/',
       filePath: imageFileList[0].url, // 临时文件路径
-      name: 'file',       // 与接口的 file 字段一致
+      name: 'file', // 与接口的 file 字段一致
       formData: formData,
       // formData: {
       //   task: task_id,   // task ID
@@ -1046,6 +1063,11 @@ Page({
     const that = this;
     let fileSelectPickerKey = [];
     const fileSelectPickerValue = that.data.fileSelectPickerValue;
+    // const restricted = fileSelectPickerValue.filter(num =>   [1, 2, 3].includes(num)); //"AI-E图", "AI-B图", "AI-A图" 只保留一个
+    // if (restricted.length >= 2) {
+    //   utils.showToast(that, "AI-E、AI-B、AI-A只能选择一个", "error");
+    //   return ;
+    // }
     that.data.fileTypeList.forEach(item => {
       if (fileSelectPickerValue.includes(item.value)) {
         fileSelectPickerKey.push(item.label);

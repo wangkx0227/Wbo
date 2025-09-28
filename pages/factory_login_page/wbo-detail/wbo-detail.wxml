@@ -48,19 +48,17 @@
     </swiper>
     <view class="info"  >
       <view>上传：{{item.created_by}}--{{item.create_time}}</view>
-      <view class="text-box" wx:if="{{ item.state2 === 2}}" >
+      <!-- <view class="text-box" wx:if="{{ item.state2 === 2}}" >
         <text>说明：{{item.note}}</text>
-      </view>
+      </view> -->
       <!-- 表格（new） -->
-      <scroll-view scroll-y="true" class="table-scroll-y">
+      <!-- <scroll-view scroll-y="true" class="table-scroll-y">
         <view class="table">
-          <!-- 表头 -->
           <view class="table-row header">
             <view class="cell">评估标准</view>
             <view class="cell">合格</view>
             <view class="cell">不合格</view>
           </view>
-          <!-- 数据行 -->
           <view class="table-row">
             <view class="cell">顏色匹配（喷漆或印刷）</view>
             <view class="cell" data-id="{{item.id}}" data-radio-name="colorMatch" data-boolean-param="{{true}}" bindtap="chooseRadio">
@@ -172,24 +170,21 @@
         <t-link class="arrange-center-flex-end"  data-index="{{index}}" data-type="blank_images" data-id="{{item.id}}" data-state="2"  bind:tap="sumbitNote">提交</t-link>
       </view>
       <view class="status-row">
-
         <view class="arrange-column">
-
           <view class="arrange-center" style="gap: 10rpx;">
             <view class="status-tag {{item.state2 === 1 ? 'accept active' : 'unselected'}}" data-index="{{index}}" data-type="blank_images" data-id="{{item.id}}" data-state="1" bindtap="onDesignerStatusTapNew">接受</view>
-            <!--  bindtap="onDesignerStatusTap"  -->
             <view class="status-tag {{item.state2 === 2 ? 'reject active' : 'unselected'}}" data-index="{{index}}" data-type="blank_images" data-id="{{item.id}}" data-state="2" bindtap="onOpenTextArea">拒绝</view>
             <view wx:if="{{item.state2!==0}}" class="status-date-inline">
               ({{item.state2_updated_by}}--{{item.state2_update_time}})
             </view>
           </view>
         </view>
-      </view>
+      </view> -->
      
 
       <!-- <t-divider content="新旧分割"></t-divider> -->
       <!-- old -->
-      <!-- <view class="text-box">
+      <view class="text-box">
         <text>说明：{{item.note}}</text>
       </view>
       <view class="status-row">
@@ -213,7 +208,7 @@
             </view>
           </view>
         </view>
-      </view> -->
+      </view>
       <!-- old -->
     </view>
   </view>
@@ -228,19 +223,17 @@
     </swiper>
     <view class="info">
       <view>上传：{{item.created_by}}--{{item.create_time}}</view>
-      <view class="text-box" wx:if="{{ item.state2 === 2}}" >
+      <!-- <view class="text-box" wx:if="{{ item.state2 === 2}}" >
         <text>说明：{{item.note}}</text>
-      </view>
+      </view> -->
        <!-- 表格（new） -->
-       <scroll-view scroll-y="true" class="table-scroll-y">
+       <!-- <scroll-view scroll-y="true" class="table-scroll-y">
         <view class="table">
-          <!-- 表头 -->
           <view class="table-row header">
             <view class="cell">评估标准</view>
             <view class="cell">合格</view>
             <view class="cell">不合格</view>
           </view>
-          <!-- 数据行 -->
           <view class="table-row">
             <view class="cell">顏色匹配（喷漆或印刷）</view>
             <view class="cell" data-id="{{item.id}}" data-radio-name="colorMatch" data-boolean-param="{{true}}" bindtap="chooseRadio">
@@ -355,7 +348,7 @@
         <view class="arrange-column">
           <view class="arrange-center" style="gap: 10rpx;">
             <view class="status-tag {{item.state2 === 1 ? 'accept active' : 'unselected'}}" data-index="{{index}}" data-type="drawings_images" data-id="{{item.id}}" data-state="1" bindtap="onDesignerStatusTapNew">接受</view>
-            <!--  bindtap="onDesignerStatusTap"  -->
+
             <view class="status-tag {{item.state2 === 2 ? 'reject active' : 'unselected'}}" data-index="{{index}}" data-type="drawings_images" data-id="{{item.id}}" data-state="2" bindtap="onOpenTextArea">拒绝</view>
             <view wx:if="{{item.state2!==0}}" class="status-date-inline">
               ({{item.state2_updated_by}}--{{item.state2_update_time}})
@@ -363,9 +356,12 @@
           </view>
         </view>
       </view>
-      
+       -->
       <!-- old -->
-      <!-- <view class="status-row">
+      <view class="text-box">
+        <text>说明：{{item.note}}</text>
+      </view>
+      <view class="status-row">
         <view class=" arrange-column ">
           <text style="font-size: 14px;font-weight: bolder;">FMR：</text>
           <view class="arrange-center" style="gap: 10rpx;">
@@ -387,7 +383,7 @@
             </view>
           </view>
         </view>
-      </view> -->
+      </view>
       <!-- old -->
     </view>
   </view>
