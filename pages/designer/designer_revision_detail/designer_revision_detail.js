@@ -66,28 +66,7 @@ Page({
     // 附件
     popupFileArtworkVisible: false, // 附件上传 控制变量
     fileSelectPickerVisible: false, // 附件类型 控制变量
-    fileTypeList: [ // 附件上传的状态列表
-      { label: '无类型', value: 0 },
-      { label: '切图', value: 1 },
-      { label: "AI档", value: 2 },
-      { label: "AI档图", value: 3 },
-      { label: "附图", value: 4 },
-    ],
-    // fileTypeList: [ // 附件上传的状态列表
-    //   { label: '无类型', value: 0},
-    //   { label: 'AI-E图',value: 1},
-    //   { label: "AI-B图",value: 2},
-    //   { label: "AI-A图",value: 3},
-    //   { label: "切图",value: 4},
-    //   { label: '修图',value: 5},
-    //   { label: 'GPT生图',value: 6},
-    //   { label: "打样图",value: 7},
-    //   { label: "AI档图",value: 8},
-    //   { label: "泥膜修改",value: 9},
-    //   { label: '样品修改',value: 10},
-    //   {label: '原创设计',value: 11},
-    //   {label: "备注",value: 12},
-    // ],
+    fileTypeList: [], // 附件上传的状态列表
     fileSelectPickerValue: [],
     fileSelectPickerKey: "",
     image_type: [], // 附件上传的状态-多选
@@ -220,6 +199,19 @@ Page({
       showLoading: false,
       showSkeleton: false,
     }).then(list => { // list 就是data数据
+      if (list.wboClientDatas.fileTypeList.length !== 0) {//遍历 文件类型 
+        const fileTypeList = JSON.parse(JSON.stringify(list.wboClientDatas.fileTypeList))
+        .map(item => ({
+          label: item.name,
+          value: item.id
+        }));
+        that.setData({
+          fileTypeList: [{//手动加上无类型
+            label: "无类型",
+            value: 0
+          },...fileTypeList]
+        })
+      }
       if (list.lps.length !== 0) {
         let AITDesignerList = [];
         let AITManagerList = [];

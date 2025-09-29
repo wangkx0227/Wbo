@@ -3,7 +3,7 @@ const utils = require('../../utils/util')
 Page({
   data: {
     Data: [], // 页面展示数据变量
-    allData: [],// 全部的数据
+    allData: [], // 全部的数据
     filteredData: [], // 筛选后的数据
     pageSize: 6, // 每次加载多少条数据
     currentIndex: 0, // 加载到数据的第几个索引
@@ -16,25 +16,22 @@ Page({
     // 下拉刷新与滚动底部刷新使用变量
     isDownRefreshing: false, // 下拉刷新状态
     isLoadingReachMore: false, // 滚动底部加载数据
-    noMoreData: false,    // 数据是否全部加载完毕
+    noMoreData: false, // 数据是否全部加载完毕
     skeletonLoading: true, // 骨架控制变量
     scrollTop: 0, // 回到顶部变量
     // 筛选框变量-1
     dropdownTemplate: {
       value: 'all',
-      options: [
-        {
-          value: 'all',
-          label: '全部客户',
-        },
-      ],
+      options: [{
+        value: 'all',
+        label: '全部客户',
+      }, ],
     },
     filterTemplate: 'all',
     // 筛选框变量-2
     dropdownSorter: {
       value: 'default',
-      options: [
-        {
+      options: [{
           value: 'default',
           label: '默认排序',
         },
@@ -59,36 +56,71 @@ Page({
     // 判断显示标签栏
     if (userRole === "kyle") {
       this.setData({
-        tabBarShow: true, userTabs: [
-          { value: 'primary', label: '初步评审' },
-          { value: 'ultimate', label: '最终审查' },
-          { value: 'file', label: '文档下载' },
+        tabBarShow: true,
+        userTabs: [{
+            value: 'primary',
+            label: '初步评审'
+          },
+          {
+            value: 'ultimate',
+            label: '最终审查'
+          },
+          {
+            value: 'file',
+            label: '文档下载'
+          },
         ]
       });
     } else if (userRole === "fmr") {
       this.setData({
-        tabBarShow: true, userTabs: [
-          { value: 'primary', label: '可行性评估' },
-          { value: 'ultimate', label: '样品上传' }
+        tabBarShow: true,
+        userTabs: [{
+            value: 'primary',
+            label: '可行性评估'
+          },
+          {
+            value: 'ultimate',
+            label: '样品上传'
+          }
         ]
       });
     } else if (userRole === "designer") {
       this.setData({
-        tabBarShow: true, userTabs: [
-          { value: 'allocate', label: '指派设计师' },
-          { value: 'primary', label: "图稿修改" },
-          { value: 'factory', label: '工厂稿上传' },
-          { value: 'ultimate', label: '样品图审查' },
-          
+        tabBarShow: true,
+        userTabs: [{
+            value: 'allocate',
+            label: '指派设计师'
+          },
+          {
+            value: 'primary',
+            label: "图稿修改"
+          },
+          {
+            value: 'factory',
+            label: '工厂稿上传'
+          },
+          {
+            value: 'ultimate',
+            label: '样品图审查'
+          },
+
         ]
       });
     } else if (userRole === "chosen_draft") {
       this.setData({
-        tabBarShow: true, userTabs: [
-          { value: 'add_project', label: '新增开发案' },
-          { value: 'primary', label: '第一轮选稿' },
-          { value: 'ultimate', label: '第二轮选稿' },
-          
+        tabBarShow: true,
+        userTabs: [{
+            value: 'add_project',
+            label: '新增开发案'
+          },
+          {
+            value: 'primary',
+            label: '第一轮选稿'
+          },
+          {
+            value: 'ultimate',
+            label: '第二轮选稿'
+          },
         ]
       });
     }
@@ -157,7 +189,7 @@ Page({
           line_plan_year: line_plan.year || "未记录", // 年
           line_plan_season: line_plan.season || "未记录", // 风格
           line_plan_is_new_development: line_plan.is_new_development, // 是否结案
-          development_director: development_director,// 主导人
+          development_director: development_director, // 主导人
           development_start_data: development_start_data, //开发案时间
         }
         if (lp_data['line_plan_is_new_development']) {
@@ -179,7 +211,6 @@ Page({
         "dropdownTemplate.options": options.concat(client)
       })
     }
-
     return arrangeData // 全部数据
   },
   // 数据分页显示处理
@@ -195,7 +226,10 @@ Page({
     const apiUserName = that.data.apiUserName;
     utils.LoadDataList({
       page: that,
-      data: { type: "getProjectList", username: apiUserName },
+      data: {
+        type: "getProjectList",
+        username: apiUserName
+      },
       mode: mode
     }).then(list => { // list 就是data数据
       const arrangeData = that.dataStructure(list);
@@ -232,9 +266,7 @@ Page({
       return;
     }
     const position_list = wx.getStorageSync('position_list'); // 实际的权限列表
-    const position_type = position_list.find(item =>
-      ["设计经理", "AIT", "AIT分配人"].includes(item)
-    ) || "";
+    const position_type = position_list.find(item => ["设计经理", "AIT", "AIT分配人"].includes(item)) || "";
     const userRole = wx.getStorageSync('userRole');
     const userName = wx.getStorageSync('userName');
     const apiUserName = wx.getStorageSync('apiUserName');
@@ -252,7 +284,6 @@ Page({
         that.dataDesignerRequest("init");
       };
     });
-
   },
   // 跳转到详情页面
   onJumpArtworkDeatails(e) {
@@ -358,7 +389,7 @@ Page({
   // 胶囊悬浮框切换函数
   onTabBarChange(e) {
     const that = this;
-    const value = e.detail.value;// 值
+    const value = e.detail.value; // 值
     const userRole = that.data.userRole; // 角色
     const current = that.data.userTabs.find(item => item.value === value); // 动态显示tab
     // 重置数据，与筛选条件
@@ -508,7 +539,6 @@ Page({
     const lineplan_id = e.currentTarget.dataset.lineplan_id;
     const montageUrl = app.globalData.montageUrl;
     // 1. 让用户选择文件
-
     wx.chooseMessageFile({
       count: 1,
       type: 'file',
@@ -523,7 +553,9 @@ Page({
           utils.showToast(that, "文件格式错误，请选择Excel文件", "error");
           return;
         }
-        wx.showLoading({ title: '上传中，请稍后' });
+        wx.showLoading({
+          title: '上传中，请稍后'
+        });
         // 3. 上传文件到服务器
         wx.uploadFile({
           url: montageUrl + '/wbo/upload_file/', // 你的服务器上传接口地址
@@ -613,7 +645,7 @@ Page({
     that.setData({
       Data: updatedData,
       selectLpIdList: [],
-      tabBarShow: true,  // 触发按钮 
+      tabBarShow: true, // 触发按钮 
       batchSelectValue: false, // 隐藏胶囊按钮
     })
   },
@@ -639,7 +671,10 @@ Page({
       utils.showToast(that, "请选择LP后提交", "warning");
       return;
     } else {
-      const { value, label } = e.detail;
+      const {
+        value,
+        label
+      } = e.detail;
       utils.UpdateData({
         page: that,
         data: {
@@ -669,22 +704,97 @@ Page({
         pickerVisible: false,
         Data: updatedData, // 修改显示的状态
         selectLpIdList: [],
-        tabBarShow: true,  // 触发按钮 
+        tabBarShow: true, // 触发按钮 
         batchSelectValue: false, // 隐藏胶囊按钮
       })
     }
   },
 
-  // 负责导出
-  onArtworkExportPPT(e){
+  // 负责导出 最终审查
+  onArtworkExportPPT(e) {
     const that = this;
-    const lineplan_id = e.currentTarget.dataset.lineplan_id;
-    console.log(lineplan_id);
+    const url = app.globalData.url;
+    // const fileUrl = app.globalData.fileUrl;
+    const userName = that.data.userName;
+    const lineplan_id = e.currentTarget.dataset.lineplan_id; // 注意属性名会自动转驼峰
+    wx.request({
+      url: url, // 请求地址
+      method: 'POST',
+      data: {
+        "type": "exportPPT",
+        "lp_ids": [
+          lineplan_id,
+        ],
+        "username": userName
+      },
+      header: {
+        'content-type': 'application/json' // 根据后端要求设置
+      },
+      success(res) {
+        if (res.statusCode === 200) {
+          const full_url_list = res.data.full_url_list || [];
+          if (full_url_list.length === 0) {
+            utils.showToast(that, "无附件", "error");
+          } else {
+            utils.showToast(that, "请查看微信通知");
+          }
+        } else {
+          utils.showToast(that, "导出失败", "error");
+        }
+      },
+      fail(err) {
+        utils.showToast(that, "网络错误", "error");
+      }
+    });
   },
   // 负责导入
-  onArtworkImportPPT(e){
+  onArtworkImportPPT(e) {
     const that = this;
     const lineplan_id = e.currentTarget.dataset.lineplan_id;
-    console.log(lineplan_id);
+    // 1. 让用户选择文件
+    const montageUrl = app.globalData.montageUrl;
+    wx.chooseMessageFile({
+      count: 1,
+      type: 'file',
+      extension: ['ppt', 'pptx'],
+      success: (res) => {
+        // 2. 用户选择成功
+        const tempFile = res.tempFiles[0];
+        const parts = tempFile.name.split('.');
+        const suffix = parts[parts.length - 1]; // 正确：获取最后一个元素
+        // 健壮性检查
+        if (!suffix || (suffix !== 'ppt' && suffix !== 'pptx')) {
+          utils.showToast(that, "文件格式错误，请选择pptx文件", "error");
+          return;
+        }
+        wx.showLoading({
+          title: '上传中，请稍后'
+        });
+        // 3. 上传文件到服务器
+        wx.uploadFile({
+          url: montageUrl + '/wbo/ppt_extract/', // 你的服务器上传接口地址
+          filePath: tempFile.path, // 临时文件路径
+          name: 'file', // 文件对应的参数名，后端根据这个字段获取文件
+          formData: {
+            // 可以附带其他参数，如用户ID
+            'lp_id': lineplan_id
+          },
+          success: (uploadRes) => {
+            // 4. 上传成功
+            utils.showToast(that, "上传成功");
+          },
+          fail: (err) => {
+            utils.showToast(that, "上传失败", "error");
+          },
+          complete(res) {
+            wx.hideLoading();
+          }
+        });
+      },
+      fail: (err) => {
+        utils.showToast(that, "选择文件失败", "error");
+      }
+    });
+
   },
 })
